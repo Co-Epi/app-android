@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_root"
+    app:startDestination="@id/tabs_container_fragment">
+
+    <fragment
+        android:id="@+id/tabs_container_fragment"
+        android:name="org.coepi.android.ui.TabsContainerFragment"
+        android:label="tabs_container"
+        tools:layout="@layout/fragment_tabs_container" />
+
+</navigation>

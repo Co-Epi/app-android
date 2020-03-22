@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/care_fragment">
+
+    <fragment
+        android:id="@+id/care_fragment"
+        android:name="org.coepi.android.ui.care.CareFragment"
+        android:label="@string/label_fragment_care"
+        tools:layout="@layout/fragment_care" />
+
+    <fragment
+        android:id="@+id/ble_fragment"
+        android:name="org.coepi.android.ui.ble.BleFragment"
+        android:label="@string/label_fragment_care"
+        tools:layout="@layout/fragment_ble" />
+
+    <fragment
+        android:id="@+id/location_fragment"
+        android:name="org.coepi.android.ui.location.LocationFragment"
+        android:label="@string/label_fragment_location"
+        tools:layout="@layout/fragment_location" />
+
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="org.coepi.android.ui.settings.SettingsFragment"
+        android:label="@string/label_fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation>

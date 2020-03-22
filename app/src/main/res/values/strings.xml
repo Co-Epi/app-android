@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">CoEpi</string>
+
+    <!-- Tabs -->
+    <string name="tab_care">Care</string>
+    <string name="tab_settings">Settings</string>
+    <string name="tab_ble">BLE</string>
+    <string name="tab_location">Location</string>
+
+    <!-- Fragment labels -->
+    <string name="label_fragment_care">Care</string>
+    <string name="label_fragment_settings">Settings</string>
+    <string name="label_fragment_ble">BLE</string>
+    <string name="label_fragment_location">Location</string>
+
 </resources>
