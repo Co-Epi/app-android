@@ -3,12 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_root"
-    app:startDestination="@id/tabs_container_fragment">
+    app:startDestination="@id/tabs_container">
 
     <fragment
-        android:id="@+id/tabs_container_fragment"
+        android:id="@+id/tabs_container"
         android:name="org.coepi.android.ui.TabsContainerFragment"
-        android:label="tabs_container"
+        tools:layout="@layout/fragment_tabs_container" />
+
+    <action
+        android:id="@+id/action_global_onboarding"
+        app:destination="@id/onboarding"
+        app:popExitAnim="@android:anim/fade_out" />
+    <fragment
+        android:id="@+id/onboarding"
+        android:name="org.coepi.android.ui.onboarding.OnboardingFragment"
+        android:label="@string/label_fragment_onboarding"
         tools:layout="@layout/fragment_tabs_container" />
 
 </navigation>
