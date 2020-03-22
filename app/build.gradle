@@ -56,4 +56,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:2.2.0"
 
     implementation "com.github.quickpermissions:quickpermissions-kotlin:0.4.0"
+
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
