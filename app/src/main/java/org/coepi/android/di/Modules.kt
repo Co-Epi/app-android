@@ -1,6 +1,8 @@
 package org.coepi.android.di
 
 import org.coepi.android.ble.BlePeripheral
+import org.coepi.android.network.apiModule
+import org.coepi.android.repo.repoModule
 import org.coepi.android.ui.ble.BleViewModel
 import org.coepi.android.ui.care.CareViewModel
 import org.coepi.android.ui.location.LocationViewModel
@@ -28,5 +30,7 @@ val systemModule = module {
 
 val appModule = listOf(
     viewModelModule,
-    systemModule
+    systemModule,
+    apiModule,
+    repoModule
 )
