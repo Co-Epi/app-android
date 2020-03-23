@@ -7,11 +7,17 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import org.coepi.android.system.log
 
-// TODO RX, inject
+interface BleDiscovery {
+    val devices: Observable<BluetoothDevice>
+}
 
-class BleDiscovery(context: Context, onDeviceDiscovered: (BluetoothDevice) -> Unit) {
+class BleDiscoveryImpl(context: Context): BleDiscovery {
+    
+    override val devices: BehaviorSubject<BluetoothDevice> = BehaviorSubject.create()
 
     private val adapter: BluetoothAdapter? = context.bluetoothManager?.adapter.also {
         if (it == null) {
@@ -34,7 +40,7 @@ class BleDiscovery(context: Context, onDeviceDiscovered: (BluetoothDevice) -> Un
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             result?.device?.let {
                 log.d("Discovered device: ${it.debugDescription}")
-                onDeviceDiscovered(it)
+                devices.onNext(it)
             } ?: {
                 log.v("Got scan result without a device")
             }()
