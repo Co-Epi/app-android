@@ -4,7 +4,7 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.app.Activity
 import android.content.Intent
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
-import org.coepi.android.system.log
+import org.coepi.android.system.log.log
 
 class BlePreconditions(private val activity: Activity, onReady: () -> Unit) {
     private val btEnabler = BleEnabler(activity) { enabled ->

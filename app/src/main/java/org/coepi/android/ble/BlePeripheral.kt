@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Context.BLUETOOTH_SERVICE
-import org.coepi.android.system.log
+import org.coepi.android.system.log.log
 
 class BlePeripheral(context: Context) {
     init {

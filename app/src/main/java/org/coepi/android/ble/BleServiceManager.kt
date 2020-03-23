@@ -11,7 +11,7 @@ import android.bluetooth.BluetoothGattService
 import android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import org.coepi.android.system.log
+import org.coepi.android.system.log.log
 import java.util.UUID
 import kotlin.text.Charsets.UTF_8
 

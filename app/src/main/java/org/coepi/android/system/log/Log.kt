@@ -1,6 +1,10 @@
-package org.coepi.android.system
+package org.coepi.android.system.log
 
-val log: Log = DefaultLog()
+val cachingLog = CachingLog()
+val log: Log = CompositeLog(
+    cachingLog,
+    DefaultLog()
+).apply { setup() }
 
 interface Log {
     fun setup()
