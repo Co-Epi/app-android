@@ -8,8 +8,11 @@ import org.coepi.android.ble.BlePeripheral
 import org.coepi.android.network.apiModule
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Preferences
+import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.ble.BleViewModel
 import org.coepi.android.ui.care.CareViewModel
+import org.coepi.android.ui.container.TabsContainerViewModel
+import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
@@ -25,6 +28,8 @@ val viewModelModule = module {
     viewModel { BleViewModel(get()) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get()) }
+    viewModel { LogsViewModel(cachingLog, get()) }
+    viewModel { TabsContainerViewModel(get()) }
 }
 
 val systemModule = module {

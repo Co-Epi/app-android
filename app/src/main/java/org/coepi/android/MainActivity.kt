@@ -7,6 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
+import org.coepi.android.system.log.log
 import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         observeRootNavigation()
 
         onboardingShower.showIfNeeded()
+
+        log.i("Testing the log")
     }
 
     private fun observeRootNavigation() {

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/tabs_container"
-        android:name="org.coepi.android.ui.TabsContainerFragment"
+        android:name="org.coepi.android.ui.container.TabsContainerFragment"
         tools:layout="@layout/fragment_tabs_container" />
 
     <action
@@ -19,5 +19,16 @@
         android:name="org.coepi.android.ui.onboarding.OnboardingFragment"
         android:label="@string/label_fragment_onboarding"
         tools:layout="@layout/fragment_tabs_container" />
+
+    <action
+        android:id="@+id/action_global_logs"
+        app:destination="@id/logs"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
+    <fragment
+        android:id="@+id/logs"
+        android:name="org.coepi.android.ui.debug.logs.LogsFragment"
+        android:label="@string/label_fragment_onboarding"
+        tools:layout="@layout/fragment_logs" />
 
 </navigation>
