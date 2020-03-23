@@ -9,7 +9,7 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import org.coepi.android.system.log
+import org.coepi.android.system.log.log
 
 interface BleDiscovery {
     val devices: Observable<BluetoothDevice>

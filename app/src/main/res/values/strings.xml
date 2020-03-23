@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">CoEpi</string>
 
+    <!-- Tabs container -->
+    <string name="tab_container_debug">Debug</string>
+
     <!-- Tabs -->
     <string name="tab_care">Care</string>
     <string name="tab_settings">Settings</string>
@@ -13,5 +16,6 @@
     <string name="label_fragment_ble">BLE</string>
     <string name="label_fragment_location">Location</string>
     <string name="label_fragment_onboarding">Onboarding</string>
+    <string name="label_fragment_logs">Logs</string>
 
 </resources>

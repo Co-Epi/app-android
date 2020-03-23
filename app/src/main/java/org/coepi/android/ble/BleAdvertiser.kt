@@ -13,7 +13,7 @@ import android.bluetooth.le.AdvertisingSetParameters.INTERVAL_HIGH
 import android.bluetooth.le.AdvertisingSetParameters.TX_POWER_MEDIUM
 import android.bluetooth.le.BluetoothLeAdvertiser
 import android.os.ParcelUuid
-import org.coepi.android.system.log
+import org.coepi.android.system.log.log
 import java.util.UUID
 
 class BleAdvertiser(

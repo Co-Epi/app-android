@@ -5,7 +5,7 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE
 import android.content.Intent
-import org.coepi.android.system.log
+import org.coepi.android.system.log.log
 
 class BleEnabler(
     private val activity: Activity,
