@@ -1,12 +1,10 @@
 package org.coepi.android
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import org.coepi.android.R.id
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.ui.navigation.Navigator
