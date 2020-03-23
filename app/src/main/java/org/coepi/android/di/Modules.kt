@@ -1,8 +1,13 @@
 package org.coepi.android.di
 
+import android.app.Application
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import org.coepi.android.ble.BlePeripheral
 import org.coepi.android.network.apiModule
 import org.coepi.android.repo.repoModule
+import org.coepi.android.system.Preferences
 import org.coepi.android.ui.ble.BleViewModel
 import org.coepi.android.ui.care.CareViewModel
 import org.coepi.android.ui.location.LocationViewModel
@@ -19,13 +24,15 @@ val viewModelModule = module {
     viewModel { SettingsViewModel() }
     viewModel { BleViewModel(get()) }
     viewModel { LocationViewModel() }
-    viewModel { OnboardingViewModel(get()) }
+    viewModel { OnboardingViewModel(get(), get()) }
 }
 
 val systemModule = module {
     single { RootNavigation() }
-    single { OnboardingShower(get()) }
+    single { OnboardingShower(get(), get()) }
     single { BlePeripheral(androidApplication()) }
+    single { getSharedPrefs(androidApplication()) }
+    single { Preferences(get()) }
 }
 
 val appModule = listOf(
@@ -34,3 +41,6 @@ val appModule = listOf(
     apiModule,
     repoModule
 )
+
+fun getSharedPrefs(androidApplication: Application): SharedPreferences =
+    androidApplication.getSharedPreferences("default", MODE_PRIVATE)
