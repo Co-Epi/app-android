@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import org.coepi.android.databinding.FragmentCareBinding.inflate
-import org.coepi.android.ui.ble.BleViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CareFragment : Fragment() {

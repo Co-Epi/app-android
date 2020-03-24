@@ -10,4 +10,5 @@ class TabsContainerViewModel(private val nav: RootNavigation) : ViewModel() {
     fun onDebugClick() {
         nav.navigate(ToDirections(actionGlobalLogs()))
     }
+
 }

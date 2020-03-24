@@ -14,6 +14,7 @@
         android:id="@+id/action_global_onboarding"
         app:destination="@id/onboarding"
         app:popExitAnim="@android:anim/fade_out" />
+
     <fragment
         android:id="@+id/onboarding"
         android:name="org.coepi.android.ui.onboarding.OnboardingFragment"
@@ -25,10 +26,11 @@
         app:destination="@id/logs"
         app:enterAnim="@android:anim/fade_in"
         app:popExitAnim="@android:anim/fade_out" />
+
     <fragment
         android:id="@+id/logs"
         android:name="org.coepi.android.ui.debug.logs.LogsFragment"
-        android:label="@string/label_fragment_onboarding"
+        android:label="@string/label_fragment_logs"
         tools:layout="@layout/fragment_logs" />
 
 </navigation>
