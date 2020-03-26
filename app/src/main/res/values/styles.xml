@@ -4,6 +4,26 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/Text</item>
     </style>
 
+    <style name="Text" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/textDefault</item>
+    </style>
+
+    <style name="Text.Headline">
+        <item name="android:textSize">@dimen/text_size_headline</item>
+    </style>
+
+    <style name="Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:height">36dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textAppearance">@style/Text</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>
