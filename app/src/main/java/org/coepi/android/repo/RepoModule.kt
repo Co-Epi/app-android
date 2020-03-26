@@ -9,4 +9,5 @@ val repoModule = module {
     single { RealmProvider(androidApplication()) }
     single { ExposureRepo(get()) }
     single<ContactRepo> { RealmContactRepo(get()) }
+    single<SymptomRepo> { SymptomRepoImpl() }
 }
