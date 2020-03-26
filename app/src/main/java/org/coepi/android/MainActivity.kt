@@ -12,6 +12,9 @@ import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.koin.android.ext.android.inject
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
 
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
@@ -27,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         onboardingShower.showIfNeeded()
 
         log.i("Testing the log")
+        
+        AppCenter.start(getApplication(), "0bb1bf95-3b14-48a6-a769-db1ff1df0307",
+                  Analytics.class, Crashes.class);
     }
 
     private fun observeRootNavigation() {
