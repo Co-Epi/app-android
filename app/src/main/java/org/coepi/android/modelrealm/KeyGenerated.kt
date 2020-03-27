@@ -16,6 +16,8 @@ import java.util.Date
  * these will be used contacting the backend to obtain the key_infected
  * if ( D( k_infected, CEN_i ) >> 64  == common64 ) { /*store infection */ }
  */
+const val key_gen_duration = 7*24*3600*1000;
+
 open class KeyGenerated (
     // You can put properties in the constructor as long as
     // all of them are initialized with default values. This
@@ -24,5 +26,5 @@ open class KeyGenerated (
     // Non-nullable properties must be initialized
     // with non-null values.
     var key: String = "",
-    var expires: Date = Date( Date().time+7*24*3600 )
+    var expires: Date = Date( Date().time+ key_gen_duration)
     ): RealmObject()
