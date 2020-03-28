@@ -22,4 +22,12 @@
     <!-- Symptoms -->
     <string name="symptoms_headline">Are you experiencing any of the following symptoms?</string>
     <string name="symptoms_submit_button">Submit</string>
+
+    <!-- Home -->
+    <string name="home_my_health_card_title">My Health</string>
+    <string name="home_contact_alerts_card_title">Contact Alerts</string>
+    <string name="home_my_health_card_description">Monitor your health and report symptoms.</string>
+    <string name="home_contact_alerts_card_description">Approximate times that you may have been exposed to a symptomatic individual.</string>
+    <string name="home_my_health_card_check_in_button">CHECK-IN</string>
+    <string name="home_contact_alerts_card_see_alerts_button">SEE ALERTS</string>
 </resources>
