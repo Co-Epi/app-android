@@ -11,12 +11,16 @@ import android.bluetooth.BluetoothGattService
 import android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import org.coepi.android.cen.CenRepo
 import org.coepi.android.system.log.log
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.util.UUID
 import kotlin.text.Charsets.UTF_8
 
-class BleServiceManager(bluetoothManager: BluetoothManager, context: Context) {
+class BleServiceManager(bluetoothManager: BluetoothManager, context: Context) : KoinComponent {
     private val gattServer: BluetoothGattServer
+    val repo : CenRepo? by inject()
 
     private val serverCallback = object : BluetoothGattServerCallback() {
         override fun onConnectionStateChange(device: BluetoothDevice?, status: Int, newState: Int) {
@@ -33,6 +37,7 @@ class BleServiceManager(bluetoothManager: BluetoothManager, context: Context) {
                                                  offset: Int,
                                                  characteristic: BluetoothGattCharacteristic?) {
             super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
+            log.d("onCharacteristicReadRequest")
             replyToCharacteristicReadRequest(requestId, device)
         }
     }
@@ -46,8 +51,14 @@ class BleServiceManager(bluetoothManager: BluetoothManager, context: Context) {
 
     private fun createService(): BluetoothGattService =
         BluetoothGattService(Uuids.service, SERVICE_TYPE_PRIMARY).apply {
-            addCharacteristic(BluetoothGattCharacteristic(
-                Uuids.characteristic, PROPERTY_READ, PERMISSION_READ))
+            // THIS IS WHERE AN ANDROID PERIPHERAL SETS ITS CHARACTERISTIC TO THE CEN
+            repo?.let {
+                it.CEN.value?.let {
+                    val c = BluetoothGattCharacteristic(Uuids.characteristic, PROPERTY_READ, PERMISSION_READ)
+                    c.setValue(it)
+                    addCharacteristic(c)
+                }
+            }
         }
 
     private fun registerService(server: BluetoothGattServer) {
@@ -63,6 +74,7 @@ class BleServiceManager(bluetoothManager: BluetoothManager, context: Context) {
             return
         }
 
+        log.d("replyToCharacteristicReadRequest")
         gattServer.sendResponse(device, requestId, GATT_SUCCESS, 0,
             UUID.randomUUID().toString().toByteArray(UTF_8))
     }
