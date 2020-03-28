@@ -10,8 +10,8 @@ import org.coepi.android.ui.navigation.RootNavigation
 
 class LogsViewModel(
     private val logger: CachingLog,
-    private val rootNav: RootNavigation,
-    private val repo : CENRepo
+    private val rootNav: RootNavigation
+    //private val repo : CENRepo
 ) : ViewModel() {
 
     val logs: MutableLiveData<List<LogMessage>> by lazy {

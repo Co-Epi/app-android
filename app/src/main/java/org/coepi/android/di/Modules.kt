@@ -3,11 +3,13 @@ package org.coepi.android.di
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import org.coepi.android.ble.BlePeripheral
+import org.coepi.android.network.apiModuleNetwork
 import org.coepi.android.cen.apiModule
 import org.coepi.android.cen.repoModule
+import org.coepi.android.repo.repoModuleRealm
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.log.cachingLog
-
 import org.coepi.android.ui.cen.CENViewModel
 //import org.coepi.android.ui.care.CareViewModel
 import org.coepi.android.ui.ble.BleViewModel
@@ -26,25 +28,28 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { SymptomsViewModel(get()) }
     viewModel { SettingsViewModel() }
+    //viewModel { BleViewModel(get()) }
     viewModel { CENViewModel(get(), get()) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get()) }
-    viewModel { LogsViewModel(cachingLog, get(), get()) }
+    viewModel { LogsViewModel(cachingLog, get() ) }
     viewModel { TabsContainerViewModel(get()) }
 }
 
 val systemModule = module {
     single { RootNavigation() }
     single { OnboardingShower(get(), get()) }
+    //single { BlePeripheral(androidApplication()) }
     single { getSharedPrefs(androidApplication()) }
     single { Preferences(get()) }
 }
 
 val appModule = listOf(
     repoModule,
+    repoModuleRealm,
     viewModelModule,
     systemModule,
-    apiModule
+    apiModuleNetwork
 )
 
 fun getSharedPrefs(androidApplication: Application): SharedPreferences =

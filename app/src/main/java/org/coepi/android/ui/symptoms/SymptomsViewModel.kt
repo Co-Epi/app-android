@@ -15,10 +15,11 @@ import org.coepi.android.extensions.toLiveData
 import org.coepi.android.extensions.toObservable
 import org.coepi.android.extensions.toUnitObservable
 import org.coepi.android.extensions.toggle
-import org.coepi.android.repo.SymptomRepo
+import org.coepi.android.repo.realm.RealmSymptomRepo
 import org.coepi.android.system.log.log
 
-class SymptomsViewModel(private val symptomRepo: SymptomRepo) : ViewModel() {
+/* comment*/
+class SymptomsViewModel(private val symptomRepo: RealmSymptomRepo) : ViewModel() {
 
     private val selectedSymptomIds: BehaviorSubject<Set<String>> =
         BehaviorSubject.createDefault(emptySet())

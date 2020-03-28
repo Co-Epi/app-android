@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-val apiModule = module {
+val apiModuleNetwork = module {
     single { provideRetrofit() }
     single { provideExposureApi(get()) }
 }

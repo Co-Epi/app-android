@@ -1,16 +1,20 @@
-package org.coepi.android.repo
+package org.coepi.android.repo.realm
 
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.coepi.android.domain.model.Symptom
+import org.coepi.android.repo.RealmProvider
 import org.coepi.android.system.log.log
 
 interface SymptomRepo {
     fun symptoms(): Single<List<Symptom>>
     fun submitSymptoms(symptoms: List<Symptom>): Completable
 }
+//org.koin.core.error.NoBeanDefFoundException: No definition found for class:'org.coepi.android.repo.RealmSymptomRepo'. Check your definitions!
 
-class SymptomRepoImpl: SymptomRepo {
+open class RealmSymptomRepo(private val realmProvider: RealmProvider): SymptomRepo {
+    //org.koin.core.error.NoBeanDefFoundException: No definition found for class:'org.coepi.android.repo.RealmSymptomRepo'. Check your definitions!
+    private val realm get() = realmProvider.realm
 
     override fun symptoms(): Single<List<Symptom>> = Single.just(listOf(
         Symptom("1", "Fever"),
