@@ -61,7 +61,7 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
         if ( ( cenKeyTimestamp == 0 ) || ( roundedTimestamp(curTimestamp) > roundedTimestamp(cenKeyTimestamp) ) ) {
             // generate a new AES Key and store it in local storage
             val secretKey = KeyGenerator.getInstance("AES").generateKey()
-            cenKey = Base64.getEncoder().encodeToString(secretKey.encoded)
+            cenKey = android.util.Base64.encodeToString(secretKey.encoded,0)
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CENKey(cenKeyTimestamp, cenKey))
         }
@@ -73,7 +73,7 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
 
     private fun generateCEN(CENKey : String, ts : Int)  : ByteArray {
         // decode the base64 encoded key
-        val decodedCENKey = Base64.getDecoder().decode(CENKey)
+        val decodedCENKey = android.util.Base64.decode(CENKey,0)
         // rebuild secretKey using SecretKeySpec
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
