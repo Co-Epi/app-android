@@ -9,7 +9,7 @@ import org.coepi.android.system.Preferences
 import org.coepi.android.system.log.cachingLog
 
 import org.coepi.android.ui.cen.CENViewModel
-import org.coepi.android.ui.care.CareViewModel
+//import org.coepi.android.ui.care.CareViewModel
 import org.coepi.android.ui.ble.BleViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
 import org.coepi.android.ui.container.TabsContainerViewModel
