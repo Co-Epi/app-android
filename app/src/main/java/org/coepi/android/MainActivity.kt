@@ -31,8 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         log.i("Testing the log")
         
-        AppCenter.start(getApplication(), "0bb1bf95-3b14-48a6-a769-db1ff1df0307",
-                  Analytics.class, Crashes.class);
+        AppCenter.start(application, "0bb1bf95-3b14-48a6-a769-db1ff1df0307", Analytics::class.java, Crashes::class.java)
     }
 
     private fun observeRootNavigation() {
