@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/ble_fragment"
-        android:name="org.coepi.android.ui.ble.BleFragment"
+        android:name="org.coepi.android.ui.cen.CENFragment"
         android:label="@string/label_fragment_care"
         tools:layout="@layout/fragment_ble" />
 

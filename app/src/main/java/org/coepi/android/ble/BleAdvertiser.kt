@@ -11,14 +11,29 @@ import android.bluetooth.le.AdvertisingSetCallback
 import android.bluetooth.le.AdvertisingSetParameters
 import android.bluetooth.le.AdvertisingSetParameters.INTERVAL_HIGH
 import android.bluetooth.le.AdvertisingSetParameters.TX_POWER_MEDIUM
-import android.bluetooth.le.BluetoothLeAdvertiser
 import android.os.ParcelUuid
+import androidx.lifecycle.ViewModel
+import org.coepi.android.cen.CENRepo
 import org.coepi.android.system.log.log
 import java.util.UUID
 
-class BleAdvertiser(
-    private val adapter: BluetoothAdapter
-) {
+class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: CENRepo) : ViewModel() {
+    val parameters = AdvertisingSetParameters.Builder()
+        .setLegacyMode(true)
+        .setConnectable(true)
+        .setScannable(true)
+        .setInterval(INTERVAL_HIGH)
+        .setTxPowerLevel(TX_POWER_MEDIUM)
+        .build()
+
+    val settings = AdvertiseSettings.Builder()
+        .setAdvertiseMode(ADVERTISE_MODE_LOW_LATENCY)
+        .setTxPowerLevel(ADVERTISE_TX_POWER_HIGH)
+        .setConnectable(true)
+        .build()
+
+    var started = false
+
     fun startAdvertising(serviceUuid: UUID) {
         if (!adapter.enableIfNotEnabled()) {
             log.e("Couldn't enable bluetooth. Can't advertise.")
@@ -27,12 +42,7 @@ class BleAdvertiser(
             log.e("No advertiser. Can't advertise.")
             return
         }
-
-        val settings = AdvertiseSettings.Builder()
-            .setAdvertiseMode(ADVERTISE_MODE_LOW_LATENCY)
-            .setTxPowerLevel(ADVERTISE_TX_POWER_HIGH)
-            .setConnectable(true)
-            .build()
+        android.util.Log.i("BleAdvertiser", "startAdvertising")
 
         val data = Builder()
             .addServiceUuid(ParcelUuid(serviceUuid))
@@ -49,13 +59,29 @@ class BleAdvertiser(
                 super.onStartFailure(errorCode)
             }
         }
-
-        advertiser.run {
-            setParameters()
-            startAdvertising(settings, data, advertisingCallback)
+        repo.CEN.observeForever { cen ->
+            // ServiceData holds Android Contact Event Number (CEN) that the Android peripheral is advertising
+            val cenString = cen.toString()
+            log.i("BleAdvertiser - observeForever CEN: $cenString")
+            if ( started ) {
+                advertiser.stopAdvertising(advertisingCallback)
+            }
+            if ( cen != null ) {
+                Builder().addServiceUuid(ParcelUuid(serviceUuid))
+                    .addServiceData(ParcelUuid(serviceUuid), cen)
+                    .build()
+                advertiser.run {
+                    started = true
+                    startAdvertising(settings, data, advertisingCallback)
+                }
+            }
         }
 
-        log.i("Started advertising")
+        advertiser.run {
+            val data = Builder().setIncludeDeviceName(true).build()
+            startAdvertisingSet(parameters, data, null, null, null, advertisingCallbackParams )
+        }
+        log.i("BleAdvertiser - Started advertising")
     }
 
     private fun BluetoothAdapter.enableIfNotEnabled(): Boolean =
@@ -65,21 +91,8 @@ class BleAdvertiser(
             true
         }
 
-    private fun BluetoothLeAdvertiser.setParameters() {
-        val parameters = AdvertisingSetParameters.Builder()
-            .setLegacyMode(true)
-            .setConnectable(true)
-            .setScannable(true)
-            .setInterval(INTERVAL_HIGH)
-            .setTxPowerLevel(TX_POWER_MEDIUM)
-            .build()
 
-        val data = Builder().setIncludeDeviceName(true).build()
-        startAdvertisingSet(parameters, data, null, null, null,
-            advertisingCallback)
-    }
-
-    private val advertisingCallback = object : AdvertisingSetCallback() {
+    private val advertisingCallbackParams = object : AdvertisingSetCallback() {
         override fun onAdvertisingSetStarted(advertisingSet: AdvertisingSet?, txPower: Int, status: Int) {
             log.i("onAdvertisingSetStarted(): txPower: $txPower, status: $status, advertisingSet: $advertisingSet")
             advertisingSet?.enableAdvertising() ?: {
