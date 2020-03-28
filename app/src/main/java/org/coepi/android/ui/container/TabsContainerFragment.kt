@@ -24,12 +24,5 @@ class TabsContainerFragment : Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        setupBottomNavigation(root)
     }.root
-
-    private fun setupBottomNavigation(view: View) {
-//        val bottomNavigationView = view.findViewById<BottomNavigationView>(bottom_navigation)
-//        val fragmentContainer = view.findViewById<View>(navHostFragment)
-//        bottomNavigationView.setupWithNavController(Navigation.findNavController(fragmentContainer))
-    }
 }
