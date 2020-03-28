@@ -3,12 +3,13 @@ package org.coepi.android.di
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import org.coepi.android.cen.CENModule
 import org.coepi.android.cen.apiModule
-import org.coepi.android.cen.repoModule
+import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.cen.CENViewModel
-import org.coepi.android.ui.care.CareViewModel
+import org.coepi.android.ui.symptoms.SymptomsViewModel
 import org.coepi.android.ui.container.TabsContainerViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.location.LocationViewModel
@@ -21,7 +22,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { CareViewModel() }
+    viewModel { SymptomsViewModel(get()) }
     viewModel { SettingsViewModel() }
     viewModel { CENViewModel(get(), get()) }
     viewModel { LocationViewModel() }
@@ -41,7 +42,8 @@ val appModule = listOf(
     repoModule,
     viewModelModule,
     systemModule,
-    apiModule
+    apiModule,
+    CENModule
 )
 
 fun getSharedPrefs(androidApplication: Application): SharedPreferences =

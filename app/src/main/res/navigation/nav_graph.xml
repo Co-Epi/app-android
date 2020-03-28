@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/care_fragment"
-        android:name="org.coepi.android.ui.care.CareFragment"
+        android:name="org.coepi.android.ui.symptoms.SymptomsFragment"
         android:label="@string/label_fragment_care"
-        tools:layout="@layout/fragment_care" />
+        tools:layout="@layout/fragment_symptoms" />
 
     <fragment
         android:id="@+id/ble_fragment"

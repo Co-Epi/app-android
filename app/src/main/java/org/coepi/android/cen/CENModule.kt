@@ -3,7 +3,7 @@ package org.coepi.android.cen
 import androidx.room.Room
 import org.koin.dsl.module
 
-val repoModule = module {
+val CENModule = module {
     single { get<AppDatabase>().cenDao() }
     single { get<AppDatabase>().cenReportDao() }
     single { get<AppDatabase>().cenkeyDao() }
