@@ -20,27 +20,27 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
-    private val repo: CENRepo by inject()
+    //private val repo: CENRepo by inject()
     private val onboardingShower: OnboardingShower by inject()
 
     private var disposables = CompositeDisposable()
 
-    lateinit var blePreconditions : BlePreconditions
+    /*TODO:lateinit var blePreconditions : BlePreconditions
     lateinit var blePeripheral : BlePeripheral
-    lateinit var bleDiscovery :  BleDiscoveryImpl
+    lateinit var bleDiscovery :  BleDiscoveryImpl*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
         observeRootNavigation()
-        blePreconditions = BlePreconditions(this) {
+        /*TODO:blePreconditions = BlePreconditions(this) {
             bleDiscovery.discover()
             log.i("BlePreconditions met - BLE discover process started")
         }
         bleDiscovery = BleDiscoveryImpl(this.applicationContext)
         blePeripheral = BlePeripheral(this.applicationContext, repo)
         blePreconditions.onActivityCreated()
-        log.i("MainActivity - onCreate")
+        log.i("MainActivity - onCreate")*/ommenti 
     }
 
     private fun observeRootNavigation() {
@@ -52,6 +52,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        blePreconditions.onActivityResult(requestCode, resultCode, data)
+        //blePreconditions.onActivityResult(requestCode, resultCode, data)
     }
 }
