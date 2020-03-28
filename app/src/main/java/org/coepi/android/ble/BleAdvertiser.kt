@@ -13,11 +13,11 @@ import android.bluetooth.le.AdvertisingSetParameters.INTERVAL_HIGH
 import android.bluetooth.le.AdvertisingSetParameters.TX_POWER_MEDIUM
 import android.os.ParcelUuid
 import androidx.lifecycle.ViewModel
-import org.coepi.android.cen.CENRepo
+import org.coepi.android.cen.CenRepo
 import org.coepi.android.system.log.log
 import java.util.UUID
 
-class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: CENRepo) : ViewModel() {
+class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: CenRepo) : ViewModel() {
     val parameters = AdvertisingSetParameters.Builder()
         .setLegacyMode(true)
         .setConnectable(true)

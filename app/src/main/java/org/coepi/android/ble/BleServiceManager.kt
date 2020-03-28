@@ -11,7 +11,7 @@ import android.bluetooth.BluetoothGattService
 import android.bluetooth.BluetoothGattService.SERVICE_TYPE_PRIMARY
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import org.coepi.android.cen.CENRepo
+import org.coepi.android.cen.CenRepo
 import org.coepi.android.system.log.log
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -20,7 +20,7 @@ import kotlin.text.Charsets.UTF_8
 
 class BleServiceManager(bluetoothManager: BluetoothManager, context: Context) : KoinComponent {
     private val gattServer: BluetoothGattServer
-    val repo : CENRepo? by inject()
+    val repo : CenRepo? by inject()
 
     private val serverCallback = object : BluetoothGattServerCallback() {
         override fun onConnectionStateChange(device: BluetoothDevice?, status: Int, newState: Int) {

@@ -11,7 +11,8 @@ import org.coepi.android.R.layout.activity_main
 import org.coepi.android.ble.BleDiscoveryImpl
 import org.coepi.android.ble.BlePeripheral
 import org.coepi.android.ble.BlePreconditions
-import org.coepi.android.cen.CENRepo
+import org.coepi.android.cen.CenRepo
+import org.coepi.android.cen.RealmCenDao
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
@@ -20,7 +21,7 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
-    private val repo: CENRepo by inject()
+    private val repo: CenRepo by inject()
     private val onboardingShower: OnboardingShower by inject()
 
     private var disposables = CompositeDisposable()

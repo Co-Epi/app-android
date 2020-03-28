@@ -9,7 +9,7 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import org.coepi.android.cen.CENRepo
+import org.coepi.android.cen.CenRepo
 import org.coepi.android.system.log.log
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -20,7 +20,7 @@ interface BleDiscovery {
 
 class BleDiscoveryImpl(context: Context): BleDiscovery, KoinComponent {
     override val devices: BehaviorSubject<BluetoothDevice> = BehaviorSubject.create()
-    val repo : CENRepo by inject()
+    val repo : CenRepo by inject()
 
 
     private val adapter: BluetoothAdapter? = context.bluetoothManager?.adapter.also {

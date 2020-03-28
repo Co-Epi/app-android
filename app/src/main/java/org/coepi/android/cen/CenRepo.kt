@@ -6,7 +6,6 @@ import org.coepi.android.system.log.log
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Path
 import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -16,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec
 // CoEpiRepo coordinates local Storage (Room) and network API calls to manage the CoEpi protocol
 //  (A) refreshCENAndCENKeys: CENKey generation every 7 days, CEN Generation every 15 minutes  (stored in Room)
 //  (B) insertCEN: Storage of observed CENs from other BLE devices
-class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private val cenkeyDao: CENKeyDao, private val cenReportDao: CENReportDao)  {
+class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, private val cenkeyDao: RealmCenKeyDao, private val cenReportDao: RealmCenReportDao)  {
     // ------------------------- CEN Management
     // the latest CENKey (AES in base64 encoded form), loaded from local storage
     private var cenKey: String = ""
@@ -36,15 +35,14 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
 
         // load last CENKey + CENKeytimestamp from local storage
         val lastKeys = cenkeyDao.lastCENKeys(1)
-        lastKeys?.let {
-            if (lastKeys.isNotEmpty()) {
-                val lk = lastKeys[0]
-                lk.let {
-                    cenKey = it.cenKey!!
-                    cenKeyTimestamp = it.timeStamp
-                }
+        if (lastKeys.isNotEmpty()) {
+            val lk = lastKeys[0]
+            lk.let {
+                cenKey = it.key
+                cenKeyTimestamp = it.timestamp
             }
         }
+
         // Setup regular CENKey refresh + CEN refresh
         //  Production: refresh CEN every 15m, refresh CENKey every 7 days
         //  Testing: refresh CEN every 15s, refresh CENKey every minute
@@ -63,7 +61,7 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
             val secretKey = KeyGenerator.getInstance("AES").generateKey()
             cenKey = Base64.getEncoder().encodeToString(secretKey.encoded)
             cenKeyTimestamp = curTimestamp
-            cenkeyDao.insert(CENKey(cenKeyTimestamp, cenKey))
+            cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
         CEN.value = generateCEN(cenKey, curTimestamp)
         Handler().postDelayed({
@@ -88,15 +86,16 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
 
     // when a peripheral CEN is detected through BLE, it is recorded here
     fun insertCEN(CEN: String) {
-        val c = CEN()
-        c.CEN = CEN
-        c.timeStamp =  (System.currentTimeMillis() / 1000L).toInt()
+        val c = Cen(
+            CEN,
+            (System.currentTimeMillis() / 1000L).toInt()
+        )
         cenDao.insert(c)
     }
 
     // ------- Network API Calls: mapping into Server Endpoints via Retrofit
     // 1. Client publicizes report to /cenreport along with 3 CENKeys (base64 encoded)
-    private fun postCENReport(report : CENReport) = cenApi.postCENReport(report)
+    private fun postCENReport(report : RealmCenReport) = cenApi.postCENReport(report)
 
     // 2. Client periodically gets publicized CENKeys alongside symptoms/infections reports from /exposurecheck
     private fun cenkeysCheck(timestamp : Int) = cenApi.cenkeysCheck(timestamp)
@@ -105,7 +104,7 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
     private fun getCENReport(cenKey : String) = cenApi.getCENReport(cenKey)
 
     // doPostSymptoms is called when a ViewModel in the UI sees the user finish a Symptoms Report, the Symptoms + last 3 CENKeys are posted to the server
-    fun doPostSymptoms(report : CENReport) {
+    fun doPostSymptoms(report : RealmCenReport) {
         val CENKeysStr = lastCENKeys(3)
         CENKeysStr?.let {
             postCENReport(report)
@@ -127,14 +126,16 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
     fun periodicCENKeysCheck() {
         val call = cenkeysCheck(lastCENKeysCheck)
         call.enqueue(object :
-            Callback<CENKeys> {
-            override fun onResponse(call: Call<CENKeys?>?, response: Response<CENKeys>) {
+            Callback<RealmCenKeys> {
+            override fun onResponse(call: Call<RealmCenKeys?>?, response: Response<RealmCenKeys>) {
                 val statusCode: Int = response.code()
                 if ( statusCode == 200 ) {
-                    val r: CENKeys? = response.body()
-                    r?.CENKeys?.let {
+                    val r: RealmCenKeys? = response.body()
+                    r?.keys?.let {
                         for ( i in it.indices ) {
-                            processMatches(matchCENKey(it[i], lastCENKeysCheck))
+                            it[i]?.let { key ->
+                                matchCENKey(key, lastCENKeysCheck)
+                            }
                         }
                     }
                 } else {
@@ -142,7 +143,7 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
                 }
             }
 
-            override fun onFailure(call: Call<CENKeys?>?, t: Throwable?) {
+            override fun onFailure(call: Call<RealmCenKeys?>?, t: Throwable?) {
                 // Log error here since request failed
                 log.e("periodicCENKeysCheck Failure")
             }
@@ -153,13 +154,13 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
     }
 
     // processMatches fetches CENReport
-    fun processMatches(matchedCENs : List<CEN>?) {
+    fun processMatches(matchedCENs : List<RealmCen>?) {
         matchedCENs?.let {
             if ( it.size > 0 ) {
                 log.i("processMatches MATCH Found")
                 for (i in it.indices) {
                     val matchedCENkey = matchedCENs[i]
-                    val call = getCENReport(matchedCENkey.CEN)
+                    val call = getCENReport(matchedCENkey.cen)
                     // TODO: for each match fetch Report data and record in Symptoms
                     // cenReportDao.insert(cenReport)
                 }
@@ -169,7 +170,7 @@ class CENRepo(private val cenApi: CENApi, private val cenDao: CENDao, private va
 
     // matchCENKey uses a publicized key and finds matches with one database call per key
     //  Not efficient... It would be best if all observed CENs are loaded into memory
-    fun matchCENKey(key : String, maxTimestamp : Int) : List<CEN>? {
+    fun matchCENKey(key : String, maxTimestamp : Int) : List<RealmCen>? {
         // take the last 7 days of timestamps and generate all the possible CENs (e.g. 7 days) TODO: Parallelize this?
         val minTimestamp = maxTimestamp - 7*24* CENLifetimeInSeconds
         var possibleCENs = Array<String>(7*24) {i ->

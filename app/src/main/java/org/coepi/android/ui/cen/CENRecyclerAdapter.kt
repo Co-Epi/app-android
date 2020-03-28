@@ -6,21 +6,21 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.coepi.android.R.layout.item_cen
-import org.coepi.android.cen.CEN
+import org.coepi.android.cen.RealmCen
 import org.coepi.android.ui.cen.CENRecyclerViewAdapter.ViewHolder
 
 class CENRecyclerViewAdapter : RecyclerView.Adapter<ViewHolder>() {
-    private var items = emptyList<CEN>()
+    private var items = emptyList<RealmCen>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val textView = view as TextView
-        fun bind(item: CEN) {
-            textView.text = item.CEN
+        fun bind(item: RealmCen) {
+            textView.text = item.cen
         }
 
     }
 
-    fun setItems(items: List<CEN>) {
+    fun setItems(items: List<RealmCen>) {
         this.items = items
         notifyDataSetChanged()
     }

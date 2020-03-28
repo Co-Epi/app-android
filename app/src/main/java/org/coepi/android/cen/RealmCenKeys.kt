@@ -1,9 +1,9 @@
 package org.coepi.android.cen
 
-import androidx.room.Entity
+import io.realm.RealmList
+import io.realm.RealmObject
 
 // ExposureCheckResponse contains a set of CENkeys (base64 encoded), which is used to match against CENs observed by client
-@Entity
-class CENKeys(_CENkeys : List<String>) {
-    var CENKeys: List<String>? = _CENkeys
-}
+open class RealmCenKeys(
+    var keys : RealmList<String> = RealmList()
+): RealmObject()

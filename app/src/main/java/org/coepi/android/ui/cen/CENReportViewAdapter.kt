@@ -1,25 +1,25 @@
 package org.coepi.android.ui.cen
 
-import org.coepi.android.cen.CENReport
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.coepi.android.R.layout.item_cen_report
+import org.coepi.android.cen.RealmCenReport
 import org.coepi.android.ui.cen.CENReportViewAdapter.ViewHolder
 
 class CENReportViewAdapter : RecyclerView.Adapter<ViewHolder>() {
-    private var items = emptyList<CENReport>()
+    private var items = emptyList<RealmCenReport>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val textView = view as TextView
-        fun bind(item: CENReport) {
+        fun bind(item: RealmCenReport) {
             textView.text = item.report
         }
     }
 
-    fun setItems(items: List<CENReport>) {
+    fun setItems(items: List<RealmCenReport>) {
         this.items = items
         notifyDataSetChanged()
     }
