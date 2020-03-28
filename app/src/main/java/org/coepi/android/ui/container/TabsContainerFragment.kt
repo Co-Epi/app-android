@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.coepi.android.R.id.bottom_navigation
+//import org.coepi.android.R.id.bottom_navigation
 import org.coepi.android.R.id.navHostFragment
 import org.coepi.android.databinding.FragmentTabsContainerBinding.inflate
 import org.coepi.android.ui.onboarding.OnboardingViewModel
@@ -28,8 +28,8 @@ class TabsContainerFragment : Fragment() {
     }.root
 
     private fun setupBottomNavigation(view: View) {
-        val bottomNavigationView = view.findViewById<BottomNavigationView>(bottom_navigation)
-        val fragmentContainer = view.findViewById<View>(navHostFragment)
-        bottomNavigationView.setupWithNavController(Navigation.findNavController(fragmentContainer))
+//        val bottomNavigationView = view.findViewById<BottomNavigationView>(bottom_navigation)
+//        val fragmentContainer = view.findViewById<View>(navHostFragment)
+//        bottomNavigationView.setupWithNavController(Navigation.findNavController(fragmentContainer))
     }
 }

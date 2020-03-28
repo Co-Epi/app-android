@@ -1,33 +1,43 @@
 package org.coepi.android.ui.home
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import org.coepi.android.databinding.FragmentHomeBinding.inflate
+import kotlinx.android.synthetic.main.fragment_home.*
 
 import org.coepi.android.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
+    // TODO: Refactor to use list, see Symptoms
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
+    private val viewModel by viewModel<HomeViewModel>()
 
-    private lateinit var viewModel: HomeViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?
+    ): View? = inflate(inflater, container, false).apply {
+        lifecycleOwner = viewLifecycleOwner
+        vm = viewModel
+    }.root
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        check_in.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToCareFragment()
+
+            findNavController().navigate(action)
+        }
+
+        see_alerts.setOnClickListener {
+            // TODO: call nav action to contact alert fragment
+        }
     }
 
 }

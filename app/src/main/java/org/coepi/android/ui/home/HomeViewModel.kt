@@ -7,5 +7,5 @@ import org.coepi.android.extensions.toLiveData
 
 class HomeViewModel : ViewModel() {
 
-    val text: LiveData<String> = Observable.just("TODO location").toLiveData()
+    val text: LiveData<String> = Observable.just("TODO Home").toLiveData()
 }

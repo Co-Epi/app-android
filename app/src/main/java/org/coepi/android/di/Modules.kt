@@ -17,11 +17,13 @@ import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
+import org.coepi.android.ui.home.HomeViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
+    viewModel { HomeViewModel() }
     viewModel { SymptomsViewModel(get()) }
     viewModel { SettingsViewModel() }
     viewModel { BleViewModel(get()) }
