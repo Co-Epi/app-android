@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import org.coepi.android.databinding.FragmentCareBinding
-import org.coepi.android.databinding.FragmentLocationBinding
 import org.coepi.android.databinding.FragmentLocationBinding.inflate
-import org.coepi.android.ui.care.CareViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LocationFragment : Fragment() {

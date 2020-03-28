@@ -5,10 +5,11 @@
     <string name="tab_container_debug">Debug</string>
 
     <!-- Tabs -->
-    <string name="tab_care">Care</string>
+    <string name="tab_symptoms">Symptoms</string>
     <string name="tab_settings">Settings</string>
     <string name="tab_ble">BLE</string>
     <string name="tab_location">Location</string>
+
 
     <!-- Fragment labels -->
     <string name="label_fragment_care">Care</string>
@@ -30,4 +31,9 @@
     <string name="recordCENsInfo">CEN Apps records neighbor CENs in close proximity to the user</string>
     <string name="getCENKeysInfo">CENKeys retrieved from servers power discovery of contact tracing:</string>
     <string name="postReportInfo">Users share reports with revealed CENKeys to reduce spread of disease</string>
+
+  <!-- Symptoms -->
+    <string name="symptoms_headline">Are you experiencing any of the following symptoms?</string>
+    <string name="symptoms_submit_button">Submit</string>
+
 </resources>
