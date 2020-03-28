@@ -17,5 +17,17 @@
     <string name="label_fragment_location">Location</string>
     <string name="label_fragment_onboarding">Onboarding</string>
     <string name="label_fragment_logs">Logs</string>
+    <string name="label_fragment_api">API</string>
 
+    <!-- BLE Testing -->
+    <string name="contactTracing">CEN Protocol for Privacy-Preserving Distributed Contact Tracing</string>
+    <string name="action_settings">Settings</string>
+    <string name="myCurrentCEN">Computing New CEN...</string>
+    <string name="getCENKeys">GET CENKeys</string>
+    <string name="postReport">POST Report</string>
+
+    <string name="broadcastCENsInfo">Apps use secret CENKeys to broadcast 128-bit CENs using BLE</string>
+    <string name="recordCENsInfo">CEN Apps records neighbor CENs in close proximity to the user</string>
+    <string name="getCENKeysInfo">CENKeys retrieved from servers power discovery of contact tracing:</string>
+    <string name="postReportInfo">Users share reports with revealed CENKeys to reduce spread of disease</string>
 </resources>

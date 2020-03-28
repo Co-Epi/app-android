@@ -4,10 +4,12 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Context.BLUETOOTH_SERVICE
+import org.coepi.android.cen.CENRepo
 import org.coepi.android.system.log.log
 
-class BlePeripheral(context: Context) {
+class BlePeripheral(context: Context, private val repo: CENRepo) {
     init {
+        android.util.Log.i("BlePeripheral", "init")
         val manager = context.getSystemService(BLUETOOTH_SERVICE)
                 as? BluetoothManager
         val adapter = manager?.adapter
@@ -19,8 +21,10 @@ class BlePeripheral(context: Context) {
     }
 
     private fun start(manager: BluetoothManager, adapter: BluetoothAdapter, context: Context) {
-        BleAdvertiser(adapter).startAdvertising(Uuids.service)
+        BleAdvertiser(adapter, repo).startAdvertising(Uuids.service)
         BleServiceManager(manager, context)
         log.i("Started peripheral")
+
+        android.util.Log.i("BlePeripheral", "start")
     }
 }
