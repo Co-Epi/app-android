@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         bleDiscovery = BleDiscoveryImpl(this.applicationContext)
         blePeripheral = BlePeripheral(this.applicationContext, repo)
         blePreconditions.onActivityCreated()
-        log.i("MainActivity - onCreate")*/ommenti 
+        log.i("MainActivity - onCreate")*/
     }
 
     private fun observeRootNavigation() {
