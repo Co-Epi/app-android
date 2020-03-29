@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import org.coepi.android.databinding.FragmentTabsContainerBinding.inflate
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TabsContainerFragment : Fragment() {
-    private val viewModel by viewModel<TabsContainerViewModel>()
+class ContainerFragment : Fragment() {
+    private val viewModel by viewModel<ContainerViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

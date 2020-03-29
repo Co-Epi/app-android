@@ -10,7 +10,7 @@ import org.coepi.android.system.Preferences
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.cen.CENViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
-import org.coepi.android.ui.container.TabsContainerViewModel
+import org.coepi.android.ui.container.ContainerViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
@@ -30,7 +30,7 @@ val viewModelModule = module {
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get()) }
-    viewModel { TabsContainerViewModel(get()) }
+    viewModel { ContainerViewModel(get()) }
 }
 
 val systemModule = module {

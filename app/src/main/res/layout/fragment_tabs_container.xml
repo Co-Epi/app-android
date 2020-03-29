@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="org.coepi.android.ui.container.TabsContainerViewModel" />
+            type="org.coepi.android.ui.container.ContainerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

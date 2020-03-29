@@ -10,11 +10,13 @@
             type="org.coepi.android.ui.home.HomeViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/homeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.HomeFragment">
+        tools:context=".ui.home.HomeFragment"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
         <androidx.cardview.widget.CardView
             android:id="@+id/my_health_card"
             android:layout_width="344dp"
@@ -26,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -34,8 +36,8 @@
                     android:id="@+id/my_health_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
                     android:src="@drawable/ic_health_icon" />
@@ -44,10 +46,10 @@
                     android:id="@+id/my_health_title"
                     android:layout_width="208dp"
                     android:layout_height="17dp"
-                    android:layout_alignParentTop="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@id/my_health_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/my_health_icon"
                     android:text="@string/home_my_health_card_title"
                     android:textAppearance="@style/card_view_title" />
 
@@ -55,10 +57,10 @@
                     android:id="@+id/my_health_description"
                     android:layout_width="208dp"
                     android:layout_height="40dp"
-                    android:layout_below="@id/my_health_title"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
-                    android:layout_toRightOf="@id/my_health_icon"
+                    app:layout_constraintTop_toBottomOf="@id/my_health_title"
+                    app:layout_constraintStart_toEndOf="@id/my_health_icon"
                     android:text="@string/home_my_health_card_description"
                     android:textAppearance="@style/card_view_body" />
 
@@ -66,15 +68,15 @@
                     android:id="@+id/check_in"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/my_health_description"
                     android:layout_marginStart="19dp"
                     android:layout_marginTop="14dp"
-                    android:layout_toRightOf="@id/my_health_icon"
+                    app:layout_constraintTop_toBottomOf="@id/my_health_description"
+                    app:layout_constraintStart_toEndOf="@id/my_health_icon"
                     android:text="@string/home_my_health_card_check_in_button"
                     android:textAppearance="@style/card_view_link"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"/>
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:id="@+id/contact_alerts_card"
@@ -82,11 +84,8 @@
             android:layout_height="144dp"
             app:cardBackgroundColor="#FAFAFA"
             app:cardCornerRadius="8dp"
-            android:layout_marginTop="33dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/my_health_card"
-            app:layout_constraintEnd_toEndOf="parent">
-            <RelativeLayout
+            android:layout_marginTop="33dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -94,14 +93,14 @@
                     android:id="@+id/contact_alerts_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
                     android:src="@drawable/ic_contact_alert_icon" />
                 <TextView
-                    android:layout_toRightOf="@id/contact_alerts_icon"
-                    android:layout_alignParentTop="true"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/contact_alerts_icon"
                     android:id="@+id/contact_alerts_title"
                     android:layout_width="208dp"
                     android:layout_height="17dp"
@@ -111,8 +110,8 @@
                     android:textAppearance="@style/card_view_title"/>
 
                 <TextView
-                    android:layout_below="@id/contact_alerts_title"
-                    android:layout_toRightOf="@id/contact_alerts_icon"
+                    app:layout_constraintTop_toBottomOf="@id/contact_alerts_title"
+                    app:layout_constraintStart_toEndOf="@id/contact_alerts_icon"
                     android:id="@+id/contact_alerts_description"
                     android:layout_width="208dp"
                     android:layout_height="wrap_content"
@@ -122,18 +121,18 @@
                     android:textAppearance="@style/card_view_body"/>
 
                 <TextView
+                    app:layout_constraintTop_toBottomOf="@id/contact_alerts_description"
+                    app:layout_constraintStart_toEndOf="@id/contact_alerts_icon"
                     android:id="@+id/see_alerts"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/contact_alerts_description"
                     android:layout_marginStart="19dp"
                     android:layout_marginTop="14dp"
-                    android:layout_toRightOf="@id/contact_alerts_icon"
                     android:text="@string/home_contact_alerts_card_see_alerts_button"
                     android:textColor="@color/colorAccent"
                     android:textAppearance="@style/card_view_link"
                     android:textStyle="bold"/>
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>
