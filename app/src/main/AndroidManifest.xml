@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+
+      <service
+          android:name="org.coepi.android.ble.covidwatch.BLEForegroundService"
+          android:enabled="true"
+          android:exported="true" />
+  </application>
 
 </manifest>
