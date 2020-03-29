@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import org.coepi.android.MainActivity
 import org.coepi.android.R
-import org.coepi.android.ble.covidwatch.utils.UUIDs
 import org.coepi.android.ble.covidwatch.utils.UUIDs.CONTACT_EVENT_SERVICE
 import org.coepi.android.system.log.log
 import java.util.Timer
@@ -32,7 +31,7 @@ interface BleService {
 data class BleServiceConfiguration(
     val advertiser: BLEAdvertiser,
     val scanner: BLEScanner,
-    val scanCallback: (UUID) -> Unit
+    val scanCallback: (ScannedData) -> Unit
 )
 
 class BLEForegroundService : LifecycleService(), BleService {

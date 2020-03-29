@@ -15,14 +15,16 @@ interface BLEScanner {
     fun startScanning(serviceUUIDs: Array<UUID>?)
 
     // TODO consider using rx
-    fun registerScanCallback(callback: (UUID) -> Unit)
+    fun registerScanCallback(callback: (ScannedData) -> Unit)
 
     fun stopScanning()
 }
 
+data class ScannedData(val serviceUuids: List<UUID>, val serviceData: String)
+
 class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
-    private var callback: ((UUID) -> Unit)? = null
+    private var callback: ((ScannedData) -> Unit)? = null
 
     // BLE
     private val scanner: BluetoothLeScanner? = adapter.bluetoothLeScanner
@@ -63,7 +65,12 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
                         .toUpperCase()}"
                 )
 
-                callback?.invoke(contactEventIdentifier)
+                val serviceUuids: List<UUID> = scanRecord.serviceUuids.map { it.uuid }
+
+                callback?.invoke(ScannedData(serviceUuids,
+                    // TODO this seems wrong. We should return service UUID + corresponding byte array
+                    scanRecord.serviceData.toString()
+                ))
 
                 // TODO
 //                CovidWatchDatabase.databaseWriteExecutor.execute {
@@ -116,7 +123,7 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
         Log.i(TAG, "Started scanning")
     }
 
-    override fun registerScanCallback(callback: (UUID) -> Unit) {
+    override fun registerScanCallback(callback: (ScannedData) -> Unit) {
         this.callback = callback
     }
 

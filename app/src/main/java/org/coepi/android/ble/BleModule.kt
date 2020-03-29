@@ -6,6 +6,7 @@ import org.coepi.android.ble.covidwatch.BLEAdvertiser
 import org.coepi.android.ble.covidwatch.BLEAdvertiserImpl
 import org.coepi.android.ble.covidwatch.BLEScanner
 import org.coepi.android.ble.covidwatch.BLEScannerImpl
+import org.coepi.android.ble.covidwatch.ScannedData
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import java.util.UUID
@@ -36,6 +37,6 @@ class NoopBleAdvertiser: BLEAdvertiser {
 
 class NoopBleScanner: BLEScanner {
     override fun startScanning(serviceUUIDs: Array<UUID>?) {}
-    override fun registerScanCallback(callback: (UUID) -> Unit) {}
+    override fun registerScanCallback(callback: (ScannedData) -> Unit) {}
     override fun stopScanning() {}
 }

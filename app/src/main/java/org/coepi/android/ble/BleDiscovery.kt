@@ -20,7 +20,7 @@ interface BleDiscovery {
 
 class BleDiscoveryImpl(context: Context): BleDiscovery, KoinComponent {
     override val devices: BehaviorSubject<BluetoothDevice> = BehaviorSubject.create()
-    val repo : CenRepo by inject()
+//    val repo : CenRepo by inject()
 
 
     private val adapter: BluetoothAdapter? = context.bluetoothManager?.adapter.also {
@@ -44,32 +44,34 @@ class BleDiscoveryImpl(context: Context): BleDiscovery, KoinComponent {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
 
             result?.device?.let {
-                result.scanRecord?.let {
-                    val serviceUuids = it.serviceUuids
-                    // check that the service UUID matches
-                    if ( serviceUuids != null ) {
-                        for (i in serviceUuids.indices) {
-                            val s = serviceUuids[i]
-                            val uuid = s.uuid.toString()
-                            // check that we have a CoEpi UUID
-                            if ( Uuids.service.toString() == s.uuid.toString() ) {
-                                val serviceData = it.serviceData.toString()
-                                // *************** The ServiceData IS WHERE WE TAKE THE ANDROID CEN that the Android peripheral is advertising and we record it in Contacts
-                                log.i("Discovered CoEpi with ServiceData: $uuid $serviceData")
-                                repo?.insertCEN(serviceData)
-                            } else {
-                                val x = Uuids.service.toString()
-                                val serviceData = it.serviceData.toString()
-                                log.d("Discovered non-CoEpi Service UUID: $x $serviceData")
-                                repo?.let {
-                                    it.insertCEN(serviceData)
-                                }
-                            }
-                        }
-                    }
-                }
-                devices.onNext(it)
 
+                // Commenting just for "documentation". This class will be removed.
+//                result.scanRecord?.let {
+//                    val serviceUuids = it.serviceUuids
+//                    // check that the service UUID matches
+//                    if ( serviceUuids != null ) {
+//                        for (i in serviceUuids.indices) {
+//                            val s = serviceUuids[i]
+//                            val uuid = s.uuid.toString()
+//                            // check that we have a CoEpi UUID
+//                            if ( Uuids.service.toString() == s.uuid.toString() ) {
+//                                val serviceData = it.serviceData.toString()
+//                                // *************** The ServiceData IS WHERE WE TAKE THE ANDROID CEN that the Android peripheral is advertising and we record it in Contacts
+//                                log.i("Discovered CoEpi with ServiceData: $uuid $serviceData")
+//                                repo?.insertCEN(serviceData)
+//                            } else {
+//                                val x = Uuids.service.toString()
+//                                val serviceData = it.serviceData.toString()
+//                                log.d("Discovered non-CoEpi Service UUID: $x $serviceData")
+//                                repo?.let {
+//                                    it.insertCEN(serviceData)
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+                devices.onNext(it)
+//
             } ?: {
                 log.v("Got scan result without a device")
             }()

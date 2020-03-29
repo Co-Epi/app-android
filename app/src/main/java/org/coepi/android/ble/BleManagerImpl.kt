@@ -14,10 +14,11 @@ import org.coepi.android.ble.covidwatch.BLEForegroundService
 import org.coepi.android.ble.covidwatch.BLEForegroundService.LocalBinder
 import org.coepi.android.ble.covidwatch.BLEScanner
 import org.coepi.android.ble.covidwatch.BleServiceConfiguration
+import org.coepi.android.ble.covidwatch.ScannedData
 import java.util.UUID
 
 interface BleManager {
-    val scanObservable: Observable<UUID>
+    val scanObservable: Observable<ScannedData>
 
     fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?)
     fun stopAdvertiser()
@@ -31,7 +32,7 @@ interface BleManager {
 class BleManagerImpl(val app: Application, val advertiser: BLEAdvertiser, val scanner: BLEScanner)
     : BleManager {
 
-    override val scanObservable: PublishSubject<UUID> = create()
+    override val scanObservable: PublishSubject<ScannedData> = create()
 
     private val intent get() = Intent(app, BLEForegroundService::class.java)
 
