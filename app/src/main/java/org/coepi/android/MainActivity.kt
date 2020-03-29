@@ -8,10 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
-import org.coepi.android.ble.BleDiscoveryImpl
 import org.coepi.android.ble.BleManager
-import org.coepi.android.ble.BleManagerImpl
-import org.coepi.android.ble.BlePeripheral
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.cen.CenRepo
 import org.coepi.android.system.log.log
@@ -22,16 +19,12 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
-    private val repo: CenRepo by inject()
     private val onboardingShower: OnboardingShower by inject()
 
     private var disposables = CompositeDisposable()
 
     lateinit var blePreconditions : BlePreconditions
     private val bleManager: BleManager by inject()
-
-    lateinit var blePeripheral : BlePeripheral
-    lateinit var bleDiscovery :  BleDiscoveryImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +34,6 @@ class MainActivity : AppCompatActivity() {
             bleManager.startService()
             log.i("BlePreconditions met - BLE manager started")
         }
-        bleDiscovery = BleDiscoveryImpl(this.applicationContext)
-        blePeripheral = BlePeripheral(this.applicationContext, repo)
         blePreconditions.onActivityCreated()
         log.i("MainActivity - onCreate")
     }
