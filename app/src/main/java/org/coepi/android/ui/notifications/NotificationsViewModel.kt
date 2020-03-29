@@ -20,10 +20,11 @@ import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.symptoms.SymptomViewData
 
 class NotificationsViewModel(private val notificationsRepo: NotificationsRepo, private val rootNav: RootNavigation ) : ViewModel() {
 
-    val symptoms = notificationsRepo.notifications().map { (symptoms) -> symptoms.toViewData() }
+    val symptoms : LiveData<List<NotificationsViewData>> =  notificationsRepo.notifications().map { it.map {it.toViewData()} }.toObservable().toLiveData();
 
 
     init {
@@ -32,7 +33,7 @@ class NotificationsViewModel(private val notificationsRepo: NotificationsRepo, p
             .withLatestFrom(selectedSymptomIds)
             .subscribe { (selectedSymptom, selectedIds) ->
                 selectedSymptomIds.onNext(selectedIds.toggle(selectedSymptom.symptom.id))
-        }
+        }\
 
         disposables += submitTrigger
             .withLatestFrom(selectedSymptoms)

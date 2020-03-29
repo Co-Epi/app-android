@@ -32,8 +32,8 @@ class NotificationsFragment: Fragment() {
             adapter = logsAdapter
         }
 
-        /*viewModel.symptoms.observeWith(viewLifecycleOwner) {
+        viewModel.symptoms.observeWith(viewLifecycleOwner) {
             logsAdapter.setItems(it)
-        }*/
+        }
     }.root
 }
