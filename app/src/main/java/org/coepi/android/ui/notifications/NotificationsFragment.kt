@@ -25,15 +25,15 @@ class NotificationsFragment: Fragment() {
             viewModel.onCloseClick()
         }
 
-        val logsAdapter = NotificationViewAdapter()
+        val notificaionAdapter = NotificationViewAdapter()
 
         logsRecyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)
-            adapter = logsAdapter
+            adapter = notificaionAdapter
         }
 
         viewModel.symptoms.observeWith(viewLifecycleOwner) {
-            logsAdapter.setItems(it)
+            notificaionAdapter.setItems(it)
         }
     }.root
 }
