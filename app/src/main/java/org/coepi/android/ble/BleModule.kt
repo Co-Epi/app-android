@@ -13,7 +13,7 @@ import java.util.UUID
 val bleModule = module {
     single { createBleAdvertiser(androidApplication()) }
     single { createBleScanner(androidApplication()) }
-    single { BleManager(androidApplication(), get(), get()) }
+    single<BleManager> { BleManagerImpl(androidApplication(), get(), get()) }
 }
 
 private val bluetoothAdapter: BluetoothAdapter? get() = BluetoothAdapter.getDefaultAdapter()

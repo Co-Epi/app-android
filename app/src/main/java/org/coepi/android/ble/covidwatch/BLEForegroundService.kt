@@ -13,11 +13,16 @@ import androidx.lifecycle.LifecycleService
 import org.coepi.android.MainActivity
 import org.coepi.android.R
 import org.coepi.android.ble.covidwatch.utils.UUIDs
+import org.coepi.android.system.log.log
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
 
-class BLEForegroundService : LifecycleService() {
+interface BleService {
+    fun changeContactEventIdentifierInServiceDataField(identifier: UUID)
+}
+
+class BLEForegroundService : LifecycleService(), BleService {
 
     private var timer: Timer? = null
 
@@ -78,6 +83,15 @@ class BLEForegroundService : LifecycleService() {
         scanner?.startScanning(arrayOf<UUID>(UUIDs.CONTACT_EVENT_SERVICE))
 
         return START_STICKY
+    }
+
+    override fun changeContactEventIdentifierInServiceDataField(identifier: UUID) {
+        val advertiser: BLEAdvertiser = advertiser ?: run {
+            log.e("Changing contact identifier but advertiser is not initialized")
+            return
+        }
+
+        advertiser.changeContactEventIdentifierInServiceDataField(identifier)
     }
 
     override fun onDestroy() {
