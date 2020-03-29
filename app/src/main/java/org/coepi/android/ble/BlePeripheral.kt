@@ -21,7 +21,7 @@ class BlePeripheral(context: Context, private val repo: CenRepo) {
     }
 
     private fun start(manager: BluetoothManager, adapter: BluetoothAdapter, context: Context) {
-        BleAdvertiser(adapter, repo).startAdvertising(Uuids.service)
+        BleAdvertiser(adapter).startAdvertising(Uuids.service)
         BleServiceManager(manager, context)
         log.i("Started peripheral")
 

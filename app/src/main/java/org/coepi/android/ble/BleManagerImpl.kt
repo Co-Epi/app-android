@@ -19,6 +19,9 @@ import java.util.UUID
 interface BleManager {
     val scanObservable: Observable<UUID>
 
+    fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?)
+    fun stopAdvertiser()
+
     fun startService()
     fun stopService()
 
@@ -53,6 +56,14 @@ class BleManagerImpl(val app: Application, val advertiser: BLEAdvertiser, val sc
 
     override fun changeContactEventIdentifierInServiceDataField(identifier: UUID) {
         service?.changeContactEventIdentifierInServiceDataField(identifier)
+    }
+
+    override fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?) {
+        service?.startAdvertiser(serviceUUID, contactEventUUID)
+    }
+
+    override fun stopAdvertiser() {
+        service?.stopAdvertiser()
     }
 
     override fun startService() {

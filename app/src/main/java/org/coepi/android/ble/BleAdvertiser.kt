@@ -13,11 +13,10 @@ import android.bluetooth.le.AdvertisingSetParameters.INTERVAL_HIGH
 import android.bluetooth.le.AdvertisingSetParameters.TX_POWER_MEDIUM
 import android.os.ParcelUuid
 import androidx.lifecycle.ViewModel
-import org.coepi.android.cen.CenRepo
 import org.coepi.android.system.log.log
 import java.util.UUID
 
-class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: CenRepo) : ViewModel() {
+class BleAdvertiser(private val adapter: BluetoothAdapter) : ViewModel() {
     val parameters = AdvertisingSetParameters.Builder()
         .setLegacyMode(true)
         .setConnectable(true)
@@ -59,24 +58,26 @@ class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: Cen
                 super.onStartFailure(errorCode)
             }
         }
-        repo.CEN.observeForever { cen ->
-            // ServiceData holds Android Contact Event Number (CEN) that the Android peripheral is advertising
-            val cenString = cen.toString()
-            log.i("BleAdvertiser - observeForever CEN: $cenString")
-            if ( started ) {
-                advertiser.stopAdvertising(advertisingCallback)
-            }
-            if ( cen != null ) {
-                Builder().addServiceUuid(ParcelUuid(serviceUuid))
-                    .addServiceData(ParcelUuid(serviceUuid), cen)
-                    .build()
-                advertiser.run {
-                    started = true
-                    startAdvertising(settings, data, advertisingCallback)
-                }
-            }
-        }
 
+        // Commenting just for "documentation". This class will be removed.
+//        repo.CEN.observeForever { cen ->
+//            // ServiceData holds Android Contact Event Number (CEN) that the Android peripheral is advertising
+//            val cenString = cen.toString()
+//            log.i("BleAdvertiser - observeForever CEN: $cenString")
+//            if ( started ) {
+//                advertiser.stopAdvertising(advertisingCallback)
+//            }
+//            if ( cen != null ) {
+//                Builder().addServiceUuid(ParcelUuid(serviceUuid))
+//                    .addServiceData(ParcelUuid(serviceUuid), cen)
+//                    .build()
+//                advertiser.run {
+//                    started = true
+//                    startAdvertising(settings, data, advertisingCallback)
+//                }
+//            }
+//        }
+        
         advertiser.run {
             val data = Builder().setIncludeDeviceName(true).build()
             startAdvertisingSet(parameters, data, null, null, null, advertisingCallbackParams )

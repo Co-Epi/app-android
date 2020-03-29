@@ -23,6 +23,9 @@ import java.util.UUID.randomUUID
 interface BleService {
     fun configure(configuration: BleServiceConfiguration)
 
+    fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?)
+    fun stopAdvertiser()
+
     fun changeContactEventIdentifierInServiceDataField(identifier: UUID)
 }
 
@@ -137,6 +140,14 @@ class BLEForegroundService : LifecycleService(), BleService {
 
     override fun configure(configuration: BleServiceConfiguration) {
         this.configuration = configuration
+    }
+
+    override fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?) {
+        configuration?.advertiser?.startAdvertiser(serviceUUID, contactEventUUID)
+    }
+
+    override fun stopAdvertiser() {
+        configuration?.advertiser?.stopAdvertiser()
     }
 
     /**
