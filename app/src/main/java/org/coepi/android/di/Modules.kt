@@ -14,6 +14,7 @@ import org.coepi.android.ui.container.TabsContainerViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.notifications.NotificationsViewModel
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
@@ -23,6 +24,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { SymptomsViewModel(get()) }
+    viewModel { NotificationsViewModel(get(),get()) }
     viewModel { SettingsViewModel() }
     viewModel { CENViewModel(get(), get()) }
     viewModel { LocationViewModel() }
