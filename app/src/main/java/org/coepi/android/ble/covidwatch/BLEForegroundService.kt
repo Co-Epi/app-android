@@ -13,21 +13,30 @@ import androidx.lifecycle.LifecycleService
 import org.coepi.android.MainActivity
 import org.coepi.android.R
 import org.coepi.android.ble.covidwatch.utils.UUIDs
+import org.coepi.android.ble.covidwatch.utils.UUIDs.CONTACT_EVENT_SERVICE
 import org.coepi.android.system.log.log
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
+import java.util.UUID.randomUUID
 
 interface BleService {
+    fun configure(configuration: BleServiceConfiguration)
+
     fun changeContactEventIdentifierInServiceDataField(identifier: UUID)
 }
+
+data class BleServiceConfiguration(
+    val advertiser: BLEAdvertiser,
+    val scanner: BLEScanner,
+    val scanCallback: (UUID) -> Unit
+)
 
 class BLEForegroundService : LifecycleService(), BleService {
 
     private var timer: Timer? = null
 
-    var advertiser: BLEAdvertiser? = null
-    var scanner: BLEScanner? = null
+    private var configuration: BleServiceConfiguration? = null
 
     companion object {
         // CONSTANTS
@@ -60,14 +69,15 @@ class BLEForegroundService : LifecycleService(), BleService {
         timer?.scheduleAtFixedRate(
             object : TimerTask() {
                 override fun run() {
-                    advertiser?.changeContactEventIdentifierInServiceDataField(UUID.randomUUID())
+                    configuration?.advertiser?.changeContactEventIdentifierInServiceDataField(
+                        randomUUID()
+                    )
                 }
             },
             MS_TO_MIN * CONTACT_EVENT_NUMBER_CHANGE_INTERVAL_MIN.toLong(),
             MS_TO_MIN * CONTACT_EVENT_NUMBER_CHANGE_INTERVAL_MIN.toLong()
         )
 
-        val newContactEventUUID = UUID.randomUUID()
         // TODO
 //        CovidWatchDatabase.databaseWriteExecutor.execute {
 //            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(this).contactEventDAO()
@@ -79,24 +89,33 @@ class BLEForegroundService : LifecycleService(), BleService {
 //            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
 //            dao.insert(contactEvent)
 //        }
-        advertiser?.startAdvertiser(UUIDs.CONTACT_EVENT_SERVICE, newContactEventUUID)
-        scanner?.startScanning(arrayOf<UUID>(UUIDs.CONTACT_EVENT_SERVICE))
+
+        configuration?.start()
 
         return START_STICKY
     }
 
+    private fun BleServiceConfiguration.start() {
+        val newContactEventUUID = randomUUID()
+
+        advertiser.startAdvertiser(CONTACT_EVENT_SERVICE, newContactEventUUID)
+
+        scanner.registerScanCallback(scanCallback)
+        scanner.startScanning(arrayOf(CONTACT_EVENT_SERVICE))
+    }
+
     override fun changeContactEventIdentifierInServiceDataField(identifier: UUID) {
-        val advertiser: BLEAdvertiser = advertiser ?: run {
+        val configuration = configuration ?: run {
             log.e("Changing contact identifier but advertiser is not initialized")
             return
         }
 
-        advertiser.changeContactEventIdentifierInServiceDataField(identifier)
+        configuration.advertiser.changeContactEventIdentifierInServiceDataField(identifier)
     }
 
     override fun onDestroy() {
-        advertiser?.stopAdvertiser()
-        scanner?.stopScanning()
+        configuration?.advertiser?.stopAdvertiser()
+        configuration?.scanner?.stopScanning()
         timer?.apply {
             cancel()
             purge()
@@ -114,6 +133,10 @@ class BLEForegroundService : LifecycleService(), BleService {
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
         return binder
+    }
+
+    override fun configure(configuration: BleServiceConfiguration) {
+        this.configuration = configuration
     }
 
     /**

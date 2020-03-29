@@ -13,10 +13,16 @@ import java.util.*
 
 interface BLEScanner {
     fun startScanning(serviceUUIDs: Array<UUID>?)
+
+    // TODO consider using rx
+    fun registerScanCallback(callback: (UUID) -> Unit)
+
     fun stopScanning()
 }
 
 class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
+
+    private var callback: ((UUID) -> Unit)? = null
 
     // BLE
     private val scanner: BluetoothLeScanner? = adapter.bluetoothLeScanner
@@ -56,6 +62,9 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
                     "Scan result device.address=${result.device.address} RSSI=${result.rssi} CEI=${contactEventIdentifier.toString()
                         .toUpperCase()}"
                 )
+
+                callback?.invoke(contactEventIdentifier)
+
                 // TODO
 //                CovidWatchDatabase.databaseWriteExecutor.execute {
 //                    val dao: ContactEventDAO =
@@ -107,9 +116,12 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
         Log.i(TAG, "Started scanning")
     }
 
+    override fun registerScanCallback(callback: (UUID) -> Unit) {
+        this.callback = callback
+    }
+
     override fun stopScanning() {
         scanner?.stopScan(scanCallback)
         Log.i(TAG, "Stopped scanning")
     }
-
 }
