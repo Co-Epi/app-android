@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
         observeRootNavigation()
+        onboardingShower.showIfNeeded();
         blePreconditions = BlePreconditions(this) {
             bleDiscovery.discover()
             log.i("BlePreconditions met - BLE discover process started")
