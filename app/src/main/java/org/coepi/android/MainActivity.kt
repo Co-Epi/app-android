@@ -2,6 +2,7 @@ package org.coepi.android
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import io.reactivex.disposables.CompositeDisposable
@@ -19,6 +20,8 @@ import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.koin.android.ext.android.inject
 
+const val TAG_BLE_LOG = "BLEInit"
+
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
     private val repo: CenRepo by inject()
@@ -34,11 +37,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
         observeRootNavigation()
+        Log.i(TAG_BLE_LOG, "Staring BLE");
         blePreconditions = BlePreconditions(this) {
             bleDiscovery.discover()
-            log.i("BlePreconditions met - BLE discover process started")
+            val ok= "BlePreconditions met - BLE discover process started";
+            log.i(ok)
+            Log.i(TAG_BLE_LOG, ok);//DONE: BARTPROBLEM on my phone (sdk=21) I don see ok! Now I see
         }
         bleDiscovery = BleDiscoveryImpl(this.applicationContext)
+
         blePeripheral = BlePeripheral(this.applicationContext, repo)
         blePreconditions.onActivityCreated()
         log.i("MainActivity - onCreate")

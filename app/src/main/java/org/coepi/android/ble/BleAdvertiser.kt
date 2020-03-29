@@ -18,13 +18,25 @@ import org.coepi.android.system.log.log
 import java.util.UUID
 
 class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: CenRepo) : ViewModel() {
-    val parameters = AdvertisingSetParameters.Builder()
+
+    /* requires minSDK=26
+      * 2020-03-29 04:19:39.417 7774-7774/org.coepi.android E/AndroidRuntime: FATAL EXCEPTION: main
+        Process: org.coepi.android, PID: 7774
+        bjava.lang.NoClassDefFoundError: Failed resolution of: Landroid/bluetooth/le/AdvertisingSetParameters$Builder;
+
+        BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: CenRepo) : ViewModel() {
+        val parameters = AdvertisingSetParameters.Builder()
+         requires minSDK= 26
+
+         tried this older example: https://code.tutsplus.com/tutorials/how-to-advertise-android-as-a-bluetooth-le-peripheral--cms-25426
+
+    val params = AdvertisingSetParameters.Builder()
         .setLegacyMode(true)
         .setConnectable(true)
         .setScannable(true)
         .setInterval(INTERVAL_HIGH)
         .setTxPowerLevel(TX_POWER_MEDIUM)
-        .build()
+        .build()*/
 
     val settings = AdvertiseSettings.Builder()
         .setAdvertiseMode(ADVERTISE_MODE_LOW_LATENCY)
@@ -79,7 +91,7 @@ class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: Cen
 
         advertiser.run {
             val data = Builder().setIncludeDeviceName(true).build()
-            startAdvertisingSet(parameters, data, null, null, null, advertisingCallbackParams )
+            startAdvertising(settings, data, advertisingCallback )
         }
         log.i("BleAdvertiser - Started advertising")
     }
@@ -92,6 +104,7 @@ class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: Cen
         }
 
 
+    /* requires minsdk=26
     private val advertisingCallbackParams = object : AdvertisingSetCallback() {
         override fun onAdvertisingSetStarted(advertisingSet: AdvertisingSet?, txPower: Int, status: Int) {
             log.i("onAdvertisingSetStarted(): txPower: $txPower, status: $status, advertisingSet: $advertisingSet")
@@ -112,9 +125,13 @@ class BleAdvertiser(private val adapter: BluetoothAdapter, private val repo: Cen
         override fun onAdvertisingSetStopped(advertisingSet: AdvertisingSet) {
             log.i("onAdvertisingSetStopped(): $advertisingSet")
         }
-    }
+    }*/
+
 
     private fun AdvertisingSet.enableAdvertising() {
+        /*
+        requires minSDK=26
+         */
         setAdvertisingData(Builder()
             .setIncludeDeviceName(true)
             .setIncludeTxPowerLevel(true)
