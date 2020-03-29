@@ -10,13 +10,7 @@ import androidx.lifecycle.LifecycleService
 import org.coepi.android.App
 import org.coepi.android.MainActivity
 import org.coepi.android.R
-import org.covidwatch.android.CovidWatchApplication
-import org.covidwatch.android.MainActivity
-import org.covidwatch.android.R
-import org.covidwatch.android.data.ContactEvent
-import org.covidwatch.android.data.ContactEventDAO
-import org.covidwatch.android.data.CovidWatchDatabase
-import org.covidwatch.android.utils.UUIDs
+import org.coepi.android.ble.covidwatch.utils.UUIDs
 import java.util.*
 
 class BLEForegroundService : LifecycleService() {
@@ -72,16 +66,17 @@ class BLEForegroundService : LifecycleService() {
         )
 
         val newContactEventUUID = UUID.randomUUID()
-        CovidWatchDatabase.databaseWriteExecutor.execute {
-            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(this).contactEventDAO()
-            val contactEvent = ContactEvent(newContactEventUUID.toString())
-            val isCurrentUserSick = getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE
-            ).getBoolean(getString(R.string.preference_is_current_user_sick), false)
-            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
-            dao.insert(contactEvent)
-        }
+        // TODO
+//        CovidWatchDatabase.databaseWriteExecutor.execute {
+//            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(this).contactEventDAO()
+//            val contactEvent = ContactEvent(newContactEventUUID.toString())
+//            val isCurrentUserSick = getSharedPreferences(
+//                getString(R.string.preference_file_key),
+//                Context.MODE_PRIVATE
+//            ).getBoolean(getString(R.string.preference_is_current_user_sick), false)
+//            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
+//            dao.insert(contactEvent)
+//        }
         app?.bleAdvertiser?.startAdvertiser(UUIDs.CONTACT_EVENT_SERVICE, newContactEventUUID)
         app?.bleScanner?.startScanning(arrayOf<UUID>(UUIDs.CONTACT_EVENT_SERVICE))
 
@@ -100,6 +95,7 @@ class BLEForegroundService : LifecycleService() {
 
 
     override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
         return null
     }
 

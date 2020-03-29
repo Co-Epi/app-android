@@ -7,10 +7,6 @@ import android.os.Build
 import android.os.ParcelUuid
 import android.util.Log
 import androidx.annotation.RequiresApi
-import org.covidwatch.android.R
-import org.covidwatch.android.data.ContactEvent
-import org.covidwatch.android.data.ContactEventDAO
-import org.covidwatch.android.data.CovidWatchDatabase
 import org.coepi.android.ble.covidwatch.utils.UUIDs
 import org.coepi.android.ble.covidwatch.utils.toUUID
 import java.util.*
@@ -55,20 +51,21 @@ class BLEScanner(ctx: Context, adapter: BluetoothAdapter) {
                     "Scan result device.address=${result.device.address} RSSI=${result.rssi} CEI=${contactEventIdentifier.toString()
                         .toUpperCase()}"
                 )
-                CovidWatchDatabase.databaseWriteExecutor.execute {
-                    val dao: ContactEventDAO =
-                        CovidWatchDatabase.getInstance(context).contactEventDAO()
-                    val contactEvent = ContactEvent(contactEventIdentifier.toString())
-                    val isCurrentUserSick = context.getSharedPreferences(
-                        context.getString(R.string.preference_file_key),
-                        Context.MODE_PRIVATE
-                    ).getBoolean(
-                        context.getString(R.string.preference_is_current_user_sick),
-                        false
-                    )
-                    contactEvent.wasPotentiallyInfectious = isCurrentUserSick
-                    dao.insert(contactEvent)
-                }
+                // TODO
+//                CovidWatchDatabase.databaseWriteExecutor.execute {
+//                    val dao: ContactEventDAO =
+//                        CovidWatchDatabase.getInstance(context).contactEventDAO()
+//                    val contactEvent = ContactEvent(contactEventIdentifier.toString())
+//                    val isCurrentUserSick = context.getSharedPreferences(
+//                        context.getString(R.string.preference_file_key),
+//                        Context.MODE_PRIVATE
+//                    ).getBoolean(
+//                        context.getString(R.string.preference_is_current_user_sick),
+//                        false
+//                    )
+//                    contactEvent.wasPotentiallyInfectious = isCurrentUserSick
+//                    dao.insert(contactEvent)
+//                }
             }
         }
     }

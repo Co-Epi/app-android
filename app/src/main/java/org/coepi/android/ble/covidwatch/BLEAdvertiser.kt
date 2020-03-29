@@ -8,10 +8,6 @@ import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
-import org.covidwatch.android.R
-import org.covidwatch.android.data.ContactEvent
-import org.covidwatch.android.data.ContactEventDAO
-import org.covidwatch.android.data.CovidWatchDatabase
 import org.coepi.android.ble.covidwatch.utils.UUIDs
 import org.coepi.android.ble.covidwatch.utils.toBytes
 import org.coepi.android.ble.covidwatch.utils.toUUID
@@ -233,16 +229,17 @@ class BLEAdvertiser(private val context: Context, private val adapter: Bluetooth
     }
 
     fun logContactEventIdentifier(identifier: UUID) {
-        CovidWatchDatabase.databaseWriteExecutor.execute {
-            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(context).contactEventDAO()
-            val contactEvent = ContactEvent(identifier.toString())
-            val isCurrentUserSick = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE
-            ).getBoolean(context.getString(R.string.preference_is_current_user_sick), false)
-            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
-            dao.insert(contactEvent)
-        }
+        // TODO
+//        CovidWatchDatabase.databaseWriteExecutor.execute {
+//            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(context).contactEventDAO()
+//            val contactEvent = ContactEvent(identifier.toString())
+//            val isCurrentUserSick = context.getSharedPreferences(
+//                context.getString(R.string.preference_file_key),
+//                Context.MODE_PRIVATE
+//            ).getBoolean(context.getString(R.string.preference_is_current_user_sick), false)
+//            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
+//            dao.insert(contactEvent)
+//        }
     }
 
 }
