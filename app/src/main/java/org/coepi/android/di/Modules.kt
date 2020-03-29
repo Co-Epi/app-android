@@ -3,6 +3,7 @@ package org.coepi.android.di
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import org.coepi.android.ble.bleModule
 import org.coepi.android.cen.CENModule
 import org.coepi.android.cen.apiModule
 import org.coepi.android.repo.repoModule
@@ -43,7 +44,8 @@ val appModule = listOf(
     viewModelModule,
     systemModule,
     apiModule,
-    CENModule
+    CENModule,
+    bleModule
 )
 
 fun getSharedPrefs(androidApplication: Application): SharedPreferences =

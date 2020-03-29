@@ -1,23 +1,28 @@
 package org.coepi.android.ble.covidwatch
 
-import android.app.*
-import android.bluetooth.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
-import org.coepi.android.App
 import org.coepi.android.MainActivity
 import org.coepi.android.R
 import org.coepi.android.ble.covidwatch.utils.UUIDs
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
+import java.util.UUID
 
 class BLEForegroundService : LifecycleService() {
 
-    // APP
-    private var app: App? = null
     private var timer: Timer? = null
+
+    var advertiser: BLEAdvertiser? = null
+    var scanner: BLEScanner? = null
 
     companion object {
         // CONSTANTS
@@ -25,14 +30,6 @@ class BLEForegroundService : LifecycleService() {
         private const val CONTACT_EVENT_NUMBER_CHANGE_INTERVAL_MIN = 15
         private const val MS_TO_MIN = 60000
         private const val TAG = "BLEForegroundService"
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        val application = (application as? App) ?: return
-        app = application
-        app?.bleAdvertiser = BLEAdvertiser(this, BluetoothAdapter.getDefaultAdapter())
-        app?.bleScanner = BLEScanner(this, BluetoothAdapter.getDefaultAdapter())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -58,7 +55,7 @@ class BLEForegroundService : LifecycleService() {
         timer?.scheduleAtFixedRate(
             object : TimerTask() {
                 override fun run() {
-                    app?.bleAdvertiser?.changeContactEventIdentifierInServiceDataField()
+                    advertiser?.changeContactEventIdentifierInServiceDataField(UUID.randomUUID())
                 }
             },
             MS_TO_MIN * CONTACT_EVENT_NUMBER_CHANGE_INTERVAL_MIN.toLong(),
@@ -77,15 +74,15 @@ class BLEForegroundService : LifecycleService() {
 //            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
 //            dao.insert(contactEvent)
 //        }
-        app?.bleAdvertiser?.startAdvertiser(UUIDs.CONTACT_EVENT_SERVICE, newContactEventUUID)
-        app?.bleScanner?.startScanning(arrayOf<UUID>(UUIDs.CONTACT_EVENT_SERVICE))
+        advertiser?.startAdvertiser(UUIDs.CONTACT_EVENT_SERVICE, newContactEventUUID)
+        scanner?.startScanning(arrayOf<UUID>(UUIDs.CONTACT_EVENT_SERVICE))
 
         return START_STICKY
     }
 
     override fun onDestroy() {
-        app?.bleAdvertiser?.stopAdvertiser()
-        app?.bleScanner?.stopScanning()
+        advertiser?.stopAdvertiser()
+        scanner?.stopScanning()
         timer?.apply {
             cancel()
             purge()
@@ -93,10 +90,16 @@ class BLEForegroundService : LifecycleService() {
         super.onDestroy()
     }
 
+    inner class LocalBinder : Binder() {
+        internal val service: BLEForegroundService
+            get() = this@BLEForegroundService
+    }
+
+    private val binder: IBinder = LocalBinder()
 
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
-        return null
+        return binder
     }
 
     /**

@@ -13,12 +13,20 @@ import org.coepi.android.ble.covidwatch.utils.toBytes
 import org.coepi.android.ble.covidwatch.utils.toUUID
 import java.util.*
 
+interface BLEAdvertiser {
+    fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?)
+    fun stopAdvertiser()
+    fun changeContactEventIdentifierInServiceDataField(identifier: UUID)
+}
+
 /**
  * BLEAdvertiser is responsible for advertising the bluetooth services.
  * Only one instance of this class is to be constructed, but its not enforced. (for now)
  * You have been warned!
  */
-class BLEAdvertiser(private val context: Context, private val adapter: BluetoothAdapter) {
+class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
+    : BLEAdvertiser {
+
     // BLE
     private val advertiser: BluetoothLeAdvertiser = adapter.bluetoothLeAdvertiser
     private var bluetoothGattServer: BluetoothGattServer? = null
@@ -162,7 +170,7 @@ class BLEAdvertiser(private val context: Context, private val adapter: Bluetooth
      * @param serviceUUID The UUID to advertise the service
      * @param contactEventUUID The UUID that indicates the contact event
      */
-    fun startAdvertiser(
+    override fun startAdvertiser(
         serviceUUID: UUID?,
         contactEventUUID: UUID?
     ) {
@@ -209,7 +217,7 @@ class BLEAdvertiser(private val context: Context, private val adapter: Bluetooth
     /**
      * Stops all BLE related activity
      */
-    fun stopAdvertiser() {
+    override fun stopAdvertiser() {
         advertiser.stopAdvertising(advertisingCallback)
         bluetoothGattServer?.clearServices()
         bluetoothGattServer?.close()
@@ -217,15 +225,17 @@ class BLEAdvertiser(private val context: Context, private val adapter: Bluetooth
     }
 
     /**
-     * Changes the CEI to a new random valid UUID in the service data field
-     * NOTE: This will also log the CEI and stop/start the advertiser
+     * Changes the CEI to a new UUID in the service data field
+     * NOTE: This will also stop/start the advertiser
      */
-    fun changeContactEventIdentifierInServiceDataField() {
+    override fun changeContactEventIdentifierInServiceDataField(identifier: UUID) {
         Log.i(TAG, "Changing the contact event identifier in service data field...")
         stopAdvertiser()
-        val newContactEventIdentifier = UUID.randomUUID()
-        logContactEventIdentifier(newContactEventIdentifier)
-        startAdvertiser(UUIDs.CONTACT_EVENT_SERVICE, newContactEventIdentifier)
+
+        // TODO
+//        logContactEventIdentifier(newContactEventIdentifier)
+
+        startAdvertiser(UUIDs.CONTACT_EVENT_SERVICE, identifier)
     }
 
     fun logContactEventIdentifier(identifier: UUID) {
