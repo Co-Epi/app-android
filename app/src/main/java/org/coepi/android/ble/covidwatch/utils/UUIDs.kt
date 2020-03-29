@@ -1,4 +1,4 @@
-package org.covidwatch.android.utils
+package org.coepi.android.ble.covidwatch.utils
 
 import java.util.*
 

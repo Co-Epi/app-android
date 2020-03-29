@@ -1,13 +1,15 @@
-package org.covidwatch.android.ble
+package org.coepi.android.ble.covidwatch
 
 import android.app.*
 import android.bluetooth.*
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import org.coepi.android.App
+import org.coepi.android.MainActivity
+import org.coepi.android.R
 import org.covidwatch.android.CovidWatchApplication
 import org.covidwatch.android.MainActivity
 import org.covidwatch.android.R
@@ -20,7 +22,7 @@ import java.util.*
 class BLEForegroundService : LifecycleService() {
 
     // APP
-    private var app: CovidWatchApplication? = null
+    private var app: App? = null
     private var timer: Timer? = null
 
     companion object {
@@ -33,7 +35,7 @@ class BLEForegroundService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        val application = (application as? CovidWatchApplication) ?: return
+        val application = (application as? App) ?: return
         app = application
         app?.bleAdvertiser = BLEAdvertiser(this, BluetoothAdapter.getDefaultAdapter())
         app?.bleScanner = BLEScanner(this, BluetoothAdapter.getDefaultAdapter())

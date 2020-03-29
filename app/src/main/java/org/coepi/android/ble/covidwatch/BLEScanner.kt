@@ -1,4 +1,4 @@
-package org.covidwatch.android.ble
+package org.coepi.android.ble.covidwatch
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.*
@@ -11,8 +11,8 @@ import org.covidwatch.android.R
 import org.covidwatch.android.data.ContactEvent
 import org.covidwatch.android.data.ContactEventDAO
 import org.covidwatch.android.data.CovidWatchDatabase
-import org.covidwatch.android.utils.UUIDs
-import org.covidwatch.android.utils.toUUID
+import org.coepi.android.ble.covidwatch.utils.UUIDs
+import org.coepi.android.ble.covidwatch.utils.toUUID
 import java.util.*
 
 class BLEScanner(ctx: Context, adapter: BluetoothAdapter) {
