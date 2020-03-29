@@ -1,6 +1,7 @@
 package org.coepi.android.cen
 
 import android.os.Handler
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import org.coepi.android.system.log.log
 import retrofit2.Call
@@ -29,8 +30,11 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     // last time (unix timestamp) the CENKeys were requested
     var lastCENKeysCheck = 0
+    private val TAG_LOG = "CenRepo"
+
 
     init {
+        Log.i(TAG_LOG, "init!")
         CEN.value = ByteArray(0)
 
         // load last CENKey + CENKeytimestamp from local storage
@@ -59,7 +63,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
         if ( ( cenKeyTimestamp == 0 ) || ( roundedTimestamp(curTimestamp) > roundedTimestamp(cenKeyTimestamp) ) ) {
             // generate a new AES Key and store it in local storage
             val secretKey = KeyGenerator.getInstance("AES").generateKey()
-            cenKey = Base64.getEncoder().encodeToString(secretKey.encoded)
+            cenKey = android.util.Base64.encodeToString(secretKey.encoded,android.util.Base64.DEFAULT)
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
@@ -71,7 +75,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     private fun generateCEN(CENKey : String, ts : Int)  : ByteArray {
         // decode the base64 encoded key
-        val decodedCENKey = Base64.getDecoder().decode(CENKey)
+        val decodedCENKey = android.util.Base64.decode(CENKey,android.util.Base64.DEFAULT)
         // rebuild secretKey using SecretKeySpec
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
@@ -124,11 +128,13 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     }
 
     fun periodicCENKeysCheck() {
+        Log.i(TAG_LOG, "periodicCENKeysCheck!")//OK: I see this in the log!
         val call = cenkeysCheck(lastCENKeysCheck)
         call.enqueue(object :
             Callback<RealmCenKeys> {
             override fun onResponse(call: Call<RealmCenKeys?>?, response: Response<RealmCenKeys>) {
                 val statusCode: Int = response.code()
+                Log.i(TAG_LOG, "lastCENKeysCheck status ${statusCode}")//TODO: BARTPROBLEM I don't see this in the log!?
                 if ( statusCode == 200 ) {
                     val r: RealmCenKeys? = response.body()
                     r?.keys?.let {
@@ -172,8 +178,8 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     //  Not efficient... It would be best if all observed CENs are loaded into memory
     fun matchCENKey(key : String, maxTimestamp : Int) : List<RealmCen>? {
         // take the last 7 days of timestamps and generate all the possible CENs (e.g. 7 days) TODO: Parallelize this?
-        val minTimestamp = maxTimestamp - 7*24* CENLifetimeInSeconds
-        var possibleCENs = Array<String>(7*24) {i ->
+        val minTimestamp = maxTimestamp - 7*24* 60
+        var possibleCENs = Array<String>(7*24 *(60/CENLifetimeInSeconds)) {i ->
             val ts = maxTimestamp - CENLifetimeInSeconds * i
             val CENBytes = generateCEN(key, ts)
             CENBytes.toString()
