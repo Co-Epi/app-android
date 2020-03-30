@@ -62,6 +62,11 @@ class BleManagerImpl(
             serviceUUID, characteristicUUID, value, advertiser, scanner,
             scanCallback = {
                 scanObservable.onNext(it)
+            },
+            advertiserWriteCallback = {
+                // Since advertiser write is used as scan replacement
+                // for the Android (Central) / iOS (Peripheral) case, we broadcast it as scan.
+                scanObservable.onNext(it)
             }
         ))
         start()

@@ -15,13 +15,13 @@ import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
-import org.coepi.android.ble.covidwatch.utils.toUUID
 import java.util.UUID
 
 interface BLEAdvertiser {
     fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?)
     fun stopAdvertiser()
     fun changeAdvertisedValue(value: String?)
+    fun registerWriteCallback(callback: (String) -> Unit)
 }
 
 /**
@@ -41,6 +41,10 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
     private var characteristicUUID: UUID? = null
 
     private var advertisedValue: String? = null
+
+    // Case Android (Central) - iOS (Peripheral)
+    // https://docs.google.com/document/d/1f65V3PI214-uYfZLUZtm55kdVwoazIMqGJrxcYNI4eg/edit#
+    private var writeCallback: ((String) -> Unit)? = null
 
     // CONSTANTS
     companion object {
@@ -98,14 +102,13 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
                             return
                         }
 
-
-                        val newContactEventIdentifier = value?.toUUID()
-                        if (newContactEventIdentifier == null) {
+                        val str = value?.let { String(it) }
+                        if (str == null) {
                             result = BluetoothGatt.GATT_FAILURE
                             return
                         }
+                        writeCallback?.invoke(str)
 
-                        logContactEventIdentifier(newContactEventIdentifier)
                     } else {
                         result = BluetoothGatt.GATT_FAILURE
                     }
@@ -210,8 +213,11 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
         startAdvertiser(serviceUUID, characteristicUUID, value)
     }
 
+    override fun registerWriteCallback(callback: (String) -> Unit) {
+        writeCallback = callback
+    }
+
     fun logContactEventIdentifier(identifier: UUID) {
-        // TODO
 //        CovidWatchDatabase.databaseWriteExecutor.execute {
 //            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(context).contactEventDAO()
 //            val contactEvent = ContactEvent(identifier.toString())

@@ -21,6 +21,7 @@ interface BleService {
 
     fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, value: String)
     fun stopAdvertiser()
+    fun registerAdvertiserWriteCallback(callback: (String) -> Unit)
 
     fun changeAdvertisedValue(value: String)
 }
@@ -31,7 +32,8 @@ data class BleServiceConfiguration(
     val startValue: String,
     val advertiser: BLEAdvertiser,
     val scanner: BLEScanner,
-    val scanCallback: (String) -> Unit
+    val scanCallback: (String) -> Unit,
+    val advertiserWriteCallback: (String) -> Unit
 )
 
 class BLEForegroundService : LifecycleService(), BleService {
@@ -107,11 +109,15 @@ class BLEForegroundService : LifecycleService(), BleService {
 
     override fun changeAdvertisedValue(value: String) {
         val configuration = configuration ?: run {
-            log.e("Changing contact identifier but advertiser is not initialized")
+            log.e("Changing contact identifier but not configured yet")
             return
         }
-
         configuration.advertiser.changeAdvertisedValue(value)
+    }
+
+    override fun registerAdvertiserWriteCallback(callback: (String) -> Unit) {
+        val configuration = configuration ?: error("Not configured")
+        configuration.advertiser.registerWriteCallback(callback)
     }
 
     override fun onDestroy() {
@@ -145,6 +151,7 @@ class BLEForegroundService : LifecycleService(), BleService {
     }
 
     private fun BleServiceConfiguration.start() {
+        advertiser.registerWriteCallback(advertiserWriteCallback)
         advertiser.startAdvertiser(serviceUUID, characteristicUUID, startValue)
         scanner.registerScanCallback(scanCallback)
         scanner.startScanning(arrayOf(serviceUUID))
