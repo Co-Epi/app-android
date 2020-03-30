@@ -26,9 +26,11 @@ class CENFragment : Fragment() {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)
             adapter = neighborCENAdapter
         }
+
         viewModel.neighborCENs.observeWith(viewLifecycleOwner) {
             neighborCENAdapter.setItems(it)
         }
+
         viewModel.myCurrentCEN.observeWith(viewLifecycleOwner) {
             android.util.Log.i("BleFragment", "BleFragment new value: $it")
 

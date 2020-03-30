@@ -25,7 +25,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { SymptomsViewModel(get()) }
     viewModel { SettingsViewModel() }
-    viewModel { CENViewModel(get(), get()) }
+    viewModel { CENViewModel(get(), get(), get()) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get()) }

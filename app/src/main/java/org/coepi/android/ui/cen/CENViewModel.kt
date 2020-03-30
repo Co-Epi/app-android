@@ -1,16 +1,21 @@
 package org.coepi.android.ui.cen
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import org.coepi.android.ble.BleManager
 import org.coepi.android.cen.CenRepo
 import org.coepi.android.cen.RealmCen
 import org.coepi.android.cen.RealmCenReport
 import org.coepi.android.extensions.toLiveData
 import org.coepi.android.ui.navigation.RootNavigation
 
-class CENViewModel(repo: CenRepo,
-                   private val rootNav: RootNavigation) : ViewModel() {
+class CENViewModel(
+    repo: CenRepo,
+    private val rootNav: RootNavigation,
+    private val bleManager: BleManager
+) : ViewModel() {
 
     // CEN being broadcast by this device
     val myCurrentCEN = repo.CEN
@@ -18,11 +23,13 @@ class CENViewModel(repo: CenRepo,
         .toLiveData()
 
     // recently observed CENs
-    val neighborCENs: MutableLiveData<List<RealmCen>> by lazy {
-        MutableLiveData<List<RealmCen>>()
-    }
+    val neighborCENs: LiveData<List<String>> = bleManager.scanObservable
+        .scan(emptyList<String>()) { acc, element -> acc + element }
+        .toLiveData()
+
+    // TODO
     val cenReports: MutableLiveData<List<RealmCenReport>> by lazy {
-            MutableLiveData<List<RealmCenReport>>()
+        MutableLiveData<List<RealmCenReport>>()
     }
 
     private fun update() {
