@@ -30,9 +30,12 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     // last time (unix timestamp) the CENKeys were requested
     var lastCENKeysCheck = 0
+    private val TAG_LOG = "CenRepo"
+
 
     init {
-        CEN.onNext(ByteArray(0))
+        Log.i(TAG_LOG, "init!")
+        CEN.value = ByteArray(0)
 
         // load last CENKey + CENKeytimestamp from local storage
         val lastKeys = cenkeyDao.lastCENKeys(1)
@@ -60,7 +63,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
         if ( ( cenKeyTimestamp == 0 ) || ( roundedTimestamp(curTimestamp) > roundedTimestamp(cenKeyTimestamp) ) ) {
             // generate a new AES Key and store it in local storage
             val secretKey = KeyGenerator.getInstance("AES").generateKey()
-            cenKey = Base64.getEncoder().encodeToString(secretKey.encoded)
+            cenKey = android.util.Base64.encodeToString(secretKey.encoded,android.util.Base64.DEFAULT)
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
@@ -72,7 +75,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     private fun generateCEN(CENKey : String, ts : Int)  : ByteArray {
         // decode the base64 encoded key
-        val decodedCENKey = Base64.getDecoder().decode(CENKey)
+        val decodedCENKey = android.util.Base64.decode(CENKey,android.util.Base64.DEFAULT)
         // rebuild secretKey using SecretKeySpec
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
@@ -125,17 +128,22 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     }
 
     fun periodicCENKeysCheck() {
+        Log.i(TAG_LOG, "periodicCENKeysCheck!")//OK: I see this in the log!
         val call = cenkeysCheck(lastCENKeysCheck)
         call.enqueue(object :
             Callback<RealmCenKeys> {
             override fun onResponse(call: Call<RealmCenKeys?>?, response: Response<RealmCenKeys>) {
                 val statusCode: Int = response.code()
+                Log.i(TAG_LOG, "lastCENKeysCheck status ${statusCode}")//TODO: BARTPROBLEM I don't see this in the log!?
                 if ( statusCode == 200 ) {
                     val r: RealmCenKeys? = response.body()
                     r?.keys?.let {
                         for ( i in it.indices ) {
                             it[i]?.let { key ->
-                                matchCENKey(key, lastCENKeysCheck)
+                                val matched = matchCENKey(key, lastCENKeysCheck)
+                                if( matched!= null || matched.size > 0 ){
+                                    log.i("You've met a person with symptoms");
+                                }
                             }
                         }
                     }
