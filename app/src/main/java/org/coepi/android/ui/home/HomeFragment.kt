@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import org.coepi.android.databinding.FragmentHomeBinding.inflate
-import kotlinx.android.synthetic.main.fragment_home.*
 
 import org.coepi.android.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,20 +23,4 @@ class HomeFragment : Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
     }.root
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        check_in.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToCareFragment()
-
-            findNavController().navigate(action)
-        }
-
-        see_alerts.setOnClickListener {
-            // TODO: call nav action to contact alert fragment
-        }
-    }
-
 }

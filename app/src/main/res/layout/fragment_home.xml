@@ -73,6 +73,7 @@
                     app:layout_constraintTop_toBottomOf="@id/my_health_description"
                     app:layout_constraintStart_toEndOf="@id/my_health_icon"
                     android:text="@string/home_my_health_card_check_in_button"
+                    android:onClick="@{() -> vm.onCheckInClick()}"
                     android:textAppearance="@style/card_view_link"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"/>
@@ -129,6 +130,7 @@
                     android:layout_marginStart="19dp"
                     android:layout_marginTop="14dp"
                     android:text="@string/home_contact_alerts_card_see_alerts_button"
+                    android:onClick="@{() -> vm.onSeeAlertsClick()}"
                     android:textColor="@color/colorAccent"
                     android:textAppearance="@style/card_view_link"
                     android:textStyle="bold"/>

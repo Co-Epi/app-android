@@ -32,5 +32,12 @@
         android:name="org.coepi.android.ui.debug.logs.LogsFragment"
         android:label="@string/label_fragment_logs"
         tools:layout="@layout/fragment_logs" />
+    <fragment
+        android:id="@+id/symptomsFragment"
+        android:name="org.coepi.android.ui.symptoms.SymptomsFragment"
+        android:label="SymptomsFragment" />
+    <action
+        android:id="@+id/action_global_symptomsFragment"
+        app:destination="@id/symptomsFragment" />
 
 </navigation>
