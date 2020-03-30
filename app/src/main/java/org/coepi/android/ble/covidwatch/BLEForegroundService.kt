@@ -89,20 +89,6 @@ class BLEForegroundService : LifecycleService(), BleService {
         //////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////
 
-
-
-        // TODO
-//        CovidWatchDatabase.databaseWriteExecutor.execute {
-//            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(this).contactEventDAO()
-//            val contactEvent = ContactEvent(newContactEventUUID.toString())
-//            val isCurrentUserSick = getSharedPreferences(
-//                getString(R.string.preference_file_key),
-//                Context.MODE_PRIVATE
-//            ).getBoolean(getString(R.string.preference_is_current_user_sick), false)
-//            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
-//            dao.insert(contactEvent)
-//        }
-
         return START_STICKY
     }
 

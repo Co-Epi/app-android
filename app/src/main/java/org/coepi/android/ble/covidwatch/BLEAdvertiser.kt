@@ -206,28 +206,10 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
     override fun changeAdvertisedValue(value: String?) {
         Log.i(TAG, "Changing the contact event identifier in service data field...")
         stopAdvertiser()
-
-        // TODO
-//        logContactEventIdentifier(newContactEventIdentifier)
-
         startAdvertiser(serviceUUID, characteristicUUID, value)
     }
 
     override fun registerWriteCallback(callback: (String) -> Unit) {
         writeCallback = callback
     }
-
-    fun logContactEventIdentifier(identifier: UUID) {
-//        CovidWatchDatabase.databaseWriteExecutor.execute {
-//            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(context).contactEventDAO()
-//            val contactEvent = ContactEvent(identifier.toString())
-//            val isCurrentUserSick = context.getSharedPreferences(
-//                context.getString(R.string.preference_file_key),
-//                Context.MODE_PRIVATE
-//            ).getBoolean(context.getString(R.string.preference_is_current_user_sick), false)
-//            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
-//            dao.insert(contactEvent)
-//        }
-    }
-
 }

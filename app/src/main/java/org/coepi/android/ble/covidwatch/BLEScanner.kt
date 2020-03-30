@@ -76,23 +76,6 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
                         callback?.invoke(String(bytes))
                     }
                 }
-
-
-                // TODO
-//                CovidWatchDatabase.databaseWriteExecutor.execute {
-//                    val dao: ContactEventDAO =
-//                        CovidWatchDatabase.getInstance(context).contactEventDAO()
-//                    val contactEvent = ContactEvent(contactEventIdentifier.toString())
-//                    val isCurrentUserSick = context.getSharedPreferences(
-//                        context.getString(R.string.preference_file_key),
-//                        Context.MODE_PRIVATE
-//                    ).getBoolean(
-//                        context.getString(R.string.preference_is_current_user_sick),
-//                        false
-//                    )
-//                    contactEvent.wasPotentiallyInfectious = isCurrentUserSick
-//                    dao.insert(contactEvent)
-//                }
             }
         }
     }
