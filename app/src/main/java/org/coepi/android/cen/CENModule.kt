@@ -7,5 +7,5 @@ val CENModule = module {
     single { RealmCenReportDao(get()) }
     single { RealmCenKeyDao(get()) }
     single { CenRepo(get(), get(), get(), get()) }
-    single { CenManager(get(), get()) }
+    single { CenManager(get(), get(), get()) }
 }

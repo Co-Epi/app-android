@@ -12,23 +12,23 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import org.coepi.android.MainActivity
 import org.coepi.android.R
-import org.coepi.android.ble.covidwatch.utils.UUIDs.CONTACT_EVENT_SERVICE
 import org.coepi.android.system.log.log
 import java.util.Timer
-import java.util.TimerTask
 import java.util.UUID
-import java.util.UUID.randomUUID
 
 interface BleService {
     fun configure(configuration: BleServiceConfiguration)
 
-    fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?)
+    fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, value: String)
     fun stopAdvertiser()
 
-    fun changeContactEventIdentifierInServiceDataField(identifier: UUID)
+    fun changeAdvertisedValue(value: String)
 }
 
 data class BleServiceConfiguration(
+    val serviceUUID: UUID,
+    val characteristicUUID: UUID,
+    val startValue: String,
     val advertiser: BLEAdvertiser,
     val scanner: BLEScanner,
     val scanCallback: (ScannedData) -> Unit
@@ -65,20 +65,29 @@ class BLEForegroundService : LifecycleService(), BleService {
             .build()
         startForeground(6, notification)
 
-        // scheduler a new timer to start changing the contact event numbers
-        timer?.cancel()
-        timer = Timer()
-        timer?.scheduleAtFixedRate(
-            object : TimerTask() {
-                override fun run() {
-                    configuration?.advertiser?.changeContactEventIdentifierInServiceDataField(
-                        randomUUID()
-                    )
-                }
-            },
-            MS_TO_MIN * CONTACT_EVENT_NUMBER_CHANGE_INTERVAL_MIN.toLong(),
-            MS_TO_MIN * CONTACT_EVENT_NUMBER_CHANGE_INTERVAL_MIN.toLong()
-        )
+        //////////////////////////////////////////////////////////////
+        // TODO address this
+        // NOTE: Incompatibility (temporary?) with covidwatch
+        // CENs are scheduled outside, so disabling this scheduler
+        //////////////////////////////////////////////////////////////
+//        // scheduler a new timer to start changing the contact event numbers
+//        timer?.cancel()
+//        timer = Timer()
+//        timer?.scheduleAtFixedRate(
+//            object : TimerTask() {
+//                override fun run() {
+//                    configuration?.advertiser?.changeAdvertisedValue(
+//                        randomUUID()
+//                    )
+//                }
+//            },
+//            MS_TO_MIN * CONTACT_EVENT_NUMBER_CHANGE_INTERVAL_MIN.toLong(),
+//            MS_TO_MIN * CONTACT_EVENT_NUMBER_CHANGE_INTERVAL_MIN.toLong()
+//        )
+        //////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////
+
+
 
         // TODO
 //        CovidWatchDatabase.databaseWriteExecutor.execute {
@@ -98,21 +107,19 @@ class BLEForegroundService : LifecycleService(), BleService {
     }
 
     private fun BleServiceConfiguration.start() {
-        val newContactEventUUID = randomUUID()
-
-        advertiser.startAdvertiser(CONTACT_EVENT_SERVICE, newContactEventUUID)
+        advertiser.startAdvertiser(serviceUUID, characteristicUUID, startValue)
 
         scanner.registerScanCallback(scanCallback)
-        scanner.startScanning(arrayOf(CONTACT_EVENT_SERVICE))
+        scanner.startScanning(arrayOf(serviceUUID))
     }
 
-    override fun changeContactEventIdentifierInServiceDataField(identifier: UUID) {
+    override fun changeAdvertisedValue(value: String) {
         val configuration = configuration ?: run {
             log.e("Changing contact identifier but advertiser is not initialized")
             return
         }
 
-        configuration.advertiser.changeContactEventIdentifierInServiceDataField(identifier)
+        configuration.advertiser.changeAdvertisedValue(value)
     }
 
     override fun onDestroy() {
@@ -141,8 +148,8 @@ class BLEForegroundService : LifecycleService(), BleService {
         this.configuration = configuration
     }
 
-    override fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?) {
-        configuration?.advertiser?.startAdvertiser(serviceUUID, contactEventUUID)
+    override fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, value: String) {
+        configuration?.advertiser?.startAdvertiser(serviceUUID, characteristicUUID, value)
     }
 
     override fun stopAdvertiser() {
@@ -167,5 +174,4 @@ class BLEForegroundService : LifecycleService(), BleService {
             manager.createNotificationChannel(serviceChannel)
         }
     }
-
 }

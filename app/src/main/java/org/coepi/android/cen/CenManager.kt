@@ -1,30 +1,52 @@
 package org.coepi.android.cen
 
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import org.coepi.android.ble.BleManager
+import org.coepi.android.ble.BlePreconditions
+import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.Uuids
 import org.coepi.android.ble.covidwatch.ScannedData
-import org.coepi.android.ble.covidwatch.utils.UUIDs.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC
-import org.coepi.android.ble.covidwatch.utils.UUIDs.CONTACT_EVENT_SERVICE
 import org.coepi.android.system.log.log
 import java.util.UUID
 
-class CenManager(private val bleManager: BleManager, private val cenRepo: CenRepo) {
-
+class CenManager(
+    private val blePreconditions: BlePreconditionsNotifier,
+    private val bleManager: BleManager,
+    private val cenRepo: CenRepo
+) {
     private val disposables = CompositeDisposable()
 
-    init {
+    fun start() {
+        initServiceWhenBleIsEnabled()
         observeCen()
         observeScanner()
     }
 
+    private fun initServiceWhenBleIsEnabled() {
+        disposables += Observables.combineLatest(
+            blePreconditions.bleEnabled,
+            // Take the first CEN, needed to start the service
+            cenRepo.CEN
+        )
+        .take(1)
+        .subscribeBy(onNext = { (_, firstCen) ->
+            bleManager.startService(firstCen.toString()) // TODO review String <-> ByteArray
+            log.i("BlePreconditions met - BLE manager started")
+        }, onError = {
+            log.i("Error enabling bluetooth: $it")
+        })
+    }
+
+    /**
+     * Sends CEN to advertiser when it's changed in DB
+     */
     private fun observeCen() {
-        cenRepo.CEN.observeForever { cen ->
+        disposables += cenRepo.CEN.subscribeBy (onNext = { cen ->
             // ServiceData holds Android Contact Event Number (CEN) that the Android peripheral is advertising
             val cenString = cen.toString()
-            log.i("BleAdvertiser - observeForever CEN: $cenString")
 
             // TODO is check really needed? If yes, either add flag to advertiser or expose state and use here
 //            if (started) {
@@ -32,12 +54,11 @@ class CenManager(private val bleManager: BleManager, private val cenRepo: CenRep
 //            }
 
             if (cen != null) {
-                bleManager.startAdvertiser(
-                    CONTACT_EVENT_SERVICE,
-                    CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC
-                )
+                bleManager.startAdvertiser(cenString)
             }
-        }
+        }, onError = {
+            log.i("Error observing CEN: $it")
+        })
     }
 
     private fun observeScanner() {
@@ -49,11 +70,14 @@ class CenManager(private val bleManager: BleManager, private val cenRepo: CenRep
             })
     }
 
+    /**
+     * Inserts scanned CENs in DB
+     */
     private fun handleScannedData(data: ScannedData) {
         for (i in data.serviceUuids.indices) {
             val serviceUuid = data.serviceUuids[i]
 
-            if (serviceUuid.isCoepi()) {
+            if (serviceUuid.isCoepi()) { // TODO move this filtering to BLE classes
                 val serviceData = data.serviceData
                 // *************** The ServiceData IS WHERE WE TAKE THE ANDROID CEN that the Android peripheral is advertising and we record it in Contacts
                 // TODO make service data return the actual service data

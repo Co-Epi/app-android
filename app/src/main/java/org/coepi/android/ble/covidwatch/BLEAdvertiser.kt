@@ -8,15 +8,15 @@ import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
-import org.coepi.android.ble.covidwatch.utils.UUIDs
 import org.coepi.android.ble.covidwatch.utils.toBytes
 import org.coepi.android.ble.covidwatch.utils.toUUID
 import java.util.*
 
 interface BLEAdvertiser {
-    fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?)
+    fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?)
     fun stopAdvertiser()
-    fun changeContactEventIdentifierInServiceDataField(identifier: UUID)
+    fun changeAdvertisedValue(value: String?)
+//    fun registerIdentifierGenerator(generator: (() -> UUID))
 }
 
 /**
@@ -30,7 +30,14 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
     // BLE
     private val advertiser: BluetoothLeAdvertiser = adapter.bluetoothLeAdvertiser
     private var bluetoothGattServer: BluetoothGattServer? = null
-    private var advertisedContactEventUUID: UUID? = null
+
+    // TODO encapsulate these 2 maybe
+    private var serviceUUID: UUID? = null
+    private var characteristicUUID: UUID? = null
+
+    private var advertisedValue: String? = null
+
+    private var identifierGenerator: (() -> UUID)? = null
 
     // CONSTANTS
     companion object {
@@ -73,17 +80,19 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
                 var value: ByteArray? = null
 
                 try {
-                    if (characteristic?.uuid == UUIDs.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC) {
+                    if (characteristic?.uuid == characteristicUUID) {
                         if (offset != 0) {
                             result = BluetoothGatt.GATT_INVALID_OFFSET
                             return
                         }
 
+                        // TODO review this
+                        // TODO Do we really need to generate a new CEN here or can we
+                        // TODO just use the periodically generated / advertised one?
                         val newContactEventIdentifier = UUID.randomUUID()
-
                         logContactEventIdentifier(newContactEventIdentifier)
-
                         value = newContactEventIdentifier.toBytes()
+
                     } else {
                         result = BluetoothGatt.GATT_FAILURE
                     }
@@ -126,11 +135,12 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
 
                 var result = BluetoothGatt.GATT_SUCCESS
                 try {
-                    if (characteristic?.uuid == UUIDs.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC) {
+                    if (characteristic?.uuid == characteristicUUID) {
                         if (offset != 0) {
                             result = BluetoothGatt.GATT_INVALID_OFFSET
                             return
                         }
+
 
                         val newContactEventIdentifier = value?.toUUID()
                         if (newContactEventIdentifier == null) {
@@ -172,9 +182,12 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
      */
     override fun startAdvertiser(
         serviceUUID: UUID?,
-        contactEventUUID: UUID?
+        characteristicUUID: UUID?,
+        value: String?
     ) {
-        advertisedContactEventUUID = contactEventUUID
+        this.serviceUUID = serviceUUID
+        this.characteristicUUID = characteristicUUID
+        advertisedValue = value
 
         val settings = AdvertiseSettings.Builder()
             .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
@@ -182,11 +195,13 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
             .setConnectable(true)
             .build()
 
+        // TODO review this
+        val advertisedValueBytes = advertisedValue?.toByteArray()
+
 //        val testServiceDataMaxLength = ByteArray(20)
         val data = AdvertiseData.Builder()
             .setIncludeDeviceName(false)
-            .addServiceUuid(ParcelUuid(serviceUUID))
-            .addServiceData(ParcelUuid(serviceUUID), contactEventUUID?.toBytes())
+            .addServiceData(ParcelUuid(serviceUUID), advertisedValueBytes)
 //            .addServiceData(ParcelUuid(serviceUUID), testServiceDataMaxLength)
             .build()
 
@@ -196,12 +211,12 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
                 bluetoothManager.openGattServer(context, bluetoothGattServerCallback)
 
             val service = BluetoothGattService(
-                UUIDs.CONTACT_EVENT_SERVICE,
+                serviceUUID,
                 BluetoothGattService.SERVICE_TYPE_PRIMARY
             )
             service.addCharacteristic(
                 BluetoothGattCharacteristic(
-                    UUIDs.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC,
+                    characteristicUUID,
                     BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_WRITE,
                     BluetoothGattCharacteristic.PERMISSION_READ or BluetoothGattCharacteristic.PERMISSION_WRITE
                 )
@@ -228,15 +243,19 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
      * Changes the CEI to a new UUID in the service data field
      * NOTE: This will also stop/start the advertiser
      */
-    override fun changeContactEventIdentifierInServiceDataField(identifier: UUID) {
+    override fun changeAdvertisedValue(value: String?) {
         Log.i(TAG, "Changing the contact event identifier in service data field...")
         stopAdvertiser()
 
         // TODO
 //        logContactEventIdentifier(newContactEventIdentifier)
 
-        startAdvertiser(UUIDs.CONTACT_EVENT_SERVICE, identifier)
+        startAdvertiser(serviceUUID, characteristicUUID, value)
     }
+
+//    override fun registerIdentifierGenerator(generator: () -> UUID) {
+//        identifierGenerator = generator
+//    }
 
     fun logContactEventIdentifier(identifier: UUID) {
         // TODO

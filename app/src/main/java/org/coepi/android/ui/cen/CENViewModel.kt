@@ -6,15 +6,17 @@ import androidx.lifecycle.Transformations
 import org.coepi.android.cen.CenRepo
 import org.coepi.android.cen.RealmCen
 import org.coepi.android.cen.RealmCenReport
+import org.coepi.android.extensions.toLiveData
 import org.coepi.android.ui.navigation.RootNavigation
 
 class CENViewModel(repo: CenRepo,
                    private val rootNav: RootNavigation) : ViewModel() {
 
     // CEN being broadcast by this device
-    val myCurrentCEN = Transformations.map(repo.CEN) { cen ->
-        "CEN: $cen"
-    }
+    val myCurrentCEN = repo.CEN
+        .map { "CEN: $it" }
+        .toLiveData()
+
     // recently observed CENs
     val neighborCENs: MutableLiveData<List<RealmCen>> by lazy {
         MutableLiveData<List<RealmCen>>()

@@ -1,15 +1,18 @@
 package org.coepi.android.ble.covidwatch
 
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.le.*
+import android.bluetooth.le.BluetoothLeScanner
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanFilter
+import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.Build
 import android.os.ParcelUuid
 import android.util.Log
 import androidx.annotation.RequiresApi
-import org.coepi.android.ble.covidwatch.utils.UUIDs
 import org.coepi.android.ble.covidwatch.utils.toUUID
-import java.util.*
+import java.util.UUID
 
 interface BLEScanner {
     fun startScanning(serviceUUIDs: Array<UUID>?)
@@ -25,6 +28,9 @@ data class ScannedData(val serviceUuids: List<UUID>, val serviceData: String)
 class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
     private var callback: ((ScannedData) -> Unit)? = null
+
+    // TODO consider injecting UUID so it's not optional
+    private var serviceUuid: UUID? = null
 
     // BLE
     private val scanner: BluetoothLeScanner? = adapter.bluetoothLeScanner
@@ -48,9 +54,10 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
         private fun handleScanResult(result: ScanResult) {
             val scanRecord = result.scanRecord ?: return
+            val serviceUuid = this@BLEScannerImpl.serviceUuid ?: error("Didn't set service UUID")
 
             val contactEventIdentifier =
-                scanRecord.serviceData[ParcelUuid(UUIDs.CONTACT_EVENT_SERVICE)]?.toUUID()
+                scanRecord.serviceData[ParcelUuid(serviceUuid)]?.toUUID()
 
             if (contactEventIdentifier == null) {
                 Log.i(

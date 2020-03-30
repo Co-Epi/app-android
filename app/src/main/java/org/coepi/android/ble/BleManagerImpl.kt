@@ -20,17 +20,23 @@ import java.util.UUID
 interface BleManager {
     val scanObservable: Observable<ScannedData>
 
-    fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?)
+    fun startAdvertiser(value: String)
     fun stopAdvertiser()
 
-    fun startService()
+    fun startService(value: String)
     fun stopService()
 
-    fun changeContactEventIdentifierInServiceDataField(identifier: UUID)
+    fun changeAdvertisedValue(value: String)
 }
 
-class BleManagerImpl(val app: Application, val advertiser: BLEAdvertiser, val scanner: BLEScanner)
-    : BleManager {
+class BleManagerImpl(
+    val app: Application,
+    val advertiser: BLEAdvertiser,
+    val scanner: BLEScanner
+) : BleManager {
+
+    private val serviceUUID: UUID = UUID.fromString("0000C019-0000-1000-8000-00805F9B34FB")
+    private val characteristicUUID: UUID = UUID.fromString("D61F4F27-3D6B-4B04-9E46-C9D2EA617F62")
 
     override val scanObservable: PublishSubject<ScannedData> = create()
 
@@ -38,12 +44,16 @@ class BleManagerImpl(val app: Application, val advertiser: BLEAdvertiser, val sc
 
     private var service: BLEForegroundService? = null
 
+    private var value: String? = null
+
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val value = this@BleManagerImpl.value
+                ?: error("No value to advertise")
+
             val bleService = (service as LocalBinder).service
             bleService.configure(BleServiceConfiguration(
-                advertiser,
-                scanner,
+                serviceUUID, characteristicUUID, value, advertiser, scanner,
                 scanCallback = {
                     scanObservable.onNext(it)
                 }
@@ -55,24 +65,37 @@ class BleManagerImpl(val app: Application, val advertiser: BLEAdvertiser, val sc
         override fun onServiceDisconnected(name: ComponentName?) {}
     }
 
-    override fun changeContactEventIdentifierInServiceDataField(identifier: UUID) {
-        service?.changeContactEventIdentifierInServiceDataField(identifier)
+    override fun changeAdvertisedValue(value: String) {
+        this.value = value
+
+        service?.changeAdvertisedValue(value)
     }
 
-    override fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?) {
-        service?.startAdvertiser(serviceUUID, contactEventUUID)
+    override fun startAdvertiser(value: String) {
+        this.value = value
+
+        service?.startAdvertiser(serviceUUID, characteristicUUID, value)
+    }
+
+    override fun startService(value: String) {
+        this.value = value
+
+        app.bindService(intent, serviceConnection, BIND_AUTO_CREATE)
+        app.startService(intent)
     }
 
     override fun stopAdvertiser() {
         service?.stopAdvertiser()
     }
 
-    override fun startService() {
-        app.bindService(intent, serviceConnection, BIND_AUTO_CREATE)
-        app.startService(intent)
-    }
-
     override fun stopService() {
         app.stopService(intent)
+    }
+
+    companion object {
+        val CONTACT_EVENT_SERVICE: UUID =
+            UUID.fromString("0000C019-0000-1000-8000-00805F9B34FB")
+        val CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC: UUID =
+            UUID.fromString("D61F4F27-3D6B-4B04-9E46-C9D2EA617F62")
     }
 }

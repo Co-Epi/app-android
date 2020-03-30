@@ -1,7 +1,8 @@
 package org.coepi.android.cen
 
 import android.os.Handler
-import androidx.lifecycle.MutableLiveData
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.BehaviorSubject.create
 import org.coepi.android.system.log.log
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,8 +23,8 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     private var cenKeyTimestamp = 0
     
     // the latest CEN (ByteArray form), generated using cenKey
-    var CEN : MutableLiveData<ByteArray> = MutableLiveData<ByteArray>()
-    var CENKeyLifetimeInSeconds = 7*86400 // every 7 days a new key is generated
+    var CEN : BehaviorSubject<ByteArray> = create()
+    private var CENKeyLifetimeInSeconds = 7*86400 // every 7 days a new key is generated
     var CENLifetimeInSeconds = 15*60   // every 15 mins a new CEN is generated
     private val periodicCENKeysCheckFrequencyInSeconds = 60*30 // run every 30 mins
 
@@ -31,7 +32,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     var lastCENKeysCheck = 0
 
     init {
-        CEN.value = ByteArray(0)
+        CEN.onNext(ByteArray(0))
 
         // load last CENKey + CENKeytimestamp from local storage
         val lastKeys = cenkeyDao.lastCENKeys(1)
@@ -63,7 +64,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
-        CEN.value = generateCEN(cenKey, curTimestamp)
+        CEN.onNext(generateCEN(cenKey, curTimestamp))
         Handler().postDelayed({
             refreshCENAndCENKeys()
         }, CENLifetimeInSeconds * 1000L)

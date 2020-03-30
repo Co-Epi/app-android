@@ -15,6 +15,7 @@ val bleModule = module {
     single { createBleAdvertiser(androidApplication()) }
     single { createBleScanner(androidApplication()) }
     single<BleManager> { BleManagerImpl(androidApplication(), get(), get()) }
+    single<BlePreconditionsNotifier> { BlePreconditionsNotifierImpl() }
 }
 
 private val bluetoothAdapter: BluetoothAdapter? get() = BluetoothAdapter.getDefaultAdapter()
@@ -30,9 +31,10 @@ private fun createBleScanner(app: Application): BLEScanner =
     } ?: NoopBleScanner()
 
 class NoopBleAdvertiser: BLEAdvertiser {
-    override fun startAdvertiser(serviceUUID: UUID?, contactEventUUID: UUID?) {}
+    override fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?) {}
     override fun stopAdvertiser() {}
-    override fun changeContactEventIdentifierInServiceDataField(identifier: UUID) {}
+    override fun changeAdvertisedValue(value: String?) {}
+//    override fun registerIdentifierGenerator(generator: () -> UUID) {}
 }
 
 class NoopBleScanner: BLEScanner {

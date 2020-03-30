@@ -10,6 +10,8 @@ import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.ble.BleManager
 import org.coepi.android.ble.BlePreconditions
+import org.coepi.android.ble.BlePreconditionsNotifier
+import org.coepi.android.cen.CenManager
 import org.coepi.android.cen.CenRepo
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.navigation.Navigator
@@ -20,22 +22,25 @@ import org.koin.android.ext.android.inject
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
     private val onboardingShower: OnboardingShower by inject()
+    private val blePreconditionsNotifier: BlePreconditionsNotifier by inject()
+    private val cenManager: CenManager by inject()
 
-    private var disposables = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
-    lateinit var blePreconditions : BlePreconditions
-    private val bleManager: BleManager by inject()
+    private var blePreconditions: BlePreconditions? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
         observeRootNavigation()
+
         blePreconditions = BlePreconditions(this) {
-            bleManager.startService()
+            blePreconditionsNotifier.notifyBleEnabled()
             log.i("BlePreconditions met - BLE manager started")
         }
-        blePreconditions.onActivityCreated()
-        log.i("MainActivity - onCreate")
+        blePreconditions?.onActivityCreated()
+
+        cenManager.start()
     }
 
     private fun observeRootNavigation() {
@@ -47,6 +52,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        blePreconditions.onActivityResult(requestCode, resultCode, data)
+        blePreconditions?.onActivityResult(requestCode, resultCode, data)
     }
 }
