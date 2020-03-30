@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Base64
+import java.util.Vector
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -31,7 +32,6 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     // last time (unix timestamp) the CENKeys were requested
     var lastCENKeysCheck = 0
-    private val TAG_LOG = "CenRepo"
 
 
     init {
@@ -133,17 +133,21 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
             Callback<RealmCenKeys> {
             override fun onResponse(call: Call<RealmCenKeys?>?, response: Response<RealmCenKeys>) {
                 val statusCode: Int = response.code()
-                //TODO: PROBLEM I don't see this in the log!?
                 if ( statusCode == 200 ) {
                     val r: RealmCenKeys? = response.body()
                     r?.keys?.let {
+                        var keyMatched=Vector<String>()
                         for ( i in it.indices ) {
                             it[i]?.let { key ->
                                 val matched = matchCENKey(key, lastCENKeysCheck)
                                 if( matched!= null && matched.isNotEmpty() ){
-                                    log.i("You've met a person with symptoms");
+                                    keyMatched.add(key);
                                 }
                             }
+                        }
+                        if( keyMatched.isNotEmpty() ){
+                            log.i("You've met a person with symptoms");
+                            processMatches(keyMatched);
                         }
                     }
                 } else {
@@ -162,13 +166,13 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     }
 
     // processMatches fetches CENReport
-    fun processMatches(matchedCENs : List<RealmCen>?) {
-        matchedCENs?.let {
+    fun processMatches(matchedCENKeys : Vector<String>?) {
+        matchedCENKeys?.let {
             if ( it.size > 0 ) {
                 log.i("processMatches MATCH Found")
                 for (i in it.indices) {
-                    val matchedCENkey = matchedCENs[i]
-                    val call = getCENReport(matchedCENkey.cen)
+                    val matchedCENkey = matchedCENKeys[i]
+                    val call = getCENReport(matchedCENkey)
                     // TODO: for each match fetch Report data and record in Symptoms
                     // cenReportDao.insert(cenReport)
                 }
@@ -180,8 +184,8 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     //  Not efficient... It would be best if all observed CENs are loaded into memory
     fun matchCENKey(key : String, maxTimestamp : Int) : List<RealmCen>? {
         // take the last 7 days of timestamps and generate all the possible CENs (e.g. 7 days) TODO: Parallelize this?
-        val minTimestamp = maxTimestamp - 7*24* CENLifetimeInSeconds
-        var possibleCENs = Array<String>(7*24) {i ->
+        val minTimestamp = maxTimestamp - 7*24* 60
+        var possibleCENs = Array<String>(7*24 *(60/CENLifetimeInSeconds)) {i ->
             val ts = maxTimestamp - CENLifetimeInSeconds * i
             val CENBytes = generateCEN(key, ts)
             CENBytes.toString()
