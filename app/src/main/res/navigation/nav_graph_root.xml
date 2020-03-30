@@ -19,7 +19,7 @@
         android:id="@+id/onboarding"
         android:name="org.coepi.android.ui.onboarding.OnboardingFragment"
         android:label="@string/label_fragment_onboarding"
-        tools:layout="@layout/fragment_tabs_container" />
+        tools:layout="@layout/fragment_onboarding" />
 
     <action
         android:id="@+id/action_global_logs"
@@ -35,9 +35,18 @@
     <fragment
         android:id="@+id/symptomsFragment"
         android:name="org.coepi.android.ui.symptoms.SymptomsFragment"
-        android:label="SymptomsFragment" />
+        android:label="SymptomsFragment"
+        tools:layout="@layout/fragment_symptoms"/>
     <action
         android:id="@+id/action_global_symptomsFragment"
         app:destination="@id/symptomsFragment" />
+    <fragment
+        android:id="@+id/CENFragment"
+        android:name="org.coepi.android.ui.cen.CENFragment"
+        android:label="CENFragment"
+        tools:layout="@layout/fragment_ble"/>
+    <action
+        android:id="@+id/action_global_CENFragment"
+        app:destination="@id/CENFragment" />
 
 </navigation>

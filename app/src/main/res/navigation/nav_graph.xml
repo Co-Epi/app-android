@@ -10,11 +10,7 @@
         android:name="org.coepi.android.ui.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home"
-        >
-        <action
-            android:id="@+id/action_home_fragment_to_care_fragment"
-            app:destination="@id/care_fragment" />
-    </fragment>
+        />
 
     <fragment
         android:id="@+id/care_fragment"
