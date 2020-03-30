@@ -38,6 +38,6 @@ class NoopBleAdvertiser: BLEAdvertiser {
 
 class NoopBleScanner: BLEScanner {
     override fun startScanning(serviceUUIDs: Array<UUID>?) {}
-    override fun registerScanCallback(callback: (ScannedData) -> Unit) {}
+    override fun registerScanCallback(callback: (String) -> Unit) {}
     override fun stopScanning() {}
 }

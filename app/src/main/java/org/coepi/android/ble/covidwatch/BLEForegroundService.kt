@@ -31,7 +31,7 @@ data class BleServiceConfiguration(
     val startValue: String,
     val advertiser: BLEAdvertiser,
     val scanner: BLEScanner,
-    val scanCallback: (ScannedData) -> Unit
+    val scanCallback: (String) -> Unit
 )
 
 class BLEForegroundService : LifecycleService(), BleService {

@@ -5,12 +5,8 @@ import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import org.coepi.android.ble.BleManager
-import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
-import org.coepi.android.ble.Uuids
-import org.coepi.android.ble.covidwatch.ScannedData
 import org.coepi.android.system.log.log
-import java.util.UUID
 
 class CenManager(
     private val blePreconditions: BlePreconditionsNotifier,
@@ -64,36 +60,9 @@ class CenManager(
     private fun observeScanner() {
         disposables += bleManager.scanObservable
             .subscribeBy(onNext = {
-                handleScannedData(it)
+                cenRepo.insertCEN(it)
             }, onError = {
                 log.e("Error scanning: $it")
             })
     }
-
-    /**
-     * Inserts scanned CENs in DB
-     */
-    private fun handleScannedData(data: ScannedData) {
-        for (i in data.serviceUuids.indices) {
-            val serviceUuid = data.serviceUuids[i]
-
-            if (serviceUuid.isCoepi()) { // TODO move this filtering to BLE classes
-                val serviceData = data.serviceData
-                // *************** The ServiceData IS WHERE WE TAKE THE ANDROID CEN that the Android peripheral is advertising and we record it in Contacts
-                // TODO make service data return the actual service data
-                log.i("Discovered CoEpi with ServiceData: $serviceUuid $serviceData")
-                cenRepo.insertCEN(serviceData)
-
-            } else {
-                // TODO review this. Seems weird.
-                val x = Uuids.service.toString()
-                val serviceData = data.serviceData
-                log.d("Discovered non-CoEpi Service UUID: $x $serviceData")
-                cenRepo.insertCEN(serviceData)
-            }
-        }
-    }
-
-    private fun UUID.isCoepi() =
-        Uuids.service.toString() == toString()
 }

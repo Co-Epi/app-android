@@ -18,7 +18,7 @@ import org.coepi.android.ble.covidwatch.ScannedData
 import java.util.UUID
 
 interface BleManager {
-    val scanObservable: Observable<ScannedData>
+    val scanObservable: Observable<String>
 
     fun startAdvertiser(value: String)
     fun stopAdvertiser()
@@ -38,7 +38,7 @@ class BleManagerImpl(
     private val serviceUUID: UUID = UUID.fromString("0000C019-0000-1000-8000-00805F9B34FB")
     private val characteristicUUID: UUID = UUID.fromString("D61F4F27-3D6B-4B04-9E46-C9D2EA617F62")
 
-    override val scanObservable: PublishSubject<ScannedData> = create()
+    override val scanObservable: PublishSubject<String> = create()
 
     private val intent get() = Intent(app, BLEForegroundService::class.java)
 

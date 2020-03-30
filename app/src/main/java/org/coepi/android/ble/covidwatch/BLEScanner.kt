@@ -17,8 +17,7 @@ import java.util.UUID
 interface BLEScanner {
     fun startScanning(serviceUUIDs: Array<UUID>?)
 
-    // TODO consider using rx
-    fun registerScanCallback(callback: (ScannedData) -> Unit)
+    fun registerScanCallback(callback: (String) -> Unit)
 
     fun stopScanning()
 }
@@ -27,7 +26,7 @@ data class ScannedData(val serviceUuids: List<UUID>, val serviceData: String)
 
 class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
-    private var callback: ((ScannedData) -> Unit)? = null
+    private var callback: ((String) -> Unit)? = null
 
     // TODO consider injecting UUID so it's not optional
     private var serviceUuid: UUID? = null
@@ -72,12 +71,12 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
                         .toUpperCase()}"
                 )
 
-                val serviceUuids: List<UUID> = scanRecord.serviceUuids.map { it.uuid }
+                scanRecord.serviceUuids.filter { it.uuid == serviceUuid }.forEach { uuid ->
+                    scanRecord.serviceData[uuid]?.let { bytes ->
+                        callback?.invoke(String(bytes))
+                    }
+                }
 
-                callback?.invoke(ScannedData(serviceUuids,
-                    // TODO this seems wrong. We should return service UUID + corresponding byte array
-                    scanRecord.serviceData.toString()
-                ))
 
                 // TODO
 //                CovidWatchDatabase.databaseWriteExecutor.execute {
@@ -130,7 +129,7 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
         Log.i(TAG, "Started scanning")
     }
 
-    override fun registerScanCallback(callback: (ScannedData) -> Unit) {
+    override fun registerScanCallback(callback: (String) -> Unit) {
         this.callback = callback
     }
 
