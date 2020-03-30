@@ -10,25 +10,27 @@ import org.coepi.android.system.Preferences
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.cen.CENViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
-import org.coepi.android.ui.container.TabsContainerViewModel
+import org.coepi.android.ui.container.ContainerViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
+import org.coepi.android.ui.home.HomeViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
+    viewModel { HomeViewModel(get()) }
     viewModel { SymptomsViewModel(get()) }
     viewModel { SettingsViewModel() }
     viewModel { CENViewModel(get(), get()) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get()) }
-    viewModel { TabsContainerViewModel(get()) }
+    viewModel { ContainerViewModel(get()) }
 }
 
 val systemModule = module {
