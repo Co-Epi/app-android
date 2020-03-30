@@ -35,7 +35,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
 
     init {
-        CEN.value = ByteArray(0)
+        CEN.onNext( ByteArray(0))
 
         // load last CENKey + CENKeytimestamp from local storage
         val lastKeys = cenkeyDao.lastCENKeys(1)
