@@ -140,7 +140,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
                         for ( i in it.indices ) {
                             it[i]?.let { key ->
                                 val matched = matchCENKey(key, lastCENKeysCheck)
-                                if( matched!= null || matched.size > 0 ){
+                                if( matched!= null && matched.isNotEmpty() ){
                                     log.i("You've met a person with symptoms");
                                 }
                             }
