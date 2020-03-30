@@ -70,6 +70,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    
+    def appCenterSdkVersion = '3.1.0'
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 
     // used for KeyPair Generation (RSA+ECDSA+ED25519) / JSON Web Key + Signatures
     implementation "com.nimbusds:nimbus-jose-jwt:7.8.1"
