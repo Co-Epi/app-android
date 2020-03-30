@@ -5,9 +5,10 @@ import org.coepi.android.ui.debug.logs.LogsFragmentDirections.Companion.actionGl
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
 
-class TabsContainerViewModel(private val nav: RootNavigation) : ViewModel() {
+class ContainerViewModel(private val nav: RootNavigation) : ViewModel() {
 
     fun onDebugClick() {
         nav.navigate(ToDirections(actionGlobalLogs()))
     }
+
 }

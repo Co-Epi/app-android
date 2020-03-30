@@ -1,6 +1,5 @@
-package org.coepi.android.network
+package org.coepi.android.cen
 
-import org.coepi.android.network.api.ExposureApi
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -8,14 +7,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val apiModule = module {
     single { provideRetrofit() }
-    single { provideExposureApi(get()) }
+    single { provideCENApi(get()) }
 }
 
 private fun provideRetrofit() : Retrofit = Retrofit.Builder()
     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
     .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl("")
+    .baseUrl("https://coepi.wolk.com:8080")
     .build()
 
-private fun provideExposureApi(retrofit: Retrofit): ExposureApi =
-    retrofit.create(ExposureApi::class.java)
+private fun provideCENApi(retrofit: Retrofit): CENApi =
+    retrofit.create(CENApi::class.java)

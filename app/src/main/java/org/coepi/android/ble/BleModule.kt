@@ -1,11 +1,43 @@
 package org.coepi.android.ble
 
+import android.app.Application
+import android.bluetooth.BluetoothAdapter
+import org.coepi.android.ble.covidwatch.BLEAdvertiser
+import org.coepi.android.ble.covidwatch.BLEAdvertiserImpl
+import org.coepi.android.ble.covidwatch.BLEScanner
+import org.coepi.android.ble.covidwatch.BLEScannerImpl
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
-
-// TODO bg service
+import java.util.UUID
 
 val bleModule = module {
-    single<BleDiscovery> { BleDiscoveryImpl(androidApplication()) }
-    single { BlePeripheral(androidApplication()) }
+    single { createBleAdvertiser(androidApplication()) }
+    single { createBleScanner(androidApplication()) }
+    single<BleManager> { BleManagerImpl(androidApplication(), get(), get()) }
+    single<BlePreconditionsNotifier> { BlePreconditionsNotifierImpl() }
+}
+
+private val bluetoothAdapter: BluetoothAdapter? get() = BluetoothAdapter.getDefaultAdapter()
+
+private fun createBleAdvertiser(app: Application): BLEAdvertiser =
+    bluetoothAdapter?.let { adapter ->
+        BLEAdvertiserImpl(app, adapter)
+    } ?: NoopBleAdvertiser()
+
+private fun createBleScanner(app: Application): BLEScanner =
+    bluetoothAdapter?.let { adapter ->
+        BLEScannerImpl(app, adapter)
+    } ?: NoopBleScanner()
+
+class NoopBleAdvertiser: BLEAdvertiser {
+    override fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?) {}
+    override fun stopAdvertiser() {}
+    override fun changeAdvertisedValue(value: String?) {}
+    override fun registerWriteCallback(callback: (String) -> Unit) {}
+}
+
+class NoopBleScanner: BLEScanner {
+    override fun startScanning(serviceUUIDs: Array<UUID>?) {}
+    override fun registerScanCallback(callback: (String) -> Unit) {}
+    override fun stopScanning() {}
 }
