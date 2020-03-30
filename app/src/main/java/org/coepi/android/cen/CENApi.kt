@@ -14,7 +14,7 @@ interface CENApi {
 
     // get recent keys that have CEN Reports
     @GET("/cenkeys/{timestamp}")
-    fun cenkeysCheck(@Path("timestamp") timestamp : Int): Call<RealmCenKeys>
+    fun cenkeysCheck(@Path("timestamp") timestamp : Int): Call<Array<String>>
 
     // get report based on matched CENkey
     @GET("/cenreport/{key}")
