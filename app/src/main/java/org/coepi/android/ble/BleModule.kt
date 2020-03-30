@@ -34,7 +34,6 @@ class NoopBleAdvertiser: BLEAdvertiser {
     override fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?) {}
     override fun stopAdvertiser() {}
     override fun changeAdvertisedValue(value: String?) {}
-//    override fun registerIdentifierGenerator(generator: () -> UUID) {}
 }
 
 class NoopBleScanner: BLEScanner {

@@ -1,6 +1,13 @@
 package org.coepi.android.ble.covidwatch
 
-import android.bluetooth.*
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothGatt
+import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattServer
+import android.bluetooth.BluetoothGattServerCallback
+import android.bluetooth.BluetoothGattService
+import android.bluetooth.BluetoothManager
 import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
@@ -8,15 +15,13 @@ import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
-import org.coepi.android.ble.covidwatch.utils.toBytes
 import org.coepi.android.ble.covidwatch.utils.toUUID
-import java.util.*
+import java.util.UUID
 
 interface BLEAdvertiser {
     fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?)
     fun stopAdvertiser()
     fun changeAdvertisedValue(value: String?)
-//    fun registerIdentifierGenerator(generator: (() -> UUID))
 }
 
 /**
@@ -36,8 +41,6 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
     private var characteristicUUID: UUID? = null
 
     private var advertisedValue: String? = null
-
-    private var identifierGenerator: (() -> UUID)? = null
 
     // CONSTANTS
     companion object {
@@ -66,52 +69,6 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
             override fun onServiceAdded(status: Int, service: BluetoothGattService?) {
                 super.onServiceAdded(status, service)
                 Log.i(TAG, "onServiceAdded status=$status service=$service")
-            }
-
-            override fun onCharacteristicReadRequest(
-                device: BluetoothDevice?,
-                requestId: Int,
-                offset: Int,
-                characteristic: BluetoothGattCharacteristic?
-            ) {
-                super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
-
-                var result = BluetoothGatt.GATT_SUCCESS
-                var value: ByteArray? = null
-
-                try {
-                    if (characteristic?.uuid == characteristicUUID) {
-                        if (offset != 0) {
-                            result = BluetoothGatt.GATT_INVALID_OFFSET
-                            return
-                        }
-
-                        // TODO review this
-                        // TODO Do we really need to generate a new CEN here or can we
-                        // TODO just use the periodically generated / advertised one?
-                        val newContactEventIdentifier = UUID.randomUUID()
-                        logContactEventIdentifier(newContactEventIdentifier)
-                        value = newContactEventIdentifier.toBytes()
-
-                    } else {
-                        result = BluetoothGatt.GATT_FAILURE
-                    }
-                } catch (exception: Exception) {
-                    result = BluetoothGatt.GATT_FAILURE
-                    value = null
-                } finally {
-                    Log.i(
-                        TAG,
-                        "onCharacteristicReadRequest result=$result device=$device requestId=$requestId offset=$offset characteristic=$characteristic"
-                    )
-                    bluetoothGattServer?.sendResponse(
-                        device,
-                        requestId,
-                        result,
-                        offset,
-                        value
-                    )
-                }
             }
 
             override fun onCharacteristicWriteRequest(
@@ -252,10 +209,6 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
 
         startAdvertiser(serviceUUID, characteristicUUID, value)
     }
-
-//    override fun registerIdentifierGenerator(generator: () -> UUID) {
-//        identifierGenerator = generator
-//    }
 
     fun logContactEventIdentifier(identifier: UUID) {
         // TODO
