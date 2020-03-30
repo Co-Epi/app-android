@@ -6,7 +6,6 @@ import org.coepi.android.ble.covidwatch.BLEAdvertiser
 import org.coepi.android.ble.covidwatch.BLEAdvertiserImpl
 import org.coepi.android.ble.covidwatch.BLEScanner
 import org.coepi.android.ble.covidwatch.BLEScannerImpl
-import org.coepi.android.ble.covidwatch.ScannedData
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import java.util.UUID

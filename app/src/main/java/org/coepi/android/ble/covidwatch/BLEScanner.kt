@@ -22,8 +22,6 @@ interface BLEScanner {
     fun stopScanning()
 }
 
-data class ScannedData(val serviceUuids: List<UUID>, val serviceData: String)
-
 class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
     private var callback: ((String) -> Unit)? = null
