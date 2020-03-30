@@ -14,8 +14,8 @@ import org.coepi.android.ble.covidwatch.BLEForegroundService
 import org.coepi.android.ble.covidwatch.BLEForegroundService.LocalBinder
 import org.coepi.android.ble.covidwatch.BLEScanner
 import org.coepi.android.ble.covidwatch.BleServiceConfiguration
-import org.coepi.android.ble.covidwatch.ScannedData
 import java.util.UUID
+import java.util.UUID.fromString
 
 interface BleManager {
     val scanObservable: Observable<String>
@@ -30,13 +30,13 @@ interface BleManager {
 }
 
 class BleManagerImpl(
-    val app: Application,
-    val advertiser: BLEAdvertiser,
-    val scanner: BLEScanner
+    private val app: Application,
+    private val advertiser: BLEAdvertiser,
+    private val scanner: BLEScanner
 ) : BleManager {
 
-    private val serviceUUID: UUID = UUID.fromString("0000C019-0000-1000-8000-00805F9B34FB")
-    private val characteristicUUID: UUID = UUID.fromString("D61F4F27-3D6B-4B04-9E46-C9D2EA617F62")
+    private val serviceUUID: UUID = fromString("0000C019-0000-1000-8000-00805F9B34FB")
+    private val characteristicUUID: UUID = fromString("D61F4F27-3D6B-4B04-9E46-C9D2EA617F62")
 
     override val scanObservable: PublishSubject<String> = create()
 
@@ -92,12 +92,5 @@ class BleManagerImpl(
 
     override fun stopService() {
         app.stopService(intent)
-    }
-
-    companion object {
-        val CONTACT_EVENT_SERVICE: UUID =
-            UUID.fromString("0000C019-0000-1000-8000-00805F9B34FB")
-        val CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC: UUID =
-            UUID.fromString("D61F4F27-3D6B-4B04-9E46-C9D2EA617F62")
     }
 }
