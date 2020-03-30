@@ -101,17 +101,9 @@ class BLEForegroundService : LifecycleService(), BleService {
 //            dao.insert(contactEvent)
 //        }
 
-        configuration?.start()
-
         return START_STICKY
     }
 
-    private fun BleServiceConfiguration.start() {
-        advertiser.startAdvertiser(serviceUUID, characteristicUUID, startValue)
-
-        scanner.registerScanCallback(scanCallback)
-        scanner.startScanning(arrayOf(serviceUUID))
-    }
 
     override fun changeAdvertisedValue(value: String) {
         val configuration = configuration ?: run {
@@ -146,6 +138,16 @@ class BLEForegroundService : LifecycleService(), BleService {
 
     override fun configure(configuration: BleServiceConfiguration) {
         this.configuration = configuration
+    }
+
+    fun start() {
+        configuration?.start() ?: error("Starting without a configuration")
+    }
+
+    private fun BleServiceConfiguration.start() {
+        advertiser.startAdvertiser(serviceUUID, characteristicUUID, startValue)
+        scanner.registerScanCallback(scanCallback)
+        scanner.startScanning(arrayOf(serviceUUID))
     }
 
     override fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, value: String) {

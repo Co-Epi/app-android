@@ -48,21 +48,23 @@ class BleManagerImpl(
 
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val value = this@BleManagerImpl.value
-                ?: error("No value to advertise")
-
-            val bleService = (service as LocalBinder).service
-            bleService.configure(BleServiceConfiguration(
-                serviceUUID, characteristicUUID, value, advertiser, scanner,
-                scanCallback = {
-                    scanObservable.onNext(it)
-                }
-            ))
-
-            this@BleManagerImpl.service = bleService
+            val value = this@BleManagerImpl.value ?: error("No value to advertise")
+            this@BleManagerImpl.service = (service as LocalBinder).service.apply {
+                configureAndStart(value)
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {}
+    }
+
+    private fun BLEForegroundService.configureAndStart(value: String) {
+        configure(BleServiceConfiguration(
+            serviceUUID, characteristicUUID, value, advertiser, scanner,
+            scanCallback = {
+                scanObservable.onNext(it)
+            }
+        ))
+        start()
     }
 
     override fun changeAdvertisedValue(value: String) {
