@@ -1,6 +1,7 @@
 package org.coepi.android.cen
 
 import android.os.Handler
+import android.util.Log
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.create
 import org.coepi.android.system.log.log
@@ -34,7 +35,6 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
 
     init {
-        Log.i(TAG_LOG, "init!")
         CEN.value = ByteArray(0)
 
         // load last CENKey + CENKeytimestamp from local storage
@@ -128,13 +128,12 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     }
 
     fun periodicCENKeysCheck() {
-        Log.i(TAG_LOG, "periodicCENKeysCheck!")//OK: I see this in the log!
         val call = cenkeysCheck(lastCENKeysCheck)
         call.enqueue(object :
             Callback<RealmCenKeys> {
             override fun onResponse(call: Call<RealmCenKeys?>?, response: Response<RealmCenKeys>) {
                 val statusCode: Int = response.code()
-                Log.i(TAG_LOG, "lastCENKeysCheck status ${statusCode}")//TODO: BARTPROBLEM I don't see this in the log!?
+                //TODO: PROBLEM I don't see this in the log!?
                 if ( statusCode == 200 ) {
                     val r: RealmCenKeys? = response.body()
                     r?.keys?.let {
