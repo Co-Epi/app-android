@@ -15,7 +15,7 @@ import org.coepi.android.ble.covidwatch.utils.toUUID
 import java.util.UUID
 
 interface BLEScanner {
-    fun startScanning(serviceUUIDs: Array<UUID>?)
+    fun startScanning(serviceUUIDs: Array<UUID>)
 
     fun registerScanCallback(callback: (String) -> Unit)
 
@@ -84,11 +84,11 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    override fun startScanning(serviceUUIDs: Array<UUID>?) {
+    override fun startScanning(serviceUUIDs: Array<UUID>) {
 
         val scanner = scanner ?: return
 
-        val scanFilters = serviceUUIDs?.map {
+        val scanFilters = serviceUUIDs.map {
             ScanFilter.Builder().setServiceUuid(ParcelUuid(it)).build()
         }
 

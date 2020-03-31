@@ -35,14 +35,14 @@ private fun createBleScanner(app: Application): BLEScanner =
     } ?: NoopBleScanner()
 
 class NoopBleAdvertiser: BLEAdvertiser {
-    override fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?) {}
+    override fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, value: String) {}
     override fun stopAdvertiser() {}
-    override fun changeAdvertisedValue(value: String?) {}
+    override fun changeAdvertisedValue(value: String) {}
     override fun registerWriteCallback(callback: (String) -> Unit) {}
 }
 
 class NoopBleScanner: BLEScanner {
-    override fun startScanning(serviceUUIDs: Array<UUID>?) {}
+    override fun startScanning(serviceUUIDs: Array<UUID>) {}
     override fun registerScanCallback(callback: (String) -> Unit) {}
     override fun stopScanning() {}
 }

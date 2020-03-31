@@ -15,12 +15,13 @@ import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
+import org.coepi.android.system.log.log
 import java.util.UUID
 
 interface BLEAdvertiser {
-    fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?)
+    fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, value: String)
     fun stopAdvertiser()
-    fun changeAdvertisedValue(value: String?)
+    fun changeAdvertisedValue(value: String)
     fun registerWriteCallback(callback: (String) -> Unit)
 }
 
@@ -138,12 +139,12 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
      * ADVERTISE_MODE_LOW_LATENCY is a must as the other nodes are not real-time.
      *
      * @param serviceUUID The UUID to advertise the service
-     * @param contactEventUUID The UUID that indicates the contact event
+     * @param characteristicUUID The UUID that indicates the contact event
      */
     override fun startAdvertiser(
-        serviceUUID: UUID?,
-        characteristicUUID: UUID?,
-        value: String?
+        serviceUUID: UUID,
+        characteristicUUID: UUID,
+        value: String
     ) {
         this.serviceUUID = serviceUUID
         this.characteristicUUID = characteristicUUID
@@ -203,8 +204,13 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
      * Changes the CEI to a new UUID in the service data field
      * NOTE: This will also stop/start the advertiser
      */
-    override fun changeAdvertisedValue(value: String?) {
+    override fun changeAdvertisedValue(value: String) {
+        val serviceUUID = serviceUUID ?: log.e("No service configured").run { return }
+        val characteristicUUID =
+            characteristicUUID ?: log.e("No characteristic configured").run { return }
+
         Log.i(TAG, "Changing the contact event identifier in service data field...")
+
         stopAdvertiser()
         startAdvertiser(serviceUUID, characteristicUUID, value)
     }
