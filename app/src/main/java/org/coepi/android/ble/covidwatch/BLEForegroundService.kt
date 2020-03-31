@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import org.coepi.android.MainActivity
 import org.coepi.android.R
+import org.coepi.android.cen.Cen
 import org.coepi.android.system.log.log
 import java.util.Timer
 import java.util.UUID
@@ -19,21 +20,21 @@ import java.util.UUID
 interface BleService {
     fun configure(configuration: BleServiceConfiguration)
 
-    fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, value: String)
+    fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, cen: Cen)
     fun stopAdvertiser()
-    fun registerAdvertiserWriteCallback(callback: (String) -> Unit)
+    fun registerAdvertiserWriteCallback(callback: (Cen) -> Unit)
 
-    fun changeAdvertisedValue(value: String)
+    fun changeAdvertisedCen(cen: Cen)
 }
 
 data class BleServiceConfiguration(
     val serviceUUID: UUID,
     val characteristicUUID: UUID,
-    val startValue: String,
+    val startCen: Cen,
     val advertiser: BLEAdvertiser,
     val scanner: BLEScanner,
-    val scanCallback: (String) -> Unit,
-    val advertiserWriteCallback: (String) -> Unit
+    val scanCallback: (Cen) -> Unit,
+    val advertiserWriteCallback: (Cen) -> Unit
 )
 
 class BLEForegroundService : LifecycleService(), BleService {
@@ -93,15 +94,15 @@ class BLEForegroundService : LifecycleService(), BleService {
     }
 
 
-    override fun changeAdvertisedValue(value: String) {
+    override fun changeAdvertisedCen(cen: Cen) {
         val configuration = configuration ?: run {
             log.e("Changing contact identifier but not configured yet")
             return
         }
-        configuration.advertiser.changeAdvertisedValue(value)
+        configuration.advertiser.changeAdvertisedValue(cen)
     }
 
-    override fun registerAdvertiserWriteCallback(callback: (String) -> Unit) {
+    override fun registerAdvertiserWriteCallback(callback: (Cen) -> Unit) {
         val configuration = configuration ?: error("Not configured")
         configuration.advertiser.registerWriteCallback(callback)
     }
@@ -138,13 +139,13 @@ class BLEForegroundService : LifecycleService(), BleService {
 
     private fun BleServiceConfiguration.start() {
         advertiser.registerWriteCallback(advertiserWriteCallback)
-        advertiser.startAdvertiser(serviceUUID, characteristicUUID, startValue)
+        advertiser.startAdvertiser(serviceUUID, characteristicUUID, startCen)
         scanner.registerScanCallback(scanCallback)
         scanner.startScanning(arrayOf(serviceUUID))
     }
 
-    override fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, value: String) {
-        configuration?.advertiser?.startAdvertiser(serviceUUID, characteristicUUID, value)
+    override fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, cen: Cen) {
+        configuration?.advertiser?.startAdvertiser(serviceUUID, characteristicUUID, cen)
     }
 
     override fun stopAdvertiser() {

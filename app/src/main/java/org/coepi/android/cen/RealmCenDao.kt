@@ -23,7 +23,7 @@ class RealmCenDao(private val realmProvider: RealmProvider) {
     fun insert(cen: ReceivedCen) {
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmReceivedCen>() // Create a new object
-            realmObj.cen = cen.cen
+            realmObj.cen = cen.cen.bytes
             realmObj.timestamp = cen.timestamp
         }
     }

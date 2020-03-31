@@ -12,19 +12,20 @@ import android.os.ParcelUuid
 import android.util.Log
 import androidx.annotation.RequiresApi
 import org.coepi.android.ble.covidwatch.utils.toUUID
+import org.coepi.android.cen.Cen
 import java.util.UUID
 
 interface BLEScanner {
     fun startScanning(serviceUUIDs: Array<UUID>)
 
-    fun registerScanCallback(callback: (String) -> Unit)
+    fun registerScanCallback(callback: (Cen) -> Unit)
 
     fun stopScanning()
 }
 
 class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
-    private var callback: ((String) -> Unit)? = null
+    private var callback: ((Cen) -> Unit)? = null
 
     // TODO consider injecting UUID so it's not optional
     private var serviceUuid: UUID? = null
@@ -71,7 +72,7 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
                 scanRecord.serviceUuids.filter { it.uuid == serviceUuid }.forEach { uuid ->
                     scanRecord.serviceData[uuid]?.let { bytes ->
-                        callback?.invoke(String(bytes))
+                        callback?.invoke(Cen(bytes))
                     }
                 }
             }
@@ -110,7 +111,7 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
         Log.i(TAG, "Started scanning")
     }
 
-    override fun registerScanCallback(callback: (String) -> Unit) {
+    override fun registerScanCallback(callback: (Cen) -> Unit) {
         this.callback = callback
     }
 

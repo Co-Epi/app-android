@@ -23,7 +23,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     private var cenKeyTimestamp = 0
     
     // the latest CEN (ByteArray form), generated using cenKey
-    var CEN : BehaviorSubject<ByteArray> = create()
+    var cen : BehaviorSubject<Cen> = create()
     private var CENKeyLifetimeInSeconds = 7*86400 // every 7 days a new key is generated
     var CENLifetimeInSeconds = 15*60   // every 15 mins a new CEN is generated
     private val periodicCENKeysCheckFrequencyInSeconds = 60*30 // run every 30 mins
@@ -33,7 +33,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
 
     init {
-        CEN.onNext( ByteArray(0))
+        cen.onNext(Cen(ByteArray(0))) // TODO what's this for?
 
         // load last CENKey + CENKeytimestamp from local storage
         val lastKeys = cenkeyDao.lastCENKeys(1)
@@ -65,20 +65,20 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
-        CEN.onNext(generateCEN(cenKey, curTimestamp))
+        cen.onNext(generateCEN(cenKey, curTimestamp))
         Handler().postDelayed({
             refreshCENAndCENKeys()
         }, CENLifetimeInSeconds * 1000L)
     }
 
-    private fun generateCEN(CENKey : String, ts : Int)  : ByteArray {
+    private fun generateCEN(CENKey : String, ts : Int): Cen {
         // decode the base64 encoded key
         val decodedCENKey = android.util.Base64.decode(CENKey,android.util.Base64.DEFAULT)
         // rebuild secretKey using SecretKeySpec
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-        return cipher.doFinal(IntToByteArray(roundedTimestamp(ts)))
+        return Cen(cipher.doFinal(IntToByteArray(roundedTimestamp(ts))))
     }
 
     private fun roundedTimestamp(ts : Int) : Int {
@@ -87,9 +87,9 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     }
 
     // when a peripheral CEN is detected through BLE, it is recorded here
-    fun insertCEN(CEN: String) {
+    fun insertCEN(cen: Cen) {
         val c = ReceivedCen(
-            CEN,
+            cen,
             (System.currentTimeMillis() / 1000L).toInt()
         )
         cenDao.insert(c)
