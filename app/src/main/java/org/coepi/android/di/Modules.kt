@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import org.coepi.android.ble.bleModule
+import org.coepi.android.ble.bleSimulatorModule
 import org.coepi.android.cen.CENModule
 import org.coepi.android.cen.apiModule
 import org.coepi.android.repo.repoModule
@@ -48,6 +49,7 @@ val appModule = listOf(
     apiModule,
     CENModule,
     bleModule
+//    bleSimulatorModule // Disable bleModule and enable this to use BLE simulator
 )
 
 fun getSharedPrefs(androidApplication: Application): SharedPreferences =
