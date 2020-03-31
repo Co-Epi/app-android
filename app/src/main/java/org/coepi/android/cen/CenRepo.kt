@@ -58,8 +58,12 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
         periodicCENKeysCheck()
     }
 
+    private fun curTimeStamp() : Int {
+        return (System.currentTimeMillis() / 1000L).toInt();
+    }
+
     private fun refreshCENAndCENKeys() {
-        val curTimestamp = (System.currentTimeMillis() / 1000L).toInt()
+        val curTimestamp = curTimeStamp()
         if ( ( cenKeyTimestamp == 0 ) || ( roundedTimestamp(curTimestamp) > roundedTimestamp(cenKeyTimestamp) ) ) {
             // generate a new AES Key and store it in local storage
             val secretKey = KeyGenerator.getInstance("AES").generateKey()
@@ -67,7 +71,9 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
-        CEN.onNext(generateCEN(cenKey, curTimestamp))
+        val cen= generateCEN(cenKey, curTimestamp);
+        CEN.onNext(cen)
+        log.i("cen:${cen}, key:${cenKey}")
         Handler().postDelayed({
             refreshCENAndCENKeys()
         }, CENLifetimeInSeconds * 1000L)
@@ -114,6 +120,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
         //for the format see: https://github.com/Co-Epi/coepi-backend-go
         CENKeysStr?.let {
             report.cenKeys = it
+            report.timeStamp = curTimeStamp()
         }
         postCENReport(report);
     }

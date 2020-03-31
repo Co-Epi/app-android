@@ -75,13 +75,17 @@ class SymptomsViewModel(private val symptomRepo: SymptomRepo, private val repo: 
     }
     fun submitSymptoms(){
         log.i("About to send sypmtom:");
-        val keys: String = "will be put by doPostSymptom using last 3 keys generated"
+        val keys: String = "will be set by doPostSymptom using last 3 keys generated"
         val report = "COVID 19 confirmed"
         val id = 1
-        val symptomReport = SymptomReport(id, report,keys)
+        val timestamp = 0;//this will be set by doPostSymptom
+        val symptomReport = SymptomReport(id, report,keys, timestamp)
 
         repo.doPostSymptoms( symptomReport )
-        log.i("Reported: {reportID:\""+symptomReport.reportID+"\", report:\""+symptomReport.report+"\", cenkeys: \""+ symptomReport.cenKeys+"\"}" )
+        log.i("Reported: {reportID:\""+symptomReport.reportID+
+                "\", report:\""+symptomReport.report+
+                "\", cenkeys: \""+ symptomReport.cenKeys+
+                "\", timestamp:\""+symptomReport.timeStamp+"\"}" )
 
     }
 
