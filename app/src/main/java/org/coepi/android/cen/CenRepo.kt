@@ -67,7 +67,9 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
-        CEN.onNext(generateCEN(cenKey, curTimestamp))
+        val cen= generateCEN(cenKey, curTimestamp);
+        CEN.onNext(cen)
+        log.i("current cen:${cen}, key:${cenKey}")
         Handler().postDelayed({
             refreshCENAndCENKeys()
         }, CENLifetimeInSeconds * 1000L)

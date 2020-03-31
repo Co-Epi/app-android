@@ -17,6 +17,7 @@ class CENViewModel(
     private val bleManager: BleManager
 ) : ViewModel() {
 
+    val curcen = android.util.Base64.encode(repo.CEN.value,0);
     // CEN being broadcast by this device
     val myCurrentCEN = repo.CEN
         .map { "CEN: $it" }
