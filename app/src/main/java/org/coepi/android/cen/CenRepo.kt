@@ -23,7 +23,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     private var cenKeyTimestamp = 0
     
     // the latest CEN (ByteArray form), generated using cenKey
-    var cen : BehaviorSubject<Cen> = create()
+    val cen : BehaviorSubject<Cen> = create()
     private var CENKeyLifetimeInSeconds = 7*86400 // every 7 days a new key is generated
     var CENLifetimeInSeconds = 15*60   // every 15 mins a new CEN is generated
     private val periodicCENKeysCheckFrequencyInSeconds = 60*30 // run every 30 mins
