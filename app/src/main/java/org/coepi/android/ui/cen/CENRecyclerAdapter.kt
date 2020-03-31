@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.coepi.android.R.layout.item_cen
-import org.coepi.android.cen.RealmCen
 import org.coepi.android.ui.cen.CENRecyclerViewAdapter.ViewHolder
 
 class CENRecyclerViewAdapter : RecyclerView.Adapter<ViewHolder>() {

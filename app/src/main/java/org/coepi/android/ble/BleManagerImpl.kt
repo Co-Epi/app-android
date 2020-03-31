@@ -14,19 +14,20 @@ import org.coepi.android.ble.covidwatch.BLEForegroundService
 import org.coepi.android.ble.covidwatch.BLEForegroundService.LocalBinder
 import org.coepi.android.ble.covidwatch.BLEScanner
 import org.coepi.android.ble.covidwatch.BleServiceConfiguration
+import org.coepi.android.cen.Cen
 import java.util.UUID
 import java.util.UUID.fromString
 
 interface BleManager {
-    val scanObservable: Observable<String>
+    val scanObservable: Observable<Cen>
 
-    fun startAdvertiser(value: String)
+    fun startAdvertiser(cen: Cen)
     fun stopAdvertiser()
 
-    fun startService(value: String)
+    fun startService(cen: Cen)
     fun stopService()
 
-    fun changeAdvertisedValue(value: String)
+    fun changeAdvertisedValue(cen: Cen)
 }
 
 class BleManagerImpl(
@@ -38,17 +39,17 @@ class BleManagerImpl(
     private val serviceUUID: UUID = fromString("0000C019-0000-1000-8000-00805F9B34FB")
     private val characteristicUUID: UUID = fromString("D61F4F27-3D6B-4B04-9E46-C9D2EA617F62")
 
-    override val scanObservable: PublishSubject<String> = create()
+    override val scanObservable: PublishSubject<Cen> = create()
 
     private val intent get() = Intent(app, BLEForegroundService::class.java)
 
     private var service: BLEForegroundService? = null
 
-    private var value: String? = null
+    private var cen: Cen? = null
 
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val value = this@BleManagerImpl.value ?: error("No value to advertise")
+            val value = this@BleManagerImpl.cen ?: error("No value to advertise")
             this@BleManagerImpl.service = (service as LocalBinder).service.apply {
                 configureAndStart(value)
             }
@@ -57,9 +58,9 @@ class BleManagerImpl(
         override fun onServiceDisconnected(name: ComponentName?) {}
     }
 
-    private fun BLEForegroundService.configureAndStart(value: String) {
+    private fun BLEForegroundService.configureAndStart(cen: Cen) {
         configure(BleServiceConfiguration(
-            serviceUUID, characteristicUUID, value, advertiser, scanner,
+            serviceUUID, characteristicUUID, cen, advertiser, scanner,
             scanCallback = {
                 scanObservable.onNext(it)
             },
@@ -72,20 +73,20 @@ class BleManagerImpl(
         start()
     }
 
-    override fun changeAdvertisedValue(value: String) {
-        this.value = value
+    override fun changeAdvertisedValue(cen: Cen) {
+        this.cen = cen
 
-        service?.changeAdvertisedValue(value)
+        service?.changeAdvertisedCen(cen)
     }
 
-    override fun startAdvertiser(value: String) {
-        this.value = value
+    override fun startAdvertiser(cen: Cen) {
+        this.cen = cen
 
-        service?.startAdvertiser(serviceUUID, characteristicUUID, value)
+        service?.startAdvertiser(serviceUUID, characteristicUUID, cen)
     }
 
-    override fun startService(value: String) {
-        this.value = value
+    override fun startService(cen: Cen) {
+        this.cen = cen
 
         app.bindService(intent, serviceConnection, BIND_AUTO_CREATE)
         app.startService(intent)

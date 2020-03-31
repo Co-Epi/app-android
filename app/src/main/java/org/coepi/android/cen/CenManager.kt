@@ -25,11 +25,11 @@ class CenManager(
         disposables += Observables.combineLatest(
             blePreconditions.bleEnabled,
             // Take the first CEN, needed to start the service
-            cenRepo.CEN
+            cenRepo.cen
         )
         .take(1)
         .subscribeBy(onNext = { (_, firstCen) ->
-            bleManager.startService(firstCen.toString()) // TODO review String <-> ByteArray
+            bleManager.startService(firstCen)
             log.i("BlePreconditions met - BLE manager started")
         }, onError = {
             log.i("Error enabling bluetooth: $it")
@@ -40,9 +40,8 @@ class CenManager(
      * Sends CEN to advertiser when it's changed in DB
      */
     private fun observeCen() {
-        disposables += cenRepo.CEN.subscribeBy (onNext = { cen ->
+        disposables += cenRepo.cen.subscribeBy (onNext = { cen ->
             // ServiceData holds Android Contact Event Number (CEN) that the Android peripheral is advertising
-            val cenString = cen.toString()
 
             // TODO is check really needed? If yes, either add flag to advertiser or expose state and use here
 //            if (started) {
@@ -50,7 +49,7 @@ class CenManager(
 //            }
 
             if (cen != null) {
-                bleManager.startAdvertiser(cenString)
+                bleManager.startAdvertiser(cen)
             }
         }, onError = {
             log.i("Error observing CEN: $it")
