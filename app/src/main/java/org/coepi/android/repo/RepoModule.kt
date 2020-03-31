@@ -1,5 +1,7 @@
 package org.coepi.android.repo
 
+import org.coepi.android.cen.CenRepo
+import org.coepi.android.cen.CenRepoImpl
 import org.coepi.android.repo.realm.ContactRepo
 import org.coepi.android.repo.realm.RealmContactRepo
 import org.koin.android.ext.koin.androidApplication

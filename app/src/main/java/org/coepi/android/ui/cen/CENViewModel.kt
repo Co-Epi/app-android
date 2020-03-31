@@ -17,7 +17,7 @@ class CENViewModel(
 ) : ViewModel() {
 
     // CEN being broadcast by this device
-    val myCurrentCEN = repo.cen
+    val myCurrentCEN = repo.generatedCen
         .map { it.toString() }
         .toLiveData()
 
@@ -39,4 +39,3 @@ class CENViewModel(
         // symptoms.value = symptomsDao.findByRange(0, 99999999999)
     }
 }
-
