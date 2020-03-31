@@ -1,14 +1,12 @@
 package org.coepi.android.cen
 
 import android.os.Handler
-import android.util.Log
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.create
 import org.coepi.android.system.log.log
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Base64
 import java.util.Vector
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -90,7 +88,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     // when a peripheral CEN is detected through BLE, it is recorded here
     fun insertCEN(CEN: String) {
-        val c = Cen(
+        val c = ReceivedCen(
             CEN,
             (System.currentTimeMillis() / 1000L).toInt()
         )
@@ -182,7 +180,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     // matchCENKey uses a publicized key and finds matches with one database call per key
     //  Not efficient... It would be best if all observed CENs are loaded into memory
-    fun matchCENKey(key : String, maxTimestamp : Int) : List<RealmCen>? {
+    fun matchCENKey(key : String, maxTimestamp : Int) : List<RealmReceivedCen>? {
         // take the last 7 days of timestamps and generate all the possible CENs (e.g. 7 days) TODO: Parallelize this?
         val minTimestamp = maxTimestamp - 7*24* 60
         var possibleCENs = Array<String>(7*24 *(60/CENLifetimeInSeconds)) {i ->

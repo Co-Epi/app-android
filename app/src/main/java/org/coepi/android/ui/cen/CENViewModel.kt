@@ -3,10 +3,8 @@ package org.coepi.android.ui.cen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import org.coepi.android.ble.BleManager
 import org.coepi.android.cen.CenRepo
-import org.coepi.android.cen.RealmCen
 import org.coepi.android.cen.RealmCenReport
 import org.coepi.android.extensions.toLiveData
 import org.coepi.android.ui.navigation.RootNavigation
