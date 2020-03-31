@@ -1,5 +1,6 @@
 package org.coepi.android.ui.cen
 
+import android.util.Base64
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
@@ -17,7 +18,7 @@ class CENViewModel(
     private val bleManager: BleManager
 ) : ViewModel() {
 
-    val curcen = android.util.Base64.encode(repo.CEN.value,0);
+    val curcen = Base64.encode(repo.CEN.value,0);
     // CEN being broadcast by this device
     val myCurrentCEN = repo.CEN
         .map { "CEN: $it" }
