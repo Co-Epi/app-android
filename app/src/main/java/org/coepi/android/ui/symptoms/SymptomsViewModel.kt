@@ -73,7 +73,7 @@ class SymptomsViewModel(private val symptomRepo: SymptomRepo, private val realmp
     fun onChecked(symptom: SymptomViewData) {
         checkedSymptomTrigger.onNext(symptom)
     }
-    fun doSubmitSymptms(){
+    fun submitSymptoms(){
         log.i("About to send sypmtom:");
         if( realmprovider!= null ){
             val keys: String = "will be put by doPostSymptom using last 3 keys generated"
@@ -101,7 +101,7 @@ class SymptomsViewModel(private val symptomRepo: SymptomRepo, private val realmp
 
 
     fun onSubmit() {
-        doSubmitSymptms()
+        submitSymptoms()
         submitTrigger.onNext(Unit)
     }
 
