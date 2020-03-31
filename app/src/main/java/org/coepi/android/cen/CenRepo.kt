@@ -99,7 +99,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     // ------- Network API Calls: mapping into Server Endpoints via Retrofit
     // 1. Client publicizes report to /cenreport along with 3 CENKeys (base64 encoded)
-    private fun postCENReport(report : RealmCenReport) = cenApi.postCENReport(report)
+    private fun postCENReport(report : SymptomReport) = cenApi.postCENReport(report)
 
     // 2. Client periodically gets publicized CENKeys alongside symptoms/infections reports from /exposurecheck
     private fun cenkeysCheck(timestamp : Int) = cenApi.cenkeysCheck(timestamp)
@@ -108,11 +108,14 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     private fun getCENReport(cenKey : String) = cenApi.getCENReport(cenKey)
 
     // doPostSymptoms is called when a ViewModel in the UI sees the user finish a Symptoms Report, the Symptoms + last 3 CENKeys are posted to the server
-    fun doPostSymptoms(report : RealmCenReport) {
+    fun doPostSymptoms(report : SymptomReport) {
+        //this is a string CSV of last 3 keys
         val CENKeysStr = lastCENKeys(3)
+        //for the format see: https://github.com/Co-Epi/coepi-backend-go
         CENKeysStr?.let {
-            postCENReport(report)
+            report.cenKeys = it
         }
+        postCENReport(report);
     }
 
     // lastCENKeys gets the last few CENKeys used to generate CENs by this device
@@ -120,7 +123,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
         val CENKeys = cenkeyDao.lastCENKeys(lim)
         CENKeys?.let {
             if ( CENKeys.size > 0 ) {
-                val CENKeysStrings = CENKeys.map{ k -> k.toString() }
+                val CENKeysStrings = CENKeys.map{ k -> k.key }
                 return CENKeysStrings.joinToString(",")
             }
         }

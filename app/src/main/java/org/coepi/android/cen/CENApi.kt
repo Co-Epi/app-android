@@ -10,7 +10,7 @@ import retrofit2.http.Path
 interface CENApi {
     // post CENReport along with CENKeys
     @POST("/cenreport")
-    fun postCENReport(@Body report : RealmCenReport): Single<Unit>
+    fun postCENReport(@Body report : SymptomReport): Single<Unit>
 
     // get recent keys that have CEN Reports
     @GET("/cenkeys/{timestamp}")
