@@ -29,7 +29,7 @@ class CenManager(
         )
         .take(1)
         .subscribeBy(onNext = { (_, firstCen) ->
-            bleManager.startService(firstCen) // TODO review String <-> ByteArray
+            bleManager.startService(firstCen)
             log.i("BlePreconditions met - BLE manager started")
         }, onError = {
             log.i("Error enabling bluetooth: $it")
