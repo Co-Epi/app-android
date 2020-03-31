@@ -128,12 +128,13 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     fun periodicCENKeysCheck() {
         val call = cenkeysCheck(lastCENKeysCheck)
         call.enqueue(object :
-            Callback<RealmCenKeys> {
-            override fun onResponse(call: Call<RealmCenKeys?>?, response: Response<RealmCenKeys>) {
+            Callback<List<String>> {
+            override fun onResponse(call: Call<List<String>?>?, response: Response<List<String>>) {
                 val statusCode: Int = response.code()
+                Log.i("CENApi","${statusCode}");
                 if ( statusCode == 200 ) {
-                    val r: RealmCenKeys? = response.body()
-                    r?.keys?.let {
+                    val r: List<String>? = response.body()
+                    r?.let {
                         var keyMatched=Vector<String>()
                         for ( i in it.indices ) {
                             it[i]?.let { key ->
@@ -153,9 +154,9 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
                 }
             }
 
-            override fun onFailure(call: Call<RealmCenKeys?>?, t: Throwable?) {
+            override fun onFailure(call: Call<List<String>?>?, t: Throwable?) {
                 // Log error here since request failed
-                log.e("periodicCENKeysCheck Failure")
+                log.e("periodicCENKeysCheck Failure"+ t?.message)
             }
         })
         Handler().postDelayed({
