@@ -49,9 +49,9 @@ class CENFragment : Fragment() {
 
         textCENReport.setText(curcen.toCharArray(),0,curcen.length);
         postReport.setOnClickListener(){
-            val cen_from_other = textCENReport.text;
+            val cenFromOther = textCENReport.text;
             var cenDao: RealmCenDao = RealmCenDao(RealmProvider(view.context));
-            cenDao.insert(Cen(cen_from_other.toString(), (System.currentTimeMillis() / 1000L).toInt()))
+            cenDao.insert(Cen(cenFromOther.toString(), (System.currentTimeMillis() / 1000L).toInt()))
         }
     }
 }
