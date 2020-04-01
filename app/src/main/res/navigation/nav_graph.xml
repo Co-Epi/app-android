@@ -13,18 +13,6 @@
         />
 
     <fragment
-        android:id="@+id/care_fragment"
-        android:name="org.coepi.android.ui.symptoms.SymptomsFragment"
-        android:label="@string/label_fragment_care"
-        tools:layout="@layout/fragment_symptoms" />
-
-    <fragment
-        android:id="@+id/ble_fragment"
-        android:name="org.coepi.android.ui.cen.CENFragment"
-        android:label="@string/label_fragment_care"
-        tools:layout="@layout/fragment_ble" />
-
-    <fragment
         android:id="@+id/location_fragment"
         android:name="org.coepi.android.ui.location.LocationFragment"
         android:label="@string/label_fragment_location"

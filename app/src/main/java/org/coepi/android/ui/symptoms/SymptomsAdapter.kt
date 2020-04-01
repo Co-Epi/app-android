@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.coepi.android.databinding.ItemSymptomBinding
 import org.coepi.android.databinding.ItemSymptomBinding.inflate
-import org.coepi.android.system.log.log
 import org.coepi.android.ui.symptoms.SymptomsAdapter.ViewHolder
 
 class SymptomsAdapter(

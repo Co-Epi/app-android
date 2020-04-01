@@ -15,13 +15,15 @@ import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
+import org.coepi.android.cen.Cen
+import org.coepi.android.system.log.log
 import java.util.UUID
 
 interface BLEAdvertiser {
-    fun startAdvertiser(serviceUUID: UUID?, characteristicUUID: UUID?, value: String?)
+    fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, cen: Cen)
     fun stopAdvertiser()
-    fun changeAdvertisedValue(value: String?)
-    fun registerWriteCallback(callback: (String) -> Unit)
+    fun changeAdvertisedValue(cen: Cen)
+    fun registerWriteCallback(callback: (Cen) -> Unit)
 }
 
 /**
@@ -40,11 +42,11 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
     private var serviceUUID: UUID? = null
     private var characteristicUUID: UUID? = null
 
-    private var advertisedValue: String? = null
+    private var advertisedCen: Cen? = null
 
     // Case Android (Central) - iOS (Peripheral)
     // https://docs.google.com/document/d/1f65V3PI214-uYfZLUZtm55kdVwoazIMqGJrxcYNI4eg/edit#
-    private var writeCallback: ((String) -> Unit)? = null
+    private var writeCallback: ((Cen) -> Unit)? = null
 
     // CONSTANTS
     companion object {
@@ -102,12 +104,11 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
                             return
                         }
 
-                        val str = value?.let { String(it) }
-                        if (str == null) {
+                        if (value == null) {
                             result = BluetoothGatt.GATT_FAILURE
                             return
                         }
-                        writeCallback?.invoke(str)
+                        writeCallback?.invoke(Cen(value))
 
                     } else {
                         result = BluetoothGatt.GATT_FAILURE
@@ -138,16 +139,16 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
      * ADVERTISE_MODE_LOW_LATENCY is a must as the other nodes are not real-time.
      *
      * @param serviceUUID The UUID to advertise the service
-     * @param contactEventUUID The UUID that indicates the contact event
+     * @param characteristicUUID The UUID that indicates the contact event
      */
     override fun startAdvertiser(
-        serviceUUID: UUID?,
-        characteristicUUID: UUID?,
-        value: String?
+        serviceUUID: UUID,
+        characteristicUUID: UUID,
+        cen: Cen
     ) {
         this.serviceUUID = serviceUUID
         this.characteristicUUID = characteristicUUID
-        advertisedValue = value
+        advertisedCen = cen
 
         val settings = AdvertiseSettings.Builder()
             .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
@@ -155,13 +156,10 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
             .setConnectable(true)
             .build()
 
-        // TODO review this
-        val advertisedValueBytes = advertisedValue?.toByteArray()
-
 //        val testServiceDataMaxLength = ByteArray(20)
         val data = AdvertiseData.Builder()
             .setIncludeDeviceName(false)
-            .addServiceData(ParcelUuid(serviceUUID), advertisedValueBytes)
+            .addServiceData(ParcelUuid(serviceUUID), cen.bytes)
 //            .addServiceData(ParcelUuid(serviceUUID), testServiceDataMaxLength)
             .build()
 
@@ -203,13 +201,18 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
      * Changes the CEI to a new UUID in the service data field
      * NOTE: This will also stop/start the advertiser
      */
-    override fun changeAdvertisedValue(value: String?) {
+    override fun changeAdvertisedValue(cen: Cen) {
+        val serviceUUID = serviceUUID ?: log.e("No service configured").run { return }
+        val characteristicUUID =
+            characteristicUUID ?: log.e("No characteristic configured").run { return }
+
         Log.i(TAG, "Changing the contact event identifier in service data field...")
+
         stopAdvertiser()
-        startAdvertiser(serviceUUID, characteristicUUID, value)
+        startAdvertiser(serviceUUID, characteristicUUID, cen)
     }
 
-    override fun registerWriteCallback(callback: (String) -> Unit) {
+    override fun registerWriteCallback(callback: (Cen) -> Unit) {
         writeCallback = callback
     }
 }
