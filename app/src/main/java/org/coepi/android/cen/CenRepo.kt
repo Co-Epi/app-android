@@ -1,6 +1,7 @@
 package org.coepi.android.cen
 
 import android.os.Handler
+import android.util.Base64
 import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -24,10 +25,11 @@ interface CenRepo {
     val reports: Observable<List<CenReport>>
 
      // Send symptoms report
-    fun sendReport(report: CenReport): Completable
+    fun sendReport(report: SymptomReport): Unit
 
     // Store CEN from other device
     fun storeCen(cen: Cen)
+
 }
 
 // CoEpiRepo coordinates local Storage (Room) and network API calls to manage the CoEpi protocol
@@ -82,12 +84,32 @@ class CenRepoImpl(
         periodicCENKeysCheck()
     }
 
+    private fun curTimeStamp() : Int {
+        return (System.currentTimeMillis() / 1000L).toInt();
+    }
+
+    public fun toHex( bytes:Array<Byte>) :String {
+        var ret: String =""
+        for (b in bytes) {
+            ret += String.format("%02X", b)
+        }
+        return ret
+    }
+    public fun toHex( bytes:ByteArray) :String {
+        var ret: String =""
+        for (b in bytes) {
+            ret += String.format("%02X", b)
+        }
+        return ret
+    }
+
+
     private fun refreshCENAndCENKeys() {
-        val curTimestamp = (System.currentTimeMillis() / 1000L).toInt()
+        val curTimestamp = curTimeStamp()
         if ( ( cenKeyTimestamp == 0 ) || ( roundedTimestamp(curTimestamp) > roundedTimestamp(cenKeyTimestamp) ) ) {
             // generate a new AES Key and store it in local storage
             val secretKey = KeyGenerator.getInstance("AES").generateKey()
-            cenKey = android.util.Base64.encodeToString(secretKey.encoded,android.util.Base64.DEFAULT)
+            cenKey = Base64.encodeToString(secretKey.encoded,android.util.Base64.NO_WRAP)
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
@@ -97,9 +119,26 @@ class CenRepoImpl(
         }, CENLifetimeInSeconds * 1000L)
     }
 
+    private fun hexToByteArray( hex: String ) : ByteArray{
+        var bytes = ByteArray(hex.length / 2 )
+
+        //Now, take a for loop until the length of the byte array.
+
+        for (i in 1..bytes.size) {
+            val index = i * 2;
+            val j = Integer.parseInt(hex.substring(index, index + 2), 16)
+            bytes[i] = j.toByte();
+        }
+        return bytes;
+    }
+
+    private fun generateCENFromHex(CENKeyHex : String, ts : Int)  : Cen {
+        return generateCEN(Base64.encodeToString( hexToByteArray(CENKeyHex), Base64.NO_WRAP ), ts)
+    }
+
     private fun generateCEN(CENKey : String, ts : Int): Cen {
         // decode the base64 encoded key
-        val decodedCENKey = android.util.Base64.decode(CENKey,android.util.Base64.DEFAULT)
+        val decodedCENKey = android.util.Base64.decode(CENKey,android.util.Base64.NO_WRAP)
         // rebuild secretKey using SecretKeySpec
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
@@ -123,7 +162,7 @@ class CenRepoImpl(
 
     // ------- Network API Calls: mapping into Server Endpoints via Retrofit
     // 1. Client publicizes report to /cenreport along with 3 CENKeys (base64 encoded)
-    private fun postCENReport(report: CenReport): Completable = cenApi.postCENReport(report)
+    private fun postCENReport(report : SymptomReport) = cenApi.postCENReport(report)
 
     // 2. Client periodically gets publicized CENKeys alongside symptoms/infections reports from /exposurecheck
     private fun cenkeysCheck(timestamp : Int): Call<List<String>> = cenApi.cenkeysCheck(timestamp)
@@ -131,21 +170,42 @@ class CenRepoImpl(
     // 3. Client fetch reports from /cenreport/<cenKey> (base64 encoded)
     private fun getCenReport(cenKey : String): Call<List<CenReport>> = cenApi.getCenReport(cenKey)
 
+
     // doPostSymptoms is called when a ViewModel in the UI sees the user finish a Symptoms Report, the Symptoms + last 3 CENKeys are posted to the server
-    override fun sendReport(report: CenReport): Completable =
-        postCENReport(report)
-    // TODO clarify - CENKeysStr is not used. Is this only to check that we have at least 3 CENKeys?
-//        val CENKeysStr = lastCENKeys(3)
-//        CENKeysStr?.let {
-//            postCENReport(report)
-//        }
+    override fun sendReport(report : SymptomReport) {
+        //this is a string CSV of last 3 keys
+        val CENKeysStr = lastCENKeysHex(3)
+        //for the format see: https://github.com/Co-Epi/coepi-backend-go
+        CENKeysStr?.let {
+            report.cenKeys = it
+            report.report = toHex(report.report.toByteArray())
+            report.reportTimeStamp = curTimeStamp()
+        }
+        val call = postCENReport(report);
+        call.enqueue(object :
+            Callback<Unit> {
+            override fun onResponse(call: Call<Unit?>?, response: Response<Unit>) {
+                val statusCode: Int = response.code()
+                if ( statusCode == 200 ) {
+                    log.i("200");
+                } else {
+                    log.e("periodicCENKeysCheck $statusCode")
+                }
+            }
+
+            override fun onFailure(call: Call<Unit?>?, t: Throwable?) {
+                // Log error here since request failed
+                log.e("periodicCENKeysCheck Failure")
+            }
+        })
+    }
 
     // lastCENKeys gets the last few CENKeys used to generate CENs by this device
-    fun lastCENKeys(lim : Int) : String? {
+    fun lastCENKeysHex(lim : Int) : String? {
         val CENKeys = cenkeyDao.lastCENKeys(lim)
-        CENKeys.let {
-            if (CENKeys.isNotEmpty()) {
-                val CENKeysStrings = CENKeys.map{ k -> k.toString() }
+        CENKeys?.let {
+            if ( CENKeys.size > 0 ) {
+                val CENKeysStrings = CENKeys.map{ k -> toHex( Base64.decode(k.key,Base64.NO_WRAP)) }
                 return CENKeysStrings.joinToString(",")
             }
         }

@@ -5,6 +5,7 @@ import io.reactivex.Observable
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenRepo
 import org.coepi.android.cen.CenReport
+import org.coepi.android.cen.SymptomReport
 
 interface CoEpiRepo {
     // Infection reports fetched periodically from the API
@@ -14,7 +15,7 @@ interface CoEpiRepo {
     fun storeObservedCen(cen: Cen)
 
     // Send symptoms report
-    fun sendReport(report: CenReport): Completable
+    fun sendReport(report: SymptomReport): Unit
 }
 
 class CoepiRepoImpl(
@@ -23,7 +24,7 @@ class CoepiRepoImpl(
 
     override val reports: Observable<List<CenReport>> = cenRepo.reports
 
-    override fun sendReport(report: CenReport): Completable =
+    override fun sendReport(report: SymptomReport): Unit =
         cenRepo.sendReport(report)
 
     override fun storeObservedCen(cen: Cen) {

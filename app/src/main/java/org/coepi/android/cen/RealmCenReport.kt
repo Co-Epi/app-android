@@ -4,7 +4,7 @@ import io.realm.RealmObject
 import java.util.Date
 
 open class RealmCenReport(
-    var id: Int = 0,
+    var id: String="",
     var report: String = "",
     var keys: String = "",
     var reportMimeType: String = "",
