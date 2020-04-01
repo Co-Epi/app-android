@@ -69,6 +69,7 @@ class SymptomsViewModel(private val symptomRepo: SymptomRepo, private val repo: 
     fun submitSymptoms(){
         log.i("About to send sypmtom:");
         val keys: String = "will be set by doPostSymptom using last 3 keys generated"
+        // TODO: update with values of actual report
         val report = Base64.encodeToString("COVID 19 from BART".toByteArray(), Base64.NO_WRAP)
         val id =  "REPORT1"
         val timestamp = 0;//this will be set by doPostSymptom
