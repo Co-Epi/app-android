@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- TODO maybe merge nav root and the other graph since we don't have tabs anymore -->
+
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,18 +35,28 @@
         android:name="org.coepi.android.ui.debug.logs.LogsFragment"
         android:label="@string/label_fragment_logs"
         tools:layout="@layout/fragment_logs" />
+
+    <fragment
+        android:id="@+id/alerts"
+        android:name="org.coepi.android.ui.alerts.AlertsFragment"
+        android:label="@string/label_fragment_alerts"
+        tools:layout="@layout/fragment_symptoms"/>
+    <action
+        android:id="@+id/action_global_alerts"
+        app:destination="@id/alerts" />
+
     <fragment
         android:id="@+id/symptomsFragment"
         android:name="org.coepi.android.ui.symptoms.SymptomsFragment"
-        android:label="SymptomsFragment"
+        android:label="@string/label_fragment_symptoms"
         tools:layout="@layout/fragment_symptoms"/>
     <action
         android:id="@+id/action_global_symptomsFragment"
         app:destination="@id/symptomsFragment" />
+
     <fragment
         android:id="@+id/CENFragment"
         android:name="org.coepi.android.ui.cen.CENFragment"
-        android:label="CENFragment"
         tools:layout="@layout/fragment_ble"/>
     <action
         android:id="@+id/action_global_CENFragment"

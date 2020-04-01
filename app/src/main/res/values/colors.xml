@@ -6,6 +6,7 @@
     <color name="colorBackgroundPrimary">#5561D6</color>
     <color name="colorBackgroundSecondary">#86FFEA</color>
     <color name="colorLink">#018786</color>
+    <color name="grey">#C4C4C4</color>
 
     <color name="textDefault">@android:color/black</color>
 </resources>

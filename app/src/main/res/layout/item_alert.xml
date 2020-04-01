@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="org.coepi.android.ui.alerts.AlertViewData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="30dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:id="@+id/alert_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_alert" />
+
+        <TextView
+            android:id="@+id/exposure_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@{item.exposureType}"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@id/alert_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Exposure type" />
+
+        <TextView
+            android:id="@+id/exposure_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{item.time}"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/exposure_type"
+            app:layout_constraintTop_toBottomOf="@id/exposure_type"
+            tools:text="Time" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:clickable="false"
+            android:text="@string/alerts_button_acknowledge"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exposure_type" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

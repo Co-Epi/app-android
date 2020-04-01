@@ -1,4 +1,4 @@
-package org.coepi.android.ui.notifications
+package org.coepi.android.ui.alerts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,32 +8,31 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import org.coepi.android.R.drawable.ic_close
-import org.coepi.android.databinding.FragmentLogsBinding.inflate
+import org.coepi.android.databinding.FragmentAlertsBinding.inflate
 import org.coepi.android.extensions.observeWith
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NotificationsFragment: Fragment() {
-    private val viewModel by viewModel<NotificationsViewModel>()
+class AlertsFragment: Fragment() {
+    private val viewModel by viewModel<AlertsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflate(inflater, container, false).apply {
+        lifecycleOwner = viewLifecycleOwner
+        vm = viewModel
 
-        toolbar.setNavigationIcon(ic_close)
-        toolbar.setNavigationOnClickListener {
-            viewModel.onCloseClick()
-        }
+        val alertsAdapter = AlertsAdapter(onItemClick = {
+            viewModel.onAlertClick(it)
+        })
 
-        val notificaionAdapter = NotificationViewAdapter()
-
-        logsRecyclerView.run {
+        recyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)
-            adapter = notificaionAdapter
+            adapter = alertsAdapter
         }
 
-        viewModel.symptoms.observeWith(viewLifecycleOwner) {
-            notificaionAdapter.setItems(it)
+        viewModel.alerts.observeWith(viewLifecycleOwner) {
+            alertsAdapter.submitList(it)
         }
     }.root
 }
