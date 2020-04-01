@@ -12,29 +12,32 @@ class CachingLog : Log {
 
     override fun setup() {}
 
-    override fun v(message: String) {
-        log(LogMessage(V, message))
+    override fun v(message: String, tag: LogTag?) {
+        log(LogMessage(V, addTag(tag, message)))
     }
 
-    override fun d(message: String) {
-        log(LogMessage(D, message))
+    override fun d(message: String, tag: LogTag?) {
+        log(LogMessage(D, addTag(tag, message)))
     }
 
-    override fun i(message: String) {
-        log(LogMessage(I, message))
+    override fun i(message: String, tag: LogTag?) {
+        log(LogMessage(I, addTag(tag, message)))
     }
 
-    override fun w(message: String) {
-        log(LogMessage(W, message))
+    override fun w(message: String, tag: LogTag?) {
+        log(LogMessage(W, addTag(tag, message)))
     }
 
-    override fun e(message: String) {
-        log(LogMessage(E, message))
+    override fun e(message: String, tag: LogTag?) {
+        log(LogMessage(E, addTag(tag, message)))
     }
 
     private fun log(message: LogMessage) {
         logs.add(message)
     }
+
+    private fun addTag(tag: LogTag?, message: String) =
+        tag?.let { "$it - " } + message
 }
 
 data class LogMessage(val level: LogLevel, val text: String)

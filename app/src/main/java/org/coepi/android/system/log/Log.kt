@@ -6,13 +6,22 @@ val log: Log = CompositeLog(
     DefaultLog()
 ).apply { setup() }
 
+// To filter logcat by multiple tags, use regex, e.g. (tag1)|(tag2)
+enum class LogTag {
+    BLE_A, // BLE advertiser
+    BLE_S,  // BLE scanner
+    BLE,  // General BLE (can't be assigned to peripheral or central)
+    NET,  // Networking
+    DB // DB
+}
+
 interface Log {
     fun setup()
-    fun v(message: String)
-    fun d(message: String)
-    fun i(message: String)
-    fun w(message: String)
-    fun e(message: String)
+    fun v(message: String, tag: LogTag? = null)
+    fun d(message: String, tag: LogTag? = null)
+    fun i(message: String, tag: LogTag? = null)
+    fun w(message: String, tag: LogTag? = null)
+    fun e(message: String, tag: LogTag? = null)
 }
 
 class DefaultLog : Log {
@@ -20,23 +29,26 @@ class DefaultLog : Log {
 
     override fun setup() {}
 
-    override fun v(message: String) {
-        android.util.Log.v(tag, message)
+    override fun v(message: String, tag: LogTag?) {
+        android.util.Log.v(tag.toString(), message)
     }
 
-    override fun d(message: String) {
-        android.util.Log.d(tag, message)
+    override fun d(message: String, tag: LogTag?) {
+        android.util.Log.d(tag.toString(), message)
     }
 
-    override fun i(message: String) {
-        android.util.Log.i(tag, message)
+    override fun i(message: String, tag: LogTag?) {
+        android.util.Log.i(tag.toString(), message)
     }
 
-    override fun w(message: String) {
-        android.util.Log.w(tag, message)
+    override fun w(message: String, tag: LogTag?) {
+        android.util.Log.w(tag.toString(), message)
     }
 
-    override fun e(message: String) {
-        android.util.Log.e(tag, message)
+    override fun e(message: String, tag: LogTag?) {
+        android.util.Log.e(tag.toString(), message)
     }
+
+    private fun LogTag?.toString() =
+        this?.toString() ?: tag
 }

@@ -16,6 +16,7 @@ import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
 import org.coepi.android.cen.Cen
+import org.coepi.android.system.log.LogTag.BLE_A
 import org.coepi.android.system.log.log
 import java.util.UUID
 
@@ -48,23 +49,18 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
     // https://docs.google.com/document/d/1f65V3PI214-uYfZLUZtm55kdVwoazIMqGJrxcYNI4eg/edit#
     private var writeCallback: ((Cen) -> Unit)? = null
 
-    // CONSTANTS
-    companion object {
-        private const val TAG = "BLEAdvertiser"
-    }
-
     /**
      * Callback when advertisements start and stops
      */
     private val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
 
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
-            Log.w(TAG, "onStartSuccess settingsInEffect=$settingsInEffect")
+            log.d("onStartSuccess settingsInEffect=$settingsInEffect", BLE_A)
             super.onStartSuccess(settingsInEffect)
         }
 
         override fun onStartFailure(errorCode: Int) {
-            Log.e(TAG, "onStartFailure errorCode=$errorCode")
+            log.e("onStartFailure errorCode=$errorCode", BLE_A)
             super.onStartFailure(errorCode)
         }
     }
@@ -74,7 +70,7 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
 
             override fun onServiceAdded(status: Int, service: BluetoothGattService?) {
                 super.onServiceAdded(status, service)
-                Log.i(TAG, "onServiceAdded status=$status service=$service")
+                log.i("onServiceAdded status=$status service=$service", BLE_A)
             }
 
             override fun onCharacteristicWriteRequest(
@@ -116,10 +112,10 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
                 } catch (exception: Exception) {
                     result = BluetoothGatt.GATT_FAILURE
                 } finally {
-                    Log.i(
-                        TAG,
-                        "onCharacteristicWriteRequest result=$result device=$device requestId=$requestId characteristic=$characteristic preparedWrite=$preparedWrite responseNeeded=$responseNeeded offset=$offset value=$value"
-                    )
+                    log.i("onCharacteristicWriteRequest result=$result device=$device " +
+                            "requestId=$requestId characteristic=$characteristic preparedWrite=$preparedWrite " +
+                            "responseNeeded=$responseNeeded offset=$offset value=$value", BLE_A)
+
                     if (responseNeeded) {
                         bluetoothGattServer?.sendResponse(
                             device,
@@ -206,7 +202,7 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
         val characteristicUUID =
             characteristicUUID ?: log.e("No characteristic configured").run { return }
 
-        Log.i(TAG, "Changing the contact event identifier in service data field...")
+        log.i("Changing the contact event identifier in service data field...", BLE_A)
 
         stopAdvertiser()
         startAdvertiser(serviceUUID, characteristicUUID, cen)

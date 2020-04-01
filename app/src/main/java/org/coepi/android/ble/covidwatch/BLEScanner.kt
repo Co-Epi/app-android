@@ -9,10 +9,11 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.os.Build
 import android.os.ParcelUuid
-import android.util.Log
 import androidx.annotation.RequiresApi
 import org.coepi.android.ble.covidwatch.utils.toUUID
 import org.coepi.android.cen.Cen
+import org.coepi.android.system.log.LogTag.BLE_S
+import org.coepi.android.system.log.log
 import java.util.UUID
 
 interface BLEScanner {
@@ -41,12 +42,12 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
-            Log.i(TAG, "onScanFailed errorCode=$errorCode")
+            log.e("onScanFailed errorCode=$errorCode", BLE_S)
         }
 
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
-            Log.i(TAG, "onBatchScanResults results=$results")
+            log.i("onBatchScanResults results=$results", BLE_S)
             results?.forEach { handleScanResult(it) }
         }
 
@@ -58,17 +59,11 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
                 scanRecord.serviceData[ParcelUuid(serviceUuid)]?.toUUID()
 
             if (contactEventIdentifier == null) {
-                Log.i(
-                    TAG,
-                    "Scan result device.address=${result.device.address} RSSI=${result.rssi} CEI=N/A"
-                )
+                log.i("Scan result device.address=${result.device.address} RSSI=${result.rssi} CEI=N/A", BLE_S)
                 // TODO: Handle case when CEI cannot be extracted from scan record.
             } else {
-                Log.i(
-                    TAG,
-                    "Scan result device.address=${result.device.address} RSSI=${result.rssi} CEI=${contactEventIdentifier.toString()
-                        .toUpperCase()}"
-                )
+                log.i("Scan result device.address=${result.device.address} RSSI=${result.rssi} " +
+                        "CEI=${contactEventIdentifier.toString().toUpperCase()}", BLE_S)
 
                 scanRecord.serviceUuids.filter { it.uuid == serviceUuid }.forEach { uuid ->
                     scanRecord.serviceData[uuid]?.let { bytes ->
@@ -77,11 +72,6 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
                 }
             }
         }
-    }
-
-    // CONSTANTS
-    companion object {
-        private const val TAG = "BLEScanner"
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -108,7 +98,7 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
         // The scan filter is incredibly important to allow android to run scans
         // in the background
         scanner.startScan(scanFilters, scanSettings, scanCallback)
-        Log.i(TAG, "Started scanning")
+        log.i("Started scanning", BLE_S)
     }
 
     override fun registerScanCallback(callback: (Cen) -> Unit) {
@@ -117,6 +107,6 @@ class BLEScannerImpl(ctx: Context, adapter: BluetoothAdapter): BLEScanner {
 
     override fun stopScanning() {
         scanner?.stopScan(scanCallback)
-        Log.i(TAG, "Stopped scanning")
+        log.i("Stopped scanning", BLE_S)
     }
 }
