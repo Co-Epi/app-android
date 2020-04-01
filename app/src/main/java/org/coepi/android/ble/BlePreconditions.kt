@@ -1,27 +1,54 @@
 package org.coepi.android.ble
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.Observables.combineLatest
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.subscribeBy
 import org.coepi.android.system.log.log
+import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker
 
-class BlePreconditions(private val activity: Activity, onReady: () -> Unit) {
-    private val btEnabler = BleEnabler(activity) { enabled ->
-        if (enabled) {
-            onReady()
-        } else {
-            log.e("Couldn't enable bluetooth")
-        }
-    }
+class BlePreconditions(
+    private val startPermissionsChecker: OnboardingPermissionsChecker,
+    private val blePreconditionsNotifier: BlePreconditionsNotifier,
+    private val bleEnabler: BleEnabler
+) {
+    private val disposables = CompositeDisposable()
 
-    fun onActivityCreated() {
-        activity.runWithPermissions(ACCESS_COARSE_LOCATION) {
-            btEnabler.enable()
-        }
+    fun onActivityCreated(activity: Activity) {
+        observeResults()
+
+        showEnableBleAfterPermissions(activity)
+        startPermissionsChecker.checkForPermissions(activity)
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        btEnabler.onActivityResult(requestCode, resultCode, data)
+        bleEnabler.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                                   grantResults: IntArray) {
+        startPermissionsChecker.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    @SuppressLint("CheckResult")
+    private fun showEnableBleAfterPermissions(activity: Activity) {
+        startPermissionsChecker.observable.subscribe {
+            bleEnabler.enable(activity)
+        }
+    }
+
+    private fun observeResults() {
+        disposables += combineLatest(startPermissionsChecker.observable, bleEnabler.observable)
+            .subscribeBy { (permissionsGranted, bleEnabled) ->
+                if (permissionsGranted && bleEnabled) {
+                    blePreconditionsNotifier.notifyBleEnabled()
+                } else {
+                    log.i("BLE preconditions not met. Permissions: $permissionsGranted, ble enabled: $bleEnabled")
+                    // TODO handle?
+                }
+            }
     }
 }

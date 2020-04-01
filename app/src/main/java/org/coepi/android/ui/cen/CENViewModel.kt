@@ -1,5 +1,6 @@
 package org.coepi.android.ui.cen
 
+import android.util.Base64
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
@@ -16,6 +17,7 @@ class CENViewModel(
     private val bleManager: BleManager
 ) : ViewModel() {
 
+    //val curcen = Base64.encode(repo.CEN.value,0);
     // CEN being broadcast by this device
     val myCurrentCEN = repo.generatedCen
         .map { it.toString() }
@@ -32,6 +34,11 @@ class CENViewModel(
     // TODO
     val cenReports: MutableLiveData<List<RealmCenReport>> by lazy {
         MutableLiveData<List<RealmCenReport>>()
+    }
+
+    fun insertPastedCEN( curcen :String = "" ){
+        //val curcen = "";
+        //repo.insertCEN(curcen)
     }
 
     private fun update() {
