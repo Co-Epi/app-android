@@ -199,12 +199,20 @@ class CenRepoImpl(
                 for (i in it.indices) {
                     val matchedCENkey = matchedCENKeys[i]
                     val call = getCenReport(matchedCENkey)
+
                     // TODO: for each match fetch Report data and record in Symptoms
                     // cenReportDao.insert(cenReport)
                     // TODO notify observer on completion of database write
                     // TODO or observe directly database
                     // TODO clarify with Rust lib whether it will store the reports (probably not)
-//                    reports.onNext(cenReport())
+
+                    val response = call.execute()
+                    call.execute().body()?.let { reports ->
+                        log.i("Got reports: $reports")
+                        this.reports.onNext(reports)
+                    } ?: {
+                        log.e("Response not successful: $response")
+                    } ()
                 }
             }
         }
