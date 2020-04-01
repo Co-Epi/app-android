@@ -35,13 +35,18 @@ class CENFragment : Fragment() {
             android.util.Log.i("BleFragment", "BleFragment new value: $it")
             textMyCurrentCEN.text = it
         }
+
+        viewModel.curcenhex.observeWith(( viewLifecycleOwner )){
+            textCENReport.setText( it )
+        }
+
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //init this to curCen so that so that we can copy and send to other mobile
-        //val curCEN = viewModel.curcen.toString()
+        //val curCEN = viewModel.curcenhex.toString()
         //textCENReport.setText(curCEN.toCharArray(), 0, curCEN.length);
 
         //user has pasted a CEN, simulate BLE reception by inserting it
