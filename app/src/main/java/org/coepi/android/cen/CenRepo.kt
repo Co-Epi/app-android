@@ -261,12 +261,20 @@ class CenRepoImpl(
                 for (i in it.indices) {
                     val matchedCENkey = matchedCENKeys[i]
                     val call = getCenReport(matchedCENkey)
+
                     // TODO: for each match fetch Report data and record in Symptoms
                     // cenReportDao.insert(cenReport)
                     // TODO notify observer on completion of database write
                     // TODO or observe directly database
                     // TODO clarify with Rust lib whether it will store the reports (probably not)
-//                    reports.onNext(cenReport())
+
+                    val response = call.execute()
+                    call.execute().body()?.let { reports ->
+                        log.i("Got reports: $reports")
+                        this.reports.onNext(reports)
+                    } ?: {
+                        log.e("Response not successful: $response")
+                    } ()
                 }
             }
         }
@@ -279,8 +287,8 @@ class CenRepoImpl(
         val minTimestamp = maxTimestamp - 7*24* 60
         var possibleCENs = Array<String>(7*24 *(60/CENLifetimeInSeconds)) {i ->
             val ts = maxTimestamp - CENLifetimeInSeconds * i
-            val CENBytes = generateCEN(key, ts)
-            CENBytes.toString()
+            val cen = generateCEN(key, ts)
+            cen.toHex()
         }
         // check if the possibleCENs are in the CEN Table
         return cenDao.matchCENs(minTimestamp, maxTimestamp, possibleCENs)

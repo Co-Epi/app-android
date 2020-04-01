@@ -1,3 +1,7 @@
 package org.coepi.android.cen
 
-data class Cen(val bytes: ByteArray)
+import org.coepi.android.extensions.toHex
+
+data class Cen(val bytes: ByteArray) {
+    fun toHex(): String = bytes.toHex()
+}

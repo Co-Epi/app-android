@@ -1,5 +1,6 @@
 package org.coepi.android.cen
 
+import android.util.Base64
 import io.realm.kotlin.createObject
 import io.realm.kotlin.oneOf
 import io.realm.kotlin.where
@@ -23,7 +24,7 @@ class RealmCenDao(private val realmProvider: RealmProvider) {
     fun insert(cen: ReceivedCen) {
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmReceivedCen>() // Create a new object
-            realmObj.cen = cen.cen.bytes
+            realmObj.cen = cen.cen.toHex()
             realmObj.timestamp = cen.timestamp
         }
     }
