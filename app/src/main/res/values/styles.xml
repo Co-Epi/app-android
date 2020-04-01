@@ -15,6 +15,10 @@
         <item name="android:textSize">@dimen/text_size_headline</item>
     </style>
 
+    <style name="Text.Title">
+      <item name="android:textSize">@dimen/text_size_title</item>
+    </style>
+
     <style name="Button" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@color/colorAccent</item>
         <item name="android:textAllCaps">true</item>
@@ -25,5 +29,22 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:textAppearance">@style/Text</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="card_view_title">
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:textColor">#DE000000</item>
+    </style>
+    <style name="card_view_body">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:textColor">#DE000000</item>
+    </style>
+    <style name="card_view_link">
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 </resources>

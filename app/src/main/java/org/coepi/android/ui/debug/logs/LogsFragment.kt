@@ -19,7 +19,7 @@ class LogsFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflate(inflater, container, false).apply {
-
+        vm = viewModel
         toolbar.setNavigationIcon(ic_close)
         toolbar.setNavigationOnClickListener {
             viewModel.onCloseClick()

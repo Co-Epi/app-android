@@ -4,16 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
-import org.coepi.android.ble.BleDiscoveryImpl
-import org.coepi.android.ble.BlePeripheral
 import org.coepi.android.ble.BlePreconditions
-import org.coepi.android.cen.CenRepo
-import org.coepi.android.cen.RealmCenDao
-import org.coepi.android.system.log.log
+import org.coepi.android.cen.CenManager
 import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
@@ -21,27 +20,22 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
-    private val repo: CenRepo by inject()
     private val onboardingShower: OnboardingShower by inject()
+    private val cenManager: CenManager by inject()
+    private val blePreconditions: BlePreconditions by inject()
 
-    private var disposables = CompositeDisposable()
-
-    lateinit var blePreconditions : BlePreconditions
-    lateinit var blePeripheral : BlePeripheral
-    lateinit var bleDiscovery :  BleDiscoveryImpl
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
         observeRootNavigation()
-        blePreconditions = BlePreconditions(this) {
-            bleDiscovery.discover()
-            log.i("BlePreconditions met - BLE discover process started")
-        }
-        bleDiscovery = BleDiscoveryImpl(this.applicationContext)
-        blePeripheral = BlePeripheral(this.applicationContext, repo)
-        blePreconditions.onActivityCreated()
-        log.i("MainActivity - onCreate")
+        onboardingShower.showIfNeeded()
+
+        blePreconditions.onActivityCreated(this)
+
+        AppCenter.start(application, "0bb1bf95-3b14-48a6-a769-db1ff1df0307", Analytics::class.java, Crashes::class.java)
+        cenManager.start()
     }
 
     private fun observeRootNavigation() {
@@ -54,5 +48,16 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         blePreconditions.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        blePreconditions.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    object RequestCodes {
+        const val onboardingPermissions = 1
+        const val enableBluetooth = 2
     }
 }
