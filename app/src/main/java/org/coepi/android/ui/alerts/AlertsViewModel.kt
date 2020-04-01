@@ -16,7 +16,7 @@ class AlertsViewModel(
     private val resources: Resources
 ) : ViewModel() {
 
-    private val alertsObservable: Observable<List<AlertViewData>> = notificationsRepo.notifications()
+    private val alertsObservable: Observable<List<AlertViewData>> = notificationsRepo.alerts()
         .map { reports -> reports.map { it.toViewData() } }
         .toObservable()
 

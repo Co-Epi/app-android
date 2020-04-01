@@ -5,12 +5,17 @@ import org.coepi.android.cen.CenReport
 import java.util.Date
 
 interface AlertsRepo {
-    fun notifications(): Single<List<CenReport>>
+    fun alerts(): Single<List<CenReport>>
 }
 
-class AlertRepoImpl: AlertsRepo {
+class AlertRepoImpl(
+    private val coepiRepo: CoEpiRepo
+): AlertsRepo {
 
-    override fun notifications(): Single<List<CenReport>> = Single.just(listOf(
+    // Uncomment when API reports are working
+//    override fun alerts(): Single<List<CenReport>> = coepiRepo.reports.single(emptyList())
+
+    override fun alerts(): Single<List<CenReport>> = Single.just(listOf(
         CenReport(1, "Report text1", "keys", "mime type", Date(), true),
         CenReport(2, "Report text2", "keys", "mime type", Date(), true),
         CenReport(3, "Report text3", "keys", "mime type", Date(), true),
