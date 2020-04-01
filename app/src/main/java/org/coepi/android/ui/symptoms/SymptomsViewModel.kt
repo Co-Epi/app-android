@@ -1,5 +1,6 @@
 package org.coepi.android.ui.symptoms
 
+import android.util.Base64
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
@@ -73,11 +74,14 @@ class SymptomsViewModel(private val symptomRepo: SymptomRepo, private val repo: 
     fun onChecked(symptom: SymptomViewData) {
         checkedSymptomTrigger.onNext(symptom)
     }
+
+
+
     fun submitSymptoms(){
         log.i("About to send sypmtom:");
         val keys: String = "will be set by doPostSymptom using last 3 keys generated"
-        val report = "COVID 19 confirmed"
-        val id = 1
+        val report = Base64.encodeToString("COVID 19 from BART".toByteArray(), Base64.NO_WRAP)
+        val id = repo.toHex( "REPORT1".toByteArray())
         val timestamp = 0;//this will be set by doPostSymptom
         val symptomReport = SymptomReport(id, report,keys, timestamp)
 
