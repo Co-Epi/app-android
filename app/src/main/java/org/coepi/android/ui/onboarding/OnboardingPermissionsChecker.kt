@@ -1,34 +1,46 @@
 package org.coepi.android.ui.onboarding
 
-import android.Manifest
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
-import org.coepi.android.ble.BlePreconditions
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.BLUETOOTH
+import android.app.Activity
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import androidx.core.app.ActivityCompat.checkSelfPermission
+import androidx.core.app.ActivityCompat.requestPermissions
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.PublishSubject.create
+import org.coepi.android.MainActivity.RequestCodes
+import org.coepi.android.system.log.log
 
-class OnboardingPermissionsChecker(private val blePreconditions: BlePreconditions) {
 
-    fun showPermissionCheck(onGranted: () -> Unit) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
-            val dialogBuilder = AlertDialog.Builder(context)
-            val alert = dialogBuilder.create()
-            alert.setTitle("Allow CoEpi access to Bluetooth?")
-            dialogBuilder.setMessage("CoEpi uses Bluetooth to share interactions with other Bluetooth devices. Your data will by defaut be stored locally.")
-                .setPositiveButton("Allow") { _, _ ->
-                    run {
-                        blePreconditions.onActivityCreated()
-                        onGranted()
-                    }
-                }
-                .setNegativeButton("Don't Allow") { dialog, _ -> dialog.cancel() }
-            alert.show()
+class OnboardingPermissionsChecker {
+
+    val observable: PublishSubject<Boolean> = create()
+
+    private val requestCode = RequestCodes.onboardingPermissions
+
+    fun checkForPermissions(activity: Activity) {
+        val permissions = arrayOf(BLUETOOTH, ACCESS_COARSE_LOCATION)
+        val hasAllPermissions = permissions.all {
+            checkSelfPermission(activity, it) == PERMISSION_GRANTED
         }
-        else {
-            blePreconditions.onActivityCreated();
-            onGranted();
+        if (hasAllPermissions) {
+            observable.onNext(true)
+        } else {
+            requestPermissions(activity, permissions, requestCode)
         }
     }
 
+    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                                   grantResults: IntArray) {
 
+        if (requestCode != this.requestCode) return
+
+        if (grantResults.all { it == PERMISSION_GRANTED }) {
+            log.i("Permissions granted")
+            observable.onNext(true)
+        } else {
+            log.i("Permissions denied")
+            observable.onNext(false)
+        }
+    }
 }

@@ -8,12 +8,10 @@ import org.coepi.android.ui.navigation.RootNavigation
 
 class OnboardingViewModel(
     private val rootNav: RootNavigation,
-    private val preferences: Preferences,
-    private val onboardingPermissionsChecker: OnboardingPermissionsChecker
+    private val preferences: Preferences
 ) : ViewModel() {
 
     fun onCtaClick() {
-        onboardingPermissionsChecker.showPermissionCheck()
     }
 
     private fun closeOnboardingScreen() {
