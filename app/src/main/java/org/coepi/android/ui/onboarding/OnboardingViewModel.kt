@@ -11,10 +11,7 @@ class OnboardingViewModel(
     private val preferences: Preferences
 ) : ViewModel() {
 
-    fun onCtaClick() {
-    }
-
-    private fun closeOnboardingScreen() {
+    fun onCloseClick() {
         preferences.putBoolean(SEEN_ONBOARDING, true);
         rootNav.navigate(Back)
     }
