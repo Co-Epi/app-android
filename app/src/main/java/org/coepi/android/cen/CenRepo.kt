@@ -129,7 +129,7 @@ class CenRepoImpl(
     private fun cenkeysCheck(timestamp : Int): Call<List<String>> = cenApi.cenkeysCheck(timestamp)
 
     // 3. Client fetch reports from /cenreport/<cenKey> (base64 encoded)
-    private fun getCenReport(cenKey : String): Call<List<RealmCenReport>> = cenApi.getCenReport(cenKey)
+    private fun getCenReport(cenKey : String): Call<List<CenReport>> = cenApi.getCenReport(cenKey)
 
     // doPostSymptoms is called when a ViewModel in the UI sees the user finish a Symptoms Report, the Symptoms + last 3 CENKeys are posted to the server
     override fun sendReport(report: CenReport): Completable =
