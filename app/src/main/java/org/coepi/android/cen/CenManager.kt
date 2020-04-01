@@ -6,26 +6,28 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import org.coepi.android.ble.BleManager
 import org.coepi.android.ble.BlePreconditionsNotifier
+import org.coepi.android.repo.CoEpiRepo
 import org.coepi.android.system.log.log
 
 class CenManager(
     private val blePreconditions: BlePreconditionsNotifier,
     private val bleManager: BleManager,
-    private val cenRepo: CenRepo
+    private val cenRepo: CenRepo,
+    private val coepiRepo: CoEpiRepo
 ) {
     private val disposables = CompositeDisposable()
 
     fun start() {
-        initServiceWhenBleIsEnabled()
-        observeCen()
-        observeScanner()
+        startBleServiceWhenEnabled()
+        forwardRepoCenToBleAdvertiser()
+        observeScannedCens()
     }
 
-    private fun initServiceWhenBleIsEnabled() {
+    private fun startBleServiceWhenEnabled() {
         disposables += Observables.combineLatest(
             blePreconditions.bleEnabled,
             // Take the first CEN, needed to start the service
-            cenRepo.cen
+            cenRepo.generatedCen
         )
         .take(1)
         .subscribeBy(onNext = { (_, firstCen) ->
@@ -36,11 +38,8 @@ class CenManager(
         })
     }
 
-    /**
-     * Sends CEN to advertiser when it's changed in DB
-     */
-    private fun observeCen() {
-        disposables += cenRepo.cen.subscribeBy (onNext = { cen ->
+    private fun forwardRepoCenToBleAdvertiser() {
+        disposables += cenRepo.generatedCen.subscribeBy (onNext = { cen ->
             // ServiceData holds Android Contact Event Number (CEN) that the Android peripheral is advertising
 
             // TODO is check really needed? If yes, either add flag to advertiser or expose state and use here
@@ -48,18 +47,17 @@ class CenManager(
             bleManager.stopAdvertiser()
 //            }
 
-            if (cen != null) {
-                bleManager.startAdvertiser(cen)
-            }
+            bleManager.startAdvertiser(cen)
+
         }, onError = {
             log.i("Error observing CEN: $it")
         })
     }
 
-    private fun observeScanner() {
+    private fun observeScannedCens() {
         disposables += bleManager.scanObservable
             .subscribeBy(onNext = {
-                cenRepo.insertCEN(it)
+                coepiRepo.storeObservedCen(it)
             }, onError = {
                 log.e("Error scanning: $it")
             })

@@ -1,6 +1,9 @@
 package org.coepi.android.cen
 
 import android.os.Handler
+import android.util.Log
+import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.create
 import org.coepi.android.system.log.log
@@ -13,17 +16,40 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
+interface CenRepo {
+     // Periodically generated CEN, to be made available via BLE
+    val generatedCen: Observable<Cen>
+
+    // Infection reports fetched periodically from the API
+    val reports: Observable<List<CenReport>>
+
+     // Send symptoms report
+    fun sendReport(report: CenReport): Completable
+
+    // Store CEN from other device
+    fun storeCen(cen: Cen)
+}
+
 // CoEpiRepo coordinates local Storage (Room) and network API calls to manage the CoEpi protocol
 //  (A) refreshCENAndCENKeys: CENKey generation every 7 days, CEN Generation every 15 minutes  (stored in Room)
 //  (B) insertCEN: Storage of observed CENs from other BLE devices
-class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, private val cenkeyDao: RealmCenKeyDao, private val cenReportDao: RealmCenReportDao)  {
+class CenRepoImpl(
+    private val cenApi: CENApi,
+    private val cenDao: RealmCenDao,
+    private val cenkeyDao: RealmCenKeyDao,
+    private val cenReportDao: RealmCenReportDao
+): CenRepo {
+
     // ------------------------- CEN Management
     // the latest CENKey (AES in base64 encoded form), loaded from local storage
     private var cenKey: String = ""
     private var cenKeyTimestamp = 0
-    
+
     // the latest CEN (ByteArray form), generated using cenKey
-    val cen : BehaviorSubject<Cen> = create()
+    override val generatedCen : BehaviorSubject<Cen> = create()
+
+    override val reports : BehaviorSubject<List<CenReport>> = create()
+
     private var CENKeyLifetimeInSeconds = 7*86400 // every 7 days a new key is generated
     var CENLifetimeInSeconds = 15*60   // every 15 mins a new CEN is generated
     private val periodicCENKeysCheckFrequencyInSeconds = 60*30 // run every 30 mins
@@ -33,7 +59,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
 
     init {
-        cen.onNext(Cen(ByteArray(0))) // TODO what's this for?
+        generatedCen.onNext(Cen(ByteArray(0))) // TODO what's this for?
 
         // load last CENKey + CENKeytimestamp from local storage
         val lastKeys = cenkeyDao.lastCENKeys(1)
@@ -65,7 +91,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
-        cen.onNext(generateCEN(cenKey, curTimestamp))
+        generatedCen.onNext(generateCEN(cenKey, curTimestamp))
         Handler().postDelayed({
             refreshCENAndCENKeys()
         }, CENLifetimeInSeconds * 1000L)
@@ -87,7 +113,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
     }
 
     // when a peripheral CEN is detected through BLE, it is recorded here
-    fun insertCEN(cen: Cen) {
+    override fun storeCen(cen: Cen) {
         val c = ReceivedCen(
             cen,
             (System.currentTimeMillis() / 1000L).toInt()
@@ -97,27 +123,28 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     // ------- Network API Calls: mapping into Server Endpoints via Retrofit
     // 1. Client publicizes report to /cenreport along with 3 CENKeys (base64 encoded)
-    private fun postCENReport(report : RealmCenReport) = cenApi.postCENReport(report)
+    private fun postCENReport(report: CenReport): Completable = cenApi.postCENReport(report)
 
     // 2. Client periodically gets publicized CENKeys alongside symptoms/infections reports from /exposurecheck
-    private fun cenkeysCheck(timestamp : Int) = cenApi.cenkeysCheck(timestamp)
+    private fun cenkeysCheck(timestamp : Int): Call<List<String>> = cenApi.cenkeysCheck(timestamp)
 
     // 3. Client fetch reports from /cenreport/<cenKey> (base64 encoded)
-    private fun getCENReport(cenKey : String) = cenApi.getCENReport(cenKey)
+    private fun getCenReport(cenKey : String): Call<List<RealmCenReport>> = cenApi.getCenReport(cenKey)
 
     // doPostSymptoms is called when a ViewModel in the UI sees the user finish a Symptoms Report, the Symptoms + last 3 CENKeys are posted to the server
-    fun doPostSymptoms(report : RealmCenReport) {
-        val CENKeysStr = lastCENKeys(3)
-        CENKeysStr?.let {
-            postCENReport(report)
-        }
-    }
+    override fun sendReport(report: CenReport): Completable =
+        postCENReport(report)
+    // TODO clarify - CENKeysStr is not used. Is this only to check that we have at least 3 CENKeys?
+//        val CENKeysStr = lastCENKeys(3)
+//        CENKeysStr?.let {
+//            postCENReport(report)
+//        }
 
     // lastCENKeys gets the last few CENKeys used to generate CENs by this device
     fun lastCENKeys(lim : Int) : String? {
         val CENKeys = cenkeyDao.lastCENKeys(lim)
-        CENKeys?.let {
-            if ( CENKeys.size > 0 ) {
+        CENKeys.let {
+            if (CENKeys.isNotEmpty()) {
                 val CENKeysStrings = CENKeys.map{ k -> k.toString() }
                 return CENKeysStrings.joinToString(",")
             }
@@ -171,9 +198,13 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
                 log.i("processMatches MATCH Found")
                 for (i in it.indices) {
                     val matchedCENkey = matchedCENKeys[i]
-                    val call = getCENReport(matchedCENkey)
+                    val call = getCenReport(matchedCENkey)
                     // TODO: for each match fetch Report data and record in Symptoms
                     // cenReportDao.insert(cenReport)
+                    // TODO notify observer on completion of database write
+                    // TODO or observe directly database
+                    // TODO clarify with Rust lib whether it will store the reports (probably not)
+//                    reports.onNext(cenReport())
                 }
             }
         }
