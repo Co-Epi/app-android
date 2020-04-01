@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import org.coepi.android.databinding.FragmentBleBinding.inflate
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import kotlinx.android.synthetic.main.fragment_ble.*
 import org.coepi.android.extensions.observeWith
 
 class CENFragment : Fragment() {
@@ -33,8 +33,21 @@ class CENFragment : Fragment() {
 
         viewModel.myCurrentCEN.observeWith(viewLifecycleOwner) {
             android.util.Log.i("BleFragment", "BleFragment new value: $it")
-
             textMyCurrentCEN.text = it
         }
     }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //init this to curCen so that so that we can copy and send to other mobile
+        val curCEN = viewModel.curcen.toString()
+        textCENReport.setText(curCEN.toCharArray(), 0, curCEN.length);
+
+        //user has pasted a CEN, simulate BLE reception by inserting it
+        postReport.setOnClickListener() {
+            val cenFromOther = textCENReport.text;
+            viewModel.insertPastedCEN(cenFromOther.toString());
+        }
+    }
 }
