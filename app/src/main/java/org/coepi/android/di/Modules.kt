@@ -12,6 +12,7 @@ import org.coepi.android.cen.CENModule
 import org.coepi.android.cen.apiModule
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Preferences
+import org.coepi.android.system.Resources
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.cen.CENViewModel
 import org.coepi.android.ui.container.ContainerViewModel
@@ -19,6 +20,7 @@ import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.home.HomeViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
@@ -31,6 +33,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { SymptomsViewModel(get()) }
+    viewModel { AlertsViewModel(get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { CENViewModel(get(), get(), get()) }
     viewModel { LocationViewModel() }
@@ -48,6 +51,7 @@ val systemModule = module {
     single<BlePreconditionsNotifier> { BlePreconditionsNotifierImpl() }
     single { BlePreconditions(get(), get(), get()) }
     single { BleEnabler() }
+    single { Resources(androidApplication()) }
 }
 
 val appModule = listOf(
