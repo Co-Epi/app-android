@@ -83,7 +83,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
         if ( ( cenKeyTimestamp == 0 ) || ( roundedTimestamp(curTimestamp) > roundedTimestamp(cenKeyTimestamp) ) ) {
             // generate a new AES Key and store it in local storage
             val secretKey = KeyGenerator.getInstance("AES").generateKey()
-            cenKey = Base64.encodeToString(secretKey.encoded,android.util.Base64.NO_WRAP)
+            cenKey = Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP)
             cenKeyTimestamp = curTimestamp
             cenkeyDao.insert(CenKey(cenKey, cenKeyTimestamp))
         }
@@ -180,7 +180,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
         val CENKeys = cenkeyDao.lastCENKeys(lim)
         CENKeys?.let {
             if ( CENKeys.size > 0 ) {
-                val CENKeysStrings = CENKeys.map{ k -> toHex( Base64.decode(k.key,Base64.NO_WRAP)) }
+                val CENKeysStrings = CENKeys.map{ k -> toHex( Base64.decode(k.key, Base64.NO_WRAP)) }
                 return CENKeysStrings.joinToString(",")
             }
         }
