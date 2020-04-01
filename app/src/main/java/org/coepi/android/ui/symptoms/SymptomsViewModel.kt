@@ -85,7 +85,7 @@ class SymptomsViewModel(private val symptomRepo: SymptomRepo, private val repo: 
         log.i("Reported: {reportID:\""+symptomReport.reportID+
                 "\", report:\""+symptomReport.report+
                 "\", cenkeys: \""+ symptomReport.cenKeys+
-                "\", timestamp:\""+symptomReport.timeStamp+"\"}" )
+                "\", reportTimeStamp:\""+symptomReport.reportTimeStamp+"\"}" )
 
     }
 

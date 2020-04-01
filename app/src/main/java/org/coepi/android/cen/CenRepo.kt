@@ -120,7 +120,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
         //for the format see: https://github.com/Co-Epi/coepi-backend-go
         CENKeysStr?.let {
             report.cenKeys = it
-            report.timeStamp = curTimeStamp()
+            report.reportTimeStamp = curTimeStamp()
         }
         postCENReport(report);
     }
