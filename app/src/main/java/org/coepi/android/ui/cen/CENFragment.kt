@@ -41,8 +41,8 @@ class CENFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //init this to curCen so that so that we can copy and send to other mobile
-        val curCEN = viewModel.curcen.toString()
-        textCENReport.setText(curCEN.toCharArray(), 0, curCEN.length);
+        //val curCEN = viewModel.curcen.toString()
+        //textCENReport.setText(curCEN.toCharArray(), 0, curCEN.length);
 
         //user has pasted a CEN, simulate BLE reception by inserting it
         postReport.setOnClickListener() {

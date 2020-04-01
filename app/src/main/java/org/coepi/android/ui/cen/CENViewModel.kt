@@ -17,7 +17,7 @@ class CENViewModel(
     private val bleManager: BleManager
 ) : ViewModel() {
 
-    val curcen = Base64.encode(repo.CEN.value,0);
+    //val curcen = Base64.encode(repo.CEN.value,0);
     // CEN being broadcast by this device
     val myCurrentCEN = repo.generatedCen
         .map { it.toString() }
@@ -38,7 +38,7 @@ class CENViewModel(
 
     fun insertPastedCEN( curcen :String = "" ){
         //val curcen = "";
-        repo.insertCEN(curcen)
+        //repo.insertCEN(curcen)
     }
 
     private fun update() {
