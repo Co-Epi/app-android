@@ -6,6 +6,8 @@ import org.coepi.android.cen.CenRepo
 import org.coepi.android.system.log.CachingLog
 import org.coepi.android.system.log.LogMessage
 import org.coepi.android.ui.navigation.NavigationCommand.Back
+import org.coepi.android.ui.debug.logs.LogsFragmentDirections.Companion.actionGlobalCENFragment
+import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
 
 class LogsViewModel(
@@ -32,5 +34,9 @@ class LogsViewModel(
 
     private fun update() {
         logs.value = logger.logs
+    }
+
+    fun onBLEClick(){
+        rootNav.navigate(ToDestination(actionGlobalCENFragment()))
     }
 }

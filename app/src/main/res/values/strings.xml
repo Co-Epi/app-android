@@ -5,6 +5,7 @@
     <string name="tab_container_debug">Debug</string>
 
     <!-- Tabs -->
+    <string name="tab_home">Home</string>
     <string name="tab_symptoms">Symptoms</string>
     <string name="tab_settings">Settings</string>
     <string name="tab_ble">BLE</string>
@@ -12,6 +13,7 @@
 
 
     <!-- Fragment labels -->
+    <string name="label_fragment_home">Home</string>
     <string name="label_fragment_care">Care</string>
     <string name="label_fragment_settings">Settings</string>
     <string name="label_fragment_ble">BLE</string>
@@ -44,4 +46,12 @@
     <string name="onboarding_banner_1"><b>Track</b> where you\'ve been</string>
     <string name="onboarding_banner_2"><b>Monitor</b> your health</string>
     <string name="onboarding_banner_3">Get <b>contextualized alerts</b> about possible exposure to infectious illness</string>
+
+    <!-- Home -->
+    <string name="home_my_health_card_title">My Health</string>
+    <string name="home_contact_alerts_card_title">Contact Alerts</string>
+    <string name="home_my_health_card_description">Monitor your health and report symptoms.</string>
+    <string name="home_contact_alerts_card_description">Approximate times that you may have been exposed to a symptomatic individual.</string>
+    <string name="home_my_health_card_check_in_button">CHECK-IN</string>
+    <string name="home_contact_alerts_card_see_alerts_button">SEE ALERTS</string>
 </resources>
