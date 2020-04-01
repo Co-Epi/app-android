@@ -24,7 +24,7 @@ class RealmCenDao(private val realmProvider: RealmProvider) {
     fun insert(cen: ReceivedCen) {
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmReceivedCen>() // Create a new object
-            realmObj.cen = Base64.encodeToString(cen.cen.bytes, Base64.NO_WRAP)
+            realmObj.cen = cen.cen.toHex()
             realmObj.timestamp = cen.timestamp
         }
     }

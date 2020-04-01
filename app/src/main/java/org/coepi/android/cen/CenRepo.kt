@@ -217,8 +217,8 @@ class CenRepoImpl(
         val minTimestamp = maxTimestamp - 7*24* 60
         var possibleCENs = Array<String>(7*24 *(60/CENLifetimeInSeconds)) {i ->
             val ts = maxTimestamp - CENLifetimeInSeconds * i
-            val CENBytes = generateCEN(key, ts)
-            CENBytes.toString()
+            val cen = generateCEN(key, ts)
+            cen.toHex()
         }
         // check if the possibleCENs are in the CEN Table
         return cenDao.matchCENs(minTimestamp, maxTimestamp, possibleCENs)
