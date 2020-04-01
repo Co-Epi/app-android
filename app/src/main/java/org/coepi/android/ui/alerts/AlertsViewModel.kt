@@ -23,10 +23,13 @@ class AlertsViewModel(
     val alerts: LiveData<List<AlertViewData>> = alertsObservable.toLiveData()
 
     val title = alertsObservable
-        .map {
-            resources.getQuantityString(alerts_new_notifications_count, it.size)
-        }
+        .map { title(it.size) }
+        .startWith(title(0))
         .toLiveData()
+
+
+    private fun title(alertsSize: Int) =
+        resources.getQuantityString(alerts_new_notifications_count, alertsSize)
 
     private fun CenReport.toViewData(): AlertViewData =
         AlertViewData(report, dotFormatter.format(date), this) // TODO which date format?
