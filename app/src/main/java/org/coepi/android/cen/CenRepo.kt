@@ -3,10 +3,10 @@ package org.coepi.android.cen
 import android.os.Handler
 import android.util.Base64
 import android.util.Log
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.create
+import org.coepi.android.extensions.toHex
 import org.coepi.android.system.log.log
 import retrofit2.Call
 import retrofit2.Callback
@@ -88,22 +88,6 @@ class CenRepoImpl(
         return (System.currentTimeMillis() / 1000L).toInt();
     }
 
-    public fun toHex( bytes:Array<Byte>) :String {
-        var ret: String =""
-        for (b in bytes) {
-            ret += String.format("%02X", b)
-        }
-        return ret
-    }
-    public fun toHex( bytes:ByteArray) :String {
-        var ret: String =""
-        for (b in bytes) {
-            ret += String.format("%02X", b)
-        }
-        return ret
-    }
-
-
     private fun refreshCENAndCENKeys() {
         val curTimestamp = curTimeStamp()
         if ( ( cenKeyTimestamp == 0 ) || ( roundedTimestamp(curTimestamp) > roundedTimestamp(cenKeyTimestamp) ) ) {
@@ -179,7 +163,7 @@ class CenRepoImpl(
         CENKeysStr?.let {
             report.cenKeys = it
             report.report = Base64.encodeToString(report.report.toByteArray(), Base64.NO_WRAP)
-            report.reportID = toHex(report.reportID.toByteArray())
+            report.reportID = report.reportID.toByteArray().toHex()
             report.reportTimeStamp = curTimeStamp()
         }
         val call = postCENReport(report);
@@ -204,11 +188,9 @@ class CenRepoImpl(
     // lastCENKeys gets the last few CENKeys used to generate CENs by this device
     fun lastCENKeysHex(lim : Int) : String? {
         val CENKeys = cenkeyDao.lastCENKeys(lim)
-        CENKeys?.let {
-            if ( CENKeys.size > 0 ) {
-                val CENKeysStrings = CENKeys.map{ k -> toHex( Base64.decode(k.key, Base64.NO_WRAP)) }
-                return CENKeysStrings.joinToString(",")
-            }
+        if (CENKeys.size > 0) {
+            val CENKeysStrings = CENKeys.map{ k -> k.key }
+            return CENKeysStrings.joinToString(",")
         }
         return null
     }
