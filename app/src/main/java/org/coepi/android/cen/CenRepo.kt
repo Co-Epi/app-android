@@ -178,7 +178,8 @@ class CenRepoImpl(
         //for the format see: https://github.com/Co-Epi/coepi-backend-go
         CENKeysStr?.let {
             report.cenKeys = it
-            report.report = toHex(report.report.toByteArray())
+            report.report = Base64.encodeToString(report.report.toByteArray(), Base64.NO_WRAP)
+            report.reportID = toHex(report.reportID.toByteArray())
             report.reportTimeStamp = curTimeStamp()
         }
         val call = postCENReport(report);
@@ -226,6 +227,7 @@ class CenRepoImpl(
                         for ( i in it.indices ) {
                             it[i]?.let { key ->
                                 val matched = matchCENKey(key, lastCENKeysCheck)
+                                log.i("Trying: ${key}");
                                 if( matched!= null && matched.isNotEmpty() ){
                                     keyMatched.add(key);
                                 }
