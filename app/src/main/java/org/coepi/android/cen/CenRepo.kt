@@ -114,7 +114,7 @@ class CenRepo(private val cenApi: CENApi, private val cenDao: RealmCenDao, priva
 
     private fun generateCEN(CENKey : String, ts : Int)  : ByteArray {
         // decode the base64 encoded key
-        val decodedCENKey = android.util.Base64.decode(CENKey,android.util.Base64.NO_WRAP)
+        val decodedCENKey = android.util.Base64.decode(CENKey, Base64.NO_WRAP)
         // rebuild secretKey using SecretKeySpec
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
