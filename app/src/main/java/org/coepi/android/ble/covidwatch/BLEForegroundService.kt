@@ -13,6 +13,7 @@ import androidx.lifecycle.LifecycleService
 import org.coepi.android.MainActivity
 import org.coepi.android.R
 import org.coepi.android.cen.Cen
+import org.coepi.android.system.log.LogTag.BLE_A
 import org.coepi.android.system.log.log
 import java.util.Timer
 import java.util.UUID
@@ -96,7 +97,7 @@ class BLEForegroundService : LifecycleService(), BleService {
 
     override fun changeAdvertisedCen(cen: Cen) {
         val configuration = configuration ?: run {
-            log.e("Changing contact identifier but not configured yet")
+            log.e("Changing contact identifier but not configured yet", BLE_A)
             return
         }
         configuration.advertiser.changeAdvertisedValue(cen)
