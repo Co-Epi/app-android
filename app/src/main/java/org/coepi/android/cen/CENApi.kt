@@ -9,7 +9,7 @@ import retrofit2.http.Path
 
 interface CENApi {
     // post CENReport along with CENKeys
-    @POST("/cenreport/13298327ebcebe7f153b956e4596d503")
+    @POST("/cenreport/") //not needed 13298327ebcebe7f153b956e4596d503"
     fun postCENReport(@Body report : SymptomReport): Call<Unit>
 
     // get recent keys that have CEN Reports
