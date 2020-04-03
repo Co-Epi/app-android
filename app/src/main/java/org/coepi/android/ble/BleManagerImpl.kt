@@ -1,6 +1,7 @@
 package org.coepi.android.ble
 
 import android.app.Application
+import android.bluetooth.BluetoothAdapter
 import android.content.ComponentName
 import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
@@ -17,6 +18,8 @@ import org.coepi.android.ble.covidwatch.BLEScanner
 import org.coepi.android.ble.covidwatch.BLEScannerImpl
 import org.coepi.android.ble.covidwatch.BleServiceConfiguration
 import org.coepi.android.cen.Cen
+import org.coepi.android.system.log.LogTag.BLE
+import org.coepi.android.system.log.log
 import java.util.UUID
 import java.util.UUID.fromString
 
@@ -59,17 +62,15 @@ class BleManagerImpl(
     }
 
     private fun BLEForegroundService.configureAndStart(cen: Cen) {
-        val advertiser : BLEAdvertiser  =
-            bluetoothAdapter?.let { adapter ->
-                BLEAdvertiserImpl(app, adapter)
-            } ?: NoopBleAdvertiser()
+        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+        if (bluetoothAdapter == null) {
+            log.e("Bluetooth adapter is null. Can't continue", BLE)
+            return
+        }
 
-        val scanner : BLEScanner =
-            bluetoothAdapter?.let { adapter ->
-                BLEScannerImpl(app, adapter)
-            } ?: NoopBleScanner()
         configure(BleServiceConfiguration(
-            serviceUUID, characteristicUUID, cen, advertiser, scanner,
+            serviceUUID, characteristicUUID, cen, BLEAdvertiserImpl(app, bluetoothAdapter),
+            BLEScannerImpl(app, bluetoothAdapter),
             scanCallback = {
                 scanObservable.onNext(it)
             },

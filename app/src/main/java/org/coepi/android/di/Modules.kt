@@ -4,23 +4,24 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import org.coepi.android.ble.BleEnabler
+import org.coepi.android.ble.BleManager
+import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
-import org.coepi.android.ble.bleModule
 import org.coepi.android.cen.CENModule
 import org.coepi.android.cen.apiModule
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.Resources
 import org.coepi.android.system.log.cachingLog
+import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.cen.CENViewModel
 import org.coepi.android.ui.container.ContainerViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.home.HomeViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
-import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
@@ -52,6 +53,8 @@ val systemModule = module {
     single { BlePreconditions(get(), get(), get()) }
     single { BleEnabler() }
     single { Resources(androidApplication()) }
+    single<BleManager> { BleManagerImpl(androidApplication()) }
+//    single<BleManager> { BleSimulator() }  // Disable BleManagerImpl and enable this to use BLE simulator
 }
 
 val appModule = listOf(
@@ -59,9 +62,7 @@ val appModule = listOf(
     viewModelModule,
     systemModule,
     apiModule,
-    CENModule,
-    bleModule
-//    bleSimulatorModule // Disable bleModule and enable this to use BLE simulator
+    CENModule
 )
 
 fun getSharedPrefs(androidApplication: Application): SharedPreferences =
