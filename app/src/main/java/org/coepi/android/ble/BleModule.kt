@@ -12,16 +12,14 @@ import org.koin.dsl.module
 import java.util.UUID
 
 val bleModule = module {
-    single { createBleAdvertiser(androidApplication()) }
-    single { createBleScanner(androidApplication()) }
-    single<BleManager> { BleManagerImpl(androidApplication(), get(), get()) }
+    single<BleManager> { BleManagerImpl(androidApplication()) }
 }
 
 val bleSimulatorModule = module {
     single<BleManager> { BleSimulator() }
 }
 
-private val bluetoothAdapter: BluetoothAdapter? get() = BluetoothAdapter.getDefaultAdapter()
+val bluetoothAdapter: BluetoothAdapter? get() = BluetoothAdapter.getDefaultAdapter()
 
 private fun createBleAdvertiser(app: Application): BLEAdvertiser =
     bluetoothAdapter?.let { adapter ->

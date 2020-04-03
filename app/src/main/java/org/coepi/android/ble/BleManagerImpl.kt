@@ -10,9 +10,11 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.ble.covidwatch.BLEAdvertiser
+import org.coepi.android.ble.covidwatch.BLEAdvertiserImpl
 import org.coepi.android.ble.covidwatch.BLEForegroundService
 import org.coepi.android.ble.covidwatch.BLEForegroundService.LocalBinder
 import org.coepi.android.ble.covidwatch.BLEScanner
+import org.coepi.android.ble.covidwatch.BLEScannerImpl
 import org.coepi.android.ble.covidwatch.BleServiceConfiguration
 import org.coepi.android.cen.Cen
 import java.util.UUID
@@ -31,9 +33,7 @@ interface BleManager {
 }
 
 class BleManagerImpl(
-    private val app: Application,
-    private val advertiser: BLEAdvertiser,
-    private val scanner: BLEScanner
+    private val app: Application
 ) : BleManager {
 
     private val serviceUUID: UUID = fromString("0000C019-0000-1000-8000-00805F9B34FB")
@@ -59,6 +59,15 @@ class BleManagerImpl(
     }
 
     private fun BLEForegroundService.configureAndStart(cen: Cen) {
+        val advertiser : BLEAdvertiser  =
+            bluetoothAdapter?.let { adapter ->
+                BLEAdvertiserImpl(app, adapter)
+            } ?: NoopBleAdvertiser()
+
+        val scanner : BLEScanner =
+            bluetoothAdapter?.let { adapter ->
+                BLEScannerImpl(app, adapter)
+            } ?: NoopBleScanner()
         configure(BleServiceConfiguration(
             serviceUUID, characteristicUUID, cen, advertiser, scanner,
             scanCallback = {
