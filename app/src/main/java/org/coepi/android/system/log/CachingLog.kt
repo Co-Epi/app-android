@@ -42,6 +42,10 @@ class CachingLog : Log {
 
 data class LogMessage(val level: LogLevel, val text: String)
 
-enum class LogLevel {
-    V, D, I, W, E
+enum class LogLevel(val text:String) {
+    V("Verbose"),
+    D("Debug"),
+    I("Info"),
+    W("Warn"),
+    E("Error")
 }
