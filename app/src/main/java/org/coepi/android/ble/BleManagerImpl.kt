@@ -1,6 +1,7 @@
 package org.coepi.android.ble
 
 import android.app.Application
+import android.bluetooth.BluetoothAdapter
 import android.content.ComponentName
 import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
@@ -10,11 +11,15 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.ble.covidwatch.BLEAdvertiser
+import org.coepi.android.ble.covidwatch.BLEAdvertiserImpl
 import org.coepi.android.ble.covidwatch.BLEForegroundService
 import org.coepi.android.ble.covidwatch.BLEForegroundService.LocalBinder
 import org.coepi.android.ble.covidwatch.BLEScanner
+import org.coepi.android.ble.covidwatch.BLEScannerImpl
 import org.coepi.android.ble.covidwatch.BleServiceConfiguration
 import org.coepi.android.cen.Cen
+import org.coepi.android.system.log.LogTag.BLE
+import org.coepi.android.system.log.log
 import java.util.UUID
 import java.util.UUID.fromString
 
@@ -31,9 +36,7 @@ interface BleManager {
 }
 
 class BleManagerImpl(
-    private val app: Application,
-    private val advertiser: BLEAdvertiser,
-    private val scanner: BLEScanner
+    private val app: Application
 ) : BleManager {
 
     private val serviceUUID: UUID = fromString("0000C019-0000-1000-8000-00805F9B34FB")
@@ -59,8 +62,15 @@ class BleManagerImpl(
     }
 
     private fun BLEForegroundService.configureAndStart(cen: Cen) {
+        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+        if (bluetoothAdapter == null) {
+            log.e("Bluetooth adapter is null. Can't continue", BLE)
+            return
+        }
+
         configure(BleServiceConfiguration(
-            serviceUUID, characteristicUUID, cen, advertiser, scanner,
+            serviceUUID, characteristicUUID, cen, BLEAdvertiserImpl(app, bluetoothAdapter),
+            BLEScannerImpl(app, bluetoothAdapter),
             scanCallback = {
                 scanObservable.onNext(it)
             },
