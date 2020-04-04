@@ -18,24 +18,28 @@ class CenManager(
     private val disposables = CompositeDisposable()
 
     fun start() {
-        startBleServiceWhenEnabled()
-        forwardRepoCenToBleAdvertiser()
-        observeScannedCens()
+        startBleWhenEnabled()
     }
 
-    private fun startBleServiceWhenEnabled() {
+    private fun startBleWhenEnabled() {
         disposables += Observables.combineLatest(
             blePreconditions.bleEnabled,
             // Take the first CEN, needed to start the service
             cenRepo.generatedCen
         )
         .take(1)
-        .subscribeBy(onNext = { (_, firstCen) ->
-            bleManager.startService(firstCen)
-            log.i("BlePreconditions met - BLE manager started")
+        .subscribeBy(onNext = { (_, cen) ->
+            log.i("BlePreconditions met - starting BLE")
+            startBle(cen)
         }, onError = {
             log.i("Error enabling bluetooth: $it")
         })
+    }
+
+    private fun startBle(cen: Cen) {
+        bleManager.startService(cen)
+        forwardRepoCenToBleAdvertiser()
+        observeScannedCens()
     }
 
     private fun forwardRepoCenToBleAdvertiser() {
