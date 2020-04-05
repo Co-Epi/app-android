@@ -65,49 +65,63 @@ class BLEAdvertiser(val context: Context, adapter: BluetoothAdapter) {
                 Log.i(TAG, "onServiceAdded status=$status service=$service")
             }
 
-//            override fun onCharacteristicReadRequest(
-//                device: BluetoothDevice?,
-//                requestId: Int,
-//                offset: Int,
-//                characteristic: BluetoothGattCharacteristic?
-//            ) {
-//                super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
-//
-//                var result = BluetoothGatt.GATT_SUCCESS
-//                var value: ByteArray? = null
-//
-//                try {
-//                    if (characteristic?.uuid == BluetoothService.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC) {
-//                        if (offset != 0) {
-//                            result = BluetoothGatt.GATT_INVALID_OFFSET
-//                            return
-//                        }
-//
+            override fun onCharacteristicReadRequest(
+                device: BluetoothDevice?,
+                requestId: Int,
+                offset: Int,
+                characteristic: BluetoothGattCharacteristic?
+            ) {
+                super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
+
+                var result = BluetoothGatt.GATT_SUCCESS
+                var value: ByteArray? = null
+
+                try {
+                    if (characteristic?.uuid == BluetoothService.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC) {
+                        if (offset != 0) {
+                            result = BluetoothGatt.GATT_INVALID_OFFSET
+                            return
+                        }
+
+                        /************************************************************************/
+                        // CoEpi modification
+                        // Use CEN
+                        // Send CEN in read request iOS(c) - Android(p)
+                        // NOTE: we use the stored advertisedContactEventIdentifier (set in startAdvertising)
+                        // startAdvertising is called periodically with a new CEN by CenRepo
+                        // Not generating a new one on each request (differently to the iOS impl)
+                        // clarify whether we need to generate one here.
+                        // Note also that covidwatch stores advertisedContactEventIdentifier in variable but doesn't do anything with it.
+
+                        value = advertisedContactEventIdentifier?.bytes
+
+                        // Original code
 //                        val newContactEventIdentifier = UUID.randomUUID()
-//
 //                        logContactEventIdentifier(newContactEventIdentifier)
-//
 //                        value = newContactEventIdentifier.toBytes()
-//                    } else {
-//                        result = BluetoothGatt.GATT_FAILURE
-//                    }
-//                } catch (exception: Exception) {
-//                    result = BluetoothGatt.GATT_FAILURE
-//                    value = null
-//                } finally {
-//                    Log.i(
-//                        TAG,
-//                        "onCharacteristicReadRequest result=$result device=$device requestId=$requestId offset=$offset characteristic=$characteristic"
-//                    )
-//                    bluetoothGattServer?.sendResponse(
-//                        device,
-//                        requestId,
-//                        result,
-//                        offset,
-//                        value
-//                    )
-//                }
-//            }
+                        /************************************************************************/
+
+
+                    } else {
+                        result = BluetoothGatt.GATT_FAILURE
+                    }
+                } catch (exception: Exception) {
+                    result = BluetoothGatt.GATT_FAILURE
+                    value = null
+                } finally {
+                    Log.i(
+                        TAG,
+                        "onCharacteristicReadRequest result=$result device=$device requestId=$requestId offset=$offset characteristic=$characteristic"
+                    )
+                    bluetoothGattServer?.sendResponse(
+                        device,
+                        requestId,
+                        result,
+                        offset,
+                        value
+                    )
+                }
+            }
 
             override fun onCharacteristicWriteRequest(
                 device: BluetoothDevice?,
