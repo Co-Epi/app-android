@@ -7,6 +7,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import org.coepi.android.ble.BleManager
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.repo.CoEpiRepo
+import org.coepi.android.system.log.LogTag.BLE_S
 import org.coepi.android.system.log.log
 
 class CenManager(
@@ -61,6 +62,7 @@ class CenManager(
     private fun observeScannedCens() {
         disposables += bleManager.scanObservable
             .subscribeBy(onNext = {
+                log.i("Discovered a CEN: ${it.toHex()}", BLE_S)
                 coepiRepo.storeObservedCen(it)
             }, onError = {
                 log.e("Error scanning: $it")

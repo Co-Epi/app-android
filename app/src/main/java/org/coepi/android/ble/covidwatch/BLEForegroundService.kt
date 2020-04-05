@@ -21,7 +21,7 @@ import java.util.UUID
 interface BleService {
     fun configure(configuration: BleServiceConfiguration)
 
-    fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, cen: Cen)
+    fun startAdvertiser(cen: Cen)
     fun stopAdvertiser()
     fun registerAdvertiserWriteCallback(callback: (Cen) -> Unit)
 
@@ -29,8 +29,6 @@ interface BleService {
 }
 
 data class BleServiceConfiguration(
-    val serviceUUID: UUID,
-    val characteristicUUID: UUID,
     val startCen: Cen,
     val advertiser: BLEAdvertiser,
     val scanner: BLEScanner,
@@ -100,16 +98,16 @@ class BLEForegroundService : LifecycleService(), BleService {
             log.e("Changing contact identifier but not configured yet", BLE_A)
             return
         }
-        configuration.advertiser.changeAdvertisedValue(cen)
+        configuration.advertiser.changeContactEventIdentifierInServiceDataField(cen)
     }
 
     override fun registerAdvertiserWriteCallback(callback: (Cen) -> Unit) {
         val configuration = configuration ?: error("Not configured")
-        configuration.advertiser.registerWriteCallback(callback)
+        configuration.advertiser.writeCallback = callback
     }
 
     override fun onDestroy() {
-        configuration?.advertiser?.stopAdvertiser()
+        configuration?.advertiser?.stopAdvertising()
         configuration?.scanner?.stopScanning()
         timer?.apply {
             cancel()
@@ -139,18 +137,18 @@ class BLEForegroundService : LifecycleService(), BleService {
     }
 
     private fun BleServiceConfiguration.start() {
-        advertiser.registerWriteCallback(advertiserWriteCallback)
-        advertiser.startAdvertiser(serviceUUID, characteristicUUID, startCen)
-        scanner.registerScanCallback(scanCallback)
-        scanner.startScanning(arrayOf(serviceUUID))
+        advertiser.writeCallback = advertiserWriteCallback
+        advertiser.startAdvertising(BluetoothService.CONTACT_EVENT_SERVICE, startCen)
+        scanner.callback = scanCallback
+        scanner.startScanning(arrayOf(BluetoothService.CONTACT_EVENT_SERVICE))
     }
 
-    override fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, cen: Cen) {
-        configuration?.advertiser?.startAdvertiser(serviceUUID, characteristicUUID, cen)
+    override fun startAdvertiser(cen: Cen) {
+        configuration?.advertiser?.startAdvertising(BluetoothService.CONTACT_EVENT_SERVICE, cen)
     }
 
     override fun stopAdvertiser() {
-        configuration?.advertiser?.stopAdvertiser()
+        configuration?.advertiser?.stopAdvertising()
     }
 
     /**
