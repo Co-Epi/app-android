@@ -44,18 +44,19 @@ class LogsFragment: Fragment() {
         spinLevel.adapter = logLevelAdapter
         spinLevel.setSelection(0)
 
-        spinLevel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val selected = spinLevel.selectedItem.toString()
-                val selectedLevel = LogLevel.valueOf("" + selected[0])
+        //Filter log messages
+        viewModel.logs.observeWith(viewLifecycleOwner) {
 
-                //Filter log messages
-                viewModel.logs.observeWith(viewLifecycleOwner) {
-                    logsAdapter.setItems(it.filter { entry -> entry.level.compareTo(selectedLevel) >= 0 })
+            spinLevel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    val selected = spinLevel.selectedItem.toString()
+                    val selectedLevel = LogLevel.valueOf("" + selected[0])
+                    logsAdapter.setItems(it.filter { entry -> entry.level >= selectedLevel })
+                }
+                override fun onNothingSelected(parent: AdapterView<*>) {
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
+
         }
     }.root
 }
