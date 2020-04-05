@@ -8,7 +8,8 @@ val CENModule = module {
     single { RealmCenDao(get()) }
     single { RealmCenReportDao(get()) }
     single { RealmCenKeyDao(get()) }
-    single<CenRepo> { CenRepoImpl(get(), get(), get(), get()) }
+    single { RealmCenLastKeysCheckDao(get()) }
+    single<CenRepo> { CenRepoImpl(get(), get(), get(), get(), get()) }
     single<CoEpiRepo> { CoepiRepoImpl(get()) }
     single { CenManager(get(), get(), get(), get()) }
 }

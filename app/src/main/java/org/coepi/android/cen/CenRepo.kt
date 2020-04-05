@@ -39,7 +39,8 @@ class CenRepoImpl(
     private val cenApi: CENApi,
     private val cenDao: RealmCenDao,
     private val cenkeyDao: RealmCenKeyDao,
-    private val cenReportDao: RealmCenReportDao
+    private val cenReportDao: RealmCenReportDao,
+    private val lastCENKeysCheck: RealmCenLastKeysCheckDao// last time (unix timestamp) the CENKeys were requested
 ): CenRepo {
 
     // ------------------------- CEN Management
@@ -55,10 +56,6 @@ class CenRepoImpl(
     private var CENKeyLifetimeInSeconds = 7*86400 // every 7 days a new key is generated
     var CENLifetimeInSeconds = 15*60   // every 15 mins a new CEN is generated
     private val periodicCENKeysCheckFrequencyInSeconds = 60*30 // run every 30 mins
-
-    // last time (unix timestamp) the CENKeys were requested
-    var lastCENKeysCheck = 0
-
 
     init {
         generatedCen.onNext(Cen(ByteArray(0))) // TODO what's this for?
@@ -85,7 +82,7 @@ class CenRepoImpl(
     }
 
     private fun curTimeStamp() : Int {
-        return (System.currentTimeMillis() / 1000L).toInt();
+        return (System.currentTimeMillis() / 1000L).toInt()
     }
 
     private fun refreshCENAndCENKeys() {
@@ -104,16 +101,16 @@ class CenRepoImpl(
     }
 
     private fun hexToByteArray( hex: String ) : ByteArray{
-        var bytes = ByteArray(hex.length / 2 )
+        val bytes = ByteArray(hex.length / 2 )
 
         //Now, take a for loop until the length of the byte array.
 
         for (i in 1..bytes.size) {
-            val index = i * 2;
+            val index = i * 2
             val j = Integer.parseInt(hex.substring(index, index + 2), 16)
-            bytes[i] = j.toByte();
+            bytes[i] = j.toByte()
         }
-        return bytes;
+        return bytes
     }
 
     private fun generateCENFromHex(CENKeyHex : String, ts : Int)  : Cen {
@@ -122,7 +119,7 @@ class CenRepoImpl(
 
     private fun generateCEN(CENKey : String, ts : Int): Cen {
         // decode the base64 encoded key
-        val decodedCENKey = android.util.Base64.decode(CENKey, Base64.NO_WRAP)
+        val decodedCENKey = Base64.decode(CENKey, Base64.NO_WRAP)
         // rebuild secretKey using SecretKeySpec
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
@@ -166,13 +163,13 @@ class CenRepoImpl(
             report.reportID = report.reportID.toByteArray().toHex()
             report.reportTimeStamp = curTimeStamp()
         }
-        val call = postCENReport(report);
+        val call = postCENReport(report)
         call.enqueue(object :
             Callback<Unit> {
             override fun onResponse(call: Call<Unit?>?, response: Response<Unit>) {
                 val statusCode: Int = response.code()
                 if ( statusCode == 200 ) {
-                    log.i("200");
+                    log.i("200")
                 } else {
                     log.e("periodicCENKeysCheck $statusCode")
                 }
@@ -186,38 +183,54 @@ class CenRepoImpl(
     }
 
     // lastCENKeys gets the last few CENKeys used to generate CENs by this device
-    fun lastCENKeysHex(lim : Int) : String? {
+    private fun lastCENKeysHex(lim : Int) : String? {
         val CENKeys = cenkeyDao.lastCENKeys(lim)
-        if (CENKeys.size > 0) {
+        if (CENKeys.isNotEmpty()) {
             val CENKeysStrings = CENKeys.map{ k -> k.key }
             return CENKeysStrings.joinToString(",")
         }
         return null
     }
 
-    fun periodicCENKeysCheck() {
-        val call = cenkeysCheck(lastCENKeysCheck)
+    private fun periodicCENKeysCheck() {
+        val lastRealmCheck= lastCENKeysCheck.lastCENKeysCheck(1)
+        val curtime = curTimeStamp()
+        var timelastCheck= curtime
+        if( lastRealmCheck.isNotEmpty() ){
+            timelastCheck = lastRealmCheck.last().timestamp
+        }//else{ //never run any check         }*/
+        //insert last time we've checked
+        lastCENKeysCheck.insert(curtime)
+        val call = cenkeysCheck(timelastCheck)
         call.enqueue(object :
             Callback<List<String>> {
             override fun onResponse(call: Call<List<String>?>?, response: Response<List<String>>) {
                 val statusCode: Int = response.code()
-                Log.i("CENApi","${statusCode}");
+                Log.i("CENApi","${statusCode}")
                 if ( statusCode == 200 ) {
                     val r: List<String>? = response.body()
                     r?.let {
-                        var keyMatched=Vector<String>()
+                        val keyMatched=Vector<String>()
+                        val processed =HashSet<String>()
                         for ( i in it.indices ) {
                             it[i]?.let { key ->
-                                val matched = matchCENKey(key, lastCENKeysCheck)
-                                log.i("Trying: ${key}");
-                                if( matched!= null && matched.isNotEmpty() ){
-                                    keyMatched.add(key);
+                                if( !processed.contains(key) ){
+                                    val matched = matchCENKey(key, timelastCheck)
+                                    log.i("Trying key: ${key}")
+                                    processed.add(key)
+                                    if( matched!= null && matched.isNotEmpty() ){
+                                        keyMatched.add(key)
+                                    }else{
+
+                                    }
+                                }else{
+                                    Log.i( "CEN"," ${key} duplicata")
                                 }
                             }
                         }
                         if( keyMatched.isNotEmpty() ){
-                            log.i("You've met a person with symptoms");
-                            processMatches(keyMatched);
+                            log.i("You've met a person with symptoms")
+                            processMatches(keyMatched)
                         }
                     }
                 } else {
@@ -267,7 +280,7 @@ class CenRepoImpl(
     fun matchCENKey(key : String, maxTimestamp : Int) : List<RealmReceivedCen>? {
         // take the last 7 days of timestamps and generate all the possible CENs (e.g. 7 days) TODO: Parallelize this?
         val minTimestamp = maxTimestamp - 7*24* 60
-        var possibleCENs = Array<String>(7*24 *(60/CENLifetimeInSeconds)) {i ->
+        val possibleCENs = Array<String>(7*24 *(60/CENLifetimeInSeconds)) {i ->
             val ts = maxTimestamp - CENLifetimeInSeconds * i
             val cen = generateCEN(key, ts)
             cen.toHex()
