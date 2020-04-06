@@ -13,18 +13,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class OnboardingFragment : Fragment() {
     private val viewModel by viewModel<OnboardingViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
     }.root
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if( Build.VERSION.SDK_INT >= 24 ) {
-            view.setBackgroundResource(R.drawable.background_gradient)
-        }
-
-    }
 }
