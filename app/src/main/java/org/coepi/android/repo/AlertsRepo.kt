@@ -1,18 +1,20 @@
 package org.coepi.android.repo
 
+import io.reactivex.Observable
 import io.reactivex.Single
 import org.coepi.android.cen.CenReport
+import org.coepi.android.cen.ReceivedCenReport
 import java.util.Date
 
 interface AlertsRepo {
-    fun alerts(): Single<List<CenReport>>
+    val alerts: Observable<List<ReceivedCenReport>>
 }
 
 class AlertRepoImpl(
-    private val coepiRepo: CoEpiRepo
+    coepiRepo: CoEpiRepo
 ): AlertsRepo {
 
-    override fun alerts(): Single<List<CenReport>> = coepiRepo.reports.single(emptyList())
+    override val alerts: Observable<List<ReceivedCenReport>> = coepiRepo.reports
 
     // Dummy test data
 //    override fun alerts(): Single<List<CenReport>> = Single.just(listOf(

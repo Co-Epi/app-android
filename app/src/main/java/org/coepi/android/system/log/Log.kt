@@ -12,7 +12,8 @@ enum class LogTag {
     BLE_S,  // BLE scanner
     BLE,  // General BLE (can't be assigned to peripheral or central)
     NET,  // Networking
-    DB // DB
+    DB, // DB
+    CEN_L // CEN logic
 }
 
 interface Log {

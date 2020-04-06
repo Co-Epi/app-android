@@ -1,5 +1,6 @@
 package org.coepi.android.cen
 
+import org.coepi.android.api.CENApi
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

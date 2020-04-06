@@ -11,6 +11,7 @@ import org.coepi.android.R.drawable.ic_close
 import org.coepi.android.databinding.FragmentAlertsBinding.inflate
 import org.coepi.android.extensions.observeWith
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Date
 
 class AlertsFragment: Fragment() {
     private val viewModel by viewModel<AlertsViewModel>()

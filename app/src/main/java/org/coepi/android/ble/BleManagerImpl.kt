@@ -81,6 +81,10 @@ class BleManagerImpl(
                 scanObservable.onNext(it)
             }
         ))
+
+        log.i("Staring BLE advertising CEN: $cen")
+        log.i("NOTE: BLE advertising/scanning logs currently not in UI, since covidwatch " +
+                "doesn't use our logger", BLE)
         start()
     }
 
