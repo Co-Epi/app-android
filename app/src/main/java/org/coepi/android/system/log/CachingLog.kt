@@ -37,7 +37,7 @@ class CachingLog : Log {
     }
 
     private fun addTag(tag: LogTag?, message: String) =
-        tag?.let { "$it - " } + message
+        (tag?.let { "$it - " } ?: "") + message
 }
 
 data class LogMessage(val level: LogLevel, val text: String)

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "org.coepi.android"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "0.1"

@@ -11,11 +11,9 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.ble.covidwatch.BLEAdvertiser
-import org.coepi.android.ble.covidwatch.BLEAdvertiserImpl
 import org.coepi.android.ble.covidwatch.BLEForegroundService
 import org.coepi.android.ble.covidwatch.BLEForegroundService.LocalBinder
 import org.coepi.android.ble.covidwatch.BLEScanner
-import org.coepi.android.ble.covidwatch.BLEScannerImpl
 import org.coepi.android.ble.covidwatch.BleServiceConfiguration
 import org.coepi.android.cen.Cen
 import org.coepi.android.system.log.LogTag.BLE
@@ -39,9 +37,6 @@ class BleManagerImpl(
     private val app: Application
 ) : BleManager {
 
-    private val serviceUUID: UUID = fromString("0000C019-0000-1000-8000-00805F9B34FB")
-    private val characteristicUUID: UUID = fromString("D61F4F27-3D6B-4B04-9E46-C9D2EA617F62")
-
     override val scanObservable: PublishSubject<Cen> = create()
 
     private val intent get() = Intent(app, BLEForegroundService::class.java)
@@ -61,6 +56,9 @@ class BleManagerImpl(
         override fun onServiceDisconnected(name: ComponentName?) {}
     }
 
+    private fun BluetoothAdapter.supportsAdvertising() =
+        isMultipleAdvertisementSupported && bluetoothLeAdvertiser != null
+
     private fun BLEForegroundService.configureAndStart(cen: Cen) {
         val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
         if (bluetoothAdapter == null) {
@@ -69,8 +67,11 @@ class BleManagerImpl(
         }
 
         configure(BleServiceConfiguration(
-            serviceUUID, characteristicUUID, cen, BLEAdvertiserImpl(app, bluetoothAdapter),
-            BLEScannerImpl(app, bluetoothAdapter),
+            cen,
+            takeIf { bluetoothAdapter.supportsAdvertising() }?.let {
+                BLEAdvertiser(app, bluetoothAdapter)
+            },
+            BLEScanner(app, bluetoothAdapter),
             scanCallback = {
                 scanObservable.onNext(it)
             },
@@ -92,7 +93,7 @@ class BleManagerImpl(
     override fun startAdvertiser(cen: Cen) {
         this.cen = cen
 
-        service?.startAdvertiser(serviceUUID, characteristicUUID, cen)
+        service?.startAdvertiser(cen)
     }
 
     override fun startService(cen: Cen) {

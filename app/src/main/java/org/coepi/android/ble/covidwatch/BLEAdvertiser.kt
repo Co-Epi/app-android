@@ -16,52 +16,44 @@ import android.content.Context
 import android.os.ParcelUuid
 import android.util.Log
 import org.coepi.android.cen.Cen
+import org.coepi.android.extensions.toHex
 import org.coepi.android.system.log.LogTag.BLE_A
 import org.coepi.android.system.log.log
 import java.util.UUID
 
-interface BLEAdvertiser {
-    fun startAdvertiser(serviceUUID: UUID, characteristicUUID: UUID, cen: Cen)
-    fun stopAdvertiser()
-    fun changeAdvertisedValue(cen: Cen)
-    fun registerWriteCallback(callback: (Cen) -> Unit)
-}
+class BLEAdvertiser(val context: Context, adapter: BluetoothAdapter) {
 
-/**
- * BLEAdvertiser is responsible for advertising the bluetooth services.
- * Only one instance of this class is to be constructed, but its not enforced. (for now)
- * You have been warned!
- */
-class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
-    : BLEAdvertiser {
+    /************************************************************************/
+    // CoEpi modification
+    var writeCallback: ((Cen) -> Unit)? = null
+    /************************************************************************/
 
-    // BLE
-    private val advertiser: BluetoothLeAdvertiser = adapter.bluetoothLeAdvertiser
+    companion object {
+        private const val TAG = "BluetoothLeAdvertiser"
+    }
+
+    private val advertiser: BluetoothLeAdvertiser? = adapter.bluetoothLeAdvertiser
+
     private var bluetoothGattServer: BluetoothGattServer? = null
 
-    // TODO encapsulate these 2 maybe
-    private var serviceUUID: UUID? = null
-    private var characteristicUUID: UUID? = null
+    /************************************************************************/
+    // CoEpi modification
+    // Use Cen
+    private var advertisedContactEventIdentifier: Cen? = null
+    // Original code
+//    private var advertisedContactEventIdentifier: UUID? = null
+    /************************************************************************/
 
-    private var advertisedCen: Cen? = null
-
-    // Case Android (Central) - iOS (Peripheral)
-    // https://docs.google.com/document/d/1f65V3PI214-uYfZLUZtm55kdVwoazIMqGJrxcYNI4eg/edit#
-    private var writeCallback: ((Cen) -> Unit)? = null
-
-    /**
-     * Callback when advertisements start and stops
-     */
-    private val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
+    private val advertiseCallback: AdvertiseCallback = object : AdvertiseCallback() {
 
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
-            log.d("onStartSuccess settingsInEffect=$settingsInEffect", BLE_A)
             super.onStartSuccess(settingsInEffect)
+            Log.w(TAG, "onStartSuccess settingsInEffect=$settingsInEffect")
         }
 
         override fun onStartFailure(errorCode: Int) {
-            log.e("onStartFailure errorCode=$errorCode", BLE_A)
             super.onStartFailure(errorCode)
+            Log.e(TAG, "onStartFailure errorCode=$errorCode")
         }
     }
 
@@ -70,7 +62,65 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
 
             override fun onServiceAdded(status: Int, service: BluetoothGattService?) {
                 super.onServiceAdded(status, service)
-                log.i("onServiceAdded status=$status service=$service", BLE_A)
+                Log.i(TAG, "onServiceAdded status=$status service=$service")
+            }
+
+            override fun onCharacteristicReadRequest(
+                device: BluetoothDevice?,
+                requestId: Int,
+                offset: Int,
+                characteristic: BluetoothGattCharacteristic?
+            ) {
+                super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
+
+                var result = BluetoothGatt.GATT_SUCCESS
+                var value: ByteArray? = null
+
+                try {
+                    if (characteristic?.uuid == BluetoothService.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC) {
+                        if (offset != 0) {
+                            result = BluetoothGatt.GATT_INVALID_OFFSET
+                            return
+                        }
+
+                        /************************************************************************/
+                        // CoEpi modification
+                        // Use CEN
+                        // Send CEN in read request iOS(c) - Android(p)
+                        // NOTE: we use the stored advertisedContactEventIdentifier (set in startAdvertising)
+                        // startAdvertising is called periodically with a new CEN by CenRepo
+                        // Not generating a new one on each request (differently to the iOS impl)
+                        // clarify whether we need to generate one here.
+                        // Note also that covidwatch stores advertisedContactEventIdentifier in variable but doesn't do anything with it.
+
+                        value = advertisedContactEventIdentifier?.bytes
+
+                        // Original code
+//                        val newContactEventIdentifier = UUID.randomUUID()
+//                        logContactEventIdentifier(newContactEventIdentifier)
+//                        value = newContactEventIdentifier.toBytes()
+                        /************************************************************************/
+
+
+                    } else {
+                        result = BluetoothGatt.GATT_FAILURE
+                    }
+                } catch (exception: Exception) {
+                    result = BluetoothGatt.GATT_FAILURE
+                    value = null
+                } finally {
+                    Log.i(
+                        TAG,
+                        "onCharacteristicReadRequest result=$result device=$device requestId=$requestId offset=$offset characteristic=$characteristic"
+                    )
+                    bluetoothGattServer?.sendResponse(
+                        device,
+                        requestId,
+                        result,
+                        offset,
+                        value
+                    )
+                }
             }
 
             override fun onCharacteristicWriteRequest(
@@ -94,17 +144,32 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
 
                 var result = BluetoothGatt.GATT_SUCCESS
                 try {
-                    if (characteristic?.uuid == characteristicUUID) {
+                    if (characteristic?.uuid == BluetoothService.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC) {
                         if (offset != 0) {
                             result = BluetoothGatt.GATT_INVALID_OFFSET
                             return
                         }
 
+                        /************************************************************************/
+                        // CoEpi modification
+                        // Advetiser was written to
+
                         if (value == null) {
                             result = BluetoothGatt.GATT_FAILURE
                             return
                         }
+                        log.i("CEN was written to my advertiser: ${value.toHex()}", BLE_A)
                         writeCallback?.invoke(Cen(value))
+
+                        // Original code
+//                        val newContactEventIdentifier = value?.toUUID()
+//                        if (newContactEventIdentifier == null) {
+//                            result = BluetoothGatt.GATT_FAILURE
+//                            return
+//                        }
+//
+//                        logContactEventIdentifier(newContactEventIdentifier)
+                        /************************************************************************/
 
                     } else {
                         result = BluetoothGatt.GATT_FAILURE
@@ -112,10 +177,10 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
                 } catch (exception: Exception) {
                     result = BluetoothGatt.GATT_FAILURE
                 } finally {
-                    log.i("onCharacteristicWriteRequest result=$result device=$device " +
-                            "requestId=$requestId characteristic=$characteristic preparedWrite=$preparedWrite " +
-                            "responseNeeded=$responseNeeded offset=$offset value=$value", BLE_A)
-
+                    Log.i(
+                        TAG,
+                        "onCharacteristicWriteRequest result=$result device=$device requestId=$requestId characteristic=$characteristic preparedWrite=$preparedWrite responseNeeded=$responseNeeded offset=$offset value=$value"
+                    )
                     if (responseNeeded) {
                         bluetoothGattServer?.sendResponse(
                             device,
@@ -129,86 +194,118 @@ class BLEAdvertiserImpl(private val context: Context, adapter: BluetoothAdapter)
             }
         }
 
-    /**
-     * Starts the advertiser, with the given UUID. We advertise with MEDIUM power to get
-     * reasonable range, but this will need to be experimentally determined later.
-     * ADVERTISE_MODE_LOW_LATENCY is a must as the other nodes are not real-time.
-     *
-     * @param serviceUUID The UUID to advertise the service
-     * @param characteristicUUID The UUID that indicates the contact event
-     */
-    override fun startAdvertiser(
-        serviceUUID: UUID,
-        characteristicUUID: UUID,
-        cen: Cen
+    fun startAdvertising(
+        serviceUUID: UUID?,
+        /************************************************************************/
+        // CoEpi modification
+        // use CEN
+        contactEventIdentifier: Cen?
+        // Original code
+//        contactEventIdentifier: UUID?
+        /************************************************************************/
     ) {
-        this.serviceUUID = serviceUUID
-        this.characteristicUUID = characteristicUUID
-        advertisedCen = cen
+        try {
+            advertisedContactEventIdentifier = contactEventIdentifier
 
-        val settings = AdvertiseSettings.Builder()
-            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-            .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
-            .setConnectable(true)
-            .build()
+            val advertiseSettings = AdvertiseSettings.Builder()
+                // Use low latency mode so the chance of being discovered is higher
+                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                // Use low power so the discoverability range is short
+                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_LOW)
+                // Use true so devices can connect to our GATT server
+                .setConnectable(true)
+                // Advertise forever
+                .setTimeout(0)
+                .build()
 
-//        val testServiceDataMaxLength = ByteArray(20)
-        val data = AdvertiseData.Builder()
-            .setIncludeDeviceName(false)
-            .addServiceData(ParcelUuid(serviceUUID), cen.bytes)
-//            .addServiceData(ParcelUuid(serviceUUID), testServiceDataMaxLength)
-            .build()
+            val advertiseData = AdvertiseData.Builder()
+                .setIncludeDeviceName(false)
+                .addServiceUuid(ParcelUuid(serviceUUID))
+                /************************************************************************/
+                // CoEpi modification
+                // Different syntax to retrieve bytes
+                .addServiceData(ParcelUuid(serviceUUID), contactEventIdentifier?.bytes)
+                // Original code
+//                .addServiceData(ParcelUuid(serviceUUID), contactEventIdentifier?.toBytes())
+                /************************************************************************/
+//                .addServiceData(ParcelUuid(serviceUUID), ByteArray(20))
+                .build()
 
-        (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).let { bluetoothManager ->
+            (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager).let { bluetoothManager ->
 
-            bluetoothGattServer =
-                bluetoothManager.openGattServer(context, bluetoothGattServerCallback)
+                bluetoothGattServer =
+                    bluetoothManager?.openGattServer(context, bluetoothGattServerCallback)
 
-            val service = BluetoothGattService(
-                serviceUUID,
-                BluetoothGattService.SERVICE_TYPE_PRIMARY
-            )
-            service.addCharacteristic(
-                BluetoothGattCharacteristic(
-                    characteristicUUID,
-                    BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_WRITE,
-                    BluetoothGattCharacteristic.PERMISSION_READ or BluetoothGattCharacteristic.PERMISSION_WRITE
+                val service = BluetoothGattService(
+                    BluetoothService.CONTACT_EVENT_SERVICE,
+                    BluetoothGattService.SERVICE_TYPE_PRIMARY
                 )
-            )
+                service.addCharacteristic(
+                    BluetoothGattCharacteristic(
+                        BluetoothService.CONTACT_EVENT_IDENTIFIER_CHARACTERISTIC,
+                        BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_WRITE,
+                        BluetoothGattCharacteristic.PERMISSION_READ or BluetoothGattCharacteristic.PERMISSION_WRITE
+                    )
+                )
 
-            bluetoothGattServer?.clearServices()
-            bluetoothGattServer?.addService(service)
+                bluetoothGattServer?.clearServices()
+                bluetoothGattServer?.addService(service)
+            }
+
+            advertiser?.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
+
+            Log.i(TAG, "Started advertising")
+        } catch (exception: java.lang.Exception) {
+            Log.e(TAG, "Start advertising failed: $exception")
         }
+    }
 
-        advertiser.startAdvertising(settings, data, advertisingCallback)
+    fun stopAdvertising() {
+        try {
+            advertiser?.stopAdvertising(advertiseCallback)
+            bluetoothGattServer?.apply {
+                clearServices()
+                close()
+            }
+            bluetoothGattServer = null
+
+            Log.i(TAG, "Stopped advertising")
+        } catch (exception: java.lang.Exception) {
+            Log.e(TAG, "Stop advertising failed: $exception")
+        }
     }
 
     /**
-     * Stops all BLE related activity
+     * Changes the CEN to a new random UUID in the service data field
+     * NOTE: This will also log the CEN and stop/start the advertiser
      */
-    override fun stopAdvertiser() {
-        advertiser.stopAdvertising(advertisingCallback)
-        bluetoothGattServer?.clearServices()
-        bluetoothGattServer?.close()
-        bluetoothGattServer = null
+    fun changeContactEventIdentifierInServiceDataField(newContactEventIdentifier: Cen) {
+        Log.i(TAG, "Changing the contact event identifier in service data field...")
+        stopAdvertising()
+        /************************************************************************/
+        // CoEpi modification
+        // We don't need this as storage not managed here
+//        val newContactEventIdentifier = UUID.randomUUID()
+//        logContactEventIdentifier(newContactEventIdentifier)
+        /************************************************************************/
+        startAdvertising(BluetoothService.CONTACT_EVENT_SERVICE, newContactEventIdentifier)
     }
 
-    /**
-     * Changes the CEI to a new UUID in the service data field
-     * NOTE: This will also stop/start the advertiser
-     */
-    override fun changeAdvertisedValue(cen: Cen) {
-        val serviceUUID = serviceUUID ?: log.e("No service configured").run { return }
-        val characteristicUUID =
-            characteristicUUID ?: log.e("No characteristic configured").run { return }
-
-        log.i("Changing the contact event identifier in service data field...", BLE_A)
-
-        stopAdvertiser()
-        startAdvertiser(serviceUUID, characteristicUUID, cen)
-    }
-
-    override fun registerWriteCallback(callback: (Cen) -> Unit) {
-        writeCallback = callback
-    }
+    /************************************************************************/
+    // CoEpi modification
+    // We don't need this as storage not managed here
+    // Original code
+//    fun logContactEventIdentifier(identifier: UUID) {
+//        CovidWatchDatabase.databaseWriteExecutor.execute {
+//            val dao: ContactEventDAO = CovidWatchDatabase.getInstance(context).contactEventDAO()
+//            val contactEvent = ContactEvent(identifier.toString())
+//            val isCurrentUserSick = context.getSharedPreferences(
+//                context.getString(R.string.preference_file_key),
+//                Context.MODE_PRIVATE
+//            ).getBoolean(context.getString(R.string.preference_is_current_user_sick), false)
+//            contactEvent.wasPotentiallyInfectious = isCurrentUserSick
+//            dao.insert(contactEvent)
+//        }
+//    }
+    /************************************************************************/
 }
