@@ -6,11 +6,24 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- If your app targets Android 9 or lower, you can declare
+         ACCESS_COARSE_LOCATION instead.           -->
+    <!--
+    https://developer.android.com/guide/topics/connectivity/bluetooth-le#permissions
+    ON MOTOC BLE IS NOT WORKING WITH THIS <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>-->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
-  <application
+    <!-- if your app targets API level 21 or higher. -->
+    <uses-feature android:name="android.hardware.location.gps" />
+
+    <!--app is available to BLE-capable devices only. -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+
+
+    <application
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

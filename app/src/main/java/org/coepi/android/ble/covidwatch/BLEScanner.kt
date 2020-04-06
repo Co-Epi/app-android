@@ -46,7 +46,14 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
             Log.i(TAG, "onScanFailed errorCode=$errorCode")
         }
 
-        override fun onBatchScanResults(results: MutableList<ScanResult>?) {
+        override fun onScanResult(callbackType: Int, result: ScanResult?) {
+            super.onScanResult(callbackType, result)
+            if( result!= null ){
+                processScanResult(result)
+            }
+        }
+
+        override fun onBatchScanResults(results: List<ScanResult>?) {
             super.onBatchScanResults(results)
             Log.i(TAG, "onBatchScanResults results=$results")
             results?.forEach { processScanResult(it) }
@@ -126,14 +133,14 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
 //            val scanFilters = serviceUUIDs?.map {
 //                ScanFilter.Builder().setServiceUuid(ParcelUuid(it)).build()
 //            }
-            val scanFilters = null
+            val scanFilters =  mutableListOf<ScanFilter>()  // emptyList<ScanFilter>()
 
             val scanSettings = ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
-                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)//notworking on MOTOC: SCAN_MODE_BALANCED
+                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)//CALLBACK_TYPE_FIRST_MATCH
                 .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
-                .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
-                .setReportDelay(1000)
+                .setNumOfMatches(ScanSettings.MATCH_NUM_FEW_ADVERTISEMENT)/**/
+                //.setReportDelay(1)//this uses onBatchScanResults instead of onScanResult
                 .build()
 
             isScanning = true

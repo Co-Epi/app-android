@@ -2,6 +2,7 @@ package org.coepi.android.ble
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables.combineLatest
@@ -17,11 +18,11 @@ class BlePreconditions(
 ) {
     private val disposables = CompositeDisposable()
 
-    fun onActivityCreated(activity: Activity) {
+    fun onActivityCreated(activity: Activity, context: Context) {
         observeResults()
 
         showEnableBleAfterPermissions(activity)
-        startPermissionsChecker.checkForPermissions(activity)
+        startPermissionsChecker.checkForPermissions(activity, context)
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

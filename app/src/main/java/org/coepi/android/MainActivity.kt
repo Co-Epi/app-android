@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         observeRootNavigation()
         onboardingShower.showIfNeeded()
 
-        blePreconditions.onActivityCreated(this)
+        blePreconditions.onActivityCreated(this, applicationContext)
 
         AppCenter.start(application, "0bb1bf95-3b14-48a6-a769-db1ff1df0307", Analytics::class.java, Crashes::class.java)
         cenManager.start()
