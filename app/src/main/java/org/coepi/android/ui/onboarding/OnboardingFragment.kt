@@ -11,10 +11,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class OnboardingFragment : Fragment() {
     private val viewModel by viewModel<OnboardingViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
     }.root
+
 }
