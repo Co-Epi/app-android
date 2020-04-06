@@ -36,8 +36,8 @@ class CENFragment : Fragment() {
             textMyCurrentCEN.text = it
         }
 
-        viewModel.curcenhex.observeWith(( viewLifecycleOwner )){
-            textCENReport.setText( it )
+        viewModel.curcenhex.observeWith((viewLifecycleOwner)) {
+            textCENReport.setText(it)
         }
 
     }.root

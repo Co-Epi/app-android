@@ -19,6 +19,7 @@ class CENViewModel(
 
     //val curcen = Base64.encode(repo.CEN.value,0);
     val curcenhex = repo.generatedCen.map { it.toHex() }.toLiveData()
+
     // CEN being broadcast by this device
     val myCurrentCEN = repo.generatedCen
         .map { it.toString() }
@@ -40,21 +41,21 @@ class CENViewModel(
     private fun String.hexToByteArray(): ByteArray {
         val carr = toCharArray()
         val size = carr.size
-        val res = ByteArray(size/2)
-        var i=0
-        while( i< size){
-            val hex2 =""+carr[i]+carr[i+1]
-            val byte :Byte = hex2.toLong(radix = 16).toByte()
-            res[i/2] = byte
-            i+=2
+        val res = ByteArray(size / 2)
+        var i = 0
+        while (i < size) {
+            val hex2 = "" + carr[i] + carr[i + 1]
+            val byte: Byte = hex2.toLong(radix = 16).toByte()
+            res[i / 2] = byte
+            i += 2
         }
         return res
     }
 
-    fun insertPastedCEN( centoinsert :String = "" ){
+    fun insertPastedCEN(centoinsert: String = "") {
         val curcenbytes = centoinsert.hexToByteArray();
-        val c = Cen( curcenbytes )
-        repo.storeCen( c );
+        val c = Cen(curcenbytes)
+        repo.storeCen(c);
     }
 
     private fun update() {
