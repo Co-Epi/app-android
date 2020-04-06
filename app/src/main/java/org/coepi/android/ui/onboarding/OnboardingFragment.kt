@@ -1,10 +1,12 @@
 package org.coepi.android.ui.onboarding
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import org.coepi.android.R
 import org.coepi.android.databinding.FragmentOnboardingBinding.inflate
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -17,4 +19,12 @@ class OnboardingFragment : Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
     }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if( Build.VERSION.SDK_INT >= 24 ) {
+            view.setBackgroundResource(R.drawable.background_gradient)
+        }
+
+    }
 }
