@@ -30,7 +30,7 @@ interface BleService {
 
 data class BleServiceConfiguration(
     val startCen: Cen,
-    val advertiser: BLEAdvertiser,
+    val advertiser: BLEAdvertiser?,
     val scanner: BLEScanner,
     val scanCallback: (Cen) -> Unit,
     val advertiserWriteCallback: (Cen) -> Unit
@@ -98,12 +98,12 @@ class BLEForegroundService : LifecycleService(), BleService {
             log.e("Changing contact identifier but not configured yet", BLE_A)
             return
         }
-        configuration.advertiser.changeContactEventIdentifierInServiceDataField(cen)
+        configuration.advertiser?.changeContactEventIdentifierInServiceDataField(cen)
     }
 
     override fun registerAdvertiserWriteCallback(callback: (Cen) -> Unit) {
         val configuration = configuration ?: error("Not configured")
-        configuration.advertiser.writeCallback = callback
+        configuration.advertiser?.writeCallback = callback
     }
 
     override fun onDestroy() {
@@ -137,8 +137,8 @@ class BLEForegroundService : LifecycleService(), BleService {
     }
 
     private fun BleServiceConfiguration.start() {
-        advertiser.writeCallback = advertiserWriteCallback
-        advertiser.startAdvertising(BluetoothService.CONTACT_EVENT_SERVICE, startCen)
+        advertiser?.writeCallback = advertiserWriteCallback
+        advertiser?.startAdvertising(BluetoothService.CONTACT_EVENT_SERVICE, startCen)
         scanner.callback = scanCallback
         scanner.startScanning(arrayOf(BluetoothService.CONTACT_EVENT_SERVICE))
     }
