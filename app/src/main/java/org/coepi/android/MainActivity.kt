@@ -12,7 +12,7 @@ import io.reactivex.rxkotlin.plusAssign
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.ble.BlePreconditions
-import org.coepi.android.cen.CenManager
+import org.coepi.android.cen.BleInitializer
 import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
@@ -21,10 +21,15 @@ import org.koin.android.ext.android.inject
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
     private val onboardingShower: OnboardingShower by inject()
-    private val cenManager: CenManager by inject()
+    private val cenManager: BleInitializer by inject()
     private val blePreconditions: BlePreconditions by inject()
+    private val nonReferencedDependenciesActivator: NonReferencedDependenciesActivator by inject()
 
     private val disposables = CompositeDisposable()
+
+    init {
+        nonReferencedDependenciesActivator.activate()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

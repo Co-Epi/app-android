@@ -3,6 +3,7 @@ package org.coepi.android.di
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import org.coepi.android.NonReferencedDependenciesActivator
 import org.coepi.android.ble.BleEnabler
 import org.coepi.android.ble.BleManager
 import org.coepi.android.ble.BleManagerImpl
@@ -39,7 +40,7 @@ val viewModelModule = module {
     viewModel { CENViewModel(get(), get(), get()) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get()) }
-    viewModel { LogsViewModel(cachingLog, get(), get()) }
+    viewModel { LogsViewModel(cachingLog, get()) }
     viewModel { ContainerViewModel(get()) }
 }
 
@@ -55,6 +56,7 @@ val systemModule = module {
     single { Resources(androidApplication()) }
     single<BleManager> { BleManagerImpl(androidApplication()) }
 //    single<BleManager> { BleSimulator() }  // Disable BleManagerImpl and enable this to use BLE simulator
+    single { NonReferencedDependenciesActivator(get()) }
 }
 
 val appModule = listOf(

@@ -12,7 +12,7 @@ class RealmCenDao(private val realmProvider: RealmProvider) {
     fun all(): List<RealmReceivedCen> =
         realm.where<RealmReceivedCen>().findAll()
 
-    fun matchCENs(start: Int, end: Int, cens: Array<String>): List<RealmReceivedCen> =
+    fun matchCENs(start: Long, end: Long, cens: Array<String>): List<RealmReceivedCen> =
         realm.where<RealmReceivedCen>()
             .greaterThanOrEqualTo("timestamp", start)
             .and()

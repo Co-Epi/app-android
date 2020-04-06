@@ -1,27 +1,30 @@
 package org.coepi.android.ui.cen
 
-import android.util.Base64
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import org.coepi.android.ble.BleManager
 import org.coepi.android.cen.Cen
-import org.coepi.android.cen.CenRepo
+import org.coepi.android.cen.MyCenProvider
 import org.coepi.android.cen.RealmCenReport
+import org.coepi.android.cen.ReceivedCen
+import org.coepi.android.extensions.coEpiTimestamp
 import org.coepi.android.extensions.toLiveData
+import org.coepi.android.repo.CoEpiRepo
 import org.coepi.android.ui.navigation.RootNavigation
+import java.util.Date
 
 class CENViewModel(
-    private val repo: CenRepo,
-    private val rootNav: RootNavigation,
-    private val bleManager: BleManager
+    myCenProvider: MyCenProvider,
+    bleManager: BleManager,
+    private val coeEpiRepo: CoEpiRepo
 ) : ViewModel() {
 
     //val curcen = Base64.encode(repo.CEN.value,0);
-    val curcenhex = repo.generatedCen.map { it.toHex() }.toLiveData()
+    val curcenhex = myCenProvider.cen.map { it.toHex() }.toLiveData()
 
     // CEN being broadcast by this device
-    val myCurrentCEN = repo.generatedCen
+    val myCurrentCEN = myCenProvider.cen
         .map { it.toString() }
         .toLiveData()
 
@@ -53,9 +56,9 @@ class CENViewModel(
     }
 
     fun insertPastedCEN(centoinsert: String = "") {
-        val curcenbytes = centoinsert.hexToByteArray();
+        val curcenbytes = centoinsert.hexToByteArray()
         val c = Cen(curcenbytes)
-        repo.storeCen(c);
+        coeEpiRepo.storeObservedCen(ReceivedCen(c, Date().coEpiTimestamp()))
     }
 
     private fun update() {

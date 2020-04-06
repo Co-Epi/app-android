@@ -2,6 +2,7 @@ package org.coepi.android.cen
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.Observables.combineLatest
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import org.coepi.android.ble.BleManager
@@ -10,11 +11,10 @@ import org.coepi.android.repo.CoEpiRepo
 import org.coepi.android.system.log.LogTag.BLE_S
 import org.coepi.android.system.log.log
 
-class CenManager(
+class BleInitializer(
     private val blePreconditions: BlePreconditionsNotifier,
     private val bleManager: BleManager,
-    private val cenRepo: CenRepo,
-    private val coepiRepo: CoEpiRepo
+    private val myCenProvider: MyCenProvider
 ) {
     private val disposables = CompositeDisposable()
 
@@ -23,10 +23,10 @@ class CenManager(
     }
 
     private fun startBleWhenEnabled() {
-        disposables += Observables.combineLatest(
+        disposables += combineLatest(
             blePreconditions.bleEnabled,
             // Take the first CEN, needed to start the service
-            cenRepo.generatedCen
+            myCenProvider.cen
         )
         .take(1)
         .subscribeBy(onNext = { (_, cen) ->
@@ -40,11 +40,10 @@ class CenManager(
     private fun startBle(cen: Cen) {
         bleManager.startService(cen)
         forwardRepoCenToBleAdvertiser()
-        observeScannedCens()
     }
 
     private fun forwardRepoCenToBleAdvertiser() {
-        disposables += cenRepo.generatedCen.subscribeBy (onNext = { cen ->
+        disposables += myCenProvider.cen.subscribeBy (onNext = { cen ->
             // ServiceData holds Android Contact Event Number (CEN) that the Android peripheral is advertising
 
             // TODO is check really needed? If yes, either add flag to advertiser or expose state and use here
@@ -57,15 +56,5 @@ class CenManager(
         }, onError = {
             log.i("Error observing CEN: $it")
         })
-    }
-
-    private fun observeScannedCens() {
-        disposables += bleManager.scanObservable
-            .subscribeBy(onNext = {
-                log.i("Discovered a CEN: ${it.toHex()}", BLE_S)
-                coepiRepo.storeObservedCen(it)
-            }, onError = {
-                log.e("Error scanning: $it")
-            })
     }
 }

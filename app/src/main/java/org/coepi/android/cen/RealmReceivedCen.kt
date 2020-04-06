@@ -4,5 +4,5 @@ import io.realm.RealmObject
 
 open class RealmReceivedCen(
     var cen: String = "", // Hex encoding
-    var timestamp: Int = 0
+    var timestamp: Long = 0
 ): RealmObject()

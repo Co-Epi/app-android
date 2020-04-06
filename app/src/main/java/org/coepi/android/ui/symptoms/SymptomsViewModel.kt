@@ -11,23 +11,26 @@ import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
-import org.coepi.android.cen.CenRepo
+import org.coepi.android.cen.CenReportRepo
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.domain.model.Symptom
+import org.coepi.android.extensions.coEpiTimestamp
 import org.coepi.android.extensions.toLiveData
 import org.coepi.android.extensions.toUnitObservable
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
-import org.coepi.android.system.log.log
+import java.util.Date
 
-class SymptomsViewModel(private val symptomRepo: SymptomRepo, private val repo: CenRepo ) : ViewModel() {
+class SymptomsViewModel(
+    private val symptomRepo: SymptomRepo,
+    private val reportRepo: CenReportRepo
+) : ViewModel() {
 
     private val selectedSymptomIds: BehaviorSubject<Set<String>> =
         BehaviorSubject.createDefault(emptySet())
 
     private val checkedSymptomTrigger: PublishSubject<SymptomViewData> = create()
     private val submitTrigger: PublishSubject<Unit> = create()
-
 
     private val symptomsObservable: Observable<List<SymptomViewData>> = Observables
         .combineLatest(symptomRepo.symptoms().toObservable(), selectedSymptomIds)
@@ -64,31 +67,17 @@ class SymptomsViewModel(private val symptomRepo: SymptomRepo, private val repo: 
         checkedSymptomTrigger.onNext(symptom)
     }
 
-
-
-    fun submitSymptoms(){
-        log.i("About to send sypmtom:");
-        val keys: String = "will be set by doPostSymptom using last 3 keys generated"
+    private fun submitSymptoms() {
         // TODO: update with values of actual report
         val report = Base64.encodeToString("COVID 19 from BART".toByteArray(), Base64.NO_WRAP)
-        val id =  "REPORT1"
-        val timestamp = 0;//this will be set by doPostSymptom
-        val symptomReport = SymptomReport(id, report,keys, timestamp)
-
-        repo.sendReport( symptomReport )
-        log.i("Reported: {reportID:\""+symptomReport.reportID+
-                "\", report:\""+symptomReport.report+
-                "\", cenkeys: \""+ symptomReport.cenKeys+
-                "\", reportTimeStamp:\""+symptomReport.reportTimeStamp+"\"}" )
-
+        reportRepo.sendReport(SymptomReport("REPORT1", report, Date().coEpiTimestamp()))
     }
-
 
     fun onSubmit() {
         submitSymptoms()
         submitTrigger.onNext(Unit)
     }
 
-    private fun Symptom.toViewData(isChecked: Boolean) =
+    private fun Symptom.toViewData(isChecked: Boolean): SymptomViewData =
         SymptomViewData(name, isChecked, this)
 }

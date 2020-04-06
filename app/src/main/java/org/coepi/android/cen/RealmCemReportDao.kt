@@ -30,10 +30,6 @@ class RealmCenReportDao(private val realmProvider: RealmProvider) {
             val realmObj = realm.createObject<RealmCenReport>() // Create a new object
             realmObj.id = report.id
             realmObj.report = report.report
-            realmObj.keys = report.keys
-            realmObj.reportMimeType = report.reportMimeType
-            realmObj.date = report.date
-            realmObj.isUser = report.isUser
         }
     }
 
