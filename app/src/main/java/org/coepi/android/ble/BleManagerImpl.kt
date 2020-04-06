@@ -56,6 +56,9 @@ class BleManagerImpl(
         override fun onServiceDisconnected(name: ComponentName?) {}
     }
 
+    private fun BluetoothAdapter.supportsAdvertising() =
+        isMultipleAdvertisementSupported && bluetoothLeAdvertiser != null
+
     private fun BLEForegroundService.configureAndStart(cen: Cen) {
         val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
         if (bluetoothAdapter == null) {
@@ -64,7 +67,10 @@ class BleManagerImpl(
         }
 
         configure(BleServiceConfiguration(
-            cen, BLEAdvertiser(app, bluetoothAdapter),
+            cen,
+            takeIf { bluetoothAdapter.supportsAdvertising() }?.let {
+                BLEAdvertiser(app, bluetoothAdapter)
+            },
             BLEScanner(app, bluetoothAdapter),
             scanCallback = {
                 scanObservable.onNext(it)
