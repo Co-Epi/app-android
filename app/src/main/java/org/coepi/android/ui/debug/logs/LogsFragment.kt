@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import org.coepi.android.R
 import org.coepi.android.R.drawable.ic_close
+import org.coepi.android.R.layout.item_min_loglevel
 import org.coepi.android.databinding.FragmentLogsBinding.inflate
 import org.coepi.android.extensions.observeWith
 import org.coepi.android.system.log.LogLevel
+import org.coepi.android.ui.extensions.onItemSelected
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -38,25 +40,21 @@ class LogsFragment: Fragment() {
             adapter = logsAdapter
         }
 
-        //Fill spinner with Log Level values
-        val logLevelAdapter = ArrayAdapter(inflater.context , R.layout.item_min_loglevel, LogLevel.values().map { value -> value.text }.toTypedArray())
-        logLevelAdapter.setDropDownViewResource(R.layout.item_min_loglevel)
+        val logLevelAdapter= ArrayAdapter(inflater.context,
+            item_min_loglevel, LogLevel.values().map { it.text }.toTypedArray())
+        logLevelAdapter.setDropDownViewResource(item_min_loglevel)
         spinLevel.adapter = logLevelAdapter
         spinLevel.setSelection(0)
 
-        //Filter log messages
-        viewModel.logs.observeWith(viewLifecycleOwner) {
-
-            spinLevel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    val selected = spinLevel.selectedItem.toString()
-                    val selectedLevel = LogLevel.valueOf("" + selected[0])
-                    logsAdapter.setItems(it.filter { entry -> entry.level >= selectedLevel })
-                }
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                }
-            }
-
+        spinLevel.onItemSelected {
+            val selected = spinLevel.selectedItem.toString()
+            val logLevel = LogLevel.valueOf("${selected[0]}") // FIXME using the first letter to get enum value is a hack
+            viewModel.onLogLevelSelected(logLevel)
         }
+
+        viewModel.logs.observeWith(viewLifecycleOwner) {
+            logsAdapter.setItems(it)
+        }
+
     }.root
 }
