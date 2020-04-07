@@ -18,8 +18,7 @@ import org.coepi.android.ble.covidwatch.BleServiceConfiguration
 import org.coepi.android.cen.Cen
 import org.coepi.android.system.log.LogTag.BLE
 import org.coepi.android.system.log.log
-import java.util.UUID
-import java.util.UUID.fromString
+
 
 interface BleManager {
     val scanObservable: Observable<Cen>
@@ -61,9 +60,15 @@ class BleManagerImpl(
 
     private fun BLEForegroundService.configureAndStart(cen: Cen) {
         val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+        var supportBatch = false;
+        if( bluetoothAdapter!= null ){
+            supportBatch = bluetoothAdapter.isOffloadedScanBatchingSupported
+        }
         if (bluetoothAdapter == null) {
             log.e("Bluetooth adapter is null. Can't continue", BLE)
             return
+        }else{
+            //needed?? BluetoothAdapter.getDefaultAdapter().enable()
         }
 
         configure(BleServiceConfiguration(
@@ -71,7 +76,7 @@ class BleManagerImpl(
             takeIf { bluetoothAdapter.supportsAdvertising() }?.let {
                 BLEAdvertiser(app, bluetoothAdapter)
             },
-            BLEScanner(app, bluetoothAdapter),
+            BLEScanner(app, bluetoothAdapter, supportBatch),
             scanCallback = {
                 scanObservable.onNext(it)
             },

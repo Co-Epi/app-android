@@ -1,11 +1,11 @@
 package org.coepi.android.ble.covidwatch
 
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.le.BluetoothLeScanner
-import android.bluetooth.le.ScanCallback
-import android.bluetooth.le.ScanFilter
-import android.bluetooth.le.ScanResult
-import android.bluetooth.le.ScanSettings
+import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat
+import no.nordicsemi.android.support.v18.scanner.ScanCallback
+import no.nordicsemi.android.support.v18.scanner.ScanFilter
+import no.nordicsemi.android.support.v18.scanner.ScanResult
+import no.nordicsemi.android.support.v18.scanner.ScanSettings
 import android.content.Context
 import android.os.Build
 import android.os.Handler
@@ -20,7 +20,7 @@ import java.lang.Exception
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
-class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
+class BLEScanner(val context: Context, adapter: BluetoothAdapter, private var supportHardwareBatchBLE:Boolean ) {
 
     /************************************************************************/
     // CoEpi modification
@@ -33,11 +33,12 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
         private const val TAG = "BluetoothLeScanner"
     }
 
-    private val scanner: BluetoothLeScanner? = adapter.bluetoothLeScanner
+    private val scanner: BluetoothLeScannerCompat? = BluetoothLeScannerCompat.getScanner()
 
     var isScanning: Boolean = false
 
     private var handler = Handler()
+
 
     private var scanCallback = object : ScanCallback() {
 
@@ -46,15 +47,18 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
             Log.i(TAG, "onScanFailed errorCode=$errorCode")
         }
 
-        override fun onScanResult(callbackType: Int, result: ScanResult?) {
+        override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
-            if( result!= null ){
+            //if( result!= null ){
                 processScanResult(result)
-            }
+            //}
         }
 
-        override fun onBatchScanResults(results: List<ScanResult>?) {
+        override fun onBatchScanResults(results: MutableList<ScanResult>) {
             super.onBatchScanResults(results)
+            if( results.size > maxResultsGot ){
+                maxResultsGot = results.size;
+            }
             Log.i(TAG, "onBatchScanResults results=$results")
             results?.forEach { processScanResult(it) }
         }
@@ -63,7 +67,7 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
             val scanRecord = result.scanRecord ?: return
 
             val contactEventIdentifier =
-                scanRecord.serviceData[ParcelUuid(BluetoothService.CONTACT_EVENT_SERVICE)]?.toUUID()
+                scanRecord?.serviceData?.get(ParcelUuid(BluetoothService.CONTACT_EVENT_SERVICE))?.toUUID()
 
             if (contactEventIdentifier == null) {
                 Log.i(
@@ -100,9 +104,14 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
                 // CoEpi modification
                 // Pass the CEN found in the advertisement data to the callback
 
-                scanRecord.serviceUuids.filter { it.uuid == BluetoothService.CONTACT_EVENT_SERVICE }.forEach { uuid ->
-                    scanRecord.serviceData[uuid]?.let { bytes ->
-                        callback?.invoke(Cen(bytes))
+                scanRecord.serviceUuids?.filter { it.uuid == BluetoothService.CONTACT_EVENT_SERVICE }?.forEach { uuid ->
+                    if( scanRecord.serviceData != null ) {
+                        var uuiddata = scanRecord.serviceData
+                        if( uuiddata != null ) {
+                            uuiddata[uuid]?.let { bytes ->
+                                callback?.invoke(Cen(bytes))
+                            }
+                        }
                     }
                 }
                 // Original code
@@ -125,6 +134,10 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
         }
     }
 
+    var numHardwareAttemp = 0;
+    var maxResultsGot = 0;
+    var useHardwareBatchBLE = supportHardwareBatchBLE;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     fun startScanning(serviceUUIDs: Array<UUID>?) {
         if (isScanning) return
@@ -133,18 +146,21 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
 //            val scanFilters = serviceUUIDs?.map {
 //                ScanFilter.Builder().setServiceUuid(ParcelUuid(it)).build()
 //            }
-            val scanFilters =  mutableListOf<ScanFilter>()  // emptyList<ScanFilter>()
+
+            val scanFilters: MutableList<ScanFilter> = ArrayList()
 
             val scanSettings = ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)//notworking on MOTOC: SCAN_MODE_BALANCED
-                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)//CALLBACK_TYPE_FIRST_MATCH
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
                 .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
                 .setNumOfMatches(ScanSettings.MATCH_NUM_FEW_ADVERTISEMENT)/**/
-                //.setReportDelay(1)//this uses onBatchScanResults instead of onScanResult
-                .build()
-
+                .setReportDelay(1000)//this uses onBatchScanResults instead of onScanResult
+                .setLegacy(false)
+                .setUseHardwareBatchingIfSupported(useHardwareBatchBLE)
+            .build()
             isScanning = true
             scanner?.startScan(scanFilters, scanSettings, scanCallback)
+
             Log.i(TAG, "Started scan")
         } catch (exception: Exception) {
             Log.e(TAG, "Start scan failed: $exception")
@@ -154,6 +170,15 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
         handler.removeCallbacksAndMessages(null)
         handler.postDelayed({
             if (isScanning) {
+                if( maxResultsGot == 0 && supportHardwareBatchBLE){
+                    numHardwareAttemp++
+                    if( numHardwareAttemp % 6 == 0 ){
+                        //after 6 attempts (1min) to use hardware I've found no result
+                        // try avoid use hardware, it consumes more battery, but it may work!
+                        //switch between hardware and software
+                        useHardwareBatchBLE = !useHardwareBatchBLE
+                    }
+                }
                 Log.i(TAG, "Restarting scan...")
                 stopScanning()
                 startScanning(serviceUUIDs)
