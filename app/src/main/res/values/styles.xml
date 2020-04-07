@@ -52,4 +52,8 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorAccent</item>
     </style>
+
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
 </resources>
