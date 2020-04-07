@@ -206,7 +206,7 @@ class CenRepoImpl(
                     val r: List<String>? = response.body()
                     r?.let {
                         var keyMatched=Vector<String>()
-                        /*for ( i in it.indices ) {
+                        for ( i in it.indices ) {
                             it[i]?.let { key ->
                                 val matched = matchCENKey(key, lastCENKeysCheck)
                                 log.i("Trying: ${key}");
@@ -214,7 +214,7 @@ class CenRepoImpl(
                                     keyMatched.add(key);
                                 }
                             }
-                        }*/
+                        }
                         if( keyMatched.isNotEmpty() ){
                             log.i("You've met a person with symptoms");
                             processMatches(keyMatched);
