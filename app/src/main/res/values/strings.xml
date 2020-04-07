@@ -38,6 +38,7 @@
     <!-- Symptoms -->
     <string name="symptoms_headline">Are you experiencing any of the following symptoms?</string>
     <string name="symptoms_submit_button">Submit</string>
+    <string name="symptoms_success_message">Symptoms submitted!</string>
 
     <!-- Onboarding -->
     <string name="onboarding_title">CoEpi</string>

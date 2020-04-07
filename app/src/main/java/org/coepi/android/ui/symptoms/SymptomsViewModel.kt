@@ -10,23 +10,27 @@ import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
+import org.coepi.android.R
+import org.coepi.android.R.string.symptoms_success_message
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.extensions.toLiveData
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
+import org.coepi.android.system.Resources
 import org.coepi.android.ui.common.UINotificationData
 import org.coepi.android.ui.extensions.rx.toNotification
 import org.coepi.android.ui.extensions.rx.toIsInProgress
 
 class SymptomsViewModel(
-    private val symptomRepo: SymptomRepo
+    private val symptomRepo: SymptomRepo,
+    resources: Resources
 ) : ViewModel() {
 
     val isInProgress: LiveData<Boolean> = symptomRepo.sendReportState
         .toIsInProgress().toLiveData()
 
     val notification: LiveData<UINotificationData> = symptomRepo.sendReportState
-        .toNotification("Symptoms submitted!").toLiveData()
+        .toNotification(resources.getString(symptoms_success_message)).toLiveData()
 
     private val selectedSymptomIds: BehaviorSubject<Set<String>> =
         BehaviorSubject.createDefault(emptySet())
