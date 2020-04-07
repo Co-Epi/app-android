@@ -16,7 +16,7 @@ data class ApiParamsCenReport(
 
 fun SymptomReport.toApiParamsCenReport(keys: List<CenKey>) =
     ApiParamsCenReport(
-        reportID = reportID.toByteArray().toHex(),
+        reportID = id.toByteArray().toHex(),
         report = Base64.encodeToString(report.toByteArray(), Base64.NO_WRAP),
         cenKeys = keys.joinToString(",") { it.key },
         reportTimeStamp = Date().coEpiTimestamp()

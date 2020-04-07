@@ -1,16 +1,27 @@
 package org.coepi.android.repo
 
-import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
+import org.coepi.android.cen.CenReportRepo
+import org.coepi.android.cen.SymptomReport
+import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.domain.model.Symptom
-import org.coepi.android.system.log.log
+import org.coepi.android.extensions.coEpiTimestamp
+import java.util.Date
+import java.util.UUID.randomUUID
 
 interface SymptomRepo {
+    val sendReportState: Observable<VoidOperationState>
+
     fun symptoms(): Single<List<Symptom>>
-    fun submitSymptoms(symptoms: List<Symptom>): Completable
+    fun submitSymptoms(symptoms: List<Symptom>)
 }
 
-class SymptomRepoImpl: SymptomRepo {
+class SymptomRepoImpl(
+    private val reportRepo: CenReportRepo
+): SymptomRepo {
+
+    override val sendReportState: Observable<VoidOperationState> = reportRepo.sendState
 
     override fun symptoms(): Single<List<Symptom>> = Single.just(listOf(
         Symptom("1", "Fever"),
@@ -26,9 +37,11 @@ class SymptomRepoImpl: SymptomRepo {
         Symptom("11", "Loss of smell or taste")
     ))
 
-    override fun submitSymptoms(symptoms: List<Symptom>): Completable =
-        // Send to api
-        Completable.complete().also {
-            log.i("Submitted symptoms: $symptoms")
-        }
+    override fun submitSymptoms(symptoms: List<Symptom>) {
+        reportRepo.sendReport(SymptomReport(
+            id = randomUUID().toString(),
+            report = "TODO symptoms -> report",
+            timestamp = Date().coEpiTimestamp()
+        ))
+    }
 }
