@@ -11,7 +11,7 @@
         android:drawable="@drawable/ic_coepicloud_splash"/>
     <item
         android:gravity="bottom|center"
-        android:bottom="18dp"
+        android:bottom="55dp"
         android:drawable="@drawable/ic_coepi_copyright"/>
 
 </layer-list>
