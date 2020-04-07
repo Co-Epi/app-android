@@ -6,11 +6,10 @@
 
     <item
         android:gravity="center"
-        android:drawable="@drawable/ic_coepi_cloud"/>
-
+        android:drawable="@drawable/ic_coepicloud_splash"/>
     <item
-        android:gravity="center"
-        android:drawable="@drawable/ic_coepi_title"
-        android:top="35dp"/>
+        android:gravity="bottom|center"
+        android:bottom="50dp"
+        android:drawable="@drawable/ic_coepi_copyright"/>
 
 </layer-list>
