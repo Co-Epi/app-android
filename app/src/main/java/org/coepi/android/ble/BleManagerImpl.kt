@@ -60,7 +60,7 @@ class BleManagerImpl(
 
     private fun BLEForegroundService.configureAndStart(cen: Cen) {
         val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-        var supportBatch = false;
+        var supportBatch = false
         if( bluetoothAdapter!= null ){
             supportBatch = bluetoothAdapter.isOffloadedScanBatchingSupported
         }
@@ -76,7 +76,7 @@ class BleManagerImpl(
             takeIf { bluetoothAdapter.supportsAdvertising() }?.let {
                 BLEAdvertiser(app, bluetoothAdapter)
             },
-            BLEScanner(app, bluetoothAdapter, supportBatch),
+            BLEScanner(app, supportBatch),
             scanCallback = {
                 scanObservable.onNext(it)
             },

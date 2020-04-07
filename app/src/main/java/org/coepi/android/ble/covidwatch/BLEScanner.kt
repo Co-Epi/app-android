@@ -14,13 +14,11 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import org.coepi.android.ble.covidwatch.utils.toUUID
 import org.coepi.android.cen.Cen
-import org.coepi.android.system.log.LogTag.BLE_S
-import org.coepi.android.system.log.log
 import java.lang.Exception
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
-class BLEScanner(val context: Context, adapter: BluetoothAdapter, private var supportHardwareBatchBLE:Boolean ) {
+class BLEScanner(val context: Context, private var supportHardwareBatchBLE:Boolean ) {
 
     /************************************************************************/
     // CoEpi modification
@@ -57,17 +55,17 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter, private var su
         override fun onBatchScanResults(results: MutableList<ScanResult>) {
             super.onBatchScanResults(results)
             if( results.size > maxResultsGot ){
-                maxResultsGot = results.size;
+                maxResultsGot = results.size
             }
             Log.i(TAG, "onBatchScanResults results=$results")
-            results?.forEach { processScanResult(it) }
+            results.forEach { processScanResult(it) }
         }
 
         private fun processScanResult(result: ScanResult) {
             val scanRecord = result.scanRecord ?: return
 
             val contactEventIdentifier =
-                scanRecord?.serviceData?.get(ParcelUuid(BluetoothService.CONTACT_EVENT_SERVICE))?.toUUID()
+                scanRecord.serviceData?.get(ParcelUuid(BluetoothService.CONTACT_EVENT_SERVICE))?.toUUID()
 
             if (contactEventIdentifier == null) {
                 Log.i(
@@ -106,7 +104,7 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter, private var su
 
                 scanRecord.serviceUuids?.filter { it.uuid == BluetoothService.CONTACT_EVENT_SERVICE }?.forEach { uuid ->
                     if( scanRecord.serviceData != null ) {
-                        var uuiddata = scanRecord.serviceData
+                        val uuiddata = scanRecord.serviceData
                         if( uuiddata != null ) {
                             uuiddata[uuid]?.let { bytes ->
                                 callback?.invoke(Cen(bytes))
@@ -134,9 +132,9 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter, private var su
         }
     }
 
-    var numHardwareAttemp = 0;
-    var maxResultsGot = 0;
-    var useHardwareBatchBLE = supportHardwareBatchBLE;
+    var numHardwareAttemp = 0
+    var maxResultsGot = 0
+    var useHardwareBatchBLE = supportHardwareBatchBLE
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     fun startScanning(serviceUUIDs: Array<UUID>?) {
