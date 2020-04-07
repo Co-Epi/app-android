@@ -8,6 +8,6 @@ import org.koin.dsl.module
 val repoModule = module {
     single { RealmProvider(androidApplication()) }
     single<ContactRepo> { RealmContactRepo(get()) }
-    single<SymptomRepo> { SymptomRepoImpl() }
+    single<SymptomRepo> { SymptomRepoImpl(get()) }
     single<AlertsRepo> { AlertRepoImpl(get()) }
 }

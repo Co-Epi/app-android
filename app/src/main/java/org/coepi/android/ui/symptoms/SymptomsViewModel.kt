@@ -1,6 +1,5 @@
 package org.coepi.android.ui.symptoms
 
-import android.util.Base64
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
@@ -11,20 +10,23 @@ import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
-import org.coepi.android.cen.CenReportRepo
-import org.coepi.android.cen.SymptomReport
 import org.coepi.android.domain.model.Symptom
-import org.coepi.android.extensions.coEpiTimestamp
 import org.coepi.android.extensions.toLiveData
-import org.coepi.android.extensions.toUnitObservable
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
-import java.util.Date
+import org.coepi.android.ui.common.UINotificationData
+import org.coepi.android.ui.extensions.rx.toNotification
+import org.coepi.android.ui.extensions.rx.toIsInProgress
 
 class SymptomsViewModel(
-    private val symptomRepo: SymptomRepo,
-    private val reportRepo: CenReportRepo
+    private val symptomRepo: SymptomRepo
 ) : ViewModel() {
+
+    val isInProgress: LiveData<Boolean> = symptomRepo.sendReportState
+        .toIsInProgress().toLiveData()
+
+    val notification: LiveData<UINotificationData> = symptomRepo.sendReportState
+        .toNotification("Symptoms submitted!").toLiveData()
 
     private val selectedSymptomIds: BehaviorSubject<Set<String>> =
         BehaviorSubject.createDefault(emptySet())
@@ -57,24 +59,16 @@ class SymptomsViewModel(
 
         disposables += submitTrigger
             .withLatestFrom(selectedSymptoms)
-            .switchMap { (_, selectedSymptoms) ->
-                symptomRepo.submitSymptoms(selectedSymptoms).toUnitObservable()
+            .subscribe{ (_, symptoms) ->
+                symptomRepo.submitSymptoms(symptoms)
             }
-            .subscribe()
     }
 
     fun onChecked(symptom: SymptomViewData) {
         checkedSymptomTrigger.onNext(symptom)
     }
 
-    private fun submitSymptoms() {
-        // TODO: update with values of actual report
-        val report = Base64.encodeToString("COVID 19 from BART".toByteArray(), Base64.NO_WRAP)
-        reportRepo.sendReport(SymptomReport("REPORT1", report, Date().coEpiTimestamp()))
-    }
-
     fun onSubmit() {
-        submitSymptoms()
         submitTrigger.onNext(Unit)
     }
 

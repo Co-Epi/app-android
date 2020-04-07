@@ -1,7 +1,7 @@
 package org.coepi.android.cen
 
 data class SymptomReport(
-    var reportID: String,
+    var id: String,
     var report: String,
-    var reportTimeStamp: Long
+    var timestamp: Long
 )

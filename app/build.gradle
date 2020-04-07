@@ -80,4 +80,7 @@ dependencies {
 
     // used for GeoHash
     implementation 'com.github.drfonfon:android-kotlin-geohash:1.0'
+
+    // UI notifications
+    implementation 'com.tapadoo.android:alerter:5.1.2'
 }

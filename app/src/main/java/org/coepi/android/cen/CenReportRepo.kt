@@ -2,11 +2,9 @@ package org.coepi.android.cen
 
 import io.reactivex.Completable
 import io.reactivex.Completable.complete
-import io.reactivex.Scheduler
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
@@ -16,8 +14,14 @@ import org.coepi.android.api.request.toApiParamsCenReport
 import org.coepi.android.extensions.toObservable
 import org.coepi.android.system.log.LogTag.NET
 import org.coepi.android.system.log.log
+import org.coepi.android.system.rx.VoidOperationState
+import org.coepi.android.system.rx.VoidOperationState.Progress
+import org.coepi.android.system.rx.VoidOperationStateConsumer
+import java.util.concurrent.TimeUnit.SECONDS
 
 interface CenReportRepo {
+    val sendState: Observable<VoidOperationState>
+
     fun sendReport(report: SymptomReport)
 }
 
@@ -27,16 +31,16 @@ class CenReportRepoImpl(
 ) : CenReportRepo {
     private val postSymptomsTrigger: PublishSubject<SymptomReport> = create()
 
+    override val sendState: PublishSubject<VoidOperationState> = create()
+
     private val disposables = CompositeDisposable()
 
     init {
-        disposables += postSymptomsTrigger.flatMap { report ->
-            postReport(report).toObservable(Unit)
-        }.subscribeBy(onComplete = {
-            log.i("Posted symptoms to the api", NET)
-        }, onError = {
-            log.i("Error posting symptoms to api: $it", NET)
-        })
+        disposables += postSymptomsTrigger.doOnNext {
+            sendState.onNext(Progress)
+        }
+        .flatMap { report -> postReport(report).toObservable(Unit).materialize() }
+        .subscribe(VoidOperationStateConsumer(sendState))
     }
 
     override fun sendReport(report: SymptomReport) {
