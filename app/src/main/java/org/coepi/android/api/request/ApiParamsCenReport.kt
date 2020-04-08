@@ -1,6 +1,5 @@
 package org.coepi.android.api.request
 
-import android.util.Base64
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.extensions.coEpiTimestamp
