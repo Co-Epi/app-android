@@ -3,6 +3,8 @@ package org.coepi.android.domain
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.RealmCenDao
 import org.coepi.android.cen.RealmReceivedCen
+import org.coepi.android.extensions.coEpiTimestamp
+import java.util.Date
 
 interface CenMatcher {
     fun hasMatches(key: CenKey, maxTimestamp: Long): Boolean
