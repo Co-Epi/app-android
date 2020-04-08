@@ -16,5 +16,5 @@ fun String.hexToByteArray(): ByteArray {
     return res
 }
 
-fun String.toBase64() =
+fun String.toBase64(): String =
     Base64.encodeToString(toByteArray(), Base64.NO_WRAP)
