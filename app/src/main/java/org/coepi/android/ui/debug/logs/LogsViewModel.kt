@@ -6,7 +6,7 @@ import io.reactivex.Observable.just
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
-import org.coepi.android.extensions.toLiveData
+import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.log.CachingLog
 import org.coepi.android.system.log.LogLevel
 import org.coepi.android.system.log.LogLevel.V

@@ -3,6 +3,7 @@ package org.coepi.android.ui.extensions.rx
 import io.reactivex.Observable
 import io.reactivex.Observable.empty
 import io.reactivex.Observable.just
+import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.system.rx.VoidOperationState.Failure
 import org.coepi.android.system.rx.VoidOperationState.Progress
@@ -26,6 +27,15 @@ fun Observable<VoidOperationState>.toNotification(successMessage: String? = null
         }
     }
 
-
-fun Observable<VoidOperationState>.toIsInProgress(): Observable<Boolean> =
-    map { it is Progress }
+fun <T> Observable<OperationState<T>>.toLoaderNotification(successMessage: String? = null): Observable<UINotificationData> =
+    flatMap {
+        when (it) {
+            is Success -> successMessage?.let {
+                just(UINotificationData.Success(successMessage))
+            }
+            is Failure -> just(UINotificationData.Failure(
+                it.t.message ?: "Unknown error"
+            ))
+            is Progress -> empty<UINotificationData>()
+        }
+    }

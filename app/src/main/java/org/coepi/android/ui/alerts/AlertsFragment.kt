@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import org.coepi.android.R.drawable.ic_close
 import org.coepi.android.databinding.FragmentAlertsBinding.inflate
 import org.coepi.android.extensions.observeWith
+import org.coepi.android.ui.common.NotificationsObserver
+import org.coepi.android.ui.common.ProgressObserver
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Date
 
@@ -22,6 +24,9 @@ class AlertsFragment: Fragment() {
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
+
+        viewModel.notification.observe(viewLifecycleOwner, NotificationsObserver(activity))
+        viewModel.isInProgress.observe(viewLifecycleOwner, ProgressObserver(requireContext()))
 
         val alertsAdapter = AlertsAdapter(onItemClick = {
             viewModel.onAlertClick(it)

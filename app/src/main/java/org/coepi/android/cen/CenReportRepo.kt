@@ -11,13 +11,12 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.api.CENApi
 import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.api.request.toApiParamsCenReport
-import org.coepi.android.extensions.toObservable
+import org.coepi.android.extensions.rx.toObservable
 import org.coepi.android.system.log.LogTag.NET
 import org.coepi.android.system.log.log
+import org.coepi.android.system.rx.OperationStateNotifier
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.system.rx.VoidOperationState.Progress
-import org.coepi.android.system.rx.VoidOperationStateConsumer
-import java.util.concurrent.TimeUnit.SECONDS
 
 interface CenReportRepo {
     val sendState: Observable<VoidOperationState>
@@ -40,7 +39,7 @@ class CenReportRepoImpl(
             sendState.onNext(Progress)
         }
         .flatMap { report -> postReport(report).toObservable(Unit).materialize() }
-        .subscribe(VoidOperationStateConsumer(sendState))
+        .subscribe(OperationStateNotifier(sendState))
     }
 
     override fun sendReport(report: SymptomReport) {

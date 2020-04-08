@@ -3,7 +3,7 @@ package org.coepi.android.ui.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
-import org.coepi.android.extensions.toLiveData
+import org.coepi.android.extensions.rx.toLiveData
 
 class SettingsViewModel : ViewModel() {
 

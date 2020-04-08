@@ -3,8 +3,9 @@ package org.coepi.android.repo
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers.io
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.BehaviorSubject.createDefault
 import org.coepi.android.api.CENApi
 import org.coepi.android.api.toCenReport
 import org.coepi.android.cen.CenReportRepo
@@ -15,14 +16,21 @@ import org.coepi.android.cen.SymptomReport
 import org.coepi.android.cross.CenKeysFetcher
 import org.coepi.android.domain.CenMatcher
 import org.coepi.android.extensions.coEpiTimestamp
+import org.coepi.android.extensions.rx.doOnNextSuccess
+import org.coepi.android.extensions.rx.flatMapSuccess
+import org.coepi.android.extensions.rx.mapSuccess
+import org.coepi.android.extensions.rx.toOperationState
 import org.coepi.android.system.log.LogTag.CEN_L
 import org.coepi.android.system.log.log
+import org.coepi.android.system.rx.OperationForwarder
+import org.coepi.android.system.rx.OperationState
+import org.coepi.android.system.rx.OperationState.Progress
 import java.lang.System.currentTimeMillis
 import java.util.Date
 
 interface CoEpiRepo {
     // Infection reports fetched periodically from the API
-    val reports: Observable<List<ReceivedCenReport>>
+    val reports: BehaviorSubject<OperationState<List<ReceivedCenReport>>>
 
     // Store CEN from other device
     fun storeObservedCen(cen: ReceivedCen)
@@ -46,56 +54,63 @@ class CoepiRepoImpl(
 
     private val disposables = CompositeDisposable()
 
-    override val reports: Observable<List<ReceivedCenReport>> = keysFetcher.keys
-        .subscribeOn(io())
-        .doOnNext { keys ->
-            matchingStartTime = currentTimeMillis()
-            log.i("Fetched keys from API (${keys.size}), start matching...")
-        }
+    override val reports: BehaviorSubject<OperationState<List<ReceivedCenReport>>> =
+        createDefault(Progress)
 
-//         // Uncomment this to benchmark a few keys quickly...
-//        .map { keys ->
-//            keys.subList(0, 2)
-//        }
-
-        // Filter matching keys
-        .map { keys -> keys.distinct().mapNotNull { key -> //.distinct():same key may arrive more than once, due to multiple reporting
-            if (cenMatcher.hasMatches(key, Date().coEpiTimestamp())) {
-                key
-            } else {
-                null
+    private val reportsObservable: Observable<OperationState<List<ReceivedCenReport>>> =
+        keysFetcher.keys
+            .subscribeOn(io())
+            .doOnSubscribe {
+                reports.onNext(Progress)
             }
-        }}
-
-        .doOnNext { matchedKeys ->
-            matchingStartTime?.let {
-                val time = (currentTimeMillis() - it) / 1000
-                log.i("Took ${time}s to match keys", CEN_L)
+            .doOnNextSuccess { keys ->
+                matchingStartTime = currentTimeMillis()
+                log.i("Fetched keys from API (${keys.size}), start matching...")
             }
-            if (matchedKeys.isNotEmpty()) {
-                log.i("Matches found for keys: $matchedKeys")
-            } else {
-                log.i("No matches found for keys")
-            }
-        }
 
-        .flatMap { matchedKeys ->
-            val requests: List<Observable<List<ReceivedCenReport>>> = matchedKeys.map {
-                api.getCenReports(it.key)
-                    .map { apiCenReports ->
-                        apiCenReports.map { ReceivedCenReport(it.toCenReport()) }
+//             // Uncomment this to benchmark a few keys quickly...
+//            .mapSuccess { keys ->
+//                keys.subList(0, 2)
+//            }
+
+            // Filter matching keys
+            .mapSuccess { keys ->
+                keys.distinct().mapNotNull { key ->
+                    //.distinct():same key may arrive more than once, due to multiple reporting
+                    if (cenMatcher.hasMatches(key, Date().coEpiTimestamp())) {
+                        key
+                    } else {
+                        null
                     }
-                    .toObservable()
+                }
             }
-            Observable.merge(requests)
-        }
 
-    .share()
+            .doOnNextSuccess { matchedKeys ->
+                matchingStartTime?.let {
+                    val time = (currentTimeMillis() - it) / 1000
+                    log.i("Took ${time}s to match keys", CEN_L)
+                }
+                if (matchedKeys.isNotEmpty()) {
+                    log.i("Matches found for keys: $matchedKeys")
+                } else {
+                    log.i("No matches found for keys")
+                }
+            }
+
+            .flatMapSuccess { matchedKeys ->
+                val requests: List<Observable<List<ReceivedCenReport>>> = matchedKeys.map { key ->
+                    api.getCenReports(key.key)
+                        .map { apiCenReports ->
+                            apiCenReports.map { ReceivedCenReport(it.toCenReport()) }
+                        }
+                        .toObservable()
+                }
+                Observable.merge(requests).materialize().toOperationState()
+            }
+            .share()
 
     init {
-        disposables += reports.subscribeBy(onError = {
-            log.e("Error ocurred registering reports observer: $it")
-        })
+        disposables += reportsObservable.subscribe(OperationForwarder(reports))
     }
 
     override fun sendReport(report: SymptomReport) {

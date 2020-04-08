@@ -1,4 +1,4 @@
-package org.coepi.android.extensions
+package org.coepi.android.extensions.rx
 
 import io.reactivex.Completable
 import io.reactivex.Observable
