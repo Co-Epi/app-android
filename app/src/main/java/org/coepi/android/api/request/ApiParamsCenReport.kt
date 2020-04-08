@@ -19,6 +19,6 @@ fun SymptomReport.toApiParamsCenReport(keys: List<CenKey>) =
     ApiParamsCenReport(
         reportID = id.toByteArray().toHex(),
         report = report.toBase64(),
-        cenKeys = keys.joinToString(",") { Base64.decode(it.key, Base64.NO_WRAP).toHex() },//this has to be HEX
+        cenKeys = keys.joinToString(",") { it.key }, //this has to be HEX
         reportTimeStamp = Date().coEpiTimestamp()
     )

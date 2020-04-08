@@ -23,8 +23,6 @@ class CenKeysFetcherImpl(private val api: CENApi) : CenKeysFetcher {
         }
         .map { strings ->
             strings.map {
-                //here the keys arrive HEX, but we've base64 convert
-                val b64 = Base64.encodeToString(it.hexToByteArray(),Base64.NO_WRAP)
-                CenKey(b64, Date().coEpiTimestamp()) }
+                CenKey(it, Date().coEpiTimestamp()) }
         }
 }
