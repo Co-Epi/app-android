@@ -57,7 +57,7 @@ class CoepiRepoImpl(
 //        }
 
         // Filter matching keys
-        .map { keys -> keys.mapNotNull { key ->
+        .map { keys -> keys.distinct().mapNotNull { key -> //.distinct():same key may arrive more than once, due to multiple reporting
             if (cenMatcher.hasMatches(key, lastCENKeysCheck)) {
                 key
             } else {
