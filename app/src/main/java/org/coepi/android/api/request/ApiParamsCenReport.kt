@@ -10,7 +10,7 @@ import java.util.Date
 data class ApiParamsCenReport(
     var reportID: String,
     var report: String,
-    var cenKeys: String,
+    var cenKeys: List<String>,
     var reportTimeStamp: Long
 )
 
@@ -18,6 +18,6 @@ fun SymptomReport.toApiParamsCenReport(keys: List<CenKey>) =
     ApiParamsCenReport(
         reportID = id.toByteArray().toHex(),
         report = report.toBase64(),
-        cenKeys = keys.joinToString(",") { it.key }, //this has to be HEX
+        cenKeys = keys.map { it.key }, //this has to be HEX
         reportTimeStamp = Date().coEpiTimestamp()
     )
