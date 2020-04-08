@@ -4,6 +4,7 @@ import android.util.Base64
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.IntToByteArray
+import org.coepi.android.extensions.toHex
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -24,8 +25,7 @@ class CenLogicImpl: CenLogic {
     override fun generateCenKey(timeStamp: Long): CenKey {
         // generate a new AES Key and store it in local storage
         val secretKey = KeyGenerator.getInstance("AES").generateKey()
-        val cenKey = Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP)
-        return CenKey(cenKey, timeStamp)
+        return CenKey(secretKey.encoded.toHex(), timeStamp)
     }
 
     override fun generateCen(cenKey: CenKey, ts: Long): Cen {
