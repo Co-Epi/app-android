@@ -1,10 +1,12 @@
 package org.coepi.android.cross
 
+import android.util.Base64
 import io.reactivex.Observable
 import io.reactivex.Observable.interval
 import org.coepi.android.api.CENApi
 import org.coepi.android.cen.CenKey
 import org.coepi.android.extensions.coEpiTimestamp
+import org.coepi.android.extensions.hexToByteArray
 import java.util.Date
 import java.util.concurrent.TimeUnit.MINUTES
 
@@ -20,6 +22,9 @@ class CenKeysFetcherImpl(private val api: CENApi) : CenKeysFetcher {
             api.cenkeysCheck(0).toObservable()
         }
         .map { strings ->
-            strings.map { CenKey(it, Date().coEpiTimestamp()) }
+            strings.map {
+                //here the keys arrive HEX, but we've base64 convert
+                val b64 = Base64.encodeToString(it.hexToByteArray(),Base64.NO_WRAP)
+                CenKey(b64, Date().coEpiTimestamp()) }
         }
 }
