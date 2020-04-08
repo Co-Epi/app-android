@@ -83,4 +83,7 @@ dependencies {
 
     // UI notifications
     implementation 'com.tapadoo.android:alerter:5.1.2'
+
+    // HTTP logging
+    implementation("com.squareup.okhttp3:logging-interceptor:4.3.1")
 }
