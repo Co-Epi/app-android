@@ -11,7 +11,7 @@ import org.coepi.android.cen.ReceivedCen
 import org.coepi.android.extensions.coEpiTimestamp
 import org.coepi.android.extensions.toLiveData
 import org.coepi.android.repo.CoEpiRepo
-import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.extensions.hexToByteArray
 import java.util.Date
 
 class CENViewModel(
@@ -41,19 +41,7 @@ class CENViewModel(
         MutableLiveData<List<RealmCenReport>>()
     }
 
-    private fun String.hexToByteArray(): ByteArray {
-        val carr = toCharArray()
-        val size = carr.size
-        val res = ByteArray(size / 2)
-        var i = 0
-        while (i < size) {
-            val hex2 = "" + carr[i] + carr[i + 1]
-            val byte: Byte = hex2.toLong(radix = 16).toByte()
-            res[i / 2] = byte
-            i += 2
-        }
-        return res
-    }
+
 
     fun insertPastedCEN(centoinsert: String = "") {
         val curcenbytes = centoinsert.hexToByteArray()
