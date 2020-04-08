@@ -9,7 +9,7 @@ import org.coepi.android.cen.MyCenProvider
 import org.coepi.android.cen.RealmCenReport
 import org.coepi.android.cen.ReceivedCen
 import org.coepi.android.extensions.coEpiTimestamp
-import org.coepi.android.extensions.toLiveData
+import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.CoEpiRepo
 import org.coepi.android.extensions.hexToByteArray
 import java.util.Date

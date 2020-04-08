@@ -3,24 +3,36 @@ package org.coepi.android.ui.alerts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import org.coepi.android.R
 import org.coepi.android.R.plurals.alerts_new_notifications_count
-import org.coepi.android.cen.CenReport
 import org.coepi.android.cen.ReceivedCenReport
-import org.coepi.android.extensions.toLiveData
+import org.coepi.android.extensions.rx.success
+import org.coepi.android.extensions.rx.toIsLoading
+import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
 import org.coepi.android.system.log.log
+import org.coepi.android.ui.common.UINotificationData
+import org.coepi.android.ui.extensions.rx.toLoaderNotification
 import org.coepi.android.ui.formatters.DateFormatters.dotFormatter
 import java.util.Date
 
 class AlertsViewModel(
-    notificationsRepo: AlertsRepo,
+    alertsRepo: AlertsRepo,
     private val resources: Resources
 ) : ViewModel() {
 
-    private val alertsObservable: Observable<List<AlertViewData>> = notificationsRepo.alerts
+    val isInProgress: LiveData<Boolean> = alertsRepo.alerts
+        .toIsLoading()
+        .take(1) // Only show while retrieving the first time
+        .toLiveData()
+
+    val notification: LiveData<UINotificationData> = alertsRepo.alerts
+        .toLoaderNotification(resources.getString(R.string.symptoms_success_message)).toLiveData()
+
+    private val alertsObservable: Observable<List<AlertViewData>> = alertsRepo.alerts
+        .success()
         .map { reports -> reports.map { it.toViewData() } }
         .observeOn(mainThread())
 
@@ -30,7 +42,6 @@ class AlertsViewModel(
         .map { title(it.size) }
         .startWith(title(0))
         .toLiveData()
-
 
     private fun title(alertsSize: Int) =
         resources.getQuantityString(alerts_new_notifications_count, alertsSize)
