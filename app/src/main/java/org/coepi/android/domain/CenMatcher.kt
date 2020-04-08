@@ -27,17 +27,16 @@ class CenMatcherImpl(
 
         // take the last 7 days of timestamps and generate all the possible CENs (e.g. 7 days) TODO: Parallelize this?
 
-        val maxRealTimeStamp = Date().coEpiTimestamp()
-        val minTimestamp = maxRealTimeStamp - secondsInAWeek
+        val minTimestamp = maxTimestamp - secondsInAWeek
         val possibleCensCount = (secondsInAWeek / cenLifetimeInSeconds).toInt()
 
         val possibleCENs = Array(possibleCensCount) { i ->
-            val ts = maxRealTimeStamp - cenLifetimeInSeconds * i
+            val ts = maxTimestamp - cenLifetimeInSeconds * i
             val cen = cenLogic.generateCen(key, ts)
             cen.toHex()
         }
 
         // check if the possibleCENs are in the CEN Table
-        return cenDao.matchCENs(minTimestamp, maxRealTimeStamp, possibleCENs)
+        return cenDao.matchCENs(minTimestamp, maxTimestamp, possibleCENs)
     }
 }

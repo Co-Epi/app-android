@@ -14,9 +14,11 @@ import org.coepi.android.cen.ReceivedCenReport
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.cross.CenKeysFetcher
 import org.coepi.android.domain.CenMatcher
+import org.coepi.android.extensions.coEpiTimestamp
 import org.coepi.android.system.log.LogTag.CEN_L
 import org.coepi.android.system.log.log
 import java.lang.System.currentTimeMillis
+import java.util.Date
 
 interface CoEpiRepo {
     // Infection reports fetched periodically from the API
@@ -58,7 +60,7 @@ class CoepiRepoImpl(
 
         // Filter matching keys
         .map { keys -> keys.distinct().mapNotNull { key -> //.distinct():same key may arrive more than once, due to multiple reporting
-            if (cenMatcher.hasMatches(key, lastCENKeysCheck)) {
+            if (cenMatcher.hasMatches(key, Date().coEpiTimestamp())) {
                 key
             } else {
                 null
