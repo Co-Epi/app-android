@@ -10,14 +10,14 @@ import retrofit2.http.Path
 
 interface CENApi {
     // post CENReport along with CENKeys
-    @POST("/cenreport/")
+    @POST("cenreport/")
     fun postCENReport(@Body report : ApiParamsCenReport): Completable
 
     // get recent keys that have CEN Reports
-    @GET("/cenkeys/{timestamp}")
+    @GET("cenkeys/{timestamp}")
     fun cenkeysCheck(@Path("timestamp") timestamp : Int): Single<List<String>>
 
     // get report based on matched CENkey
-    @GET("/cenreport/{key}")
+    @GET("cenreport/{key}")
     fun getCenReports(@Path("key") key: String): Single<List<ApiCenReport>>
 }
