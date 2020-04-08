@@ -1,5 +1,7 @@
 package org.coepi.android.extensions
 
+import android.util.Base64
+
 fun String.hexToByteArray(): ByteArray {
     val carr = toCharArray()
     val size = carr.size
@@ -13,3 +15,6 @@ fun String.hexToByteArray(): ByteArray {
     }
     return res
 }
+
+fun String.toBase64() =
+    Base64.encodeToString(toByteArray(), Base64.NO_WRAP)

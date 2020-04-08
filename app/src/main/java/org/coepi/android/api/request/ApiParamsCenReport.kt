@@ -4,6 +4,7 @@ import android.util.Base64
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.extensions.coEpiTimestamp
+import org.coepi.android.extensions.toBase64
 import org.coepi.android.extensions.toHex
 import java.util.Date
 
@@ -17,7 +18,7 @@ data class ApiParamsCenReport(
 fun SymptomReport.toApiParamsCenReport(keys: List<CenKey>) =
     ApiParamsCenReport(
         reportID = id.toByteArray().toHex(),
-        report = Base64.encodeToString(report.toByteArray(), Base64.NO_WRAP),
+        report = report.toBase64(),
         cenKeys = keys.joinToString(",") { Base64.decode(it.key, Base64.NO_WRAP).toHex() },//this has to be HEX
         reportTimeStamp = Date().coEpiTimestamp()
     )
