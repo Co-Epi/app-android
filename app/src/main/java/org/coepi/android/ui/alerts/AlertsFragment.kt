@@ -25,7 +25,6 @@ class AlertsFragment: Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        viewModel.notification.observe(viewLifecycleOwner, NotificationsObserver(activity))
         viewModel.isInProgress.observe(viewLifecycleOwner, ProgressObserver(requireContext()))
 
         val alertsAdapter = AlertsAdapter(onItemClick = {

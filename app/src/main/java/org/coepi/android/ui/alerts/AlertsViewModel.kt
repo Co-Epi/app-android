@@ -25,11 +25,9 @@ class AlertsViewModel(
 
     val isInProgress: LiveData<Boolean> = alertsRepo.alerts
         .toIsLoading()
-        .take(1) // Only show while retrieving the first time
+        .distinct()
+        .take(2) // Only show while retrieving the first time TODO ensure true -> false
         .toLiveData()
-
-    val notification: LiveData<UINotificationData> = alertsRepo.alerts
-        .toLoaderNotification(resources.getString(R.string.symptoms_success_message)).toLiveData()
 
     private val alertsObservable: Observable<List<AlertViewData>> = alertsRepo.alerts
         .success()
@@ -47,7 +45,7 @@ class AlertsViewModel(
         resources.getQuantityString(alerts_new_notifications_count, alertsSize)
 
     private fun ReceivedCenReport.toViewData(): AlertViewData =
-        AlertViewData(report.report, dotFormatter.format(Date(report.timestamp)), this.report) // TODO which date format?
+        AlertViewData(report.report, Date(report.timestamp).toString(), this.report) // TODO which date format?
 
     fun onAlertClick(viewData: AlertViewData) {
         log.i("Alert click: $viewData")

@@ -48,7 +48,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="4dp"
             android:background="@null"
             android:clickable="false"
             android:text="@string/alerts_button_acknowledge"
@@ -56,7 +56,7 @@
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/exposure_type" />
+            app:layout_constraintTop_toBottomOf="@id/exposure_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
