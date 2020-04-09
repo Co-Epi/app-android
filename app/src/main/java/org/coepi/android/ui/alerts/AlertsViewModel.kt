@@ -28,9 +28,6 @@ class AlertsViewModel(
         .take(1) // Only show while retrieving the first time
         .toLiveData()
 
-    val notification: LiveData<UINotificationData> = alertsRepo.alerts
-        .toLoaderNotification(resources.getString(R.string.symptoms_success_message)).toLiveData()
-
     private val alertsObservable: Observable<List<AlertViewData>> = alertsRepo.alerts
         .success()
         .map { reports -> reports.map { it.toViewData() } }
