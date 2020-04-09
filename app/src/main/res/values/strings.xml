@@ -44,7 +44,7 @@
     <string name="onboarding_title">CoEpi</string>
     <string name="onboarding_cta">GET STARTED</string>
     <string name="onboarding_tagline">Collaborate. Inform. Protect.</string>
-    <string name="onboarding_link"><u>How is my data used?</u></string>
+    <string name="onboarding_link"><a href="https://www.coepi.org/privacy/">How is my data used?</a></string>
     <string name="onboarding_banner_1"><b>Track</b> where you\'ve been</string>
     <string name="onboarding_banner_2"><b>Monitor</b> your health</string>
     <string name="onboarding_banner_3">Get <b>contextualized alerts</b> about possible exposure to infectious illness</string>
