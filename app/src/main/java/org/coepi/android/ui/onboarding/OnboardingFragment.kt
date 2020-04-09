@@ -1,6 +1,7 @@
 package org.coepi.android.ui.onboarding
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ class OnboardingFragment : Fragment() {
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
-    }.root
 
+        onboardingLink.movementMethod = LinkMovementMethod.getInstance()
+    }.root
 }
