@@ -24,7 +24,9 @@ class CenLogicImpl: CenLogic {
 
     override fun generateCenKey(timeStamp: Long): CenKey {
         // generate a new AES Key and store it in local storage
-        val secretKey = KeyGenerator.getInstance("AES").generateKey()
+        val secretKey = KeyGenerator.getInstance("AES")
+            .apply { init(256) } // 32 bytes
+            .generateKey()
         return CenKey(secretKey.encoded.toHex(), timeStamp)
     }
 
