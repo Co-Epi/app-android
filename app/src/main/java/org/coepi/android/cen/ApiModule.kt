@@ -26,7 +26,7 @@ private fun provideRetrofit() : Retrofit {
     return Retrofit.Builder()
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("https://q69c4m2myb.execute-api.us-west-2.amazonaws.com/v3/")
+        .baseUrl("https://v1.api.coepi.org/")
         .client(client)
         .build()
 }
