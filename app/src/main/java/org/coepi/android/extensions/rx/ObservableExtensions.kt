@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveDataReactiveStreams.fromPublisher
 import io.reactivex.BackpressureStrategy.BUFFER
 import io.reactivex.Notification
 import io.reactivex.Observable
+import io.reactivex.Observable.empty
 import io.reactivex.Observable.just
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.system.rx.OperationState
@@ -18,8 +19,7 @@ fun <T> Observable<T>.toLiveData(): LiveData<T> =
 
 fun <T> Observable<Notification<T>>.toOperationState(): Observable<OperationState<T>> =
     flatMap { notification ->
-        notification.toOperationState()?.let { just(it) } ?:
-            just(Failure(Throwable(notification.error ?: Throwable("Unknown error"))))
+        notification.toOperationState()?.let { just(it) } ?: empty()
     }
 
 fun <T> Observable<OperationState<T>>.doOnNextSuccess(f: (T) -> Unit): Observable<OperationState<T>> =

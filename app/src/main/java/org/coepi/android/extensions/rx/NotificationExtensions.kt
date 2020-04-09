@@ -10,6 +10,7 @@ fun <T>Notification<T>.toOperationState(): OperationState<T>? =
             value?.let { value ->
                 OperationState.Success(value)
             } ?: Failure(IllegalStateException("Value is null"))
-        isOnError -> Failure((error ?: Throwable("Unknown error")))
+        isOnError ->
+            Failure((error ?: Throwable("Unknown error")))
         else -> null
     }
