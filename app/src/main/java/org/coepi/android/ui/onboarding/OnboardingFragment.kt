@@ -20,12 +20,7 @@ class OnboardingFragment : Fragment() {
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
+
+        onboardingLink.movementMethod = LinkMovementMethod.getInstance()
     }.root
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val textView = view!!.findViewById<TextView>(R.id.onboardingLink)
-        textView.movementMethod = LinkMovementMethod.getInstance()
-    }
 }
