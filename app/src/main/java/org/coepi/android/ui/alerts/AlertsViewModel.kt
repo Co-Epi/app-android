@@ -45,7 +45,7 @@ class AlertsViewModel(
         resources.getQuantityString(alerts_new_notifications_count, alertsSize)
 
     private fun ReceivedCenReport.toViewData(): AlertViewData =
-        AlertViewData(report.report, dotFormatter.format(Date(report.timestamp)), this.report) // TODO which date format?
+        AlertViewData(report.report, Date(report.timestamp).toString(), this.report) // TODO which date format?
 
     fun onAlertClick(viewData: AlertViewData) {
         log.i("Alert click: $viewData")
