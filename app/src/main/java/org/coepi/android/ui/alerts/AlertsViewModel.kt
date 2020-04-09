@@ -25,7 +25,8 @@ class AlertsViewModel(
 
     val isInProgress: LiveData<Boolean> = alertsRepo.alerts
         .toIsLoading()
-        .take(1) // Only show while retrieving the first time
+        .distinct()
+        .take(2) // Only show while retrieving the first time TODO ensure true -> false
         .toLiveData()
 
     private val alertsObservable: Observable<List<AlertViewData>> = alertsRepo.alerts
