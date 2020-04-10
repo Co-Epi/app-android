@@ -3,8 +3,8 @@ package org.coepi.android.ble
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.coepi.android.ble.covidwatch.utils.toBytes
 import org.coepi.android.cen.Cen
+import org.covidwatch.libcontactrace.toBytes
 import java.util.UUID
 import java.util.concurrent.TimeUnit.SECONDS
 

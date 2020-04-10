@@ -1,23 +1,30 @@
 package org.coepi.android.ble
 
 import android.app.Application
-import android.bluetooth.BluetoothAdapter
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
-import org.coepi.android.ble.covidwatch.BLEAdvertiser
-import org.coepi.android.ble.covidwatch.BLEForegroundService
-import org.coepi.android.ble.covidwatch.BLEForegroundService.LocalBinder
-import org.coepi.android.ble.covidwatch.BLEScanner
-import org.coepi.android.ble.covidwatch.BleServiceConfiguration
+import org.coepi.android.MainActivity
+import org.coepi.android.R
 import org.coepi.android.cen.Cen
-import org.coepi.android.system.log.LogTag.BLE
-import org.coepi.android.system.log.log
+import org.covidwatch.libcontactrace.BluetoothService
+import org.covidwatch.libcontactrace.BluetoothService.LocalBinder
+import org.covidwatch.libcontactrace.cen.CenGenerator
+import org.covidwatch.libcontactrace.cen.CenVisitor
+import org.covidwatch.libcontactrace.cen.GeneratedCen
+import org.covidwatch.libcontactrace.cen.ObservedCen
 
 interface BleManager {
     val observedCens: Observable<Cen>
@@ -37,79 +44,133 @@ class BleManagerImpl(
 
     override val observedCens: PublishSubject<Cen> = create()
 
-    private val intent get() = Intent(app, BLEForegroundService::class.java)
+    private var bleManagerWithCen: BleManagerWithCen? = null
 
-    private var service: BLEForegroundService? = null
+    override fun changeAdvertisedValue(cen: Cen) {
+        bleManagerWithCen?.changeAdvertisedValue(cen)
+    }
 
-    private var cen: Cen? = null
+    override fun startAdvertiser(cen: Cen) {
+        bleManagerWithCen?.startAdvertiser(cen)
+    }
+
+    override fun startService(cen: Cen) {
+        bleManagerWithCen = BleManagerWithCen(cen, app, this)
+        bleManagerWithCen?.startService(cen)
+    }
+
+    override fun stopAdvertiser() {
+        bleManagerWithCen?.stopAdvertiser()
+    }
+
+    override fun stopService() {
+        bleManagerWithCen?.stopService()
+    }
+}
+
+class BleManagerWithCen(initialCen: Cen, private val app: Application, bleManager: BleManagerImpl) {
+
+    val scanObservable: PublishSubject<Cen> = bleManager.observedCens
+
+    private val intent get() = Intent(app, BluetoothService::class.java)
+
+    private var service: BluetoothService? = null
+
+    class DefaultCenGenerator(var cen: Cen): CenGenerator {
+        override fun generate(): GeneratedCen {
+            return GeneratedCen(cen.bytes)
+        }
+    }
+
+    private val cenGenerator = DefaultCenGenerator(initialCen)
+    private val cenVisitor = DefaultCenVisitor()
+
+    inner class DefaultCenVisitor : CenVisitor {
+        override fun visit(cen: GeneratedCen) {}
+
+        override fun visit(cen: ObservedCen) {
+            scanObservable.onNext(Cen(cen.data))
+        }
+    }
 
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val value = this@BleManagerImpl.cen ?: error("No value to advertise")
-            this@BleManagerImpl.service = (service as LocalBinder).service.apply {
-                configureAndStart(value)
+            this@BleManagerWithCen.service = (service as LocalBinder).service.apply {
+                configure(
+                    BluetoothService.ServiceConfiguration(
+                        cenGenerator,
+                        cenVisitor,
+                        foregroundNotification()
+                    )
+                )
+                start()
             }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {}
     }
 
-    private fun BluetoothAdapter.supportsAdvertising() =
-        isMultipleAdvertisementSupported && bluetoothLeAdvertiser != null
+    private fun foregroundNotification(): Notification {
+        createNotificationChannelIfNeeded()
 
-    private fun BLEForegroundService.configureAndStart(cen: Cen) {
-        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-        if (bluetoothAdapter == null) {
-            log.e("Bluetooth adapter is null. Can't continue", BLE)
-            return
+        val notificationIntent = Intent(app, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            app, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        return NotificationCompat.Builder(app, CHANNEL_ID)
+            .setContentTitle("Tags is logging")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentIntent(pendingIntent)
+            .setCategory(Notification.CATEGORY_SERVICE)
+            .build()
+    }
+
+    /**
+     * This notification channel is only required for android versions above
+     * android O. This creates the necessary notification channel for the foregroundService
+     * to function.
+     */
+    private fun createNotificationChannelIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceChannel = NotificationChannel(
+                CHANNEL_ID,
+                "Foreground Service Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val manager = ContextCompat.getSystemService(
+                app, NotificationManager::class.java
+            )
+            manager?.createNotificationChannel(serviceChannel)
         }
-
-        configure(BleServiceConfiguration(
-            cen,
-            takeIf { bluetoothAdapter.supportsAdvertising() }?.let {
-                BLEAdvertiser(app, bluetoothAdapter)
-            },
-            BLEScanner(app, bluetoothAdapter),
-            scanCallback = {
-                observedCens.onNext(it)
-            },
-            advertiserWriteCallback = {
-                // Since advertiser write is used as scan replacement
-                // for the Android (Central) / iOS (Peripheral) case, we broadcast it as scan.
-                observedCens.onNext(it)
-            }
-        ))
-
-        log.i("Staring BLE advertising CEN: $cen")
-        log.i("NOTE: BLE advertising/scanning logs currently not in UI, since covidwatch " +
-                "doesn't use our logger", BLE)
-        start()
     }
 
-    override fun changeAdvertisedValue(cen: Cen) {
-        this.cen = cen
-
-        service?.changeAdvertisedCen(cen)
+    fun changeAdvertisedValue(cen: Cen) {
+        cenGenerator.cen = cen
+        service?.updateCen()
     }
 
-    override fun startAdvertiser(cen: Cen) {
-        this.cen = cen
-
-        service?.startAdvertiser(cen)
+    fun startAdvertiser(cen: Cen) {
+        cenGenerator.cen = cen
+        service?.startAdvertiser()
     }
 
-    override fun startService(cen: Cen) {
-        this.cen = cen
-
+    fun startService(cen: Cen) {
+        cenGenerator.cen = cen
         app.bindService(intent, serviceConnection, BIND_AUTO_CREATE)
         app.startService(intent)
     }
 
-    override fun stopAdvertiser() {
+    fun stopAdvertiser() {
         service?.stopAdvertiser()
     }
 
-    override fun stopService() {
+    fun stopService() {
         app.stopService(intent)
+    }
+
+    companion object {
+        // CONSTANTS
+        private const val CHANNEL_ID = "CovidBluetoothContactChannel"
     }
 }

@@ -1,2 +1,3 @@
 rootProject.name='CoEpi'
 include ':app'
+include ':libcontactrace'
