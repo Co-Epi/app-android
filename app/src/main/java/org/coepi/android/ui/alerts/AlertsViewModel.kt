@@ -2,41 +2,36 @@ package org.coepi.android.ui.alerts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import org.coepi.android.R
 import org.coepi.android.R.plurals.alerts_new_notifications_count
 import org.coepi.android.cen.ReceivedCenReport
-import org.coepi.android.extensions.rx.success
-import org.coepi.android.extensions.rx.toIsLoading
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
+import org.coepi.android.repo.CoEpiRepo
 import org.coepi.android.system.Resources
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.common.UINotificationData
-import org.coepi.android.ui.extensions.rx.toLoaderNotification
-import org.coepi.android.ui.formatters.DateFormatters.dotFormatter
+import org.coepi.android.ui.extensions.rx.filterFailure
+import org.coepi.android.ui.extensions.rx.toNotification
 import java.util.Date
 
 class AlertsViewModel(
-    alertsRepo: AlertsRepo,
-    private val resources: Resources
+    private val alertsRepo: AlertsRepo,
+    private val resources: Resources,
+    coEpiRepo: CoEpiRepo
 ) : ViewModel() {
 
-    val isInProgress: LiveData<Boolean> = alertsRepo.alerts
-        .toIsLoading()
-        .distinct()
-        .take(2) // Only show while retrieving the first time TODO ensure true -> false
+    val errorNotification: LiveData<UINotificationData> = coEpiRepo.reports
+        .toNotification()
+        .filterFailure()
+        .observeOn(mainThread())
         .toLiveData()
 
-    private val alertsObservable: Observable<List<AlertViewData>> = alertsRepo.alerts
-        .success()
+    val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
         .map { reports -> reports.map { it.toViewData() } }
-        .observeOn(mainThread())
+        .toLiveData()
 
-    val alerts: LiveData<List<AlertViewData>> = alertsObservable.toLiveData()
-
-    val title = alertsObservable
+    val title = alertsRepo.alerts
         .map { title(it.size) }
         .startWith(title(0))
         .toLiveData()
@@ -45,10 +40,9 @@ class AlertsViewModel(
         resources.getQuantityString(alerts_new_notifications_count, alertsSize)
 
     private fun ReceivedCenReport.toViewData(): AlertViewData =
-        AlertViewData(report.report, Date(report.timestamp).toString(), this.report) // TODO which date format?
+        AlertViewData(report.report, Date(report.timestamp).toString(), this) // TODO which date format?
 
-    fun onAlertClick(viewData: AlertViewData) {
-        log.i("Alert click: $viewData")
-        // TODO
+    fun onAlertAckClick(alert: AlertViewData) {
+        alertsRepo.removeAlert(alert.report)
     }
 }

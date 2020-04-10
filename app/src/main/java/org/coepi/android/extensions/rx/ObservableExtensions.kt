@@ -46,13 +46,10 @@ fun <T, U> Observable<OperationState<T>>.flatMapSuccess(f: (T) -> Observable<Ope
 fun <T> Observable<OperationState<T>>.success(): Observable<T> =
     flatMap {
         when (it) {
-            is Success -> Observable.just<T>(it.data)
-            else -> Observable.empty<T>()
+            is Success -> just<T>(it.data)
+            else -> empty<T>()
         }
     }
 
-fun Observable<VoidOperationState>.toIsInProgress(): Observable<Boolean> =
-    map { it is Progress }
-
-fun <T> Observable<OperationState<T>>.toIsLoading(): Observable<Boolean> =
+fun <T> Observable<OperationState<T>>.toIsInProgress(): Observable<Boolean> =
     map { it is Progress }

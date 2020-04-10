@@ -6,8 +6,5 @@ import java.util.Date
 open class RealmCenReport(
     var id: String="",
     var report: String = "",
-    var keys: String = "",
-    var reportMimeType: String = "",
-    var date: Date = Date(),
-    var isUser: Boolean = false
+    var timestamp: Long = 0
 ): RealmObject()

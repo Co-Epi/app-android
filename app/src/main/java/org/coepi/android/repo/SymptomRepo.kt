@@ -18,10 +18,10 @@ interface SymptomRepo {
 }
 
 class SymptomRepoImpl(
-    private val reportRepo: CenReportRepo
+    private val coEpiRepo: CoEpiRepo
 ): SymptomRepo {
 
-    override val sendReportState: Observable<VoidOperationState> = reportRepo.sendState
+    override val sendReportState: Observable<VoidOperationState> = coEpiRepo.sendReportState
 
     override fun symptoms(): Single<List<Symptom>> = Single.just(listOf(
         Symptom("1", "Fever"),
@@ -38,7 +38,7 @@ class SymptomRepoImpl(
     ))
 
     override fun submitSymptoms(symptoms: List<Symptom>) {
-        reportRepo.sendReport(SymptomReport(
+        coEpiRepo.sendReport(SymptomReport(
             id = randomUUID().toString(),
             report = "TODO symptoms -> report",
             timestamp = Date().coEpiTimestamp()
