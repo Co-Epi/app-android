@@ -24,8 +24,8 @@ class AlertsFragment: Fragment() {
 
         viewModel.errorNotification.observe(viewLifecycleOwner, NotificationsObserver(activity))
 
-        val alertsAdapter = AlertsAdapter(onItemClick = {
-            viewModel.onAlertClick(it)
+        val alertsAdapter = AlertsAdapter(onAckClick = {
+            viewModel.onAlertAckClick(it)
         })
 
         recyclerView.run {

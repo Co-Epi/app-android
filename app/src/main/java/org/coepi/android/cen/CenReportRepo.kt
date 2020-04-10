@@ -15,10 +15,12 @@ interface CenReportRepo {
     val sendState: Observable<VoidOperationState>
 
     fun sendReport(report: SymptomReport)
+
+    fun delete(report: ReceivedCenReport)
 }
 
 class CenReportRepoImpl(
-    cenReportDao: RealmCenReportDao,
+    private val cenReportDao: RealmCenReportDao,
     private val coEpiRepo: CoEpiRepo
 ) : CenReportRepo {
     override val reports: Observable<List<ReceivedCenReport>> = cenReportDao.reports
@@ -39,5 +41,9 @@ class CenReportRepoImpl(
 
     override fun sendReport(report: SymptomReport) {
         coEpiRepo.sendReport(report)
+    }
+
+    override fun delete(report: ReceivedCenReport) {
+        cenReportDao.delete(report)
     }
 }

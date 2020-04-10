@@ -12,8 +12,6 @@ import org.coepi.android.api.CENApi
 import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.api.request.toApiParamsCenReport
 import org.coepi.android.api.toCenReport
-import org.coepi.android.cen.CenKey
-import org.coepi.android.cen.CenReport
 import org.coepi.android.cen.RealmCenDao
 import org.coepi.android.cen.RealmCenKeyDao
 import org.coepi.android.cen.ReceivedCen

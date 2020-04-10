@@ -16,7 +16,7 @@ import org.coepi.android.ui.extensions.rx.toNotification
 import java.util.Date
 
 class AlertsViewModel(
-    alertsRepo: AlertsRepo,
+    private val alertsRepo: AlertsRepo,
     private val resources: Resources,
     coEpiRepo: CoEpiRepo
 ) : ViewModel() {
@@ -40,10 +40,9 @@ class AlertsViewModel(
         resources.getQuantityString(alerts_new_notifications_count, alertsSize)
 
     private fun ReceivedCenReport.toViewData(): AlertViewData =
-        AlertViewData(report.report, Date(report.timestamp).toString(), this.report) // TODO which date format?
+        AlertViewData(report.report, Date(report.timestamp).toString(), this) // TODO which date format?
 
-    fun onAlertClick(viewData: AlertViewData) {
-        log.i("Alert click: $viewData")
-        // TODO
+    fun onAlertAckClick(alert: AlertViewData) {
+        alertsRepo.removeAlert(alert.report)
     }
 }

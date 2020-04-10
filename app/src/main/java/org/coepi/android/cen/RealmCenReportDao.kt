@@ -49,9 +49,9 @@ class RealmCenReportDao(private val realmProvider: RealmProvider) {
         }
     }
 
-    fun delete(report: CenReport) {
+    fun delete(report: ReceivedCenReport) {
         val results = realm.where<RealmCenReport>()
-            .equalTo("id", report.id)
+            .equalTo("id", report.report.id)
             .findAll()
 
         realm.executeTransaction {

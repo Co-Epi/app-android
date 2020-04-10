@@ -6,10 +6,12 @@ import org.coepi.android.cen.ReceivedCenReport
 
 interface AlertsRepo {
     val alerts: Observable<List<ReceivedCenReport>>
+
+    fun removeAlert(alert: ReceivedCenReport)
 }
 
 class AlertRepoImpl(
-    cenReportRepo: CenReportRepo
+    private val cenReportRepo: CenReportRepo
 ): AlertsRepo {
 
     override val alerts: Observable<List<ReceivedCenReport>> = cenReportRepo.reports
@@ -24,4 +26,8 @@ class AlertRepoImpl(
 //        CenReport(6, "Report text6", "keys", "mime type", Date(), true),
 //        CenReport(7, "Report text7", "keys", "mime type", Date(), true)
 //    ))
+
+    override fun removeAlert(alert: ReceivedCenReport) {
+        cenReportRepo.delete(alert)
+    }
 }
