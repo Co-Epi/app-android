@@ -1,5 +1,7 @@
 package org.coepi.android.cen
 
+import io.reactivex.subjects.BehaviorSubject
+import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.oneOf
 import io.realm.kotlin.where
@@ -7,6 +9,20 @@ import org.coepi.android.repo.RealmProvider
 
 class RealmCenReportDao(private val realmProvider: RealmProvider) {
     private val realm get() = realmProvider.realm
+
+    val reports: BehaviorSubject<List<ReceivedCenReport>> = BehaviorSubject.create()
+
+    private val reportsResults: RealmResults<RealmCenReport>
+
+    init {
+        reportsResults = realm.where<RealmCenReport>().findAllAsync()
+        reportsResults.addChangeListener { results, _ ->
+            reports.onNext(results.map {
+                ReceivedCenReport(
+                    CenReport(id = it.id, report = it.report, timestamp = it.timestamp ))
+            })
+        }
+    }
 
     fun all(limit : Int): List<RealmCenReport> =
         realm.where<RealmCenReport>()
