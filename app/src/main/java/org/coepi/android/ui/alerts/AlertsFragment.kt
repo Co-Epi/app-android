@@ -7,13 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import org.coepi.android.R.drawable.ic_close
 import org.coepi.android.databinding.FragmentAlertsBinding.inflate
 import org.coepi.android.extensions.observeWith
 import org.coepi.android.ui.common.NotificationsObserver
-import org.coepi.android.ui.common.ProgressObserver
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Date
 
 class AlertsFragment: Fragment() {
     private val viewModel by viewModel<AlertsViewModel>()
@@ -25,10 +22,10 @@ class AlertsFragment: Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        viewModel.isInProgress.observe(viewLifecycleOwner, ProgressObserver(requireContext()))
+        viewModel.errorNotification.observe(viewLifecycleOwner, NotificationsObserver(activity))
 
-        val alertsAdapter = AlertsAdapter(onItemClick = {
-            viewModel.onAlertClick(it)
+        val alertsAdapter = AlertsAdapter(onAckClick = {
+            viewModel.onAlertAckClick(it)
         })
 
         recyclerView.run {
