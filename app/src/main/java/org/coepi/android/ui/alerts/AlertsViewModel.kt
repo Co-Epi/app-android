@@ -17,15 +17,8 @@ import java.util.Date
 
 class AlertsViewModel(
     private val alertsRepo: AlertsRepo,
-    private val resources: Resources,
-    coEpiRepo: CoEpiRepo
+    private val resources: Resources
 ) : ViewModel() {
-
-    val errorNotification: LiveData<UINotificationData> = coEpiRepo.reports
-        .toNotification()
-        .filterFailure()
-        .observeOn(mainThread())
-        .toLiveData()
 
     val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
         .map { reports -> reports.map { it.toViewData() } }

@@ -13,7 +13,8 @@ enum class LogTag {
     BLE,  // General BLE (can't be assigned to peripheral or central)
     NET,  // Networking
     DB, // DB
-    CEN_L // CEN logic
+    CEN_L, // CEN logic
+    CEN_MATCHING // Worker updating reports
 }
 
 interface Log {

@@ -22,8 +22,6 @@ class AlertsFragment: Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        viewModel.errorNotification.observe(viewLifecycleOwner, NotificationsObserver(activity))
-
         val alertsAdapter = AlertsAdapter(onAckClick = {
             viewModel.onAlertAckClick(it)
         })

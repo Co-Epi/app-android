@@ -31,6 +31,8 @@ import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
+import org.coepi.android.worker.ContactsFetchManager
+import org.coepi.android.worker.ContactsFetchWorker
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -57,7 +59,8 @@ val systemModule = module {
     single { Resources(androidApplication()) }
     single<BleManager> { BleManagerImpl(androidApplication()) }
 //    single<BleManager> { BleSimulator() }  // Disable BleManagerImpl and enable this to use BLE simulator
-    single { NonReferencedDependenciesActivator(get(), get()) }
+    single { NonReferencedDependenciesActivator(get(), get(), get()) }
+    single { ContactsFetchManager(get()) }
 }
 
 val uiModule = module {
