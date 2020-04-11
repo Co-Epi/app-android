@@ -23,6 +23,9 @@ import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.home.HomeViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.notifications.NotificationChannelsCreator
+import org.coepi.android.ui.notifications.NotificationChannelsInitializer
+import org.coepi.android.ui.notifications.NotificationsShower
 import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
@@ -45,8 +48,6 @@ val viewModelModule = module {
 }
 
 val systemModule = module {
-    single { RootNavigation() }
-    single { OnboardingShower(get(), get()) }
     single { getSharedPrefs(androidApplication()) }
     single { Preferences(get()) }
     single { OnboardingPermissionsChecker() }
@@ -56,7 +57,24 @@ val systemModule = module {
     single { Resources(androidApplication()) }
     single<BleManager> { BleManagerImpl(androidApplication()) }
 //    single<BleManager> { BleSimulator() }  // Disable BleManagerImpl and enable this to use BLE simulator
-    single { NonReferencedDependenciesActivator(get()) }
+    single { NonReferencedDependenciesActivator(get(), get()) }
+}
+
+val uiModule = module {
+    single { OnboardingShower(get(), get()) }
+    single { RootNavigation() }
+    single {
+        NotificationChannelsCreator(
+            androidApplication()
+        )
+    }
+    single {
+        NotificationChannelsInitializer(
+            get(),
+            get()
+        )
+    }
+    single { NotificationsShower(get()) }
 }
 
 val appModule = listOf(
@@ -64,7 +82,8 @@ val appModule = listOf(
     viewModelModule,
     systemModule,
     apiModule,
-    CENModule
+    CENModule,
+    uiModule
 )
 
 fun getSharedPrefs(androidApplication: Application): SharedPreferences =

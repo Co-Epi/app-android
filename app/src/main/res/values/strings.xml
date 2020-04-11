@@ -74,4 +74,10 @@
         <item quantity="other">%s new contact alerts</item>
     </plurals>
 
+    <!-- Infection contact notifications -->
+    <string name="infection_notification_title">Exposure</string>
+    <string name="infection_notification_text">You were exposed to the virus. Click to see reports.</string>
+    <string name="infection_notification_channel_name">Exposures</string>
+    <string name="infection_notification_channel_description">Detected virus exposures</string>
+
 </resources>
