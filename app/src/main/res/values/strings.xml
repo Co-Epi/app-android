@@ -59,16 +59,6 @@
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
-
-    <plurals name="numbers">
-        <item quantity="zero">No comments</item>
-        <item quantity="one">%1$d comment.</item>
-        <item quantity="two">%1$d comments.</item>
-        <item quantity="few">%1$d comments.</item>
-        <item quantity="many">%1$d comments.</item>
-        <item quantity="other">%1$d comments.</item>
-    </plurals>
-
     <plurals name="alerts_new_notifications_count">
         <item quantity="one">%s new contact alert</item>
         <item quantity="other">%s new contact alerts</item>
@@ -76,7 +66,7 @@
 
     <!-- Infection contact notifications -->
     <string name="infection_notification_title">Exposure</string>
-    <string name="infection_notification_text">You were exposed to the virus. Click to see reports.</string>
+<!--    <string name="infection_notification_text">You were exposed to the virus. Click to see reports.</string>-->
     <string name="infection_notification_channel_name">Exposures</string>
     <string name="infection_notification_channel_description">Detected virus exposures</string>
 

@@ -31,6 +31,7 @@ class NotificationsShower(
         }
     }
 
+    // TODO allow to configure per notification
     private fun pendingIntent(): PendingIntent = PendingIntent.getActivity(context, 0,
         Intent(context, MainActivity::class.java).apply {
             flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK

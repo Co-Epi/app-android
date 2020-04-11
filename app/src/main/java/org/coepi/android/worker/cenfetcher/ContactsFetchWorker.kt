@@ -1,11 +1,11 @@
-package org.coepi.android.worker
+package org.coepi.android.worker.cenfetcher
 
 import android.content.Context
+import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker.Result.success
-import androidx.work.RxWorker
 import androidx.work.WorkerParameters
-import io.reactivex.Single
-import io.reactivex.Single.create
+import androidx.work.workDataOf
+import kotlinx.coroutines.delay
 import org.coepi.android.cen.RealmCenReportDao
 import org.coepi.android.cen.ReceivedCenReport
 import org.coepi.android.common.successOrNull
@@ -18,16 +18,12 @@ import org.koin.core.inject
 class ContactsFetchWorker(
     appContext: Context,
     workerParams: WorkerParameters
-) : RxWorker(appContext, workerParams), KoinComponent {
+) : CoroutineWorker(appContext, workerParams), KoinComponent {
 
     private val coEpiRepo: CoEpiRepo by inject()
     private val reportsDao: RealmCenReportDao by inject()
 
-    override fun createWork(): Single<Result> = create<Result> { emitter ->
-        emitter.onSuccess(doWork())
-    }
-
-    private fun doWork(): Result {
+    override suspend fun doWork(): Result {
         log.i("Contacts fetch worker started...", CEN_MATCHING)
 
         val reportsResult = coEpiRepo.reports()
@@ -37,7 +33,16 @@ class ContactsFetchWorker(
             reportsDao.insert(it.report)
         }
 
+        setProgress(workDataOf(CONTACT_COUNT_KEY to reports.size))
+        // TODO why is this need?
+        // TODO without delay, live data never receives the progress
+        delay(100)
+
         log.i("Contacts fetch worker finished. Saved reports: ${reports.size}", CEN_MATCHING)
         return success()
+    }
+
+    companion object {
+        const val CONTACT_COUNT_KEY = "contacts_count"
     }
 }

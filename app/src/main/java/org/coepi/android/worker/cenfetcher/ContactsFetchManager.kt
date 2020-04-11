@@ -1,7 +1,8 @@
-package org.coepi.android.worker
+package org.coepi.android.worker.cenfetcher
 
 import android.content.Context
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy.REPLACE
 import androidx.work.NetworkType.CONNECTED
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequest.Builder
@@ -10,8 +11,11 @@ import java.util.concurrent.TimeUnit.MINUTES
 
 class ContactsFetchManager(context: Context) {
 
+    val workName = "contacts_fetch_worker"
+
     init {
-        WorkManager.getInstance(context).enqueue(createWorkerRequest())
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueueUniquePeriodicWork(workName, REPLACE, createWorkerRequest())
     }
 
     private fun createWorkerRequest(): PeriodicWorkRequest {

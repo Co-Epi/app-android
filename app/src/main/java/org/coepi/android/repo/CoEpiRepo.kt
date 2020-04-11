@@ -69,8 +69,6 @@ class CoepiRepoImpl(
     override val sendReportState: PublishSubject<VoidOperationState> = PublishSubject.create()
 
     init {
-//        disposables += reportsObservable.subscribe(OperationForwarder(reports))
-
         disposables += postSymptomsTrigger.doOnNext {
             sendReportState.onNext(Progress)
         }

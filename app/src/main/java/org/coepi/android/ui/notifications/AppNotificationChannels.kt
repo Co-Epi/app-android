@@ -13,7 +13,7 @@ import org.coepi.android.ui.notifications.LocalNotificationChannelId.INFECTION_R
 /**
  * Initializes the app's notification channels and provides their ids.
  */
-class NotificationChannelsInitializer(
+class AppNotificationChannels(
     private val channels: NotificationChannelsCreator,
     private val resources: Resources
 ) {
