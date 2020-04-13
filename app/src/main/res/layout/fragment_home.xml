@@ -10,7 +10,7 @@
             type="org.coepi.android.ui.home.HomeViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/homeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -88,6 +88,9 @@
             android:layout_width="344dp"
             android:layout_height="144dp"
             app:cardBackgroundColor="#FAFAFA"
+            app:layout_constraintTop_toBottomOf="@id/my_health_card"
+            app:layout_constraintStart_toStartOf="@id/my_health_card"
+            app:layout_constraintEnd_toEndOf="@id/my_health_card"
             app:cardCornerRadius="8dp"
             android:layout_marginTop="33dp">
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -143,7 +146,20 @@
         <!-- ************************************************************ -->
         <!-- ************************************************************ -->
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{vm.versionString}"
+            app:layout_constraintEnd_toStartOf="@id/debug_button"
+            app:layout_constraintTop_toTopOf="@id/debug_button"
+            app:layout_constraintBottom_toBottomOf="@id/debug_button"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/grey"
+            tools:text="Version"
+            />
+
         <Button
+            android:id="@+id/debug_button"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
@@ -152,9 +168,10 @@
             android:layout_gravity="end"
             android:layout_marginTop="30dp"
             android:textColor="@color/grey"
+            app:layout_constraintTop_toBottomOf="@id/contact_alerts_card"
+            app:layout_constraintEnd_toEndOf="@id/contact_alerts_card"
             android:text="@string/tab_container_debug"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
