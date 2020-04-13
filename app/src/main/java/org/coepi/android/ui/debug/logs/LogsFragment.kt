@@ -45,7 +45,7 @@ class LogsFragment: Fragment() {
         }
 
         viewModel.logs.observeWith(viewLifecycleOwner) {
-            logsAdapter.setItems(it)
+            logsAdapter.submitList(it)
         }
 
     }.root
