@@ -1,14 +1,12 @@
 package org.coepi.android.ui.debug.logs
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.graphics.Color.BLUE
-import android.graphics.Color.GREEN
 import android.graphics.Color.RED
 import android.graphics.Color.YELLOW
 import android.graphics.Color.parseColor
-import android.view.LayoutInflater
+import android.view.HapticFeedbackConstants.LONG_PRESS
 import android.view.LayoutInflater.from
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
@@ -25,7 +23,7 @@ import org.coepi.android.system.log.LogLevel.W
 import org.coepi.android.system.log.LogMessage
 import org.coepi.android.ui.debug.logs.LogsRecyclerViewAdapter.ViewHolder
 
-class LogsRecyclerViewAdapter
+class LogsRecyclerViewAdapter(private val onItemLongClick: () -> Unit)
     : ListAdapter<LogMessage, ViewHolder>(LogsDiffCallback()) {
 
     class ViewHolder(
@@ -34,10 +32,16 @@ class LogsRecyclerViewAdapter
             inflate(from(parent.context), parent, false)
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: LogMessage): Unit = binding.run {
+        fun bind(item: LogMessage, onItemClick: () -> Unit): Unit = binding.run {
             this.item = item
             this.lblLogLevel.setTextColor(item.level.color())
             this.lblMessage.setTextColor(item.level.color())
+
+            root.setOnLongClickListener {
+                root.performHapticFeedback(LONG_PRESS)
+                onItemClick()
+                true
+            }
         }
 
         private fun LogLevel.color(): Int = when (this) {
@@ -53,7 +57,7 @@ class LogsRecyclerViewAdapter
         ViewHolder(parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), onItemLongClick)
     }
 }
 

@@ -1,6 +1,5 @@
 package org.coepi.android.ui.debug
 
-import android.graphics.Color
 import android.graphics.Color.WHITE
 import android.os.Bundle
 import android.view.LayoutInflater

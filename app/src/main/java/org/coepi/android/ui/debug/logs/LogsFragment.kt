@@ -1,6 +1,8 @@
 package org.coepi.android.ui.debug.logs
 
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
+import android.view.HapticFeedbackConstants.LONG_PRESS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +20,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class LogsFragment: Fragment() {
 
     private val viewModel by viewModel<LogsViewModel>()
-    private val logsAdapter = LogsRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +27,10 @@ class LogsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflate(inflater, container, false).apply {
         vm = viewModel
+
+        val logsAdapter = LogsRecyclerViewAdapter(onItemLongClick = {
+            viewModel.onLogLongTap()
+        })
 
         logsRecyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)
