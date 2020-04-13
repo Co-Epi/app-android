@@ -23,6 +23,7 @@
             android:clickable="false"
             android:gravity="center_vertical"
             android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:text="@{item.text}"
             android:textSize="@dimen/text_size_20"
             app:layout_constraintBottom_toBottomOf="parent"
