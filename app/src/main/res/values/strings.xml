@@ -11,7 +11,6 @@
     <string name="tab_ble">BLE</string>
     <string name="tab_location">Location</string>
 
-
     <!-- Fragment labels -->
     <string name="label_fragment_home">Home</string>
     <string name="label_fragment_settings">Settings</string>
@@ -55,6 +54,7 @@
     <string name="home_contact_alerts_card_description">Approximate times that you may have been exposed to a symptomatic individual.</string>
     <string name="home_my_health_card_check_in_button">CHECK-IN</string>
     <string name="home_contact_alerts_card_see_alerts_button">SEE ALERTS</string>
+    <string name="home_version">Version: %s</string>
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>

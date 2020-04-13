@@ -14,6 +14,10 @@ import org.coepi.android.cen.CENModule
 import org.coepi.android.cen.apiModule
 import org.coepi.android.cross.CenReportsNotifier
 import org.coepi.android.repo.repoModule
+import org.coepi.android.system.Clipboard
+import org.coepi.android.system.ClipboardImpl
+import org.coepi.android.system.EnvInfos
+import org.coepi.android.system.EnvInfosImpl
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.Resources
 import org.coepi.android.system.log.cachingLog
@@ -42,14 +46,14 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { HomeViewModel(get()) }
+    viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { SymptomsViewModel(get(), get()) }
     viewModel { AlertsViewModel(get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { CENViewModel(get(), get(), get()) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get()) }
-    viewModel { LogsViewModel(cachingLog) }
+    viewModel { LogsViewModel(cachingLog, get(), get()) }
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
     viewModel { ContainerViewModel(get()) }
@@ -69,6 +73,8 @@ val systemModule = module {
     single { ContactsFetchManager(get()) }
     single { CenReportsNotifier(get(), get(), get(), get(), get()) }
     single<DebugBleObservable> { DebugBleObservableImpl(get()) }
+    single<Clipboard> { ClipboardImpl(get()) }
+    single<EnvInfos> { EnvInfosImpl() }
 }
 
 val uiModule = module {
