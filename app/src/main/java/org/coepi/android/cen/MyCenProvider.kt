@@ -28,6 +28,7 @@ class MyCenProviderImpl(
         .doOnNext { debugObservable.setMyKey(it) }
         .map { key -> cenLogic.generateCen(key, key.timestamp) }
         .doOnNext { debugObservable.setMyCen(it) }
+        .share()
 
     private fun generateAndStoreNewCenKeyIfNeeded(): Observable<CenKey> {
         val curTimestamp = Date().coEpiTimestamp()
