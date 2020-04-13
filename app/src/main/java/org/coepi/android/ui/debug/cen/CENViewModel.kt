@@ -1,4 +1,4 @@
-package org.coepi.android.ui.cen
+package org.coepi.android.ui.debug.cen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

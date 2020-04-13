@@ -59,8 +59,8 @@
 
     <fragment
         android:id="@+id/CENFragment"
-        android:name="org.coepi.android.ui.cen.CENFragment"
-        tools:layout="@layout/fragment_ble"/>
+        android:name="org.coepi.android.ui.debug.cen.CENFragment"
+        tools:layout="@layout/fragment_debug_cen"/>
     <action
         android:id="@+id/action_global_CENFragment"
         app:destination="@id/CENFragment" />

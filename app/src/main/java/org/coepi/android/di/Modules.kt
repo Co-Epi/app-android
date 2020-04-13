@@ -18,7 +18,7 @@ import org.coepi.android.system.Preferences
 import org.coepi.android.system.Resources
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.alerts.AlertsViewModel
-import org.coepi.android.ui.cen.CENViewModel
+import org.coepi.android.ui.debug.cen.CENViewModel
 import org.coepi.android.ui.container.ContainerViewModel
 import org.coepi.android.ui.debug.DebugViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
