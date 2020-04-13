@@ -16,7 +16,7 @@ interface CENApi {
 
     // get recent keys that have CEN Reports
     @GET("cenkeys/{timestamp}")
-    fun cenkeysCheck(@Path("timestamp") timestamp : Int): Call<List<String>>
+    fun cenkeysCheck(@Path("timestamp") timestamp : Long): Call<List<String>>
 
     // get report based on matched CENkey
     @GET("cenreport/{key}")

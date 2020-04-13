@@ -1,3 +1,5 @@
 package org.coepi.android.cen
 
-data class ReceivedCen(val cen: Cen, val timestamp: Long)
+import org.coepi.android.domain.CoEpiDate
+
+data class ReceivedCen(val cen: Cen, val date: CoEpiDate)

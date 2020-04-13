@@ -17,7 +17,7 @@ class RealmCenKeyDao(private val realmProvider: RealmProvider) {
     fun insert(key: CenKey) {
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmCenKey>(key.key)
-            realmObj.timestamp = key.timestamp
+            realmObj.timestamp = key.date.unixTime
         }
     }
 }
