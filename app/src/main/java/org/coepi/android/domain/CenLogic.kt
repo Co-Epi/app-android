@@ -15,7 +15,7 @@ interface CenLogic {
     fun generateCenKey(date: CoEpiDate): CenKey
 
     /**
-     * @param ts Unix time, seconds
+     * @param ts Unix time
      */
     fun generateCen(cenKey: CenKey, ts: Long): Cen
 }

@@ -9,7 +9,7 @@ data class ApiParamsCenReport(
     var reportID: String,
     var report: String,
     var cenKeys: String,
-    var reportTimeStamp: Long // Unix time, seconds
+    var reportTimeStamp: Long // Unix time
 )
 
 fun SymptomReport.toApiParamsCenReport(keys: List<CenKey>) =

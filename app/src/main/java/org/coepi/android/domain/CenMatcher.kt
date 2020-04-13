@@ -3,7 +3,7 @@ package org.coepi.android.domain
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.RealmCenDao
 import org.coepi.android.cen.RealmReceivedCen
-import org.coepi.android.domain.CoEpiDate.Companion.fromSeconds
+import org.coepi.android.domain.CoEpiDate.Companion.fromUnixTime
 
 interface CenMatcher {
     fun hasMatches(key: CenKey, maxDate: CoEpiDate): Boolean
@@ -36,6 +36,6 @@ class CenMatcherImpl(
         }
 
         // check if the possibleCENs are in the CEN Table
-        return cenDao.matchCENs(fromSeconds(minTimestampSeconds), maxDate, possibleCENs)
+        return cenDao.matchCENs(fromUnixTime(minTimestampSeconds), maxDate, possibleCENs)
     }
 }
