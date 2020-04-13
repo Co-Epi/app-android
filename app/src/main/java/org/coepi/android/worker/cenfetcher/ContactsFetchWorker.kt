@@ -24,7 +24,7 @@ class ContactsFetchWorker(
     private val reportsDao: RealmCenReportDao by inject()
 
     override suspend fun doWork(): Result {
-        log.i("Contacts fetch worker started...", CEN_MATCHING)
+        log.d("Contacts fetch worker started...", CEN_MATCHING)
 
         val reportsResult = coEpiRepo.reports()
         val reports: List<ReceivedCenReport> = reportsResult.successOrNull() ?: emptyList()

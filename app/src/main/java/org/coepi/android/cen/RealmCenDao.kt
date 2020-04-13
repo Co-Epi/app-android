@@ -1,6 +1,5 @@
 package org.coepi.android.cen
 
-import android.util.Base64
 import io.realm.kotlin.createObject
 import io.realm.kotlin.oneOf
 import io.realm.kotlin.where
@@ -21,12 +20,21 @@ class RealmCenDao(private val realmProvider: RealmProvider) {
             .oneOf("cen", cens)
             .findAll()
 
-    fun insert(cen: ReceivedCen) {
+    private fun findCen(cen: Cen): RealmReceivedCen? =
+        realm.where<RealmReceivedCen>()
+            .equalTo("cen", cen.toHex())
+            .findAll()
+            .firstOrNull()
+
+    fun insert(cen: ReceivedCen): Boolean {
+        if (findCen(cen.cen) != null) {
+            return false
+        }
         realm.executeTransaction {
-            val realmObj = realm.createObject<RealmReceivedCen>() // Create a new object
-            realmObj.cen = cen.cen.toHex()
+            val realmObj = realm.createObject<RealmReceivedCen>(cen.cen.toHex()) // Create a new object
             realmObj.timestamp = cen.timestamp
         }
+        return true
     }
 
 //    @Delete("DELETE FROM cen where :timeStamp > timeStamp")

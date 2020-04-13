@@ -43,8 +43,7 @@ class RealmCenReportDao(private val realmProvider: RealmProvider) {
 
     fun insert(report: CenReport) {
         realm.executeTransaction {
-            val realmObj = realm.createObject<RealmCenReport>() // Create a new object
-            realmObj.id = report.id
+            val realmObj = realm.createObject<RealmCenReport>(report.id)
             realmObj.report = report.report
         }
     }

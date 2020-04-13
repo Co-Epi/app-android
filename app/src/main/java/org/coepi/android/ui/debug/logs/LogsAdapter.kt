@@ -1,11 +1,13 @@
 package org.coepi.android.ui.debug.logs
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.graphics.Color.BLUE
 import android.graphics.Color.GREEN
 import android.graphics.Color.RED
 import android.graphics.Color.YELLOW
+import android.graphics.Color.parseColor
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
 import android.view.ViewGroup
@@ -40,7 +42,7 @@ class LogsRecyclerViewAdapter
 
         private fun LogLevel.color(): Int = when (this) {
             V -> BLACK
-            D -> GREEN
+            D -> parseColor("#228C22")
             I -> BLUE
             W -> YELLOW
             E -> RED
