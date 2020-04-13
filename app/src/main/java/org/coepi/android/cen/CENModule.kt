@@ -1,7 +1,5 @@
 package org.coepi.android.cen
 
-import org.coepi.android.cross.CenKeysFetcher
-import org.coepi.android.cross.CenKeysFetcherImpl
 import org.coepi.android.cross.ScannedCensHandler
 import org.coepi.android.domain.CenLogic
 import org.coepi.android.domain.CenLogicImpl
@@ -16,10 +14,9 @@ val CENModule = module {
     single { RealmCenReportDao(get()) }
     single { RealmCenKeyDao(get()) }
     single<CenReportRepo> { CenReportRepoImpl(get(), get()) }
-    single<CenKeysFetcher> { CenKeysFetcherImpl(get()) }
     single<CenMatcher> { CenMatcherImpl(get(), get()) }
     single<CenLogic> { CenLogicImpl() }
-    single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get(), get()) }
+    single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get()) }
     single<MyCenProvider> { MyCenProviderImpl(get(), get()) }
     single { ScannedCensHandler(get(), get()) }
     single { BleInitializer(get(), get(), get()) }

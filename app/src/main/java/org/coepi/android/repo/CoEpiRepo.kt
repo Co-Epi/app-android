@@ -5,32 +5,32 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
 import org.coepi.android.api.CENApi
 import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.api.request.toApiParamsCenReport
 import org.coepi.android.api.toCenReport
+import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.RealmCenDao
 import org.coepi.android.cen.RealmCenKeyDao
 import org.coepi.android.cen.ReceivedCen
 import org.coepi.android.cen.ReceivedCenReport
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.cen.toCenKey
-import org.coepi.android.cross.CenKeysFetcher
+import org.coepi.android.common.Result
+import org.coepi.android.common.Result.Failure
+import org.coepi.android.common.Result.Success
+import org.coepi.android.common.doIfSuccess
+import org.coepi.android.common.flatMap
+import org.coepi.android.common.group
+import org.coepi.android.common.map
 import org.coepi.android.domain.CenMatcher
 import org.coepi.android.extensions.coEpiTimestamp
-import org.coepi.android.extensions.rx.doOnNextSuccess
-import org.coepi.android.extensions.rx.flatMapSuccess
-import org.coepi.android.extensions.rx.mapSuccess
 import org.coepi.android.extensions.rx.toObservable
-import org.coepi.android.extensions.rx.toOperationState
-import org.coepi.android.system.log.LogTag.CEN_L
+import org.coepi.android.extensions.toResult
+import org.coepi.android.system.log.LogTag.CEN_MATCHING
 import org.coepi.android.system.log.LogTag.NET
 import org.coepi.android.system.log.log
-import org.coepi.android.system.rx.OperationForwarder
-import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationStateNotifier
 import org.coepi.android.system.rx.VoidOperationState
@@ -38,8 +38,6 @@ import java.lang.System.currentTimeMillis
 import java.util.Date
 
 interface CoEpiRepo {
-    // Infection reports fetched periodically from the API
-    val reports: BehaviorSubject<OperationState<List<ReceivedCenReport>>>
 
     // State of send report operation
     val sendReportState: Observable<VoidOperationState>
@@ -49,10 +47,11 @@ interface CoEpiRepo {
 
     // Send symptoms report
     fun sendReport(report: SymptomReport)
+
+    fun reports(): Result<List<ReceivedCenReport>, Throwable>
 }
 
 class CoepiRepoImpl(
-    keysFetcher: CenKeysFetcher,
     private val cenMatcher: CenMatcher,
     private val api: CENApi,
     private val cenDao: RealmCenDao,
@@ -66,77 +65,82 @@ class CoepiRepoImpl(
 
     private val disposables = CompositeDisposable()
 
-    override val reports: BehaviorSubject<OperationState<List<ReceivedCenReport>>> =
-        createDefault(Progress)
-
-    private val reportsObservable: Observable<OperationState<List<ReceivedCenReport>>> =
-        keysFetcher.keys
-            .subscribeOn(io())
-            .doOnSubscribe {
-                reports.onNext(Progress)
-            }
-            .doOnNextSuccess { keys ->
-                matchingStartTime = currentTimeMillis()
-                log.i("Fetched keys from API (${keys.size}), start matching...")
-            }
-
-//             // Uncomment this to benchmark a few keys quickly...
-//            .mapSuccess { keys ->
-//                keys.subList(0, 2)
-//            }
-
-            // Filter matching keys
-            .mapSuccess { keys ->
-                keys.distinct().mapNotNull { key ->
-                    //.distinct():same key may arrive more than once, due to multiple reporting
-                    if (cenMatcher.hasMatches(key, Date().coEpiTimestamp())) {
-                        key
-                    } else {
-                        null
-                    }
-                }
-            }
-
-            .doOnNextSuccess { matchedKeys ->
-                matchingStartTime?.let {
-                    val time = (currentTimeMillis() - it) / 1000
-                    log.i("Took ${time}s to match keys", CEN_L)
-                }
-                if (matchedKeys.isNotEmpty()) {
-                    log.i("Matches found for keys: $matchedKeys")
-                } else {
-                    log.i("No matches found for keys")
-                }
-            }
-
-            .flatMapSuccess { matchedKeys ->
-                val requests: List<Observable<List<ReceivedCenReport>>> = matchedKeys.map { key ->
-                    api.getCenReports(key.key)
-                        .map { apiCenReports ->
-                            apiCenReports.map { ReceivedCenReport(it.toCenReport()) }
-                        }
-                        .toObservable()
-                }
-                Observable.merge(requests).materialize().toOperationState()
-            }
-            .share()
-
     private val postSymptomsTrigger: PublishSubject<SymptomReport> = PublishSubject.create()
     override val sendReportState: PublishSubject<VoidOperationState> = PublishSubject.create()
 
     init {
-        disposables += reportsObservable.subscribe(OperationForwarder(reports))
-
         disposables += postSymptomsTrigger.doOnNext {
             sendReportState.onNext(Progress)
         }
-        .flatMap { report -> postReport(report).toObservable(Unit).materialize() }
-        .subscribe(OperationStateNotifier(sendReportState))
+            .flatMap { report -> postReport(report).toObservable(Unit).materialize() }
+            .subscribe(OperationStateNotifier(sendReportState))
     }
 
     override fun sendReport(report: SymptomReport) {
         postSymptomsTrigger.onNext(report)
     }
+
+    override fun reports(): Result<List<ReceivedCenReport>, Throwable> {
+        val keysResult = api.cenkeysCheck(0).execute()
+            .toResult().map { keyStrings ->
+                keyStrings.map {
+                    CenKey(it, Date().coEpiTimestamp())
+                }
+            }
+
+        matchingStartTime = currentTimeMillis()
+
+        val matchedKeysResult: Result<List<CenKey>, Throwable> =
+            keysResult.map { filterMatchingKeys(it) }
+
+        matchingStartTime?.let {
+            val time = (currentTimeMillis() - it) / 1000
+            log.i("Took ${time}s to match keys", CEN_MATCHING)
+        }
+        matchingStartTime = null
+
+        matchedKeysResult.doIfSuccess {
+            if (it.isNotEmpty()) {
+                log.i("Matches found for keys: $it", CEN_MATCHING)
+            } else {
+                log.i("No matches found for keys", CEN_MATCHING)
+            }
+        }
+
+        return matchedKeysResult.flatMap { reportsFor(it) }
+    }
+
+    private fun reportsFor(keys: List<CenKey>): Result<List<ReceivedCenReport>, Throwable> {
+
+        // Retrieve reports for keys, group in successful / failed calls
+        val (successful, failed) = keys.map { key ->
+            api.getCenReports(key.key).execute().toResult()
+        }.group()
+
+        // Log failed calls
+        failed.forEach {
+            log.e("Error fetching reports: $it")
+        }
+
+        // If we only got failure results, return a failure, otherwise return success
+        // and ignore failures (logged before)
+        // TODO review / maybe refine this error handling
+        return if (successful.isEmpty() && failed.isNotEmpty()) {
+            Failure(Throwable("Couldn't fetch any reports"))
+        } else {
+            Success(successful.flatten().map { ReceivedCenReport(it.toCenReport()) })
+        }
+    }
+
+    private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> =
+        keys.distinct().mapNotNull { key ->
+            //.distinct():same key may arrive more than once, due to multiple reporting
+            if (cenMatcher.hasMatches(key, Date().coEpiTimestamp())) {
+                key
+            } else {
+                null
+            }
+        }
 
     private fun postReport(report: SymptomReport): Completable {
         val params: ApiParamsCenReport? =

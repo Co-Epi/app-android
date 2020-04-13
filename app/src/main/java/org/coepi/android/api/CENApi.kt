@@ -3,6 +3,7 @@ package org.coepi.android.api
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.coepi.android.api.request.ApiParamsCenReport
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -15,9 +16,9 @@ interface CENApi {
 
     // get recent keys that have CEN Reports
     @GET("cenkeys/{timestamp}")
-    fun cenkeysCheck(@Path("timestamp") timestamp : Int): Single<List<String>>
+    fun cenkeysCheck(@Path("timestamp") timestamp : Int): Call<List<String>>
 
     // get report based on matched CENkey
     @GET("cenreport/{key}")
-    fun getCenReports(@Path("key") key: String): Single<List<ApiCenReport>>
+    fun getCenReports(@Path("key") key: String): Call<List<ApiCenReport>>
 }

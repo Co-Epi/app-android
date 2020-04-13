@@ -32,15 +32,19 @@ android {
         enabled = true
     }
 
-
     compileOptions {
-        targetCompatibility = "8"
-        sourceCompatibility = "8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
 
 ext {
     koin_version = "2.1.0"
+    work_version = "2.3.4"
 }
 
 dependencies {
@@ -86,4 +90,8 @@ dependencies {
 
     // HTTP logging
     implementation("com.squareup.okhttp3:logging-interceptor:4.3.1")
+
+    // Worker
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation "androidx.work:work-rxjava2:$work_version"
 }
