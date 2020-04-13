@@ -2,7 +2,6 @@ package org.coepi.android.ui.debug.logs
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable.just
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
@@ -18,7 +17,7 @@ class LogsViewModel(logger: CachingLog) : ViewModel() {
 
     val logs: LiveData<List<LogMessage>> =
         Observables.combineLatest(
-            just<List<LogMessage>>(logger.logs),
+            logger.logs,
             selectedLogLevelSubject
         )
         .map { (logs, logLevel) ->
