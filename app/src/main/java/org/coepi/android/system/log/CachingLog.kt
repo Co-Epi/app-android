@@ -1,5 +1,10 @@
 package org.coepi.android.system.log
 
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.subjects.BehaviorSubject.createDefault
+import io.reactivex.subjects.PublishSubject
 import org.coepi.android.system.log.LogLevel.D
 import org.coepi.android.system.log.LogLevel.E
 import org.coepi.android.system.log.LogLevel.I
@@ -8,7 +13,18 @@ import org.coepi.android.system.log.LogLevel.W
 import org.coepi.android.util.LimitedSizeQueue
 
 class CachingLog : Log {
-    val logs = LimitedSizeQueue<LogMessage>(1000)
+    val logs = createDefault<LimitedSizeQueue<LogMessage>>(
+        LimitedSizeQueue(1000))
+
+    private val addLogTrigger: PublishSubject<LogMessage> = PublishSubject.create()
+    private val disposables = CompositeDisposable()
+
+    init {
+        disposables += addLogTrigger.withLatestFrom(logs)
+            .subscribe { (logMessage, logs) ->
+                this.logs.onNext(logs.apply { add(logMessage) })
+            }
+    }
 
     override fun setup() {}
 
@@ -33,7 +49,7 @@ class CachingLog : Log {
     }
 
     private fun log(message: LogMessage) {
-        logs.add(message)
+        addLogTrigger.onNext(message)
     }
 
     private fun addTag(tag: LogTag?, message: String) =
