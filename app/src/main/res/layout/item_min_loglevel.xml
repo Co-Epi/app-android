@@ -3,5 +3,6 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="20dp"
-    android:textColor="@color/textDefault"/>
+    android:padding="15dp"
+    android:textColor="@color/textDefault"
+    android:textSize="20dp" />
