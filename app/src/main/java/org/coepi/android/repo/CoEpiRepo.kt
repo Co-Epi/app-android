@@ -6,6 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.api.CENApi
 import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.api.request.toApiParamsCenReport
@@ -25,7 +26,8 @@ import org.coepi.android.common.flatMap
 import org.coepi.android.common.group
 import org.coepi.android.common.map
 import org.coepi.android.domain.CenMatcher
-import org.coepi.android.extensions.coEpiTimestamp
+import org.coepi.android.domain.CoEpiDate
+import org.coepi.android.domain.CoEpiDate.Companion.now
 import org.coepi.android.extensions.rx.toObservable
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.log.LogTag.CEN_MATCHING
@@ -35,7 +37,6 @@ import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationStateNotifier
 import org.coepi.android.system.rx.VoidOperationState
 import java.lang.System.currentTimeMillis
-import java.util.Date
 
 interface CoEpiRepo {
 
@@ -65,8 +66,8 @@ class CoepiRepoImpl(
 
     private val disposables = CompositeDisposable()
 
-    private val postSymptomsTrigger: PublishSubject<SymptomReport> = PublishSubject.create()
-    override val sendReportState: PublishSubject<VoidOperationState> = PublishSubject.create()
+    private val postSymptomsTrigger: PublishSubject<SymptomReport> = create()
+    override val sendReportState: PublishSubject<VoidOperationState> = create()
 
     init {
         disposables += postSymptomsTrigger.doOnNext {
@@ -81,10 +82,11 @@ class CoepiRepoImpl(
     }
 
     override fun reports(): Result<List<ReceivedCenReport>, Throwable> {
+
         val keysResult = api.cenkeysCheck(0).execute()
             .toResult().map { keyStrings ->
                 keyStrings.map {
-                    CenKey(it, Date().coEpiTimestamp())
+                    CenKey(it, now())
                 }
             }
 
@@ -138,15 +140,17 @@ class CoepiRepoImpl(
         }
     }
 
-    private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> =
-        keys.distinct().mapNotNull { key ->
+    private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> {
+        val maxDate: CoEpiDate = now()
+        return keys.distinct().mapNotNull { key ->
             //.distinct():same key may arrive more than once, due to multiple reporting
-            if (cenMatcher.hasMatches(key, Date().coEpiTimestamp())) {
+            if (cenMatcher.hasMatches(key, maxDate)) {
                 key
             } else {
                 null
-            }
         }
+            }
+    }
 
     private fun postReport(report: SymptomReport): Completable {
         val params: ApiParamsCenReport? =

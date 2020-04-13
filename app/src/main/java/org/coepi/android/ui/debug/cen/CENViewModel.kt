@@ -1,18 +1,17 @@
 package org.coepi.android.ui.debug.cen
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import org.coepi.android.ble.BleManager
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.MyCenProvider
 import org.coepi.android.cen.RealmCenReport
 import org.coepi.android.cen.ReceivedCen
-import org.coepi.android.extensions.coEpiTimestamp
+import org.coepi.android.domain.CoEpiDate.Companion.now
+import org.coepi.android.extensions.hexToByteArray
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.CoEpiRepo
-import org.coepi.android.extensions.hexToByteArray
-import java.util.Date
 
 class CENViewModel(
     myCenProvider: MyCenProvider,
@@ -46,7 +45,7 @@ class CENViewModel(
     fun insertPastedCEN(centoinsert: String = "") {
         val curcenbytes = centoinsert.hexToByteArray()
         val c = Cen(curcenbytes)
-        coeEpiRepo.storeObservedCen(ReceivedCen(c, Date().coEpiTimestamp()))
+        coeEpiRepo.storeObservedCen(ReceivedCen(c, now()))
     }
 
     private fun update() {

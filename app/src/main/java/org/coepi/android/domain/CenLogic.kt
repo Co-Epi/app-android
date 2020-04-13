@@ -1,6 +1,5 @@
 package org.coepi.android.domain
 
-import android.util.Base64
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.IntToByteArray
@@ -12,23 +11,28 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
 interface CenLogic {
-    fun shouldGenerateNewCenKey(curTimestamp: Long, cenKeyTimestamp: Long): Boolean
-    fun generateCenKey(timeStamp: Long): CenKey
+    fun shouldGenerateNewCenKey(curDate: CoEpiDate, cenKeyDate: CoEpiDate): Boolean
+    fun generateCenKey(date: CoEpiDate): CenKey
+
+    /**
+     * @param ts Unix time
+     */
     fun generateCen(cenKey: CenKey, ts: Long): Cen
 }
 
 class CenLogicImpl: CenLogic {
     private val cenKeyLifetimeInSeconds = 7 * 86400 // every 7 days a new key is generated
 
-    override fun shouldGenerateNewCenKey(curTimestamp: Long, cenKeyTimestamp: Long): Boolean =
-        (cenKeyTimestamp == 0L) || (roundedTimestamp(curTimestamp) > roundedTimestamp(cenKeyTimestamp))
+    override fun shouldGenerateNewCenKey(curDate: CoEpiDate, cenDate: CoEpiDate): Boolean =
+        (cenDate.unixTime == 0L) || (roundedTimestamp(curDate.unixTime) >
+                roundedTimestamp(cenDate.unixTime))
 
-    override fun generateCenKey(timeStamp: Long): CenKey {
+    override fun generateCenKey(date: CoEpiDate): CenKey {
         // generate a new AES Key and store it in local storage
         val secretKey = KeyGenerator.getInstance("AES")
             .apply { init(256) } // 32 bytes
             .generateKey()
-        return CenKey(secretKey.encoded.toHex(), timeStamp)
+        return CenKey(secretKey.encoded.toHex(), date)
     }
 
     override fun generateCen(cenKey: CenKey, ts: Long): Cen {

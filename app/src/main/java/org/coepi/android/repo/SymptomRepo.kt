@@ -2,11 +2,11 @@ package org.coepi.android.repo
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import org.coepi.android.cen.CenReportRepo
 import org.coepi.android.cen.SymptomReport
+import org.coepi.android.domain.CoEpiDate
+import org.coepi.android.domain.CoEpiDate.Companion.now
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.domain.model.Symptom
-import org.coepi.android.extensions.coEpiTimestamp
 import java.util.Date
 import java.util.UUID.randomUUID
 
@@ -41,7 +41,7 @@ class SymptomRepoImpl(
         coEpiRepo.sendReport(SymptomReport(
             id = randomUUID().toString(),
             report = "TODO symptoms -> report",
-            timestamp = Date().coEpiTimestamp()
+            date = now()
         ))
     }
 }
