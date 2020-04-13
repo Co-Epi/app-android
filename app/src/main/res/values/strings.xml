@@ -18,7 +18,6 @@
     <string name="label_fragment_ble">BLE</string>
     <string name="label_fragment_location">Location</string>
     <string name="label_fragment_onboarding">Onboarding</string>
-    <string name="label_fragment_logs">Logs</string>
     <string name="label_fragment_alerts">Alerts</string>
     <string name="label_fragment_symptoms">Symptoms</string>
     <string name="label_fragment_api">API</string>

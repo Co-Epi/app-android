@@ -11,15 +11,8 @@ import org.coepi.android.system.log.CachingLog
 import org.coepi.android.system.log.LogLevel
 import org.coepi.android.system.log.LogLevel.V
 import org.coepi.android.system.log.LogMessage
-import org.coepi.android.ui.navigation.NavigationCommand.Back
-import org.coepi.android.ui.debug.logs.LogsFragmentDirections.Companion.actionGlobalCENFragment
-import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
-import org.coepi.android.ui.navigation.RootNavigation
 
-class LogsViewModel(
-    logger: CachingLog,
-    private val rootNav: RootNavigation
-) : ViewModel() {
+class LogsViewModel(logger: CachingLog) : ViewModel() {
 
     private val selectedLogLevelSubject: BehaviorSubject<LogLevel> = createDefault(V)
 
@@ -33,15 +26,7 @@ class LogsViewModel(
         }
         .toLiveData()
 
-    fun onCloseClick() {
-        rootNav.navigate(Back)
-    }
-
     fun onLogLevelSelected(logLevel: LogLevel) {
         selectedLogLevelSubject.onNext(logLevel)
-    }
-
-    fun onBLEClick(){
-        rootNav.navigate(ToDestination(actionGlobalCENFragment()))
     }
 }

@@ -7,6 +7,7 @@ import org.coepi.android.domain.CenLogic
 import org.coepi.android.extensions.coEpiTimestamp
 import org.coepi.android.system.log.LogTag.CEN_L
 import org.coepi.android.system.log.log
+import org.coepi.android.ui.debug.DebugBleObservable
 import java.util.Date
 import java.util.concurrent.TimeUnit.MINUTES
 
@@ -16,18 +17,17 @@ interface MyCenProvider {
 
 class MyCenProviderImpl(
     private val cenLogic: CenLogic,
-    private val cenKeyDao: RealmCenKeyDao
+    private val cenKeyDao: RealmCenKeyDao,
+    private val debugObservable: DebugBleObservable
 ) : MyCenProvider {
 
     private var cenKeyTimestamp = 0L // TODO maybe observe directly a database query with the last key
 
     override val cen: Observable<Cen> = Observable.interval(0, 15, MINUTES)
-        .flatMap {
-            generateAndStoreNewCenKeyIfNeeded()
-        }
-        .map { key ->
-            cenLogic.generateCen(key, key.timestamp)
-        }
+        .flatMap { generateAndStoreNewCenKeyIfNeeded() }
+        .doOnNext { debugObservable.setMyKey(it) }
+        .map { key -> cenLogic.generateCen(key, key.timestamp) }
+        .doOnNext { debugObservable.setMyCen(it) }
 
     private fun generateAndStoreNewCenKeyIfNeeded(): Observable<CenKey> {
         val curTimestamp = Date().coEpiTimestamp()

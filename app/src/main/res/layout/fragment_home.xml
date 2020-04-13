@@ -17,6 +17,10 @@
         tools:context=".ui.home.HomeFragment"
         android:orientation="vertical"
         android:gravity="center_horizontal">
+
+        <!-- ************************************************************ -->
+        <!--  TODO entries should be in recycler view -->
+        <!-- ************************************************************ -->
         <androidx.cardview.widget.CardView
             android:id="@+id/my_health_card"
             android:layout_width="344dp"
@@ -136,5 +140,21 @@
                     android:textStyle="bold"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
+        <!-- ************************************************************ -->
+        <!-- ************************************************************ -->
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:onClick="@{() -> vm.onDebugClick()}"
+            android:layout_gravity="end"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/grey"
+            android:text="@string/tab_container_debug"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </LinearLayout>
 </layout>

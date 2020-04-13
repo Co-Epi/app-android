@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="vm" type="org.coepi.android.ui.cen.CENViewModel" />
+        <variable name="vm" type="org.coepi.android.ui.debug.cen.CENViewModel" />
     </data>
 
 

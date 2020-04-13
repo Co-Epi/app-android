@@ -4,20 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import org.coepi.android.R
-import org.coepi.android.R.drawable.ic_close
 import org.coepi.android.R.layout.item_min_loglevel
 import org.coepi.android.databinding.FragmentLogsBinding.inflate
 import org.coepi.android.extensions.observeWith
 import org.coepi.android.system.log.LogLevel
 import org.coepi.android.ui.extensions.onItemSelected
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class LogsFragment: Fragment() {
 
@@ -30,10 +26,6 @@ class LogsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflate(inflater, container, false).apply {
         vm = viewModel
-        toolbar.setNavigationIcon(ic_close)
-        toolbar.setNavigationOnClickListener {
-            viewModel.onCloseClick()
-        }
 
         logsRecyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)

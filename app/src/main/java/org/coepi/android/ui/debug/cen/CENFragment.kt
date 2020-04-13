@@ -1,15 +1,15 @@
-package org.coepi.android.ui.cen
+package org.coepi.android.ui.debug.cen
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import org.coepi.android.databinding.FragmentBleBinding.inflate
+import org.coepi.android.databinding.FragmentDebugCenBinding.inflate
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import kotlinx.android.synthetic.main.fragment_ble.*
+import kotlinx.android.synthetic.main.fragment_debug_cen.*
 import org.coepi.android.extensions.observeWith
 
 class CENFragment : Fragment() {
