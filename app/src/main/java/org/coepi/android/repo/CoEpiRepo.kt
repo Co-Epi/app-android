@@ -72,8 +72,8 @@ class CoepiRepoImpl(
         disposables += postSymptomsTrigger.doOnNext {
             sendReportState.onNext(Progress)
         }
-            .flatMap { report -> postReport(report).toObservable(Unit).materialize() }
-            .subscribe(OperationStateNotifier(sendReportState))
+        .flatMap { report -> postReport(report).toObservable(Unit).materialize() }
+        .subscribe(OperationStateNotifier(sendReportState))
     }
 
     override fun sendReport(report: SymptomReport) {
@@ -88,6 +88,12 @@ class CoepiRepoImpl(
                 }
             }
 
+        keysResult.doIfSuccess { keys ->
+            log.i("Retrieved ${keys.size} keys. Start matching...", CEN_MATCHING)
+            val keyStrings = keys.map { it.key }
+            log.v("$keyStrings", CEN_MATCHING)
+        }
+
         matchingStartTime = currentTimeMillis()
 
         val matchedKeysResult: Result<List<CenKey>, Throwable> =
@@ -101,9 +107,9 @@ class CoepiRepoImpl(
 
         matchedKeysResult.doIfSuccess {
             if (it.isNotEmpty()) {
-                log.i("Matches found for keys: $it", CEN_MATCHING)
+                log.i("Matches found: $it", CEN_MATCHING)
             } else {
-                log.i("No matches found for keys", CEN_MATCHING)
+                log.i("No matches found", CEN_MATCHING)
             }
         }
 
@@ -148,16 +154,17 @@ class CoepiRepoImpl(
                 report.toApiParamsCenReport(keys.map { it.toCenKey() })
             }
         return if (params != null) {
-            log.i("Posting the CEN report to the Api")
+            log.i("Sending CEN report to API: $params", NET)
             api.postCENReport(params).subscribeOn(io())
         } else {
-            log.e("Can't post report. No CEN keys.", NET)
+            log.e("Can't send report. No CEN keys.", NET)
             Completable.complete()
         }
     }
 
     override fun storeObservedCen(cen: ReceivedCen) {
-        log.v("Storing an observed CEN: $cen")
-        cenDao.insert(cen)
+        if (cenDao.insert(cen)) {
+            log.v("Inserted an observed CEN: $cen")
+        }
     }
 }
