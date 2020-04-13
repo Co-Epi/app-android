@@ -3,7 +3,8 @@ package org.coepi.android.system
 import android.content.SharedPreferences
 
 enum class PreferencesKey {
-    SEEN_ONBOARDING
+    SEEN_ONBOARDING,
+    LAST_CEN_KEYS_FETCH_TIMESTAMP // Unix time
 }
 
 class Preferences(private val sharedPreferences: SharedPreferences) {
@@ -14,6 +15,19 @@ class Preferences(private val sharedPreferences: SharedPreferences) {
     fun putBoolean(key: PreferencesKey, value: Boolean?) {
         putOrClear(key, value) {
             sharedPreferences.edit().putBoolean(key.toString(), it).apply()
+        }
+    }
+
+    fun getLong(key: PreferencesKey): Long? =
+        if (sharedPreferences.contains(key.toString())) {
+            sharedPreferences.getLong(key.toString(), -1)
+        } else {
+            null
+        }
+
+    fun putLong(key: PreferencesKey, value: Long?) {
+        putOrClear(key, value) {
+            sharedPreferences.edit().putLong(key.toString(), it).apply()
         }
     }
 
