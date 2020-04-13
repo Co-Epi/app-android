@@ -28,6 +28,7 @@ import org.coepi.android.common.map
 import org.coepi.android.domain.CenMatcher
 import org.coepi.android.domain.CoEpiDate
 import org.coepi.android.domain.CoEpiDate.Companion.now
+import org.coepi.android.domain.debugString
 import org.coepi.android.extensions.rx.toObservable
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.log.LogTag.CEN_MATCHING
@@ -49,7 +50,7 @@ interface CoEpiRepo {
     // Send symptoms report
     fun sendReport(report: SymptomReport)
 
-    fun reports(): Result<List<ReceivedCenReport>, Throwable>
+    fun reports(from: CoEpiDate): Result<List<ReceivedCenReport>, Throwable>
 }
 
 class CoepiRepoImpl(
@@ -60,9 +61,6 @@ class CoepiRepoImpl(
 ) : CoEpiRepo {
 
     private var matchingStartTime: Long? = null
-
-    // last time (unix timestamp) the CENKeys were requested. TODO use it. From preferences.
-    private var lastCENKeysCheck: Long = 0L
 
     private val disposables = CompositeDisposable()
 
@@ -81,9 +79,10 @@ class CoepiRepoImpl(
         postSymptomsTrigger.onNext(report)
     }
 
-    override fun reports(): Result<List<ReceivedCenReport>, Throwable> {
+    override fun reports(from: CoEpiDate): Result<List<ReceivedCenReport>, Throwable> {
+        log.d("Fetching keys starting at: ${from.debugString()}", CEN_MATCHING)
 
-        val keysResult = api.cenkeysCheck(0).execute()
+        val keysResult = api.cenkeysCheck(from.unixTime).execute()
             .toResult().map { keyStrings ->
                 keyStrings.map {
                     CenKey(it, now())
