@@ -45,8 +45,9 @@ class CenReportsNotifier(
     private fun handleWorkInfo(workInfo: WorkInfo) {
         val progress = workInfo.progress
         val count = progress.getInt(CONTACT_COUNT_KEY, -1)
-        log.i("work info count: $count")
+        log.d("Worker returned $count new reports")
         if (count > -1) { // Show with 0 count for now, for debugging
+            log.d("Showing notification...")
             notificationsShower.showNotification(notificationConfiguration(count))
         }
     }
