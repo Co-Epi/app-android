@@ -41,8 +41,9 @@ class DebugFragment: Fragment() {
 
         TabLayoutMediator(tabs, pager,
             TabConfigurationStrategy { tab: Tab, position: Int -> when (position) {
-                0 -> tab.text = "Logs"
-                1 -> tab.text = "CEN"
+                0 -> tab.text = "BLE"
+                1 -> tab.text = "Logs"
+                2 -> tab.text = "CEN"
             }}
         ).attach()
     }.root

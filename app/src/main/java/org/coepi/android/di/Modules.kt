@@ -18,9 +18,12 @@ import org.coepi.android.system.Preferences
 import org.coepi.android.system.Resources
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.alerts.AlertsViewModel
-import org.coepi.android.ui.debug.cen.CENViewModel
 import org.coepi.android.ui.container.ContainerViewModel
+import org.coepi.android.ui.debug.DebugBleObservable
+import org.coepi.android.ui.debug.DebugBleObservableImpl
 import org.coepi.android.ui.debug.DebugViewModel
+import org.coepi.android.ui.debug.ble.DebugBleViewModel
+import org.coepi.android.ui.debug.cen.CENViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.home.HomeViewModel
 import org.coepi.android.ui.location.LocationViewModel
@@ -48,6 +51,7 @@ val viewModelModule = module {
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { LogsViewModel(cachingLog) }
     viewModel { DebugViewModel(get()) }
+    viewModel { DebugBleViewModel(get()) }
     viewModel { ContainerViewModel(get()) }
 }
 
@@ -64,6 +68,7 @@ val systemModule = module {
     single { NonReferencedDependenciesActivator(get(), get(), get()) }
     single { ContactsFetchManager(get()) }
     single { CenReportsNotifier(get(), get(), get(), get(), get()) }
+    single<DebugBleObservable> { DebugBleObservableImpl(get()) }
 }
 
 val uiModule = module {

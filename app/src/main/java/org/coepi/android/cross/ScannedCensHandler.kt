@@ -17,7 +17,7 @@ class ScannedCensHandler(
     private val disposables = CompositeDisposable()
 
     init {
-        disposables += bleManager.scanObservable
+        disposables += bleManager.observedCens
             .subscribeBy(onNext = { cen ->
                 coEpiRepo.storeObservedCen(ReceivedCen(cen, Date().coEpiTimestamp()))
             }, onError = {

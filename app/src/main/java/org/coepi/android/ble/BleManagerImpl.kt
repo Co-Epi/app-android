@@ -18,11 +18,9 @@ import org.coepi.android.ble.covidwatch.BleServiceConfiguration
 import org.coepi.android.cen.Cen
 import org.coepi.android.system.log.LogTag.BLE
 import org.coepi.android.system.log.log
-import java.util.UUID
-import java.util.UUID.fromString
 
 interface BleManager {
-    val scanObservable: Observable<Cen>
+    val observedCens: Observable<Cen>
 
     fun startAdvertiser(cen: Cen)
     fun stopAdvertiser()
@@ -37,7 +35,7 @@ class BleManagerImpl(
     private val app: Application
 ) : BleManager {
 
-    override val scanObservable: PublishSubject<Cen> = create()
+    override val observedCens: PublishSubject<Cen> = create()
 
     private val intent get() = Intent(app, BLEForegroundService::class.java)
 
@@ -73,12 +71,12 @@ class BleManagerImpl(
             },
             BLEScanner(app, bluetoothAdapter),
             scanCallback = {
-                scanObservable.onNext(it)
+                observedCens.onNext(it)
             },
             advertiserWriteCallback = {
                 // Since advertiser write is used as scan replacement
                 // for the Android (Central) / iOS (Peripheral) case, we broadcast it as scan.
-                scanObservable.onNext(it)
+                observedCens.onNext(it)
             }
         ))
 

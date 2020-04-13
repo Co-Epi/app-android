@@ -9,7 +9,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit.SECONDS
 
 class BleSimulator : BleManager {
-    override val scanObservable: Observable<Cen> =
+    override val observedCens: Observable<Cen> =
         Observable.interval(0, 5, SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

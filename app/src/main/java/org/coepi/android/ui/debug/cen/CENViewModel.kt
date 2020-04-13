@@ -29,7 +29,7 @@ class CENViewModel(
         .toLiveData()
 
     // recently observed CENs
-    val neighborCENs: LiveData<List<String>> = bleManager.scanObservable
+    val neighborCENs: LiveData<List<String>> = bleManager.observedCens
         .scan(emptyList<Cen>()) { acc, element -> acc + element }
         .map { cens ->
             cens.map { it.toString() }

@@ -30,6 +30,11 @@
         tools:layout="@layout/fragment_logs" />
 
     <fragment
+        android:id="@+id/debug_ble"
+        android:name="org.coepi.android.ui.debug.ble.DebugBleFragment"
+        tools:layout="@layout/fragment_debug_ble" />
+
+    <fragment
         android:id="@+id/debug"
         android:name="org.coepi.android.ui.debug.DebugFragment"
         tools:layout="@layout/fragment_debug" />
@@ -43,7 +48,7 @@
         android:id="@+id/alerts"
         android:name="org.coepi.android.ui.alerts.AlertsFragment"
         android:label="@string/label_fragment_alerts"
-        tools:layout="@layout/fragment_symptoms"/>
+        tools:layout="@layout/fragment_symptoms" />
     <action
         android:id="@+id/action_global_alerts"
         app:destination="@id/alerts" />
@@ -52,7 +57,7 @@
         android:id="@+id/symptomsFragment"
         android:name="org.coepi.android.ui.symptoms.SymptomsFragment"
         android:label="@string/label_fragment_symptoms"
-        tools:layout="@layout/fragment_symptoms"/>
+        tools:layout="@layout/fragment_symptoms" />
     <action
         android:id="@+id/action_global_symptomsFragment"
         app:destination="@id/symptomsFragment" />
@@ -60,7 +65,7 @@
     <fragment
         android:id="@+id/CENFragment"
         android:name="org.coepi.android.ui.debug.cen.CENFragment"
-        tools:layout="@layout/fragment_debug_cen"/>
+        tools:layout="@layout/fragment_debug_cen" />
     <action
         android:id="@+id/action_global_CENFragment"
         app:destination="@id/CENFragment" />
