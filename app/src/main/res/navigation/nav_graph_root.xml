@@ -24,17 +24,20 @@
         android:label="@string/label_fragment_onboarding"
         tools:layout="@layout/fragment_onboarding" />
 
-    <action
-        android:id="@+id/action_global_logs"
-        app:destination="@id/logs"
-        app:enterAnim="@android:anim/fade_in"
-        app:popExitAnim="@android:anim/fade_out" />
-
     <fragment
         android:id="@+id/logs"
         android:name="org.coepi.android.ui.debug.logs.LogsFragment"
-        android:label="@string/label_fragment_logs"
         tools:layout="@layout/fragment_logs" />
+
+    <fragment
+        android:id="@+id/debug"
+        android:name="org.coepi.android.ui.debug.DebugFragment"
+        tools:layout="@layout/fragment_debug" />
+    <action
+        android:id="@+id/action_global_debug"
+        app:destination="@id/debug"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
 
     <fragment
         android:id="@+id/alerts"

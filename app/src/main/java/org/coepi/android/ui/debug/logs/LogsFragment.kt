@@ -30,10 +30,6 @@ class LogsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflate(inflater, container, false).apply {
         vm = viewModel
-        toolbar.setNavigationIcon(ic_close)
-        toolbar.setNavigationOnClickListener {
-            viewModel.onCloseClick()
-        }
 
         logsRecyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)
