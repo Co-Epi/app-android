@@ -4,22 +4,20 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
-import androidx.work.WorkInfo.State.SUCCEEDED
 import androidx.work.WorkManager
-import androidx.work.hasKeyWithValueOfType
-import org.coepi.android.R.drawable
-import org.coepi.android.R.plurals
+import org.coepi.android.R.drawable.ic_launcher_foreground
 import org.coepi.android.R.plurals.alerts_new_notifications_count
-import org.coepi.android.R.string
 import org.coepi.android.R.string.infection_notification_title
 import org.coepi.android.system.Resources
+import org.coepi.android.system.intent.IntentNoValue
+import org.coepi.android.system.intent.IntentKeys.NOTIFICATION_INFECTION_ARGS
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.notifications.AppNotificationChannels
 import org.coepi.android.ui.notifications.NotificationConfig
+import org.coepi.android.ui.notifications.NotificationIntentArgs
 import org.coepi.android.ui.notifications.NotificationPriority.HIGH
 import org.coepi.android.ui.notifications.NotificationsShower
 import org.coepi.android.worker.cenfetcher.ContactsFetchManager
-import org.coepi.android.worker.cenfetcher.ContactsFetchWorker
 import org.coepi.android.worker.cenfetcher.ContactsFetchWorker.Companion.CONTACT_COUNT_KEY
 
 class CenReportsNotifier(
@@ -53,10 +51,11 @@ class CenReportsNotifier(
     }
 
     private fun notificationConfiguration(count: Int): NotificationConfig = NotificationConfig(
-        drawable.ic_launcher_foreground,
+        ic_launcher_foreground,
         resources.getString(infection_notification_title),
         resources.getQuantityString(alerts_new_notifications_count, count),
         HIGH,
-        notificationChannelsInitializer.reportsChannelId
+        notificationChannelsInitializer.reportsChannelId,
+        NotificationIntentArgs(NOTIFICATION_INFECTION_ARGS, IntentNoValue())
     )
 }

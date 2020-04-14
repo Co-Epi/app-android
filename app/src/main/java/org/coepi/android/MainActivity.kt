@@ -21,6 +21,7 @@ import org.coepi.android.R.string
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.cen.BleInitializer
 import org.coepi.android.cross.CenReportsNotifier
+import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.notifications.AppNotificationChannels
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private val blePreconditions: BlePreconditions by inject()
     private val nonReferencedDependenciesActivator: NonReferencedDependenciesActivator by inject()
     private val cenReportsNotifier: CenReportsNotifier by inject()
+    private val intentForwarder: IntentForwarder by inject()
 
     private val disposables = CompositeDisposable()
 
@@ -54,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         observeRootNavigation()
         onboardingShower.showIfNeeded()
 
+        intentForwarder.onActivityCreated(intent)
 
         cenReportsNotifier.attach(this)
 
@@ -61,6 +64,11 @@ class MainActivity : AppCompatActivity() {
 
         AppCenter.start(application, "0bb1bf95-3b14-48a6-a769-db1ff1df0307", Analytics::class.java, Crashes::class.java)
         cenManager.start()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intentForwarder.onNewIntent(intent)
     }
 
     private fun observeRootNavigation() {
