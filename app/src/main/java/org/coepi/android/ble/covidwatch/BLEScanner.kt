@@ -36,6 +36,7 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
     private val scanner: BluetoothLeScanner? = adapter.bluetoothLeScanner
 
     var isScanning: Boolean = false
+    private var maxResultsGot = -1
 
     private var handler = Handler()
 
@@ -48,6 +49,17 @@ class BLEScanner(val context: Context, adapter: BluetoothAdapter) {
 
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
+            /************************************************************************/
+            // CoEpi modification: log max result got
+            var resultsSize = 0
+            if( results!= null ){
+                resultsSize = results.size
+            }
+            if( resultsSize > maxResultsGot ){
+                log.i("Scanner has got max $resultsSize results",BLE_S )
+                maxResultsGot = resultsSize
+            }
+            /************************************************************************/
             Log.i(TAG, "onBatchScanResults results=$results")
             results?.forEach { processScanResult(it) }
         }
