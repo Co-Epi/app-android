@@ -2,7 +2,7 @@ package org.coepi.android.ui.notifications
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
-import org.coepi.android.system.intent.IntentKeys
+import org.coepi.android.system.intent.IntentKey
 
 data class NotificationConfig(
     @DrawableRes val smallIcon: Int,
@@ -18,6 +18,6 @@ enum class NotificationPriority {
 }
 
 data class NotificationIntentArgs(
-    val key: IntentKeys,
+    val key: IntentKey,
     val value: Parcelable
 )

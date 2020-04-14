@@ -10,7 +10,7 @@ import org.coepi.android.R.plurals.alerts_new_notifications_count
 import org.coepi.android.R.string.infection_notification_title
 import org.coepi.android.system.Resources
 import org.coepi.android.system.intent.IntentNoValue
-import org.coepi.android.system.intent.IntentKeys.NOTIFICATION_INFECTION_ARGS
+import org.coepi.android.system.intent.IntentKey.NOTIFICATION_INFECTION_ARGS
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.notifications.AppNotificationChannels
 import org.coepi.android.ui.notifications.NotificationConfig
@@ -43,8 +43,12 @@ class CenReportsNotifier(
     private fun handleWorkInfo(workInfo: WorkInfo) {
         val progress = workInfo.progress
         val count = progress.getInt(CONTACT_COUNT_KEY, -1)
-        if (count > -1) { // Show with 0 count for now, for debugging
+
+        if (count >= 0) {
             log.d("Worker returned $count new reports")
+        }
+
+        if (count > 0) {
             log.d("Showing notification...")
             notificationsShower.showNotification(notificationConfiguration(count))
         }

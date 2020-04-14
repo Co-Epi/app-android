@@ -1,7 +1,7 @@
 package org.coepi.android.system.intent
 
 import android.content.Intent
-import org.coepi.android.system.intent.IntentKeys.NOTIFICATION_INFECTION_ARGS
+import org.coepi.android.system.intent.IntentKey.NOTIFICATION_INFECTION_ARGS
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlerts
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination

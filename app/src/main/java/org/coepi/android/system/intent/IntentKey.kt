@@ -1,5 +1,5 @@
 package org.coepi.android.system.intent
 
-enum class IntentKeys {
+enum class IntentKey {
     NOTIFICATION_INFECTION_ARGS
 }
