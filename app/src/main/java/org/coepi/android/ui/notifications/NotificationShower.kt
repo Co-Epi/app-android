@@ -36,7 +36,7 @@ class NotificationsShower(
     }
 
     private fun pendingIntent(args: NotificationIntentArgs): PendingIntent = PendingIntent.getActivity(
-        context,0, Intent(context, MainActivity::class.java).apply {
+        context, 0, Intent(context, MainActivity::class.java).apply {
             flags = FLAG_ACTIVITY_SINGLE_TOP
             putExtra(args.key.toString(), args.value)
         }, FLAG_UPDATE_CURRENT
