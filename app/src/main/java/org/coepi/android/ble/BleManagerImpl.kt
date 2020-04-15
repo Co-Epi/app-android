@@ -19,12 +19,12 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity
 import org.coepi.android.R
 import org.coepi.android.cen.Cen
-import org.covidwatch.libcontactrace.BluetoothService
-import org.covidwatch.libcontactrace.BluetoothService.LocalBinder
-import org.covidwatch.libcontactrace.cen.CenGenerator
-import org.covidwatch.libcontactrace.cen.CenVisitor
-import org.covidwatch.libcontactrace.cen.GeneratedCen
-import org.covidwatch.libcontactrace.cen.ObservedCen
+import org.tcncoalition.tcnclient.BluetoothService
+import org.tcncoalition.tcnclient.BluetoothService.LocalBinder
+import org.tcncoalition.tcnclient.cen.CenGenerator
+import org.tcncoalition.tcnclient.cen.CenVisitor
+import org.tcncoalition.tcnclient.cen.GeneratedCen
+import org.tcncoalition.tcnclient.cen.ObservedCen
 
 interface BleManager {
     val observedCens: Observable<Cen>
