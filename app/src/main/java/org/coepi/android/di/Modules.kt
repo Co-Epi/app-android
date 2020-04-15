@@ -20,6 +20,10 @@ import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.EnvInfosImpl
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.Resources
+import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
+import org.coepi.android.system.intent.IntentForwarder
+import org.coepi.android.system.intent.IntentForwarderImpl
+import org.coepi.android.system.intent.IntentHandler
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.container.ContainerViewModel
@@ -69,12 +73,14 @@ val systemModule = module {
     single { Resources(androidApplication()) }
     single<BleManager> { BleManagerImpl(androidApplication()) }
 //    single<BleManager> { BleSimulator() }  // Disable BleManagerImpl and enable this to use BLE simulator
-    single { NonReferencedDependenciesActivator(get(), get(), get()) }
+    single { NonReferencedDependenciesActivator(get(), get(), get(), get()) }
     single { ContactsFetchManager(get()) }
     single { CenReportsNotifier(get(), get(), get(), get(), get()) }
     single<DebugBleObservable> { DebugBleObservableImpl(get()) }
     single<Clipboard> { ClipboardImpl(get()) }
     single<EnvInfos> { EnvInfosImpl() }
+    single<IntentForwarder> { IntentForwarderImpl() }
+    single { InfectionsNotificationIntentHandler(get(), get()) }
 }
 
 val uiModule = module {

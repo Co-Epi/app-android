@@ -1,10 +1,14 @@
 package org.coepi.android.ui.notifications
 
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
+import android.os.Bundle
+import android.os.Parcelable
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
@@ -31,20 +35,22 @@ class NotificationsShower(
         }
     }
 
-    // TODO allow to configure per notification
-    private fun pendingIntent(): PendingIntent = PendingIntent.getActivity(context, 0,
-        Intent(context, MainActivity::class.java).apply {
-            flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
-        }, 0)
+    private fun pendingIntent(args: NotificationIntentArgs): PendingIntent = PendingIntent.getActivity(
+        context, 0, Intent(context, MainActivity::class.java).apply {
+            flags = FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(args.key.toString(), args.value)
+        }, FLAG_UPDATE_CURRENT
+    )
 
-    private fun notificationBuilder(config: NotificationConfig): Builder = Builder(context, channelId)
-        .setSmallIcon(config.smallIcon)
-        .setContentTitle(config.title)
-        .setContentText(config.text)
-        .setPriority(config.priority.toInt())
-        .setContentIntent(pendingIntent())
-        .setChannelId(config.channelId.toString())
-        .setAutoCancel(true)
+    private fun notificationBuilder(config: NotificationConfig): Builder =
+        Builder(context, channelId)
+            .setSmallIcon(config.smallIcon)
+            .setContentTitle(config.title)
+            .setContentText(config.text)
+            .setPriority(config.priority.toInt())
+            .setContentIntent(pendingIntent(config.intentArgs))
+            .setChannelId(config.channelId.toString())
+            .setAutoCancel(true)
 }
 
 private fun NotificationPriority.toInt() = when (this) {
