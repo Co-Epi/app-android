@@ -2,12 +2,11 @@ package org.coepi.android.repo
 
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.Single.just
 import org.coepi.android.cen.SymptomReport
-import org.coepi.android.domain.CoEpiDate
 import org.coepi.android.domain.CoEpiDate.Companion.now
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.domain.model.Symptom
-import java.util.Date
 import java.util.UUID.randomUUID
 
 interface SymptomRepo {
@@ -21,9 +20,9 @@ class SymptomRepoImpl(
     private val coEpiRepo: CoEpiRepo
 ): SymptomRepo {
 
-    override val sendReportState: Observable<VoidOperationState> = coEpiRepo.sendReportState
+    override val sendReportState: Observable<VoidOperationState> = coEpiRepo.sendReportState.share()
 
-    override fun symptoms(): Single<List<Symptom>> = Single.just(listOf(
+    override fun symptoms(): Single<List<Symptom>> = just(listOf(
         Symptom("1", "Fever"),
         Symptom("2", "Tiredness"),
         Symptom("3", "Loss of appetite"),

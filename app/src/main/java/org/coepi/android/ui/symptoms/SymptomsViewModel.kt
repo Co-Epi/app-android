@@ -3,6 +3,7 @@ package org.coepi.android.ui.symptoms
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
@@ -17,19 +18,22 @@ import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.system.Resources
-import org.coepi.android.ui.common.UINotificationData
+import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.extensions.rx.toNotification
+import org.coepi.android.ui.navigation.NavigationCommand.Back
+import org.coepi.android.ui.navigation.RootNavigation
 
-class SymptomsViewModel(
+class SymptomsViewModel (
     private val symptomRepo: SymptomRepo,
-    resources: Resources
+    resources: Resources,
+    uiNotifier: UINotifier,
+    val navigation: RootNavigation
 ) : ViewModel() {
 
     val isInProgress: LiveData<Boolean> = symptomRepo.sendReportState
-        .toIsInProgress().toLiveData()
-
-    val notification: LiveData<UINotificationData> = symptomRepo.sendReportState
-        .toNotification(resources.getString(symptoms_success_message)).toLiveData()
+        .toIsInProgress()
+        .observeOn(mainThread())
+        .toLiveData()
 
     private val selectedSymptomIds: BehaviorSubject<Set<String>> =
         BehaviorSubject.createDefault(emptySet())
@@ -45,13 +49,13 @@ class SymptomsViewModel(
 
     val symptoms: LiveData<List<SymptomViewData>> = symptomsObservable.toLiveData()
 
+    private val disposables = CompositeDisposable()
+
     private val selectedSymptoms = symptomsObservable
         .map { symptoms -> symptoms
             .filter { it.isChecked }
             .map { it.symptom }
         }
-
-    private val disposables = CompositeDisposable()
 
     init {
         disposables += checkedSymptomTrigger
@@ -65,6 +69,13 @@ class SymptomsViewModel(
             .subscribe{ (_, symptoms) ->
                 symptomRepo.submitSymptoms(symptoms)
             }
+
+        disposables += symptomRepo.sendReportState
+            .toNotification(resources.getString(symptoms_success_message))
+            .observeOn(mainThread())
+            .subscribe{
+                uiNotifier.notify(it)
+            }
     }
 
     fun onChecked(symptom: SymptomViewData) {
@@ -73,6 +84,11 @@ class SymptomsViewModel(
 
     fun onSubmit() {
         submitTrigger.onNext(Unit)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
     }
 
     private fun Symptom.toViewData(isChecked: Boolean): SymptomViewData =

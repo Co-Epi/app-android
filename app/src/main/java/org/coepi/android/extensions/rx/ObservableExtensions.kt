@@ -53,6 +53,7 @@ fun <T> Observable<OperationState<T>>.success(): Observable<T> =
 
 fun <T> Observable<OperationState<T>>.toIsInProgress(): Observable<Boolean> =
     map { it is Progress }
+    .onErrorReturnItem(false)
 
 fun <T> Observable<T>.asSequence(): Observable<List<T>> =
     scan(emptyList(), { acc, element -> acc + listOf(element) })
