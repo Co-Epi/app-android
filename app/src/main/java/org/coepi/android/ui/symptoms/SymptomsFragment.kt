@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import org.coepi.android.databinding.FragmentSymptomsBinding.inflate
 import org.coepi.android.extensions.observeWith
-import org.coepi.android.ui.common.NotificationsObserver
-import org.coepi.android.ui.common.ProgressObserver
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SymptomsFragment : Fragment() {
@@ -22,9 +20,6 @@ class SymptomsFragment : Fragment() {
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
-
-        viewModel.notification.observe(viewLifecycleOwner, NotificationsObserver(activity))
-        viewModel.isInProgress.observe(viewLifecycleOwner, ProgressObserver(requireContext()))
 
         productsRecyclerView.apply {
             setHasFixedSize(true)

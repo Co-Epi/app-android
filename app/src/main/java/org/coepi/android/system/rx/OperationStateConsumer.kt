@@ -20,9 +20,10 @@ class OperationStateNotifier<T>(
                 observer.onNext(notification.value?.let { value ->
                     Success(value)
                 } ?: Failure(IllegalStateException("Value is null")) )
-            notification.isOnError -> (notification.error ?: Throwable("Unknown error")).let { t ->
-                observer.onNext(Failure(t))
-            }
+            notification.isOnError ->
+                (notification.error ?: Throwable("Unknown error")).let { t ->
+                    observer.onNext(Failure(t))
+                }
         }
     }
 }
