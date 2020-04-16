@@ -75,6 +75,7 @@ class SymptomsViewModel (
             .observeOn(mainThread())
             .subscribe{
                 uiNotifier.notify(it)
+                navigation.navigate(Back)
             }
     }
 
