@@ -27,7 +27,7 @@ class MyCenProviderImpl(
     override val cen: Observable<Cen> = Observable.interval(0, 15, MINUTES)
         .flatMap { generateAndStoreNewCenKeyIfNeeded() }
         .doOnNext { debugObservable.setMyKey(it) }
-        .map { key -> cenLogic.generateCen(key, key.date.unixTime) }
+        .map { key -> cenLogic.generateCen(key, now().unixTime) }
         .doOnNext { debugObservable.setMyCen(it) }
         .share()
 
