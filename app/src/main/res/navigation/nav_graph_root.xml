@@ -49,9 +49,26 @@
         android:name="org.coepi.android.ui.alerts.AlertsFragment"
         android:label="@string/label_fragment_alerts"
         tools:layout="@layout/fragment_symptoms" />
+
     <action
         android:id="@+id/action_global_alerts"
         app:destination="@id/alerts" />
+
+    <fragment
+        android:id="@+id/alert_details_fragment"
+        android:name="org.coepi.android.ui.alertsdetails.AlertsDetailsFragment"
+        android:label="@string/label_fragment_alerts_details"
+        tools:layout="@layout/fragment_home" >
+        <argument
+            android:name="args"
+            app:argType="org.coepi.android.ui.alertsdetails.AlertsDetailsFragment$Args" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_alerts_details"
+        app:destination="@id/alert_details_fragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
+        />
 
     <fragment
         android:id="@+id/symptomsFragment"

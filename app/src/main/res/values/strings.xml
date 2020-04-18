@@ -18,6 +18,7 @@
     <string name="label_fragment_location">Location</string>
     <string name="label_fragment_onboarding">Onboarding</string>
     <string name="label_fragment_alerts">Alerts</string>
+    <string name="label_fragment_alerts_details">Alerts details</string>
     <string name="label_fragment_symptoms">Symptoms</string>
     <string name="label_fragment_api">API</string>
 
@@ -62,6 +63,10 @@
         <item quantity="one">%s new contact alert</item>
         <item quantity="other">%s new contact alerts</item>
     </plurals>
+
+    <!-- Alert details -->
+    <!-- TODO clarify whether this is needed -->
+    <string name="alerts_details_title">Details</string>
 
     <!-- Infection contact notifications -->
     <string name="infection_notification_title">Exposure</string>

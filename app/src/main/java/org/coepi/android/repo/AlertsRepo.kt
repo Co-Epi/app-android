@@ -17,15 +17,15 @@ class AlertRepoImpl(
     override val alerts: Observable<List<ReceivedCenReport>> = cenReportRepo.reports
 
     // Dummy test data
-//    override fun alerts(): Single<List<CenReport>> = Single.just(listOf(
-//        CenReport(1, "Report text1", "keys", "mime type", Date(), true),
-//        CenReport(2, "Report text2", "keys", "mime type", Date(), true),
-//        CenReport(3, "Report text3", "keys", "mime type", Date(), true),
-//        CenReport(4, "Report text4", "keys", "mime type", Date(), true),
-//        CenReport(5, "Report text5", "keys", "mime type", Date(), true),
-//        CenReport(6, "Report text6", "keys", "mime type", Date(), true),
-//        CenReport(7, "Report text7", "keys", "mime type", Date(), true)
-//    ))
+//    override val alerts: Observable<List<ReceivedCenReport>> = just(listOf(
+//        CenReport("1", "Report text1", 0),
+//        CenReport("2", "Report text2", 0),
+//        CenReport("3", "Report text3", 0),
+//        CenReport("4", "Report text4", 0),
+//        CenReport("5", "Report text5", 0),
+//        CenReport("6", "Report text6", 0),
+//        CenReport("7", "Report text7", 0)
+//    ).map { ReceivedCenReport(it) })
 
     override fun removeAlert(alert: ReceivedCenReport) {
         cenReportRepo.delete(alert)

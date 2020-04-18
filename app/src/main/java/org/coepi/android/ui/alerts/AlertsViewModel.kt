@@ -7,11 +7,16 @@ import org.coepi.android.cen.ReceivedCenReport
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
+import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
+import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
+import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
+import org.coepi.android.ui.navigation.RootNavigation
 import java.util.Date
 
 class AlertsViewModel(
     private val alertsRepo: AlertsRepo,
-    private val resources: Resources
+    private val resources: Resources,
+    private val navigation: RootNavigation
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
@@ -31,5 +36,9 @@ class AlertsViewModel(
 
     fun onAlertAckClick(alert: AlertViewData) {
         alertsRepo.removeAlert(alert.report)
+    }
+
+    fun onAlertClick(alert: AlertViewData) {
+        navigation.navigate(ToDirections(actionGlobalAlertsDetails(Args(alert.report))))
     }
 }

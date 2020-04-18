@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="org.coepi.android.ui.alertsdetails.AlertDetailsSymptomViewData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/default_margin"
+        android:paddingTop="20dp"
+        android:paddingEnd="@dimen/default_margin"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:id="@+id/alert_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@{item.icon}"
+            />
+
+        <TextView
+            android:id="@+id/exposure_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="@{item.symptomName}"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/alert_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/alert_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Exposure type" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

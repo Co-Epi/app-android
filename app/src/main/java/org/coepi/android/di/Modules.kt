@@ -25,6 +25,8 @@ import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.alerts.AlertsViewModel
+import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
+import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.common.UINotifierImpl
 import org.coepi.android.ui.container.ContainerViewModel
@@ -53,7 +55,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { SymptomsViewModel(get(), get(), get(), get()) }
-    viewModel { AlertsViewModel(get(), get()) }
+    viewModel { AlertsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { CENViewModel(get(), get(), get()) }
     viewModel { LocationViewModel() }
@@ -62,6 +64,7 @@ val viewModelModule = module {
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
     viewModel { ContainerViewModel(get()) }
+    viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args) }
 }
 
 val systemModule = module {
