@@ -16,6 +16,7 @@ import org.coepi.android.system.Clipboard
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.log.CachingLog
 import org.coepi.android.system.log.LogLevel
+import org.coepi.android.system.log.LogLevel.D
 import org.coepi.android.system.log.LogLevel.V
 import org.coepi.android.system.log.LogMessage
 
@@ -25,7 +26,10 @@ class LogsViewModel(
     private val envInfos: EnvInfos
 ) : ViewModel() {
 
-    private val selectedLogLevelSubject: BehaviorSubject<LogLevel> = createDefault(V)
+    private val selectedLogLevelSubject: BehaviorSubject<LogLevel> = createDefault(D)
+    val selectedLogLevel: LiveData<LogLevel> = selectedLogLevelSubject
+        .distinct()
+        .toLiveData()
 
     private val logDoubleClickTrigger = PublishSubject.create<Unit>()
 
