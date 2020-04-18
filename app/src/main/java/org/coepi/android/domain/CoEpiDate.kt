@@ -1,8 +1,11 @@
 package org.coepi.android.domain
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
-data class CoEpiDate(val unixTime: Long) {
+@Parcelize
+data class CoEpiDate(val unixTime: Long) : Parcelable {
 
     companion object {
         fun fromUnixTime(unixTime: Long): CoEpiDate =
@@ -17,4 +20,4 @@ data class CoEpiDate(val unixTime: Long) {
 }
 
 fun CoEpiDate.debugString() =
-    "$unixTime, ${Date(unixTime * 1000)} "
+    "$unixTime, ${Date(unixTime * 1000)}"

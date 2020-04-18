@@ -40,7 +40,7 @@ class AlertsAdapter(
 
 private class AlertsDiffCallback : ItemCallback<AlertViewData>() {
     override fun areItemsTheSame(oldItem: AlertViewData, newItem: AlertViewData): Boolean =
-        oldItem.report.report.id == newItem.report.report.id
+        oldItem.report.id == newItem.report.id
 
     override fun areContentsTheSame(oldItem: AlertViewData, newItem: AlertViewData): Boolean =
         oldItem == newItem

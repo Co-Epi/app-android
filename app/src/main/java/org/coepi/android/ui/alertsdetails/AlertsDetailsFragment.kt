@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import kotlinx.android.parcel.Parcelize
 import org.coepi.android.cen.ReceivedCenReport
+import org.coepi.android.cen.SymptomReport
 import org.coepi.android.databinding.FragmentAlertsDetailsBinding.inflate
 import org.coepi.android.extensions.observeWith
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragmentArgs.Companion.fromBundle
@@ -35,11 +36,11 @@ class AlertsDetailsFragment: Fragment() {
             adapter = alertsAdapter
         }
 
-        viewModel.alerts.observeWith(viewLifecycleOwner) {
+        viewModel.report.observeWith(viewLifecycleOwner) {
             alertsAdapter.submitList(it)
         }
     }.root
 
     @Parcelize
-    data class Args(val report: ReceivedCenReport) : Parcelable
+    data class Args(val report: SymptomReport) : Parcelable
 }

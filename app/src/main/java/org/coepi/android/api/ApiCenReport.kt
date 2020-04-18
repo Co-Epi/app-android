@@ -8,5 +8,8 @@ data class ApiCenReport(
     val reportTimeStamp: Long
 )
 
-fun ApiCenReport.toCenReport(): CenReport =
-    CenReport(reportID, report, reportTimeStamp)
+fun ApiCenReport.toCenReport(): CenReport = CenReport(
+    id = reportID,
+    report = report,
+    timestamp = reportTimeStamp
+)

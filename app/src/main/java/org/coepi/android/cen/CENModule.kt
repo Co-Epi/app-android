@@ -13,10 +13,10 @@ val CENModule = module {
     single(createdAtStart = true) { RealmCenDao(get()) }
     single { RealmCenReportDao(get()) }
     single { RealmCenKeyDao(get()) }
-    single<CenReportRepo> { CenReportRepoImpl(get(), get()) }
+    single<CenReportRepo> { CenReportRepoImpl(get(), get(), get()) }
     single<CenMatcher> { CenMatcherImpl(get(), get()) }
     single<CenLogic> { CenLogicImpl() }
-    single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get()) }
+    single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get(), get()) }
     single<MyCenProvider> { MyCenProviderImpl(get(), get(), get()) }
     single { ScannedCensHandler(get(), get()) }
     single { BleInitializer(get(), get(), get()) }

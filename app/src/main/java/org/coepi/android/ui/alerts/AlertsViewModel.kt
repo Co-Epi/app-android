@@ -3,7 +3,7 @@ package org.coepi.android.ui.alerts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import org.coepi.android.R.plurals.alerts_new_notifications_count
-import org.coepi.android.cen.ReceivedCenReport
+import org.coepi.android.cen.SymptomReport
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -11,6 +11,7 @@ import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlob
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
+import org.koin.ext.getScopeName
 import java.util.Date
 
 class AlertsViewModel(
@@ -31,8 +32,12 @@ class AlertsViewModel(
     private fun title(alertsSize: Int) =
         resources.getQuantityString(alerts_new_notifications_count, alertsSize)
 
-    private fun ReceivedCenReport.toViewData(): AlertViewData =
-        AlertViewData(report.report, Date(report.timestamp).toString(), this) // TODO which date format?
+    private fun SymptomReport.toViewData(): AlertViewData =
+        AlertViewData(
+            exposureType = symptoms.joinToString(", ") { it.name },
+            time = Date(date.unixTime * 1000).toString(), // TODO which date format?
+            report = this
+        )
 
     fun onAlertAckClick(alert: AlertViewData) {
         alertsRepo.removeAlert(alert.report)

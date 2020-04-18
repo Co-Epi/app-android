@@ -9,7 +9,6 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.api.CENApi
 import org.coepi.android.api.request.ApiParamsCenReport
-import org.coepi.android.api.request.toApiParamsCenReport
 import org.coepi.android.api.toCenReport
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.RealmCenDao
@@ -18,6 +17,7 @@ import org.coepi.android.cen.ReceivedCen
 import org.coepi.android.cen.ReceivedCenReport
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.cen.toCenKey
+import org.coepi.android.common.ApiSymptomsMapper
 import org.coepi.android.common.Result
 import org.coepi.android.common.Result.Failure
 import org.coepi.android.common.Result.Success
@@ -57,7 +57,8 @@ class CoepiRepoImpl(
     private val cenMatcher: CenMatcher,
     private val api: CENApi,
     private val cenDao: RealmCenDao,
-    private val cenKeyDao: RealmCenKeyDao
+    private val cenKeyDao: RealmCenKeyDao,
+    private val symptomsProcessor: ApiSymptomsMapper
 ) : CoEpiRepo {
 
     private var matchingStartTime: Long? = null
@@ -154,7 +155,7 @@ class CoepiRepoImpl(
     private fun postReport(report: SymptomReport): Completable {
         val params: ApiParamsCenReport? =
             cenKeyDao.lastCENKeys(3).takeIf { it.isNotEmpty() }?.let { keys ->
-                report.toApiParamsCenReport(keys.map { it.toCenKey() })
+                symptomsProcessor.toApiReport(report, keys.map { it.toCenKey() })
             }
         return if (params != null) {
             log.i("Sending CEN report to API: $params", NET)
