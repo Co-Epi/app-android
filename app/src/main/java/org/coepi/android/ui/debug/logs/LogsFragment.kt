@@ -1,8 +1,6 @@
 package org.coepi.android.ui.debug.logs
 
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
-import android.view.HapticFeedbackConstants.LONG_PRESS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

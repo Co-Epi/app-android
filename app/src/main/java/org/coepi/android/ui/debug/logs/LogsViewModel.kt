@@ -19,11 +19,16 @@ import org.coepi.android.system.log.LogLevel
 import org.coepi.android.system.log.LogLevel.D
 import org.coepi.android.system.log.LogLevel.V
 import org.coepi.android.system.log.LogMessage
+import org.coepi.android.ui.common.UINotificationData
+import org.coepi.android.ui.common.UINotificationData.Success
+import org.coepi.android.ui.common.UINotifier
+import org.coepi.android.ui.notifications.NotificationsShower
 
 class LogsViewModel(
     logger: CachingLog,
     private val clipboard: Clipboard,
-    private val envInfos: EnvInfos
+    private val envInfos: EnvInfos,
+    private val uiNotifier: UINotifier
 ) : ViewModel() {
 
     private val selectedLogLevelSubject: BehaviorSubject<LogLevel> = createDefault(D)
@@ -50,7 +55,10 @@ class LogsViewModel(
             .map { (_, logs) ->
                 "${envInfos.clipboardString()}\n\n${logs.toClipboardText()}"
             }
-            .subscribe { clipboard.putInClipboard(it) }
+            .subscribe {
+                clipboard.putInClipboard(it)
+                uiNotifier.notify(Success("Logs copied to clipboard"))
+            }
     }
 
     fun onLogLevelSelected(logLevel: LogLevel) {

@@ -58,7 +58,7 @@ val viewModelModule = module {
     viewModel { CENViewModel(get(), get(), get()) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get()) }
-    viewModel { LogsViewModel(cachingLog, get(), get()) }
+    viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
     viewModel { ContainerViewModel(get()) }
