@@ -26,7 +26,7 @@ class CenMatcherImpl(
     private suspend fun matchSuspended(cens: List<Cen>, keys: List<CenKey>,
                                        maxDate: CoEpiDate): List<CenKey> =
         coroutineScope {
-            val censSet: Set<String> = cens.map { it.toHex() }.toSet()
+            val censSet: Set<String> = cens.map { it.toHex() }.toHashSet()
             keys.distinct().map { key ->
                 async(Default) {
                     if (match(censSet, key, maxDate)) {
