@@ -2,6 +2,7 @@ package org.coepi.android.domain
 
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import org.coepi.android.cen.Cen
@@ -34,7 +35,7 @@ class CenMatcherImpl(
                         null
                     }
                 }
-            }.mapNotNull { it.await() }
+            }.awaitAll().filterNotNull()
         }
 
     private fun match(censSet: Set<String>, key: CenKey, maxDate: CoEpiDate): Boolean {
