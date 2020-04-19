@@ -1,8 +1,6 @@
 package org.coepi.android.ui.debug.logs
 
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
-import android.view.HapticFeedbackConstants.LONG_PRESS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,12 +39,20 @@ class LogsFragment: Fragment() {
             item_min_loglevel, LogLevel.values().map { it.text }.toTypedArray())
         logLevelAdapter.setDropDownViewResource(item_min_loglevel)
         spinLevel.adapter = logLevelAdapter
-        spinLevel.setSelection(0)
 
+        viewModel.selectedLogLevel.observeWith(viewLifecycleOwner) {
+            spinLevel.setSelection(it.ordinal, false)
+        }
+
+        // Ignore automatic call to onItemSelected when fragment loads
+        var firstOnItemSelectedCall = true
         spinLevel.onItemSelected {
             val selected = spinLevel.selectedItem.toString()
             val logLevel = LogLevel.valueOf("${selected[0]}") // FIXME using the first letter to get enum value is a hack
-            viewModel.onLogLevelSelected(logLevel)
+            if (!firstOnItemSelectedCall) {
+                viewModel.onLogLevelSelected(logLevel)
+            }
+            firstOnItemSelectedCall = false
         }
 
         viewModel.logs.observeWith(viewLifecycleOwner) {
