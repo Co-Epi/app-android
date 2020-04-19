@@ -45,12 +45,13 @@ class RealmCenReportDao(private val realmProvider: RealmProvider) {
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmCenReport>(report.id)
             realmObj.report = report.report
+            realmObj.timestamp = report.timestamp
         }
     }
 
-    fun delete(report: ReceivedCenReport) {
+    fun delete(report: SymptomReport) {
         val results = realm.where<RealmCenReport>()
-            .equalTo("id", report.report.id)
+            .equalTo("id", report.id)
             .findAll()
 
         realm.executeTransaction {

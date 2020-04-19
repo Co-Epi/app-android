@@ -2,32 +2,32 @@ package org.coepi.android.repo
 
 import io.reactivex.Observable
 import org.coepi.android.cen.CenReportRepo
-import org.coepi.android.cen.ReceivedCenReport
+import org.coepi.android.cen.SymptomReport
 
 interface AlertsRepo {
-    val alerts: Observable<List<ReceivedCenReport>>
+    val alerts: Observable<List<SymptomReport>>
 
-    fun removeAlert(alert: ReceivedCenReport)
+    fun removeAlert(alert: SymptomReport)
 }
 
 class AlertRepoImpl(
     private val cenReportRepo: CenReportRepo
 ): AlertsRepo {
 
-    override val alerts: Observable<List<ReceivedCenReport>> = cenReportRepo.reports
+    override val alerts: Observable<List<SymptomReport>> = cenReportRepo.reports
 
     // Dummy test data
-//    override fun alerts(): Single<List<CenReport>> = Single.just(listOf(
-//        CenReport(1, "Report text1", "keys", "mime type", Date(), true),
-//        CenReport(2, "Report text2", "keys", "mime type", Date(), true),
-//        CenReport(3, "Report text3", "keys", "mime type", Date(), true),
-//        CenReport(4, "Report text4", "keys", "mime type", Date(), true),
-//        CenReport(5, "Report text5", "keys", "mime type", Date(), true),
-//        CenReport(6, "Report text6", "keys", "mime type", Date(), true),
-//        CenReport(7, "Report text7", "keys", "mime type", Date(), true)
-//    ))
+//    override val alerts: Observable<List<ReceivedCenReport>> = just(listOf(
+//        CenReport("1", "Report text1", 0),
+//        CenReport("2", "Report text2", 0),
+//        CenReport("3", "Report text3", 0),
+//        CenReport("4", "Report text4", 0),
+//        CenReport("5", "Report text5", 0),
+//        CenReport("6", "Report text6", 0),
+//        CenReport("7", "Report text7", 0)
+//    ).map { ReceivedCenReport(it) })
 
-    override fun removeAlert(alert: ReceivedCenReport) {
+    override fun removeAlert(alert: SymptomReport) {
         cenReportRepo.delete(alert)
     }
 }

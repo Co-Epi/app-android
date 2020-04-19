@@ -37,10 +37,12 @@ class SymptomRepoImpl(
     ))
 
     override fun submitSymptoms(symptoms: List<Symptom>) {
-        coEpiRepo.sendReport(SymptomReport(
-            id = randomUUID().toString(),
-            report = "TODO symptoms -> report",
-            date = now()
-        ))
+        coEpiRepo.sendReport(symptoms.toReport())
     }
+
+    private fun List<Symptom>.toReport(): SymptomReport = SymptomReport(
+        id = randomUUID().toString(),
+        symptoms = this,
+        date = now()
+    )
 }
