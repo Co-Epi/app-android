@@ -1,10 +1,15 @@
 package org.coepi.android.domain
 
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
-import org.coepi.android.cen.RealmCenDao
+import org.coepi.android.extensions.toHex
 
 interface CenMatcher {
-    fun hasMatches(cens: List<ByteArray>, key: CenKey, maxDate: CoEpiDate): Boolean
+    fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: CoEpiDate): List<CenKey>
 }
 
 class CenMatcherImpl(
@@ -12,16 +17,33 @@ class CenMatcherImpl(
 ) : CenMatcher {
     private val cenLifetimeInSeconds = 15 * 60   // every 15 mins a new CEN is generated
 
-    override fun hasMatches(cens: List<ByteArray>, key: CenKey, maxDate: CoEpiDate): Boolean {
-        val censSet: Set<ByteArray> = cens.toSet()
+    override fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: CoEpiDate): List<CenKey> =
+        runBlocking {
+            matchSuspended(cens, keys, maxDate)
+        }
 
+    private suspend fun matchSuspended(cens: List<Cen>, keys: List<CenKey>,
+                                       maxDate: CoEpiDate): List<CenKey> =
+        coroutineScope {
+            val censSet: Set<String> = cens.map { it.toHex() }.toSet()
+            keys.distinct().map { key ->
+                async(Default) {
+                    if (match(censSet, key, maxDate)) {
+                        key
+                    } else {
+                        null
+                    }
+                }
+            }.mapNotNull { it.await() }
+        }
+
+    private fun match(censSet: Set<String>, key: CenKey, maxDate: CoEpiDate): Boolean {
         val secondsInAWeek: Long = 604800
-
         val possibleCensCount = (secondsInAWeek / cenLifetimeInSeconds).toInt()
         for (i in 0..possibleCensCount) {
             val ts = maxDate.unixTime - cenLifetimeInSeconds * i
             val cen = cenLogic.generateCen(key, ts)
-            if (censSet.contains(cen.bytes)) {
+            if (censSet.contains(cen.bytes.toHex())) {
                 return true
             }
         }

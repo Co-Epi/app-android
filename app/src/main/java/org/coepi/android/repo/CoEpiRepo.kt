@@ -144,17 +144,9 @@ class CoepiRepoImpl(
 
     private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> {
         val maxDate: CoEpiDate = now()
-        val cens: List<ByteArray> = cenDao.all().map { it.cen.hexToByteArray() }
+        val cens: List<Cen> = cenDao.all().map { Cen(it.cen.hexToByteArray()) }
         log.i("Stored CENs: ${cens.size}")
-
-        return keys.distinct().mapNotNull { key ->
-            //.distinct():same key may arrive more than once, due to multiple reporting
-            if (cenMatcher.hasMatches(cens, key, maxDate)) {
-                key
-            } else {
-                null
-            }
-        }
+        return cenMatcher.match(cens, keys.distinct(), maxDate)
     }
 
     private fun postReport(report: SymptomReport): Completable {
