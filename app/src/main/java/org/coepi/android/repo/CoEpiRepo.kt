@@ -144,6 +144,7 @@ class CoepiRepoImpl(
 
     private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> {
         val maxDate: CoEpiDate = now()
+        // TODO delete periodically entries older than ~3 weeks from the db
         val cens: List<Cen> = cenDao.all().map { Cen(it.cen.hexToByteArray()) }
         log.i("Stored CENs: ${cens.size}")
         return cenMatcher.match(cens, keys.distinct(), maxDate)
