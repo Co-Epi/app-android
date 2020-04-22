@@ -6,7 +6,7 @@ This is the repository for the Android implementation of CoEpi. See [CoEpi.org/v
 Develop branch: [![Build status](https://build.appcenter.ms/v0.1/apps/b313d675-577e-4bc4-b2db-d63532fbe872/branches/develop/badge)](https://appcenter.ms/users/danamlewis/apps/CoEpi-Android/build/branches/develop)
 
 ## Contribute
-
+ 
 
 1. Read the [code guidelines](https://github.com/Co-Epi/app-android/wiki/Code-guidelines).
 2. Fork or Branch
