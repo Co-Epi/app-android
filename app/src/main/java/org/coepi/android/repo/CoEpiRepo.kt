@@ -90,8 +90,8 @@ class CoepiRepoImpl(
 
         keysResult.doIfSuccess { keys ->
             log.i("Retrieved ${keys.size} keys. Start matching...", CEN_MATCHING)
-            val keyStrings = keys.map { it.key }
-            log.v("$keyStrings", CEN_MATCHING)
+//            val keyStrings = keys.map { it.key }
+//            log.v("$keyStrings", CEN_MATCHING)
         }
 
         matchingStartTime = currentTimeMillis()
@@ -107,7 +107,7 @@ class CoepiRepoImpl(
 
         matchedKeysResult.doIfSuccess {
             if (it.isNotEmpty()) {
-                log.i("Matches found: $it", CEN_MATCHING)
+                log.i("Matches found (${it.size}): $it", CEN_MATCHING)
             } else {
                 log.i("No matches found", CEN_MATCHING)
             }
@@ -120,7 +120,9 @@ class CoepiRepoImpl(
 
         // Retrieve reports for keys, group in successful / failed calls
         val (successful, failed) = keys.map { key ->
-            api.getCenReports(key.key).execute().toResult()
+            api.getCenReports(key.key).execute().toResult().doIfSuccess { reports ->
+                log.d("Retrieved ${reports.size} reports for a key")
+            }
         }.group()
 
         // Log failed calls
@@ -142,7 +144,7 @@ class CoepiRepoImpl(
         val maxDate: UnixTime = now()
         // TODO delete periodically entries older than ~3 weeks from the db
         val cens: List<Cen> = cenDao.all().map { it.cen }
-        log.i("Stored CENs: ${cens.size}")
+        log.i("DB CENs count: ${cens.size}")
         return cenMatcher.match(cens, keys.distinct(), maxDate)
     }
 

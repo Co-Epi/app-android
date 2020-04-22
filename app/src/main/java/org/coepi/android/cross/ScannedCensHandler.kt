@@ -18,6 +18,7 @@ class ScannedCensHandler(
     init {
         disposables += bleManager.observedCens
             .subscribeBy(onNext = { cen ->
+                log.d("Storing an observed CEN: $cen")
                 coEpiRepo.storeObservedCen(ReceivedCen(cen, now()))
             }, onError = {
                 log.e("Error scanning: $it")
