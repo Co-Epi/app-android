@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 
 enum class PreferencesKey {
     SEEN_ONBOARDING,
-    LAST_CEN_KEYS_FETCH_TIMESTAMP // Unix time
 }
 
 class Preferences(private val sharedPreferences: SharedPreferences) {
