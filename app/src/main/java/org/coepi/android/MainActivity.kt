@@ -85,6 +85,11 @@ class MainActivity : AppCompatActivity() {
         blePreconditions.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
+    }
+
     object RequestCodes {
         const val onboardingPermissions = 1
         const val enableBluetooth = 2
