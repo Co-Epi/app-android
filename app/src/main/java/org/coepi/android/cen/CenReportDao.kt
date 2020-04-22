@@ -5,6 +5,7 @@ import io.reactivex.Observable
 interface CenReportDao {
     val reports: Observable<List<ReceivedCenReport>>
 
-    fun insert(report: CenReport)
+    fun all(): List<ReceivedCenReport>
+    fun insert(report: CenReport): Boolean
     fun delete(report: SymptomReport)
 }

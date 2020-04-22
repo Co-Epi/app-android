@@ -29,16 +29,20 @@ class ContactsFetchWorker(
         val reportsResult = coEpiRepo.reports()
         val reports: List<ReceivedCenReport> = reportsResult.successOrNull() ?: emptyList()
 
-        reports.forEach {
+        val insertedCount = reports.map {
             reportsDao.insert(it.report)
-        }
+        }.filter { it }.size
 
-        setProgress(workDataOf(CONTACT_COUNT_KEY to reports.size))
+        // TODO only during early testing. Comment / remove
+        val currentReportsCount = reportsDao.all().size
+        log.d("Report count in DB: $currentReportsCount")
+
+        setProgress(workDataOf(CONTACT_COUNT_KEY to insertedCount))
         // TODO why is this need?
         // TODO without delay, live data never receives the progress
         delay(100)
 
-        log.i("Contacts fetch worker finished. Saved reports: ${reports.size}", CEN_MATCHING)
+        log.i("Contacts fetch worker finished. Saved new reports: $insertedCount", CEN_MATCHING)
 
         return success()
     }

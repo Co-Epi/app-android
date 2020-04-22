@@ -23,11 +23,12 @@ fun <T, U, E> Result<T, E>.flatMap(f: (T) -> Result<U, E>): Result<U, E> = when 
     is Failure -> this
 }
 
-fun <T, E> Result<T, E>.doIfSuccess(f: (T) -> Unit) {
+fun <T, E> Result<T, E>.doIfSuccess(f: (T) -> Unit): Result<T, E> {
     when (this) {
         is Success -> f(success)
         is Failure -> {}
     }
+    return this
 }
 
 fun <T, E> Result<T, E>.successOrNull(): T? =

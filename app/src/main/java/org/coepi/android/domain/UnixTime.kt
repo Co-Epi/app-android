@@ -22,10 +22,10 @@ class UnixTime private constructor(val value: Long) : Parcelable {
         other is UnixTime && value == other.value
 
     override fun hashCode(): Int = value.hashCode()
+
+    override fun toString(): String =
+        "$value, ${toDate()}"
+
+    fun toDate() =
+        Date(value * 1000)
 }
-
-fun UnixTime.debugString() =
-    "$value, ${toDate()}"
-
-fun UnixTime.toDate() =
-    Date(value * 1000)
