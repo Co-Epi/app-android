@@ -10,9 +10,9 @@ import org.coepi.android.repo.CoepiRepoImpl
 import org.koin.dsl.module
 
 val CENModule = module {
-    single(createdAtStart = true) { RealmCenDao(get()) }
-    single { RealmCenReportDao(get()) }
-    single { RealmCenKeyDao(get()) }
+    single<CenDao>(createdAtStart = true) { RealmCenDao(get()) }
+    single<CenReportDao> { RealmCenReportDao(get()) }
+    single<CenKeyDao> { RealmCenKeyDao(get()) }
     single<CenReportRepo> { CenReportRepoImpl(get(), get(), get()) }
     single<CenMatcher> { CenMatcherImpl(get()) }
     single<CenLogic> { CenLogicImpl() }

@@ -16,7 +16,7 @@ interface CenReportRepo {
 }
 
 class CenReportRepoImpl(
-    private val cenReportDao: RealmCenReportDao,
+    private val cenReportDao: CenReportDao,
     private val coEpiRepo: CoEpiRepo,
     private val symptomsProcessor: ApiSymptomsMapper
 ) : CenReportRepo {

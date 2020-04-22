@@ -18,7 +18,7 @@ interface MyCenProvider {
 
 class MyCenProviderImpl(
     private val cenLogic: CenLogic,
-    private val cenKeyDao: RealmCenKeyDao,
+    private val cenKeyDao: CenKeyDao,
     private val debugObservable: DebugBleObservable
 ) : MyCenProvider {
 
