@@ -3,14 +3,13 @@ package org.coepi.android.cen
 import io.reactivex.subjects.BehaviorSubject
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
-import io.realm.kotlin.oneOf
 import io.realm.kotlin.where
 import org.coepi.android.repo.RealmProvider
 
-class RealmCenReportDao(private val realmProvider: RealmProvider) {
+class RealmCenReportDao(private val realmProvider: RealmProvider) : CenReportDao {
     private val realm get() = realmProvider.realm
 
-    val reports: BehaviorSubject<List<ReceivedCenReport>> = BehaviorSubject.create()
+    override val reports: BehaviorSubject<List<ReceivedCenReport>> = BehaviorSubject.create()
 
     private val reportsResults: RealmResults<RealmCenReport>
 
@@ -24,24 +23,7 @@ class RealmCenReportDao(private val realmProvider: RealmProvider) {
         }
     }
 
-    fun all(limit : Int): List<RealmCenReport> =
-        realm.where<RealmCenReport>()
-            .findAll()
-
-    fun loadAllById(id: Array<String>): List<RealmCenReport> =
-        realm.where<RealmCenReport>()
-            .oneOf("id", id)
-            .findAll()
-
-    fun findByRange(start: Long, end: Long): List<RealmCenReport> =
-        realm.where<RealmCenReport>()
-            .greaterThanOrEqualTo("timestamp", start)
-            .and()
-            .lessThanOrEqualTo("timestamp", end)
-            .limit(1) // TODO why limit 1?
-            .findAll()
-
-    fun insert(report: CenReport) {
+    override fun insert(report: CenReport) {
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmCenReport>(report.id)
             realmObj.report = report.report
@@ -49,7 +31,7 @@ class RealmCenReportDao(private val realmProvider: RealmProvider) {
         }
     }
 
-    fun delete(report: SymptomReport) {
+    override fun delete(report: SymptomReport) {
         val results = realm.where<RealmCenReport>()
             .equalTo("id", report.id)
             .findAll()

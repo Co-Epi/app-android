@@ -4,15 +4,19 @@ import io.realm.kotlin.createObject
 import io.realm.kotlin.oneOf
 import io.realm.kotlin.where
 import org.coepi.android.domain.CoEpiDate
+import org.coepi.android.domain.CoEpiDate.Companion.fromUnixTime
+import org.coepi.android.extensions.hexToByteArray
 import org.coepi.android.repo.RealmProvider
 
-class RealmCenDao(private val realmProvider: RealmProvider) {
+class RealmCenDao(private val realmProvider: RealmProvider) : CenDao {
     private val realm get() = realmProvider.realm
 
-    fun all(): List<RealmReceivedCen> =
-        realm.where<RealmReceivedCen>().findAll()
+    override fun all(): List<ReceivedCen> =
+        realm.where<RealmReceivedCen>()
+            .findAll()
+            .map { it.toReceivedCen() }
 
-    fun matchCENs(start: CoEpiDate, end: CoEpiDate, cens: Array<String>): List<RealmReceivedCen> =
+    override fun matchCENs(start: CoEpiDate, end: CoEpiDate, cens: Array<String>): List<ReceivedCen> =
         realm.where<RealmReceivedCen>()
             .greaterThanOrEqualTo("timestamp", start.unixTime)
             .and()
@@ -20,14 +24,16 @@ class RealmCenDao(private val realmProvider: RealmProvider) {
             .and()
             .oneOf("cen", cens)
             .findAll()
+            .map { it.toReceivedCen() }
 
-    private fun findCen(cen: Cen): RealmReceivedCen? =
+    override fun findCen(cen: Cen): ReceivedCen? =
         realm.where<RealmReceivedCen>()
             .equalTo("cen", cen.toHex())
             .findAll()
             .firstOrNull()
+            ?.toReceivedCen()
 
-    fun insert(cen: ReceivedCen): Boolean {
+    override fun insert(cen: ReceivedCen): Boolean {
         if (findCen(cen.cen) != null) {
             return false
         }
@@ -38,6 +44,6 @@ class RealmCenDao(private val realmProvider: RealmProvider) {
         return true
     }
 
-//    @Delete("DELETE FROM cen where :timeStamp > timeStamp")
-//    fun cleanCENs(timeStamp : Int)
+    private fun RealmReceivedCen.toReceivedCen() =
+        ReceivedCen(Cen(cen.hexToByteArray()), fromUnixTime(timestamp))
 }

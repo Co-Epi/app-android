@@ -6,7 +6,7 @@ import androidx.work.ListenableWorker.Result.success
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import kotlinx.coroutines.delay
-import org.coepi.android.cen.RealmCenReportDao
+import org.coepi.android.cen.CenReportDao
 import org.coepi.android.cen.ReceivedCenReport
 import org.coepi.android.common.successOrNull
 import org.coepi.android.repo.CoEpiRepo
@@ -21,7 +21,7 @@ class ContactsFetchWorker(
 ) : CoroutineWorker(appContext, workerParams), KoinComponent {
 
     private val coEpiRepo: CoEpiRepo by inject()
-    private val reportsDao: RealmCenReportDao by inject()
+    private val reportsDao: CenReportDao by inject()
 
     override suspend fun doWork(): Result {
         log.d("Contacts fetch worker started...", CEN_MATCHING)

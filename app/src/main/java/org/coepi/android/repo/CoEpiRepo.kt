@@ -1,6 +1,7 @@
 package org.coepi.android.repo
 
 import io.reactivex.Completable
+import io.reactivex.Completable.complete
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -12,12 +13,11 @@ import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.api.toCenReport
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
-import org.coepi.android.cen.RealmCenDao
-import org.coepi.android.cen.RealmCenKeyDao
+import org.coepi.android.cen.CenDao
+import org.coepi.android.cen.CenKeyDao
 import org.coepi.android.cen.ReceivedCen
 import org.coepi.android.cen.ReceivedCenReport
 import org.coepi.android.cen.SymptomReport
-import org.coepi.android.cen.toCenKey
 import org.coepi.android.common.ApiSymptomsMapper
 import org.coepi.android.common.Result
 import org.coepi.android.common.Result.Failure
@@ -57,8 +57,8 @@ interface CoEpiRepo {
 class CoepiRepoImpl(
     private val cenMatcher: CenMatcher,
     private val api: CENApi,
-    private val cenDao: RealmCenDao,
-    private val cenKeyDao: RealmCenKeyDao,
+    private val cenDao: CenDao,
+    private val cenKeyDao: CenKeyDao,
     private val symptomsProcessor: ApiSymptomsMapper
 ) : CoEpiRepo {
 
@@ -142,7 +142,7 @@ class CoepiRepoImpl(
     private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> {
         val maxDate: CoEpiDate = now()
         // TODO delete periodically entries older than ~3 weeks from the db
-        val cens: List<Cen> = cenDao.all().map { Cen(it.cen.hexToByteArray()) }
+        val cens: List<Cen> = cenDao.all().map { it.cen }
         log.i("Stored CENs: ${cens.size}")
         return cenMatcher.match(cens, keys.distinct(), maxDate)
     }
@@ -150,14 +150,14 @@ class CoepiRepoImpl(
     private fun postReport(report: SymptomReport): Completable {
         val params: ApiParamsCenReport? =
             cenKeyDao.lastCENKeys(3).takeIf { it.isNotEmpty() }?.let { keys ->
-                symptomsProcessor.toApiReport(report, keys.map { it.toCenKey() })
+                symptomsProcessor.toApiReport(report, keys)
             }
         return if (params != null) {
             log.i("Sending CEN report to API: $params", NET)
             api.postCENReport(params).subscribeOn(io())
         } else {
             log.e("Can't send report. No CEN keys.", NET)
-            Completable.complete()
+            complete()
         }
     }
 
