@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.Observables.combineLatest
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
@@ -78,4 +77,9 @@ class LogsViewModel(
         "App version: $appVersionName ($appVersionCode), " +
         "Device: $deviceName, " +
         "Android version: $osVersion"
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
+    }
 }
