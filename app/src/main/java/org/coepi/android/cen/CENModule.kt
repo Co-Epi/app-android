@@ -11,8 +11,8 @@ import org.koin.dsl.module
 
 val CENModule = module {
     single<CenDao>(createdAtStart = true) { RealmCenDao(get()) }
-    single<CenReportDao> { RealmCenReportDao(get()) }
-    single<CenKeyDao> { RealmCenKeyDao(get()) }
+    single<CenReportDao>(createdAtStart = true) { RealmCenReportDao(get()) }
+    single<CenKeyDao>(createdAtStart = true) { RealmCenKeyDao(get()) }
     single<CenReportRepo> { CenReportRepoImpl(get(), get(), get()) }
     single<CenMatcher> { CenMatcherImpl(get()) }
     single<CenLogic> { CenLogicImpl() }
