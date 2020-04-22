@@ -10,7 +10,7 @@ import org.coepi.android.cen.CenKey
 import org.coepi.android.extensions.toHex
 
 interface CenMatcher {
-    fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: CoEpiDate): List<CenKey>
+    fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: UnixTime): List<CenKey>
 }
 
 class CenMatcherImpl(
@@ -18,7 +18,7 @@ class CenMatcherImpl(
 ) : CenMatcher {
     private val cenLifetimeInSeconds = 15 * 60 // every 15 mins a new CEN is generated
 
-    override fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: CoEpiDate): List<CenKey> =
+    override fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: UnixTime): List<CenKey> =
         if (cens.isEmpty()) {
             emptyList()
         } else {
@@ -28,7 +28,7 @@ class CenMatcherImpl(
         }
 
     private suspend fun matchSuspended(cens: List<Cen>, keys: List<CenKey>,
-                                       maxDate: CoEpiDate): List<CenKey> =
+                                       maxDate: UnixTime): List<CenKey> =
         coroutineScope {
             val censSet: Set<String> = cens.map { it.toHex() }.toHashSet()
             keys.distinct().map { key ->
@@ -42,11 +42,11 @@ class CenMatcherImpl(
             }.awaitAll().filterNotNull()
         }
 
-    private fun match(censSet: Set<String>, key: CenKey, maxDate: CoEpiDate): Boolean {
+    private fun match(censSet: Set<String>, key: CenKey, maxDate: UnixTime): Boolean {
         val secondsInAWeek: Long = 604800
         val possibleCensCount = (secondsInAWeek / cenLifetimeInSeconds).toInt()
         for (i in 0..possibleCensCount) {
-            val ts = maxDate.unixTime - cenLifetimeInSeconds * i
+            val ts = maxDate.value - cenLifetimeInSeconds * i
             val cen = cenLogic.generateCen(key, ts)
             if (censSet.contains(cen.bytes.toHex())) {
                 return true

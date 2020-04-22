@@ -3,8 +3,7 @@ package org.coepi.android.cen
 import io.realm.kotlin.createObject
 import io.realm.kotlin.oneOf
 import io.realm.kotlin.where
-import org.coepi.android.domain.CoEpiDate
-import org.coepi.android.domain.CoEpiDate.Companion.fromUnixTime
+import org.coepi.android.domain.UnixTime
 import org.coepi.android.extensions.hexToByteArray
 import org.coepi.android.repo.RealmProvider
 
@@ -16,11 +15,11 @@ class RealmCenDao(private val realmProvider: RealmProvider) : CenDao {
             .findAll()
             .map { it.toReceivedCen() }
 
-    override fun matchCENs(start: CoEpiDate, end: CoEpiDate, cens: Array<String>): List<ReceivedCen> =
+    override fun matchCENs(start: UnixTime, end: UnixTime, cens: Array<String>): List<ReceivedCen> =
         realm.where<RealmReceivedCen>()
-            .greaterThanOrEqualTo("timestamp", start.unixTime)
+            .greaterThanOrEqualTo("timestamp", start.value)
             .and()
-            .lessThanOrEqualTo("timestamp", end.unixTime)
+            .lessThanOrEqualTo("timestamp", end.value)
             .and()
             .oneOf("cen", cens)
             .findAll()
@@ -39,11 +38,11 @@ class RealmCenDao(private val realmProvider: RealmProvider) : CenDao {
         }
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmReceivedCen>(cen.cen.toHex()) // Create a new object
-            realmObj.timestamp = cen.date.unixTime
+            realmObj.timestamp = cen.timestamp.value
         }
         return true
     }
 
     private fun RealmReceivedCen.toReceivedCen() =
-        ReceivedCen(Cen(cen.hexToByteArray()), fromUnixTime(timestamp))
+        ReceivedCen(Cen(cen.hexToByteArray()), UnixTime.fromValue(timestamp))
 }

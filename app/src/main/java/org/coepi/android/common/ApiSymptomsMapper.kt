@@ -4,7 +4,7 @@ import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.CenReport
 import org.coepi.android.cen.SymptomReport
-import org.coepi.android.domain.CoEpiDate.Companion.fromUnixTime
+import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.extensions.base64ToUtf8
 import org.coepi.android.extensions.toBase64
@@ -24,13 +24,13 @@ class ApiSymptomsMapperImpl : ApiSymptomsMapper {
             reportID = report.id.toByteArray().toHex(),
             report = report.symptoms.toApiSymptomString(),
             cenKeys = keys.joinToString(",") { it.key }, // hex
-            reportTimeStamp = report.date.unixTime
+            reportTimeStamp = report.timestamp.value
         )
 
     override fun fromCenReport(report: CenReport): SymptomReport = SymptomReport(
         id = report.id,
         symptoms = fromApiSymptomString(report.report),
-        date = fromUnixTime(report.timestamp)
+        timestamp = UnixTime.fromValue(report.timestamp)
     )
 
     private fun List<Symptom>.toApiSymptomString(): String =
