@@ -15,8 +15,8 @@ interface CENApi {
     fun postCENReport(@Body report : ApiParamsCenReport): Completable
 
     // get recent keys that have CEN Reports
-    @GET("cenkeys/{timestamp}")
-    fun cenkeysCheck(@Path("timestamp") timestamp : Long): Call<List<String>>
+    @GET("cenkeys/")
+    fun cenkeysCheck(): Call<List<String>>
 
     // get report based on matched CENkey
     @GET("cenreport/{key}")
