@@ -24,6 +24,7 @@ class ContactsFetchManager(context: Context) {
             .build()
 
         return Builder(ContactsFetchWorker::class.java, 15, MINUTES)
+//            .setInitialDelay(1, SECONDS) // If using BLE simulator, ensure it can store keys first
             .setConstraints(constraints)
             .build()
     }
