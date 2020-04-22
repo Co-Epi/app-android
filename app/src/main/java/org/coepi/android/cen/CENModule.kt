@@ -14,7 +14,7 @@ val CENModule = module {
     single { RealmCenReportDao(get()) }
     single { RealmCenKeyDao(get()) }
     single<CenReportRepo> { CenReportRepoImpl(get(), get(), get()) }
-    single<CenMatcher> { CenMatcherImpl(get(), get()) }
+    single<CenMatcher> { CenMatcherImpl(get()) }
     single<CenLogic> { CenLogicImpl() }
     single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get(), get()) }
     single<MyCenProvider> { MyCenProviderImpl(get(), get(), get()) }

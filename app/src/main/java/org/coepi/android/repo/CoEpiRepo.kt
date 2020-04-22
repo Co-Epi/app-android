@@ -10,6 +10,7 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.api.CENApi
 import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.api.toCenReport
+import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.RealmCenDao
 import org.coepi.android.cen.RealmCenKeyDao
@@ -29,6 +30,7 @@ import org.coepi.android.domain.CenMatcher
 import org.coepi.android.domain.CoEpiDate
 import org.coepi.android.domain.CoEpiDate.Companion.now
 import org.coepi.android.domain.debugString
+import org.coepi.android.extensions.hexToByteArray
 import org.coepi.android.extensions.rx.toObservable
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.log.LogTag.CEN_MATCHING
@@ -142,14 +144,10 @@ class CoepiRepoImpl(
 
     private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> {
         val maxDate: CoEpiDate = now()
-        return keys.distinct().mapNotNull { key ->
-            //.distinct():same key may arrive more than once, due to multiple reporting
-            if (cenMatcher.hasMatches(key, maxDate)) {
-                key
-            } else {
-                null
-        }
-            }
+        // TODO delete periodically entries older than ~3 weeks from the db
+        val cens: List<Cen> = cenDao.all().map { Cen(it.cen.hexToByteArray()) }
+        log.i("Stored CENs: ${cens.size}")
+        return cenMatcher.match(cens, keys.distinct(), maxDate)
     }
 
     private fun postReport(report: SymptomReport): Completable {

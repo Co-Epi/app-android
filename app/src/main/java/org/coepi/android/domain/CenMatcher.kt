@@ -1,41 +1,53 @@
 package org.coepi.android.domain
 
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
-import org.coepi.android.cen.RealmCenDao
-import org.coepi.android.cen.RealmReceivedCen
-import org.coepi.android.domain.CoEpiDate.Companion.fromUnixTime
+import org.coepi.android.extensions.toHex
 
 interface CenMatcher {
-    fun hasMatches(key: CenKey, maxDate: CoEpiDate): Boolean
-    fun match(key: CenKey, maxDate: CoEpiDate): List<RealmReceivedCen>
+    fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: CoEpiDate): List<CenKey>
 }
 
 class CenMatcherImpl(
-    private val cenDao: RealmCenDao,
     private val cenLogic: CenLogic
 ) : CenMatcher {
     private val cenLifetimeInSeconds = 15 * 60   // every 15 mins a new CEN is generated
 
-    override fun hasMatches(key: CenKey, maxDate: CoEpiDate): Boolean =
-        match(key, maxDate).isNotEmpty()
-
-    // matchCENKey uses a publicized key and finds matches with one database call per key
-    //  Not efficient... It would be best if all observed CENs are loaded into memory
-    override fun match(key: CenKey, maxDate: CoEpiDate): List<RealmReceivedCen> {
-        val secondsInAWeek: Long = 604800
-
-        // take the last 7 days of timestamps and generate all the possible CENs (e.g. 7 days) TODO: Parallelize this?
-
-        val minTimestampSeconds = maxDate.unixTime - secondsInAWeek
-        val possibleCensCount = (secondsInAWeek / cenLifetimeInSeconds).toInt()
-
-        val possibleCENs = Array(possibleCensCount) { i ->
-            val ts = maxDate.unixTime - cenLifetimeInSeconds * i
-            val cen = cenLogic.generateCen(key, ts)
-            cen.toHex()
+    override fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: CoEpiDate): List<CenKey> =
+        runBlocking {
+            matchSuspended(cens, keys, maxDate)
         }
 
-        // check if the possibleCENs are in the CEN Table
-        return cenDao.matchCENs(fromUnixTime(minTimestampSeconds), maxDate, possibleCENs)
+    private suspend fun matchSuspended(cens: List<Cen>, keys: List<CenKey>,
+                                       maxDate: CoEpiDate): List<CenKey> =
+        coroutineScope {
+            val censSet: Set<String> = cens.map { it.toHex() }.toHashSet()
+            keys.distinct().map { key ->
+                async(Default) {
+                    if (match(censSet, key, maxDate)) {
+                        key
+                    } else {
+                        null
+                    }
+                }
+            }.awaitAll().filterNotNull()
+        }
+
+    private fun match(censSet: Set<String>, key: CenKey, maxDate: CoEpiDate): Boolean {
+        val secondsInAWeek: Long = 604800
+        val possibleCensCount = (secondsInAWeek / cenLifetimeInSeconds).toInt()
+        for (i in 0..possibleCensCount) {
+            val ts = maxDate.unixTime - cenLifetimeInSeconds * i
+            val cen = cenLogic.generateCen(key, ts)
+            if (censSet.contains(cen.bytes.toHex())) {
+                return true
+            }
+        }
+        return false
     }
 }
