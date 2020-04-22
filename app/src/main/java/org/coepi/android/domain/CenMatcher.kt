@@ -16,11 +16,15 @@ interface CenMatcher {
 class CenMatcherImpl(
     private val cenLogic: CenLogic
 ) : CenMatcher {
-    private val cenLifetimeInSeconds = 15 * 60   // every 15 mins a new CEN is generated
+    private val cenLifetimeInSeconds = 15 * 60 // every 15 mins a new CEN is generated
 
     override fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: CoEpiDate): List<CenKey> =
-        runBlocking {
-            matchSuspended(cens, keys, maxDate)
+        if (cens.isEmpty()) {
+            emptyList()
+        } else {
+            runBlocking {
+                matchSuspended(cens, keys, maxDate)
+            }
         }
 
     private suspend fun matchSuspended(cens: List<Cen>, keys: List<CenKey>,
