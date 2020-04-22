@@ -27,9 +27,8 @@ import org.coepi.android.common.flatMap
 import org.coepi.android.common.group
 import org.coepi.android.common.map
 import org.coepi.android.domain.CenMatcher
-import org.coepi.android.domain.CoEpiDate
-import org.coepi.android.domain.CoEpiDate.Companion.now
-import org.coepi.android.extensions.hexToByteArray
+import org.coepi.android.domain.UnixTime
+import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.extensions.rx.toObservable
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.log.LogTag.CEN_MATCHING
@@ -140,7 +139,7 @@ class CoepiRepoImpl(
     }
 
     private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> {
-        val maxDate: CoEpiDate = now()
+        val maxDate: UnixTime = now()
         // TODO delete periodically entries older than ~3 weeks from the db
         val cens: List<Cen> = cenDao.all().map { it.cen }
         log.i("Stored CENs: ${cens.size}")

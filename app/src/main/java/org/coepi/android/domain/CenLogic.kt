@@ -11,8 +11,8 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
 interface CenLogic {
-    fun shouldGenerateNewCenKey(curDate: CoEpiDate, cenKeyDate: CoEpiDate): Boolean
-    fun generateCenKey(date: CoEpiDate): CenKey
+    fun shouldGenerateNewCenKey(curTimestamp: UnixTime, cenTimestamp: UnixTime): Boolean
+    fun generateCenKey(timestamp: UnixTime): CenKey
 
     /**
      * @param ts Unix time
@@ -23,16 +23,16 @@ interface CenLogic {
 class CenLogicImpl: CenLogic {
     private val cenKeyLifetimeInSeconds = 7 * 86400 // every 7 days a new key is generated
 
-    override fun shouldGenerateNewCenKey(curDate: CoEpiDate, cenDate: CoEpiDate): Boolean =
-        (cenDate.unixTime == 0L) || (roundedTimestamp(curDate.unixTime) >
-                roundedTimestamp(cenDate.unixTime))
+    override fun shouldGenerateNewCenKey(curTimestamp: UnixTime, cenTimestamp: UnixTime): Boolean =
+        (cenTimestamp.value == 0L) || (roundedTimestamp(curTimestamp.value) >
+                roundedTimestamp(cenTimestamp.value))
 
-    override fun generateCenKey(date: CoEpiDate): CenKey {
+    override fun generateCenKey(timestamp: UnixTime): CenKey {
         // generate a new AES Key and store it in local storage
         val secretKey = KeyGenerator.getInstance("AES")
             .apply { init(256) } // 32 bytes
             .generateKey()
-        return CenKey(secretKey.encoded.toHex(), date)
+        return CenKey(secretKey.encoded.toHex(), timestamp)
     }
 
     override fun generateCen(cenKey: CenKey, ts: Long): Cen {

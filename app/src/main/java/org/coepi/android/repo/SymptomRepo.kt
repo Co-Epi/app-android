@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.Single.just
 import org.coepi.android.cen.SymptomReport
-import org.coepi.android.domain.CoEpiDate.Companion.now
+import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.domain.model.Symptom
 import java.util.UUID.randomUUID
@@ -43,6 +43,6 @@ class SymptomRepoImpl(
     private fun List<Symptom>.toReport(): SymptomReport = SymptomReport(
         id = randomUUID().toString(),
         symptoms = this,
-        date = now()
+        timestamp = now()
     )
 }

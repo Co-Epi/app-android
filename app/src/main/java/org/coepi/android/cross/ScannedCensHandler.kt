@@ -5,7 +5,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import org.coepi.android.ble.BleManager
 import org.coepi.android.cen.ReceivedCen
-import org.coepi.android.domain.CoEpiDate.Companion.now
+import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.repo.CoEpiRepo
 import org.coepi.android.system.log.log
 

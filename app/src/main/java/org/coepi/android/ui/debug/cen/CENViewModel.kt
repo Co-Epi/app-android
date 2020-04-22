@@ -8,7 +8,7 @@ import org.coepi.android.cen.Cen
 import org.coepi.android.cen.MyCenProvider
 import org.coepi.android.cen.RealmCenReport
 import org.coepi.android.cen.ReceivedCen
-import org.coepi.android.domain.CoEpiDate.Companion.now
+import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.extensions.hexToByteArray
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.CoEpiRepo
