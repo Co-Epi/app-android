@@ -42,7 +42,6 @@ class DebugFragment: Fragment() {
             TabConfigurationStrategy { tab: Tab, position: Int -> when (position) {
                 0 -> tab.text = "BLE"
                 1 -> tab.text = "Logs"
-                2 -> tab.text = "CEN"
             }}
         ).attach()
     }.root
