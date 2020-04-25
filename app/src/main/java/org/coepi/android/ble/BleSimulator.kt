@@ -41,9 +41,6 @@ class BleSimulator(cenLogic: CenLogic) : BleManager {
         log.i("Using Bluetooth simulator")
     }
 
-    override fun startAdvertiser(cen: Cen) {}
-    override fun stopAdvertiser() {}
-    override fun startService(cen: Cen) {}
+    override fun startService() {}
     override fun stopService() {}
-    override fun changeAdvertisedValue(cen: Cen) {}
 }

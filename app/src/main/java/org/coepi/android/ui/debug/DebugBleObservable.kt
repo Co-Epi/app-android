@@ -14,12 +14,13 @@ interface DebugBleObservable {
 
     fun setMyKey(key: CenKey)
     fun setMyCen(cen: Cen)
+    fun setObservedCen(cen: Cen)
 }
 
-class DebugBleObservableImpl(bleManager: BleManager): DebugBleObservable {
+class DebugBleObservableImpl: DebugBleObservable {
     override val myKey: BehaviorSubject<CenKey> = create()
     override val myCen: BehaviorSubject<Cen> = create()
-    override val observedCens: Observable<Cen> = bleManager.observedCens
+    override val observedCens: BehaviorSubject<Cen> = create()
 
     override fun setMyKey(key: CenKey) {
         myKey.onNext(key)
@@ -27,5 +28,9 @@ class DebugBleObservableImpl(bleManager: BleManager): DebugBleObservable {
 
     override fun setMyCen(cen: Cen) {
         myCen.onNext(cen)
+    }
+
+    override fun setObservedCen(cen: Cen) {
+        observedCens.onNext(cen)
     }
 }

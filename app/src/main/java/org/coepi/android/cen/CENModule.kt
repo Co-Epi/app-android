@@ -18,6 +18,6 @@ val CENModule = module {
     single<CenLogic> { CenLogicImpl() }
     single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get(), get()) }
     single<MyCenProvider> { MyCenProviderImpl(get(), get(), get()) }
-    single { ScannedCensHandler(get(), get()) }
-    single { BleInitializer(get(), get(), get()) }
+    single { ScannedCensHandler(get(), get(), get()) }
+    single { BleInitializer(get(), get()) }
 }

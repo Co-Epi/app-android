@@ -7,6 +7,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
+import org.coepi.android.domain.CenLogicImpl.Companion.cenLifetimeInSeconds
 import org.coepi.android.extensions.toHex
 
 interface CenMatcher {
@@ -16,7 +17,6 @@ interface CenMatcher {
 class CenMatcherImpl(
     private val cenLogic: CenLogic
 ) : CenMatcher {
-    private val cenLifetimeInSeconds = 15 * 60 // every 15 mins a new CEN is generated
 
     override fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: UnixTime): List<CenKey> =
         if (cens.isEmpty()) {
