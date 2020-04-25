@@ -2,7 +2,7 @@ package org.coepi.android.domain
 
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
-import org.coepi.android.cen.IntToByteArray
+import org.coepi.android.cen.longToByteArray
 import org.coepi.android.extensions.hexToByteArray
 import org.coepi.android.extensions.toHex
 import javax.crypto.Cipher
@@ -21,11 +21,14 @@ interface CenLogic {
 }
 
 class CenLogicImpl: CenLogic {
-    private val cenKeyLifetimeInSeconds = 7 * 86400 // every 7 days a new key is generated
+    companion object {
+        const val cenKeyLifetimeInSeconds: Long = 7 * 86400 // every 7 days a new key is generated
+        const val cenLifetimeInSeconds: Long = 15 * 60 // every 15 mins a new CEN is generated
+    }
 
     override fun shouldGenerateNewCenKey(curTimestamp: UnixTime, cenTimestamp: UnixTime): Boolean =
-        (cenTimestamp.value == 0L) || (roundedTimestamp(curTimestamp.value) >
-                roundedTimestamp(cenTimestamp.value))
+        (cenTimestamp.value == 0L) || (roundedTimestamp(curTimestamp.value, cenKeyLifetimeInSeconds) >
+                roundedTimestamp(cenTimestamp.value, cenKeyLifetimeInSeconds))
 
     override fun generateCenKey(timestamp: UnixTime): CenKey {
         // generate a new AES Key and store it in local storage
@@ -41,11 +44,9 @@ class CenLogicImpl: CenLogic {
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-        return Cen(cipher.doFinal(IntToByteArray(roundedTimestamp(ts).toInt()))) // TODO no toInt()
+        return Cen(cipher.doFinal(longToByteArray(roundedTimestamp(ts, cenLifetimeInSeconds))))
     }
 
-    private fun roundedTimestamp(ts: Long): Long {
-        val epoch = ts / cenKeyLifetimeInSeconds
-        return epoch * cenKeyLifetimeInSeconds
-    }
+    private fun roundedTimestamp(ts: Long, interval: Long): Long =
+        (ts / interval) * interval
 }
