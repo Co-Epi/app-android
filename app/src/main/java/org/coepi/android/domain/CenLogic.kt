@@ -2,7 +2,7 @@ package org.coepi.android.domain
 
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenKey
-import org.coepi.android.cen.IntToByteArray
+import org.coepi.android.cen.longToByteArray
 import org.coepi.android.extensions.hexToByteArray
 import org.coepi.android.extensions.toHex
 import javax.crypto.Cipher
@@ -44,7 +44,7 @@ class CenLogicImpl: CenLogic {
         val secretKey: SecretKey = SecretKeySpec(decodedCENKey, 0, decodedCENKey.size, "AES")
         val cipher: Cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-        return Cen(cipher.doFinal(IntToByteArray(roundedTimestamp(ts, cenLifetimeInSeconds).toInt()))) // TODO no toInt()
+        return Cen(cipher.doFinal(longToByteArray(roundedTimestamp(ts, cenLifetimeInSeconds))))
     }
 
     private fun roundedTimestamp(ts: Long, interval: Long): Long =
