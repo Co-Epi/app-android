@@ -34,7 +34,7 @@ class ApiSymptomsMapperImpl : ApiSymptomsMapper {
     )
 
     private fun List<Symptom>.toApiSymptomString(): String =
-        joinToString(",") { it.name }.toBase64()
+        joinToString(", ") { it.name }.toBase64()
 
     private fun fromApiSymptomString(string: String): List<Symptom> =
         string.base64ToUtf8()?.split(",")?.map {
