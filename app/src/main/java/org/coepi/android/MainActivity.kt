@@ -13,7 +13,6 @@ import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.cen.BleInitializer
-import org.coepi.android.cross.CenReportsNotifier
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     private val cenManager: BleInitializer by inject()
     private val blePreconditions: BlePreconditions by inject()
     private val nonReferencedDependenciesActivator: NonReferencedDependenciesActivator by inject()
-    private val cenReportsNotifier: CenReportsNotifier by inject()
     private val intentForwarder: IntentForwarder by inject()
     private val uiNotifier: UINotifier by inject()
 
@@ -47,8 +45,6 @@ class MainActivity : AppCompatActivity() {
         onboardingShower.showIfNeeded()
 
         intentForwarder.onActivityCreated(intent)
-
-        cenReportsNotifier.attach(this)
 
         blePreconditions.onActivityCreated(this)
 

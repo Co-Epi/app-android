@@ -80,7 +80,7 @@ class BleManagerImpl(
         )
 
         return NotificationCompat.Builder(app, CHANNEL_ID)
-            .setContentTitle("CoEpi is running")
+            .setContentTitle("CoEpi contact tracing service is running")
             .setSmallIcon(ic_launcher_foreground)
             .setContentIntent(pendingIntent)
             .setCategory(CATEGORY_SERVICE)

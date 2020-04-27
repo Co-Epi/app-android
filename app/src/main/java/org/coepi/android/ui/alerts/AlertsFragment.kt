@@ -33,6 +33,11 @@ class AlertsFragment: Fragment() {
             adapter = alertsAdapter
         }
 
+        swipeRefresh.setOnRefreshListener {
+            viewModel.onSwipeToRefresh()
+            swipeRefresh.isRefreshing = false
+        }
+
         viewModel.alerts.observeWith(viewLifecycleOwner) {
             alertsAdapter.submitList(it)
         }

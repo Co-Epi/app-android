@@ -3,18 +3,25 @@ package org.coepi.android.repo
 import io.reactivex.Observable
 import org.coepi.android.cen.CenReportRepo
 import org.coepi.android.cen.SymptomReport
+import org.coepi.android.system.rx.OperationState
+import org.coepi.android.system.rx.VoidOperationState
 
 interface AlertsRepo {
     val alerts: Observable<List<SymptomReport>>
+    val updateReportsState: Observable<VoidOperationState>
 
     fun removeAlert(alert: SymptomReport)
+    fun updateReports()
 }
 
 class AlertRepoImpl(
-    private val cenReportRepo: CenReportRepo
+    private val cenReportRepo: CenReportRepo,
+    private val coEpiRepo: CoEpiRepo
 ): AlertsRepo {
 
     override val alerts: Observable<List<SymptomReport>> = cenReportRepo.reports
+
+    override val updateReportsState: Observable<OperationState<Unit>> = coEpiRepo.updateReportsState
 
     // Dummy test data
 //    override val alerts: Observable<List<ReceivedCenReport>> = just(listOf(
@@ -29,5 +36,9 @@ class AlertRepoImpl(
 
     override fun removeAlert(alert: SymptomReport) {
         cenReportRepo.delete(alert)
+    }
+
+    override fun updateReports() {
+        coEpiRepo.requestUpdateReports()
     }
 }

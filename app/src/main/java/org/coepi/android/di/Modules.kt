@@ -12,7 +12,6 @@ import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
 import org.coepi.android.cen.CENModule
 import org.coepi.android.cen.apiModule
-import org.coepi.android.cross.CenReportsNotifier
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
@@ -77,7 +76,6 @@ val systemModule = module {
 //    single<BleManager> { BleSimulator(get()) }  // Disable BleManagerImpl and enable this to use BLE simulator
     single { NonReferencedDependenciesActivator(get(), get(), get(), get()) }
     single { ContactsFetchManager(get()) }
-    single { CenReportsNotifier(get(), get(), get(), get(), get()) }
     single<DebugBleObservable> { DebugBleObservableImpl() }
     single<Clipboard> { ClipboardImpl(get()) }
     single<EnvInfos> { EnvInfosImpl() }

@@ -10,6 +10,7 @@ import io.reactivex.Observable.just
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.Failure
+import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationState.Success
 import org.coepi.android.system.rx.VoidOperationState
@@ -37,6 +38,7 @@ fun <T, U> Observable<OperationState<T>>.mapSuccess(f: (T) -> U): Observable<Ope
 fun <T, U> Observable<OperationState<T>>.flatMapSuccess(f: (T) -> Observable<OperationState<U>>): Observable<OperationState<U>> =
     flatMap { state: OperationState<T> ->
         when (state) {
+            is NotStarted -> just(NotStarted)
             is Success -> f(state.data)
             is Progress -> just(Progress)
             is Failure -> just(Failure(state.t))
@@ -46,8 +48,8 @@ fun <T, U> Observable<OperationState<T>>.flatMapSuccess(f: (T) -> Observable<Ope
 fun <T> Observable<OperationState<T>>.success(): Observable<T> =
     flatMap {
         when (it) {
-            is Success -> just<T>(it.data)
-            else -> empty<T>()
+            is Success -> just(it.data)
+            else -> empty()
         }
     }
 
