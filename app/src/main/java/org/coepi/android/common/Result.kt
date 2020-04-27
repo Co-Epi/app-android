@@ -31,6 +31,14 @@ fun <T, E> Result<T, E>.doIfSuccess(f: (T) -> Unit): Result<T, E> {
     return this
 }
 
+fun <T, E> Result<T, E>.doIfError(f: (E) -> Unit): Result<T, E> {
+    when (this) {
+        is Success -> {}
+        is Failure -> f(error)
+    }
+    return this
+}
+
 fun <T, E> Result<T, E>.successOrNull(): T? =
     when (this) {
         is Success -> success
