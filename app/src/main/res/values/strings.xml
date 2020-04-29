@@ -63,6 +63,7 @@
         <item quantity="one">%s new contact alert</item>
         <item quantity="other">%s new contact alerts</item>
     </plurals>
+    <string name="alerts_no_symptoms_reported">No symptoms reported</string>
 
     <!-- Alert details -->
     <!-- TODO clarify whether this is needed -->

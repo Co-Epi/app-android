@@ -204,9 +204,11 @@ class CoepiRepoImpl(
     private fun reportsFor(keys: List<CenKey>): Result<List<ReceivedCenReport>, Throwable> {
         // Retrieve reports for keys, group in successful / failed calls
         val (successful, failed) = keys.map { key ->
-            api.getCenReports(key.key).execute().toResult().doIfSuccess { reports ->
-                log.d("Retrieved ${reports.size} reports for a key")
-            }
+            api.getCenReports(key.key).executeSafe()
+                .flatMap { it.toResult() }
+                .doIfSuccess { reports ->
+                    log.d("Retrieved ${reports.size} reports for a key")
+                }
         }.group()
 
         // Log failed calls

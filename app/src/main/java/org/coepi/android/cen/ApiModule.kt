@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 val apiModule = module {
     single { provideRetrofit() }
     single { provideCENApi(get()) }
-    single<ApiSymptomsMapper> { ApiSymptomsMapperImpl() }
+    single<ApiSymptomsMapper> { ApiSymptomsMapperImpl(get()) }
 }
 
 private fun provideRetrofit() : Retrofit {
