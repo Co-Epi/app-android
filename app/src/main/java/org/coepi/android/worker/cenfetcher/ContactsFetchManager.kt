@@ -11,11 +11,9 @@ import java.util.concurrent.TimeUnit.MINUTES
 
 class ContactsFetchManager(context: Context) {
 
-    val workName = "contacts_fetch_worker"
-
     init {
         val workManager = WorkManager.getInstance(context)
-        workManager.enqueueUniquePeriodicWork(workName, REPLACE, createWorkerRequest())
+        workManager.enqueueUniquePeriodicWork("contacts_fetch_worker", REPLACE, createWorkerRequest())
     }
 
     private fun createWorkerRequest(): PeriodicWorkRequest {
