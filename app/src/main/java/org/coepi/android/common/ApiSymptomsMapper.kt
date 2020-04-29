@@ -1,5 +1,6 @@
 package org.coepi.android.common
 
+import org.coepi.android.R.string.alerts_no_symptoms_reported
 import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.CenReport
@@ -9,6 +10,7 @@ import org.coepi.android.domain.model.Symptom
 import org.coepi.android.extensions.base64ToUtf8
 import org.coepi.android.extensions.toBase64
 import org.coepi.android.extensions.toHex
+import org.coepi.android.system.Resources
 import org.coepi.android.system.log.log
 import java.util.UUID.randomUUID
 
@@ -17,7 +19,7 @@ interface ApiSymptomsMapper {
     fun fromCenReport(report: CenReport): SymptomReport
 }
 
-class ApiSymptomsMapperImpl : ApiSymptomsMapper {
+class ApiSymptomsMapperImpl(private val resources: Resources) : ApiSymptomsMapper {
 
     override fun toApiReport(report: SymptomReport, keys: List<CenKey>): ApiParamsCenReport =
         ApiParamsCenReport(
@@ -37,10 +39,16 @@ class ApiSymptomsMapperImpl : ApiSymptomsMapper {
         joinToString(", ") { it.name }.toBase64()
 
     private fun fromApiSymptomString(string: String): List<Symptom> =
-        string.base64ToUtf8()?.split(",")?.map {
-            Symptom(randomUUID().toString(), it)
-        } ?: {
-            log.e("Couldn't decode symptoms string: $string, returning no symptoms.")
-            emptyList<Symptom>()
-        }()
+        if (string.isEmpty()) {
+            // If no symptoms, return a symptom called "no symptoms reported"
+            // This is a hack. It will be replaced soon with the 0.4 backend migration.
+            listOf(Symptom(randomUUID().toString(), resources.getString(alerts_no_symptoms_reported)))
+        } else {
+            string.base64ToUtf8()?.split(",")?.map {
+                Symptom(randomUUID().toString(), it)
+            } ?: {
+                log.e("Couldn't decode symptoms string: $string, returning no symptoms.")
+                emptyList<Symptom>()
+            }()
+        }
 }
