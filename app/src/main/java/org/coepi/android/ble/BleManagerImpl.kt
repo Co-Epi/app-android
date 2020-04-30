@@ -23,7 +23,7 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity
 import org.coepi.android.R.drawable.ic_launcher_foreground
 import org.coepi.android.cen.Cen
-import org.coepi.android.cen.MyCenProvider
+import org.coepi.android.domain.TcnGenerator
 import org.coepi.android.system.log.LogTag.BLE
 import org.coepi.android.system.log.log
 import org.tcncoalition.tcnclient.bluetooth.BluetoothStateListener
@@ -40,7 +40,7 @@ interface BleManager {
 
 class BleManagerImpl(
     private val app: Application,
-    private val myCenProvider: MyCenProvider
+    private val tcnGenerator: TcnGenerator
 ): BleManager, BluetoothStateListener {
 
     override val observedCens: PublishSubject<Cen> = create()
@@ -51,7 +51,7 @@ class BleManagerImpl(
 
     inner class BluetoothServiceCallback : TcnBluetoothServiceCallback {
         override fun generateTcn(): ByteArray =
-            myCenProvider.generateCen().bytes
+            tcnGenerator.generateTcn().bytes
 
         override fun onTcnFound(tcn: ByteArray, estimatedDistance: Double?) {
             observedCens.onNext(Cen(tcn))
