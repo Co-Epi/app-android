@@ -17,9 +17,9 @@ val CENModule = module {
     single<CenReportDao>(createdAtStart = true) { RealmCenReportDao(get()) }
     single<CenKeyDao>(createdAtStart = true) { RealmCenKeyDao(get()) }
     single<CenReportRepo> { CenReportRepoImpl(get(), get(), get()) }
-    single<CenMatcher> { CenMatcherImpl(get()) }
+    single<CenMatcher> { CenMatcherImpl() }
     single<CenLogic> { CenLogicImpl() }
-    single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get(), get(), get(), get(), get()) }
     single<TcnGenerator> { TcnGeneratorImpl(androidApplication()) }
     single { ScannedCensHandler(get(), get(), get()) }
     single { BleInitializer(get(), get()) }

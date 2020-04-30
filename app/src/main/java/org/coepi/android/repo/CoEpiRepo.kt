@@ -10,18 +10,17 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import org.coepi.android.R.drawable
 import org.coepi.android.R.plurals
 import org.coepi.android.R.string
 import org.coepi.android.api.CENApi
-import org.coepi.android.api.toCenReport
 import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenDao
-import org.coepi.android.cen.CenKey
-import org.coepi.android.cen.CenKeyDao
+import org.coepi.android.cen.CenReport
 import org.coepi.android.cen.CenReportDao
 import org.coepi.android.cen.ReceivedCen
-import org.coepi.android.cen.ReceivedCenReport
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.common.ApiSymptomsMapper
 import org.coepi.android.common.Result
@@ -29,14 +28,13 @@ import org.coepi.android.common.Result.Failure
 import org.coepi.android.common.Result.Success
 import org.coepi.android.common.doIfSuccess
 import org.coepi.android.common.flatMap
-import org.coepi.android.common.group
 import org.coepi.android.common.map
 import org.coepi.android.common.successOrNull
 import org.coepi.android.domain.CenMatcher
-import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.extensions.retrofit.executeSafe
 import org.coepi.android.extensions.rx.toObservable
+import org.coepi.android.extensions.toHex
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.Resources
 import org.coepi.android.system.intent.IntentKey.NOTIFICATION_INFECTION_ARGS
@@ -53,7 +51,10 @@ import org.coepi.android.ui.notifications.NotificationConfig
 import org.coepi.android.ui.notifications.NotificationIntentArgs
 import org.coepi.android.ui.notifications.NotificationPriority.HIGH
 import org.coepi.android.ui.notifications.NotificationsShower
+import org.tcncoalition.tcnclient.crypto.SignedReport
 import java.lang.System.currentTimeMillis
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 
 // TODO remove CoEpiRepo. Create update reports use case and send TCNs directly to DAO
 // TODO if Rust library or similar is added later, we can re-add this and inject new use case in it
@@ -68,7 +69,7 @@ interface CoEpiRepo {
     // Send symptoms report
     fun sendReport(report: SymptomReport)
 
-    fun reports(): Result<List<ReceivedCenReport>, Throwable>
+    fun reports(): Result<List<SignedReport>, Throwable>
 
     // Trigger manually report update
     fun requestUpdateReports()
@@ -80,7 +81,6 @@ class CoepiRepoImpl(
     private val cenMatcher: CenMatcher,
     private val api: CENApi,
     private val cenDao: CenDao,
-    private val cenKeyDao: CenKeyDao,
     private val symptomsProcessor: ApiSymptomsMapper,
     private val reportsDao: CenReportDao,
     private val resources: Resources,
@@ -125,10 +125,14 @@ class CoepiRepoImpl(
 
     private fun updateReports() {
         val reportsResult = reports()
-        val reports: List<ReceivedCenReport> = reportsResult.successOrNull() ?: emptyList()
+        val reports: List<SignedReport> = reportsResult.successOrNull() ?: emptyList()
 
         val insertedCount = reports.map {
-            reportsDao.insert(it.report)
+            reportsDao.insert(CenReport(
+                id = it.signature.toByteArray().toHex(),
+                report = it.report.memoData.toHex(),
+                timestamp = now().value // TODO extract this from memo, when protocol implemented
+            ))
         }.filter { it }.size
 
         if (insertedCount >= 0) {
@@ -150,36 +154,29 @@ class CoepiRepoImpl(
         NotificationIntentArgs(NOTIFICATION_INFECTION_ARGS, IntentNoValue())
     )
 
-    override fun reports(): Result<List<ReceivedCenReport>, Throwable> {
+    override fun reports(): Result<List<SignedReport>, Throwable> {
 
         updateReportsState.onNext(Progress)
 
-        val keysResult = api.cenkeysCheck().executeSafe()
+        val reportsResult = api.getReports().executeSafe()
             .flatMap { it.toResult() }
-            .map { keyStrings ->
-                keyStrings.map {
-                    CenKey(it, now())
-                }
-            }
 
-        keysResult.doIfSuccess { keys ->
-            log.i("Retrieved ${keys.size} keys. Start matching...", CEN_MATCHING)
-//            val keyStrings = keys.map { it.key }
-//            log.v("$keyStrings", CEN_MATCHING)
+        reportsResult.doIfSuccess { reports ->
+            log.i("Retrieved ${reports.size} reports. Start matching...", CEN_MATCHING)
         }
 
         matchingStartTime = currentTimeMillis()
 
-        val matchedKeysResult: Result<List<CenKey>, Throwable> =
-            keysResult.map { filterMatchingKeys(it) }
+        val matchedReportsResult: Result<List<SignedReport>, Throwable> =
+            reportsResult.map { filterMatchingReports(it) }
 
         matchingStartTime?.let {
             val time = (currentTimeMillis() - it) / 1000
-            log.i("Took ${time}s to match keys", CEN_MATCHING)
+            log.i("Took ${time}s to match reports", CEN_MATCHING)
         }
         matchingStartTime = null
 
-        matchedKeysResult.doIfSuccess {
+        matchedReportsResult.doIfSuccess {
             if (it.isNotEmpty()) {
                 log.i("Matches found (${it.size}): $it", CEN_MATCHING)
             } else {
@@ -187,7 +184,7 @@ class CoepiRepoImpl(
             }
         }
 
-        return matchedKeysResult.flatMap { reportsFor(it) }.also { result ->
+        return matchedReportsResult.also { result ->
             updateReportsState.onNext(when (result) {
                 is Success -> OperationState.Success(Unit)
                 is Failure -> OperationState.Failure(result.error).also {
@@ -198,41 +195,19 @@ class CoepiRepoImpl(
         }
     }
 
-    private fun reportsFor(keys: List<CenKey>): Result<List<ReceivedCenReport>, Throwable> {
-        // Retrieve reports for keys, group in successful / failed calls
-        val (successful, failed) = keys.map { key ->
-            api.getCenReports(key.key).executeSafe()
-                .flatMap { it.toResult() }
-                .doIfSuccess { reports ->
-                    log.d("Retrieved ${reports.size} reports for a key")
-                }
-        }.group()
-
-        // Log failed calls
-        failed.forEach {
-            log.e("Error fetching reports: $it")
-        }
-
-        // If we only got failure results, return a failure, otherwise return success
-        // and ignore failures (logged before)
-        // TODO review / maybe refine this error handling
-        return if (successful.isEmpty() && failed.isNotEmpty()) {
-            Failure(Throwable("Couldn't fetch any reports"))
-        } else {
-            Success(successful.flatten().map { ReceivedCenReport(it.toCenReport()) })
-        }
-    }
-
-    private fun filterMatchingKeys(keys: List<CenKey>): List<CenKey> {
-        val maxDate: UnixTime = now()
+    private fun filterMatchingReports(reports: List<String>): List<SignedReport> {
         // TODO delete periodically entries older than ~3 weeks from the db
         val cens: List<Cen> = cenDao.all().map { it.cen }
         log.i("DB CENs count: ${cens.size}")
-        return cenMatcher.match(cens, keys.distinct(), maxDate)
+        return cenMatcher.match(cens, reports.distinct())
     }
 
     private fun postReport(report: SymptomReport): Completable =
-        api.postReport(symptomsProcessor.toApiReport(report)).subscribeOn(io())
+        symptomsProcessor.toApiReport(report).let { apiReport ->
+            // NOTE: Needs to be sent as text/plain to not add quotes
+            val requestBody = apiReport.toRequestBody("text/plain".toMediaType())
+            api.postReport(requestBody).subscribeOn(io())
+        }
 
     override fun storeObservedCen(cen: ReceivedCen) {
         if (cenDao.insert(cen)) {

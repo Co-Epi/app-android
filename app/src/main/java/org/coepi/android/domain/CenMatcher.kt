@@ -6,52 +6,49 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import org.coepi.android.cen.Cen
-import org.coepi.android.cen.CenKey
-import org.coepi.android.domain.CenLogicImpl.Companion.cenLifetimeInSeconds
+import org.coepi.android.extensions.base64ToByteArray
 import org.coepi.android.extensions.toHex
+import org.tcncoalition.tcnclient.crypto.SignedReport
 
 interface CenMatcher {
-    fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: UnixTime): List<CenKey>
+    fun match(tcns: List<Cen>, reports: List<String>): List<SignedReport>
 }
 
-class CenMatcherImpl(
-    private val cenLogic: CenLogic
-) : CenMatcher {
+class CenMatcherImpl : CenMatcher {
 
-    override fun match(cens: List<Cen>, keys: List<CenKey>, maxDate: UnixTime): List<CenKey> =
-        if (cens.isEmpty()) {
+    override fun match(tcns: List<Cen>, reports: List<String>): List<SignedReport> =
+        if (tcns.isEmpty()) {
             emptyList()
         } else {
             runBlocking {
-                matchSuspended(cens, keys, maxDate)
+                matchSuspended(tcns, reports)
             }
         }
 
-    private suspend fun matchSuspended(cens: List<Cen>, keys: List<CenKey>,
-                                       maxDate: UnixTime): List<CenKey> =
+    // TODO dependency
+    private fun toReport(apiReport: String): SignedReport? =
+        apiReport.base64ToByteArray()?.let { SignedReport.fromByteArray(it) }
+
+    private suspend fun matchSuspended(cens: List<Cen>, reports: List<String>): List<SignedReport> =
         coroutineScope {
             val censSet: Set<String> = cens.map { it.toHex() }.toHashSet()
-            keys.distinct().map { key ->
+            reports.distinct().map { report ->
                 async(Default) {
-                    if (match(censSet, key, maxDate)) {
-                        key
-                    } else {
-                        null
-                    }
+                    match(censSet, report)
                 }
             }.awaitAll().filterNotNull()
         }
 
-    private fun match(censSet: Set<String>, key: CenKey, maxDate: UnixTime): Boolean {
-        val secondsInAWeek: Long = 604800
-        val possibleCensCount = (secondsInAWeek / cenLifetimeInSeconds).toInt()
-        for (i in 0..possibleCensCount) {
-            val ts = maxDate.value - cenLifetimeInSeconds * i
-            val cen = cenLogic.generateCen(key, ts)
-            if (censSet.contains(cen.bytes.toHex())) {
-                return true
+    private fun match(censSet: Set<String>, reportString: String): SignedReport? {
+        val signedReport: SignedReport = toReport(reportString) ?: return null
+
+        val recomputedTemporaryContactNumbers = signedReport.report.temporaryContactNumbers
+        recomputedTemporaryContactNumbers.forEach {
+            if (censSet.contains(it.bytes.toHex())) {
+                return signedReport
             }
         }
-        return false
+
+        return null
     }
 }

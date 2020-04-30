@@ -36,7 +36,7 @@ fun String.toBase64(): String =
 fun String.base64ToUtf8(): String? =
     base64ToByteArray()?.toString(Charset.forName("utf-8"))
 
-private fun String.base64ToByteArray(): ByteArray? =
+fun String.base64ToByteArray(): ByteArray? =
     try {
         if (SDK_INT >= O) {
             Base64.getDecoder().decode(this)

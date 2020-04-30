@@ -7,6 +7,9 @@ data class Cen(val bytes: ByteArray) {
 
     override fun toString(): String = toHex()
 
+    override fun hashCode(): Int =
+        toHex().hashCode()
+
     override fun equals(other: Any?): Boolean =
-        toString() == other.toString()
+        other is Cen && toHex() == other.toHex()
 }
