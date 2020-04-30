@@ -1,7 +1,6 @@
 package org.coepi.android.api
 
 import io.reactivex.Completable
-import io.reactivex.Single
 import org.coepi.android.api.request.ApiParamsCenReport
 import retrofit2.Call
 import retrofit2.http.Body
@@ -10,6 +9,13 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface CENApi {
+
+    @GET("tcnreport/")
+    fun getReports(): Call<List<String>>
+
+    @POST("tcnreport/")
+    fun postReport(@Body report : String): Completable
+
     // post CENReport along with CENKeys
     @POST("cenreport/")
     fun postCENReport(@Body report : ApiParamsCenReport): Completable
