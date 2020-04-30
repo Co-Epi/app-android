@@ -103,7 +103,11 @@ class CoepiRepoImpl(
         disposables += postSymptomsTrigger.doOnNext {
             sendReportState.onNext(Progress)
         }
-        .flatMap { report -> postReport(report).toObservable(Unit).materialize() }
+        .flatMap { report -> postReport(report)
+            .doOnError { log.e("Error posting report: ${it.message}") }
+            .toObservable(Unit)
+            .materialize()
+        }
         .subscribe(OperationStateNotifier(sendReportState))
 
         disposables += reportsUpdateTrigger
