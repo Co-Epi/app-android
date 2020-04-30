@@ -1,10 +1,10 @@
 package org.coepi.android.repo
 
 import io.reactivex.Completable
-import io.reactivex.Completable.complete
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
@@ -14,11 +14,10 @@ import org.coepi.android.R.drawable
 import org.coepi.android.R.plurals
 import org.coepi.android.R.string
 import org.coepi.android.api.CENApi
-import org.coepi.android.api.request.ApiParamsCenReport
 import org.coepi.android.api.toCenReport
 import org.coepi.android.cen.Cen
-import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.CenDao
+import org.coepi.android.cen.CenKey
 import org.coepi.android.cen.CenKeyDao
 import org.coepi.android.cen.CenReportDao
 import org.coepi.android.cen.ReceivedCen
@@ -43,7 +42,6 @@ import org.coepi.android.system.Resources
 import org.coepi.android.system.intent.IntentKey.NOTIFICATION_INFECTION_ARGS
 import org.coepi.android.system.intent.IntentNoValue
 import org.coepi.android.system.log.LogTag.CEN_MATCHING
-import org.coepi.android.system.log.LogTag.NET
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.NotStarted
@@ -56,7 +54,6 @@ import org.coepi.android.ui.notifications.NotificationIntentArgs
 import org.coepi.android.ui.notifications.NotificationPriority.HIGH
 import org.coepi.android.ui.notifications.NotificationsShower
 import java.lang.System.currentTimeMillis
-import io.reactivex.rxkotlin.withLatestFrom
 
 // TODO remove CoEpiRepo. Create update reports use case and send TCNs directly to DAO
 // TODO if Rust library or similar is added later, we can re-add this and inject new use case in it
@@ -234,19 +231,8 @@ class CoepiRepoImpl(
         return cenMatcher.match(cens, keys.distinct(), maxDate)
     }
 
-    private fun postReport(report: SymptomReport): Completable {
-        val params: ApiParamsCenReport? =
-            cenKeyDao.lastCENKeys(3).takeIf { it.isNotEmpty() }?.let { keys ->
-                symptomsProcessor.toApiReport(report, keys)
-            }
-        return if (params != null) {
-            log.i("Sending CEN report to API: $params", NET)
-            api.postCENReport(params).subscribeOn(io())
-        } else {
-            log.e("Can't send report. No CEN keys.", NET)
-            complete()
-        }
-    }
+    private fun postReport(report: SymptomReport): Completable =
+        api.postReport(symptomsProcessor.toApiReport(report)).subscribeOn(io())
 
     override fun storeObservedCen(cen: ReceivedCen) {
         if (cenDao.insert(cen)) {

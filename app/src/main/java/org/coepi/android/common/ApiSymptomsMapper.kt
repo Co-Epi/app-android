@@ -1,33 +1,33 @@
 package org.coepi.android.common
 
-import org.coepi.android.R.string.alerts_no_symptoms_reported
-import org.coepi.android.api.request.ApiParamsCenReport
-import org.coepi.android.cen.CenKey
+import android.content.Context
 import org.coepi.android.cen.CenReport
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.extensions.base64ToUtf8
-import org.coepi.android.extensions.toBase64
-import org.coepi.android.extensions.toHex
+import org.coepi.android.extensions.toBase64String
 import org.coepi.android.system.Resources
 import org.coepi.android.system.log.log
+import org.tcncoalition.tcnclient.TcnKeys
+import java.util.UUID.randomUUID
+import org.coepi.android.R.string.alerts_no_symptoms_reported
 
 interface ApiSymptomsMapper {
-    fun toApiReport(report: SymptomReport, keys: List<CenKey>): ApiParamsCenReport
+    fun toApiReport(report: SymptomReport): String
     fun fromCenReport(report: CenReport): SymptomReport
 }
 
-class ApiSymptomsMapperImpl(private val resources: Resources) : ApiSymptomsMapper {
+class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) : ApiSymptomsMapper {
+    private val tcnKeys: TcnKeys = TcnKeys(context)
 
-    override fun toApiReport(report: SymptomReport, keys: List<CenKey>): ApiParamsCenReport =
-        ApiParamsCenReport(
-            reportID = report.id.toByteArray().toHex(),
-            report = report.symptoms.toApiSymptomString(),
-            cenKeys = keys.joinToString(",") { it.key }, // hex
-            reportTimeStamp = report.timestamp.value
-        )
+    override fun toApiReport(report: SymptomReport): String =
+        tcnKeys.createReport(
+            // TODO
+//            MemoType.CoEpiV1,
+//            report.toMemoPayload()
+        ).toByteArray().toBase64String()
 
     override fun fromCenReport(report: CenReport): SymptomReport = SymptomReport(
         id = report.id,
@@ -35,8 +35,8 @@ class ApiSymptomsMapperImpl(private val resources: Resources) : ApiSymptomsMappe
         timestamp = UnixTime.fromValue(report.timestamp)
     )
 
-    private fun List<Symptom>.toApiSymptomString(): String =
-        joinToString(", ") { it.name }.toBase64()
+    private fun SymptomReport.toMemoPayload(): ByteArray =
+        "TODO memo".toByteArray() // TODO
 
     private fun fromApiSymptomString(string: String): List<Symptom> =
         if (string.isEmpty()) {

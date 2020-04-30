@@ -6,6 +6,7 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import org.coepi.android.api.CENApi
 import org.coepi.android.common.ApiSymptomsMapper
 import org.coepi.android.common.ApiSymptomsMapperImpl
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -14,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 val apiModule = module {
     single { provideRetrofit() }
     single { provideCENApi(get()) }
-    single<ApiSymptomsMapper> { ApiSymptomsMapperImpl(get()) }
+    single<ApiSymptomsMapper> { ApiSymptomsMapperImpl(androidApplication(), get()) }
 }
 
 private fun provideRetrofit() : Retrofit {

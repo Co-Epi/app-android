@@ -23,12 +23,15 @@ fun String.hexToByteArray(): ByteArray {
     return res
 }
 
-fun String.toBase64(): String =
+fun ByteArray.toBase64String(): String =
     if (SDK_INT >= O) {
-        Base64.getEncoder().encodeToString(toByteArray(UTF_8))
+        Base64.getEncoder().encodeToString(this)
     } else {
-        android.util.Base64.encodeToString(toByteArray(UTF_8), NO_WRAP)
+        android.util.Base64.encodeToString(this, NO_WRAP)
     }
+
+fun String.toBase64(): String =
+    toByteArray(UTF_8).toBase64String()
 
 fun String.base64ToUtf8(): String? =
     base64ToByteArray()?.toString(Charset.forName("utf-8"))
