@@ -13,6 +13,8 @@ import org.coepi.android.system.log.log
 import org.tcncoalition.tcnclient.TcnKeys
 import java.util.UUID.randomUUID
 import org.coepi.android.R.string.alerts_no_symptoms_reported
+import org.coepi.android.extensions.toBase64
+import java.nio.charset.StandardCharsets.UTF_8
 
 interface ApiSymptomsMapper {
     fun toApiReport(report: SymptomReport): String
@@ -26,7 +28,7 @@ class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) 
         tcnKeys.createReport(
             // TODO
 //            MemoType.CoEpiV1,
-//            report.toMemoPayload()
+//            report.toMemoData()
         ).toByteArray().toBase64String()
 
     override fun fromCenReport(report: CenReport): SymptomReport = SymptomReport(
@@ -35,8 +37,11 @@ class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) 
         timestamp = UnixTime.fromValue(report.timestamp)
     )
 
-    private fun SymptomReport.toMemoPayload(): ByteArray =
-        "TODO memo".toByteArray() // TODO
+    private fun List<Symptom>.toApiSymptomString(): String =
+        joinToString(", ") { it.name }.toBase64()
+
+    private fun SymptomReport.toMemoData(): ByteArray =
+        symptoms.toApiSymptomString().toBase64().toByteArray(UTF_8) // TODO
 
     private fun fromApiSymptomString(string: String): List<Symptom> =
         if (string.isEmpty()) {
