@@ -14,6 +14,7 @@ import org.tcncoalition.tcnclient.TcnKeys
 import java.util.UUID.randomUUID
 import org.coepi.android.R.string.alerts_no_symptoms_reported
 import org.coepi.android.extensions.toBase64
+import org.tcncoalition.tcnclient.crypto.MemoType
 import java.nio.charset.StandardCharsets.UTF_8
 
 interface ApiSymptomsMapper {
@@ -26,9 +27,8 @@ class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) 
 
     override fun toApiReport(report: SymptomReport): String =
         tcnKeys.createReport(
-            // TODO
-//            MemoType.CoEpiV1,
-//            report.toMemoData()
+            MemoType.CoEpiV1,
+            report.toMemoData()
         ).toByteArray().toBase64String()
 
     override fun fromCenReport(report: CenReport): SymptomReport = SymptomReport(
