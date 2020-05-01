@@ -34,7 +34,7 @@ fun String.toBase64(): String =
     toByteArray(UTF_8).toBase64String()
 
 fun String.base64ToUtf8(): String? =
-    base64ToByteArray()?.toString(Charset.forName("utf-8"))
+    base64ToByteArray()?.toString(UTF_8)
 
 fun String.base64ToByteArray(): ByteArray? =
     try {

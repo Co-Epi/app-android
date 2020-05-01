@@ -10,8 +10,6 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
-import okhttp3.MediaType
-import okhttp3.RequestBody
 import org.coepi.android.R.drawable
 import org.coepi.android.R.plurals
 import org.coepi.android.R.string
@@ -55,6 +53,8 @@ import org.tcncoalition.tcnclient.crypto.SignedReport
 import java.lang.System.currentTimeMillis
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.coepi.android.extensions.base64ToByteArray
+import java.nio.charset.StandardCharsets.UTF_8
 
 // TODO remove CoEpiRepo. Create update reports use case and send TCNs directly to DAO
 // TODO if Rust library or similar is added later, we can re-add this and inject new use case in it
@@ -134,7 +134,7 @@ class CoepiRepoImpl(
         val insertedCount = reports.map {
             reportsDao.insert(CenReport(
                 id = it.signature.toByteArray().toHex(),
-                report = it.report.memoData.toHex(),
+                report = it.report.memoData.toString(UTF_8),
                 timestamp = now().value // TODO extract this from memo, when protocol implemented
             ))
         }.filter { it }.size

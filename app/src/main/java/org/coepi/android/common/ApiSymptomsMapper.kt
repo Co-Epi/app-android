@@ -37,11 +37,8 @@ class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) 
         timestamp = UnixTime.fromValue(report.timestamp)
     )
 
-    private fun List<Symptom>.toApiSymptomString(): String =
-        joinToString(", ") { it.name }.toBase64()
-
     private fun SymptomReport.toMemoData(): ByteArray =
-        symptoms.toApiSymptomString().toBase64().toByteArray(UTF_8) // TODO
+        symptoms.joinToString(", ") { it.name }.toBase64().toByteArray(UTF_8) // TODO
 
     private fun fromApiSymptomString(string: String): List<Symptom> =
         if (string.isEmpty()) {

@@ -6,6 +6,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class CenReport(
     val id: String,
-    val report: String,
+    val report: String, // Base64
     val timestamp: Long
 ) : Parcelable
