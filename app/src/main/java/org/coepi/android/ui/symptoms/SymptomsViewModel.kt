@@ -18,9 +18,12 @@ import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.system.Resources
+import org.coepi.android.ui.thanks.ThanksFragmentDirections
+import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.extensions.rx.toNotification
 import org.coepi.android.ui.navigation.NavigationCommand.Back
+import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
 
 class SymptomsViewModel (
@@ -75,7 +78,7 @@ class SymptomsViewModel (
             .observeOn(mainThread())
             .subscribe{
                 uiNotifier.notify(it)
-                navigation.navigate(Back)
+                navigation.navigate(ToDestination(ThanksFragmentDirections.actionGlobalThanksFragment()))
             }
     }
 

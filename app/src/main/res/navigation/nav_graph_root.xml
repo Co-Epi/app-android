@@ -12,6 +12,9 @@
         android:id="@+id/tabs_container"
         android:name="org.coepi.android.ui.container.ContainerFragment"
         tools:layout="@layout/fragment_tabs_container" />
+    <action
+        android:id="@+id/action_global_homeFragment"
+        app:destination="@id/tabs_container" />
 
     <action
         android:id="@+id/action_global_onboarding"
@@ -78,6 +81,14 @@
     <action
         android:id="@+id/action_global_symptomsFragment"
         app:destination="@id/symptomsFragment" />
+
+    <fragment
+        android:id="@+id/thanksFragment"
+        android:name="org.coepi.android.ui.thanks.ThanksFragment"
+        tools:layout="@layout/fragment_thanks" />
+    <action
+        android:id="@+id/action_global_thanksFragment"
+        app:destination="@id/thanksFragment" />
 
     <fragment
         android:id="@+id/CENFragment"
