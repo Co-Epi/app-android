@@ -12,18 +12,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="#01A39D"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@drawable/item_symptom_background"
+            android:button="@null"
+            android:buttonTint="@color/colorPrimary"
             android:clickable="false"
-            android:paddingStart="15dp"
             android:text="@{item.name}"
-            android:textSize="@dimen/text_size_40"
+            android:textColor="@color/item_symptom_text"
+            android:textSize="@dimen/text_size_30"
             tools:text="test" />
 
     </LinearLayout>

@@ -87,6 +87,10 @@ class SymptomsViewModel (
         submitTrigger.onNext(Unit)
     }
 
+    fun onBack(){
+        navigation.navigate(Back)
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
