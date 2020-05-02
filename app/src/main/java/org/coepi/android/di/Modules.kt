@@ -3,13 +3,15 @@ package org.coepi.android.di
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import org.coepi.android.NonReferencedDependenciesActivator
 import org.coepi.android.ble.BleEnabler
 import org.coepi.android.ble.BleManager
-import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
+import org.coepi.android.ble.BleSimulator
 import org.coepi.android.cen.CENModule
 import org.coepi.android.cen.apiModule
 import org.coepi.android.repo.repoModule
@@ -18,6 +20,7 @@ import org.coepi.android.system.ClipboardImpl
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.EnvInfosImpl
 import org.coepi.android.system.Preferences
+import org.coepi.android.system.PreferencesImpl
 import org.coepi.android.system.Resources
 import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
@@ -74,7 +77,7 @@ val viewModelModule = module {
 
 val systemModule = module {
     single { getSharedPrefs(androidApplication()) }
-    single { Preferences(get()) }
+    single<Preferences> { PreferencesImpl(get(), get()) }
     single { OnboardingPermissionsChecker() }
     single<BlePreconditionsNotifier> { BlePreconditionsNotifierImpl() }
     single { BlePreconditions(get(), get(), get()) }
@@ -90,6 +93,7 @@ val systemModule = module {
     single<IntentForwarder> { IntentForwarderImpl() }
     single { InfectionsNotificationIntentHandler(get(), get()) }
     single<UINotifier> { UINotifierImpl() }
+    single { provideGson() }
 }
 
 val uiModule = module {
@@ -111,3 +115,8 @@ val appModule = listOf(
 
 fun getSharedPrefs(androidApplication: Application): SharedPreferences =
     androidApplication.getSharedPreferences("default", MODE_PRIVATE)
+
+private fun provideGson(): Gson = GsonBuilder()
+    .serializeNulls()
+    .setLenient()
+    .create()

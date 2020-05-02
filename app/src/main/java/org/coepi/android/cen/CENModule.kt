@@ -19,7 +19,7 @@ val CENModule = module {
     single<CenReportRepo> { CenReportRepoImpl(get(), get(), get()) }
     single<CenMatcher> { CenMatcherImpl() }
     single<CenLogic> { CenLogicImpl() }
-    single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get(), get(), get(), get(), get()) }
+    single<CoEpiRepo> { CoepiRepoImpl(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     single<TcnGenerator> { TcnGeneratorImpl(androidApplication()) }
     single { ScannedCensHandler(get(), get(), get()) }
     single { BleInitializer(get(), get()) }

@@ -10,11 +10,13 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.coepi.android.R.drawable
+import org.coepi.android.R.drawable.ic_launcher_foreground
 import org.coepi.android.R.plurals
 import org.coepi.android.R.string
 import org.coepi.android.api.CENApi
-import org.coepi.android.cen.Cen
 import org.coepi.android.cen.CenDao
 import org.coepi.android.cen.CenReport
 import org.coepi.android.cen.CenReportDao
@@ -29,11 +31,14 @@ import org.coepi.android.common.flatMap
 import org.coepi.android.common.map
 import org.coepi.android.common.successOrNull
 import org.coepi.android.domain.CenMatcher
+import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.extensions.retrofit.executeSafe
 import org.coepi.android.extensions.rx.toObservable
 import org.coepi.android.extensions.toHex
 import org.coepi.android.extensions.toResult
+import org.coepi.android.system.Preferences
+import org.coepi.android.system.PreferencesKey.LAST_FETCHED_REPORTS_INTERVAL
 import org.coepi.android.system.Resources
 import org.coepi.android.system.intent.IntentKey.NOTIFICATION_INFECTION_ARGS
 import org.coepi.android.system.intent.IntentNoValue
@@ -51,9 +56,6 @@ import org.coepi.android.ui.notifications.NotificationPriority.HIGH
 import org.coepi.android.ui.notifications.NotificationsShower
 import org.tcncoalition.tcnclient.crypto.SignedReport
 import java.lang.System.currentTimeMillis
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.coepi.android.extensions.base64ToByteArray
 import java.nio.charset.StandardCharsets.UTF_8
 
 // TODO remove CoEpiRepo. Create update reports use case and send TCNs directly to DAO
@@ -69,8 +71,6 @@ interface CoEpiRepo {
     // Send symptoms report
     fun sendReport(report: SymptomReport)
 
-    fun reports(): Result<List<SignedReport>, Throwable>
-
     // Trigger manually report update
     fun requestUpdateReports()
 
@@ -85,7 +85,8 @@ class CoepiRepoImpl(
     private val reportsDao: CenReportDao,
     private val resources: Resources,
     private val notificationChannelsInitializer: AppNotificationChannels,
-    private val notificationsShower: NotificationsShower
+    private val notificationsShower: NotificationsShower,
+    private val preferences: Preferences
 ) : CoEpiRepo {
 
     private var matchingStartTime: Long? = null
@@ -128,10 +129,10 @@ class CoepiRepoImpl(
     }
 
     private fun updateReports() {
-        val reportsResult = reports()
+        val reportsResult: Result<List<SignedReport>, Throwable> = newMatchingReports()
         val reports: List<SignedReport> = reportsResult.successOrNull() ?: emptyList()
 
-        val insertedCount = reports.map {
+        val insertedCount: Int = reports.map {
             reportsDao.insert(CenReport(
                 id = it.signature.toByteArray().toHex(),
                 report = it.report.memoData.toString(UTF_8),
@@ -150,7 +151,7 @@ class CoepiRepoImpl(
     }
 
     private fun notificationConfiguration(count: Int): NotificationConfig = NotificationConfig(
-        drawable.ic_launcher_foreground,
+        ic_launcher_foreground,
         resources.getString(string.infection_notification_title),
         resources.getQuantityString(plurals.alerts_new_notifications_count, count),
         HIGH,
@@ -158,37 +159,79 @@ class CoepiRepoImpl(
         NotificationIntentArgs(NOTIFICATION_INFECTION_ARGS, IntentNoValue())
     )
 
-    override fun reports(): Result<List<SignedReport>, Throwable> {
+    private fun newMatchingReports(): Result<List<SignedReport>, Throwable> {
+        val startInterval: ReportsInterval = preferences.getObject(
+            LAST_FETCHED_REPORTS_INTERVAL,
+            ReportsInterval::class.java
+        )?.next() ?: ReportsInterval.createFor(now())
+
+        return newMatchingReports(startInterval).doIfSuccess { chunks ->
+            preferences.putObject(
+                LAST_FETCHED_REPORTS_INTERVAL,
+                chunks.lastOrNull()?.interval ?: startInterval
+            )
+        }.map { chunks ->
+            chunks.flatMap { it.matched }
+        }
+    }
+
+    private fun newMatchingReports(startInterval: ReportsInterval)
+            : Result<List<ProcessedReportsChunk>, Throwable> =
+        generateSequence(startInterval) { it.next() }
+            .takeWhile { it.start < now().value }
+            .map { retrieveMatchingReports(it) }
+            .asIterable()
+            .map {
+                when (it) {
+                    is Success -> it.success
+                    is Failure -> return@newMatchingReports Failure(
+                        Throwable("Error fetching reports: ${it.error}"))
+                }
+            }
+            .let { Success(it) }
+
+    data class ProcessedReportsChunk(val reports: List<String>, val matched: List<SignedReport>,
+                                     val interval: ReportsInterval)
+
+    data class ReportsInterval(val number: Long, val length: Long) {
+        fun next(): ReportsInterval = ReportsInterval(number + 1, length)
+        val start: Long = number * length
+        val end: Long = start + length
+
+        companion object {
+            fun createFor(time: UnixTime): ReportsInterval {
+                val intervalLengthSeconds = 21600L
+                return ReportsInterval(
+                    number = time.value / intervalLengthSeconds,
+                    length  = intervalLengthSeconds
+                )
+            }
+        }
+    }
+
+    private fun retrieveMatchingReports(interval: ReportsInterval)
+            : Result<ProcessedReportsChunk, Throwable> {
 
         updateReportsState.onNext(Progress)
 
-        val reportsResult = api.getReports().executeSafe()
+        val reportsResult: Result<List<String>, Throwable> = api.getReports(interval.number,
+//            interval.length)
+            // TODO api will probably change this to seconds
+            interval.length * 1000)
+
+            .executeSafe()
             .flatMap { it.toResult() }
 
         reportsResult.doIfSuccess { reports ->
             log.i("Retrieved ${reports.size} reports. Start matching...", CEN_MATCHING)
         }
 
-        matchingStartTime = currentTimeMillis()
-
-        val matchedReportsResult: Result<List<SignedReport>, Throwable> =
-            reportsResult.map { filterMatchingReports(it) }
-
-        matchingStartTime?.let {
-            val time = (currentTimeMillis() - it) / 1000
-            log.i("Took ${time}s to match reports", CEN_MATCHING)
-        }
-        matchingStartTime = null
-
-        matchedReportsResult.doIfSuccess {
-            if (it.isNotEmpty()) {
-                log.i("Matches found (${it.size}): $it", CEN_MATCHING)
-            } else {
-                log.i("No matches found", CEN_MATCHING)
-            }
+        val result = reportsResult.map { reports ->
+            val matches = findMatches(reports)
+            ProcessedReportsChunk(reports, matches, interval)
         }
 
-        return matchedReportsResult.also { result ->
+        return result.also {
             updateReportsState.onNext(when (result) {
                 is Success -> OperationState.Success(Unit)
                 is Failure -> OperationState.Failure(result.error).also {
@@ -199,11 +242,30 @@ class CoepiRepoImpl(
         }
     }
 
-    private fun filterMatchingReports(reports: List<String>): List<SignedReport> {
-        // TODO delete periodically entries older than ~3 weeks from the db
-        val cens: List<Cen> = cenDao.all().map { it.cen }
-        log.i("DB CENs count: ${cens.size}")
-        return cenMatcher.match(cens, reports.distinct())
+    private fun findMatches(reports: List<String>): List<SignedReport> {
+
+        matchingStartTime = currentTimeMillis()
+
+        log.i("Retrieved ${reports.size} reports. Start matching...", CEN_MATCHING)
+
+        val matchedReports: List<SignedReport> = cenDao.all().map { it.cen }.let { cens ->
+            log.i("DB CENs count: ${cens.size}")
+            cenMatcher.match(cens, reports.distinct())
+        }
+
+        matchingStartTime?.let {
+            val time = (currentTimeMillis() - it) / 1000
+            log.i("Took ${time}s to match reports", CEN_MATCHING)
+        }
+        matchingStartTime = null
+
+        if (matchedReports.isNotEmpty()) {
+            log.i("Matches found (${matchedReports.size}): $matchedReports", CEN_MATCHING)
+        } else {
+            log.i("No matches found", CEN_MATCHING)
+        }
+
+        return matchedReports
     }
 
     private fun postReport(report: SymptomReport): Completable =
