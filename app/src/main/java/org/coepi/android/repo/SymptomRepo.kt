@@ -23,17 +23,15 @@ class SymptomRepoImpl(
     override val sendReportState: Observable<VoidOperationState> = coEpiRepo.sendReportState.share()
 
     override fun symptoms(): Single<List<Symptom>> = just(listOf(
-        Symptom("1", "Fever"),
-        Symptom("2", "Tiredness"),
-        Symptom("3", "Loss of appetite"),
-        Symptom("4", "Muscle aches"),
-        Symptom("5", "Trouble breathing"),
-        Symptom("6", "Nasal congestion"),
-        Symptom("7", "Sneezing"),
-        Symptom("8", "Sore throat"),
-        Symptom("9", "Headaches"),
-        Symptom("10", "Diarrhea"),
-        Symptom("11", "Loss of smell or taste")
+        Symptom("1", "I don\'t have any symptoms today"),
+        Symptom("2", "Cough"),
+        Symptom("3", "Breathless"),
+        Symptom("4", "Fever"),
+        Symptom("5", "Muscle aches"),
+        Symptom("6", "Loss of smell or taste"),
+        Symptom("7", "Diarrhea"),
+        Symptom("8", "Runny nose"),
+        Symptom("9", "I have symptoms that are not on the list")
     ))
 
     override fun submitSymptoms(symptoms: List<Symptom>) {
