@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.home.ThanksFragments"
-        android:background="@color/colorPrimary">
+        android:background="@drawable/ic_geometric_background">
 
 
         <TextView
