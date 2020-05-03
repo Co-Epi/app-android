@@ -5,7 +5,7 @@ import com.google.gson.Gson
 
 enum class PreferencesKey {
     SEEN_ONBOARDING,
-    LAST_FETCHED_REPORTS_INTERVAL
+    LAST_COMPLETED_REPORTS_INTERVAL
 }
 
 interface Preferences {

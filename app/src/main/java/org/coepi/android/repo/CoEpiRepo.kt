@@ -12,7 +12,6 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.coepi.android.R.drawable
 import org.coepi.android.R.drawable.ic_launcher_foreground
 import org.coepi.android.R.plurals
 import org.coepi.android.R.string
@@ -38,7 +37,7 @@ import org.coepi.android.extensions.rx.toObservable
 import org.coepi.android.extensions.toHex
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.Preferences
-import org.coepi.android.system.PreferencesKey.LAST_FETCHED_REPORTS_INTERVAL
+import org.coepi.android.system.PreferencesKey.LAST_COMPLETED_REPORTS_INTERVAL
 import org.coepi.android.system.Resources
 import org.coepi.android.system.intent.IntentKey.NOTIFICATION_INFECTION_ARGS
 import org.coepi.android.system.intent.IntentNoValue
@@ -160,31 +159,40 @@ class CoepiRepoImpl(
     )
 
     private fun newMatchingReports(): Result<List<SignedReport>, Throwable> {
-        val startInterval: ReportsInterval = preferences.getObject(
-            LAST_FETCHED_REPORTS_INTERVAL,
-            ReportsInterval::class.java
-        )?.next() ?: ReportsInterval.createFor(now())
+        val now: UnixTime = now()
 
-        return newMatchingReports(startInterval).doIfSuccess { chunks ->
-            preferences.putObject(
-                LAST_FETCHED_REPORTS_INTERVAL,
-                chunks.lastOrNull()?.interval ?: startInterval
-            )
+        val startInterval: ReportsInterval = preferences.getObject(
+            LAST_COMPLETED_REPORTS_INTERVAL,
+            ReportsInterval::class.java
+        )?.next() ?: ReportsInterval.createFor(now)
+
+        return matchingReports(startInterval, now).doIfSuccess { chunks ->
+            val lastCompletedInterval = chunks
+                .map { it.interval }
+                .findLastEndingBefore(now)
+
+            lastCompletedInterval?.let {
+                preferences.putObject(LAST_COMPLETED_REPORTS_INTERVAL, it)
+            }
+
         }.map { chunks ->
             chunks.flatMap { it.matched }
         }
     }
 
-    private fun newMatchingReports(startInterval: ReportsInterval)
+    private fun List<ReportsInterval>.findLastEndingBefore(time: UnixTime): ReportsInterval? =
+        reversed().find { it.endsBefore(time) }
+
+    private fun matchingReports(startInterval: ReportsInterval, until: UnixTime)
             : Result<List<ProcessedReportsChunk>, Throwable> =
         generateSequence(startInterval) { it.next() }
-            .takeWhile { it.start < now().value }
+            .takeWhile { it.startsBefore(until) }
             .map { retrieveMatchingReports(it) }
             .asIterable()
             .map {
                 when (it) {
                     is Success -> it.success
-                    is Failure -> return@newMatchingReports Failure(
+                    is Failure -> return@matchingReports Failure(
                         Throwable("Error fetching reports: ${it.error}"))
                 }
             }
@@ -197,6 +205,10 @@ class CoepiRepoImpl(
         fun next(): ReportsInterval = ReportsInterval(number + 1, length)
         val start: Long = number * length
         val end: Long = start + length
+
+        fun startsBefore(time: UnixTime): Boolean = start < time.value
+
+        fun endsBefore(time: UnixTime): Boolean = end < time.value
 
         companion object {
             fun createFor(time: UnixTime): ReportsInterval {
