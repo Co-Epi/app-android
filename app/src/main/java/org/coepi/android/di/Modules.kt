@@ -35,6 +35,7 @@ import org.coepi.android.ui.debug.DebugViewModel
 import org.coepi.android.ui.debug.ble.DebugBleViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.home.HomeViewModel
+import org.coepi.android.ui.thanks.ThanksViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.notifications.AppNotificationChannels
@@ -53,6 +54,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { SymptomsViewModel(get(), get(), get(), get()) }
+    viewModel { ThanksViewModel(get()) }
     viewModel { AlertsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { LocationViewModel() }
