@@ -19,7 +19,7 @@
             android:id="@+id/checkbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal"
+            android:gravity="center"
             android:background="@drawable/item_symptom_background"
             android:button="@null"
             android:buttonTint="@color/colorPrimary"

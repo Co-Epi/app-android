@@ -14,7 +14,8 @@
         tools:layout="@layout/fragment_tabs_container" />
     <action
         android:id="@+id/action_global_homeFragment"
-        app:destination="@id/tabs_container" />
+        app:destination="@id/tabs_container"
+        app:popUpTo="@id/tabs_container" />
 
     <action
         android:id="@+id/action_global_onboarding"
@@ -55,7 +56,8 @@
 
     <action
         android:id="@+id/action_global_alerts"
-        app:destination="@id/alerts" />
+        app:destination="@id/alerts"
+        app:popUpTo="@id/tabs_container"/>
 
     <fragment
         android:id="@+id/alert_details_fragment"
@@ -80,7 +82,8 @@
         tools:layout="@layout/fragment_symptoms" />
     <action
         android:id="@+id/action_global_symptomsFragment"
-        app:destination="@id/symptomsFragment" />
+        app:destination="@id/symptomsFragment"
+        app:popUpTo="@id/tabs_container" />
 
     <fragment
         android:id="@+id/thanksFragment"
@@ -88,14 +91,7 @@
         tools:layout="@layout/fragment_thanks" />
     <action
         android:id="@+id/action_global_thanksFragment"
-        app:destination="@id/thanksFragment" />
-
-    <fragment
-        android:id="@+id/CENFragment"
-        android:name="org.coepi.android.ui.debug.cen.CENFragment"
-        tools:layout="@layout/fragment_debug_cen" />
-    <action
-        android:id="@+id/action_global_CENFragment"
-        app:destination="@id/CENFragment" />
+        app:destination="@id/thanksFragment"
+        app:popUpTo="@id/tabs_container" />
 
 </navigation>

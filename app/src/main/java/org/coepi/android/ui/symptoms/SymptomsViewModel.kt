@@ -25,6 +25,7 @@ import org.coepi.android.ui.extensions.rx.toNotification
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalThanksFragment
 
 class SymptomsViewModel (
     private val symptomRepo: SymptomRepo,
@@ -78,7 +79,7 @@ class SymptomsViewModel (
             .observeOn(mainThread())
             .subscribe{
                 uiNotifier.notify(it)
-                navigation.navigate(ToDestination(ThanksFragmentDirections.actionGlobalThanksFragment()))
+                navigation.navigate(ToDestination(actionGlobalThanksFragment()))
             }
     }
 

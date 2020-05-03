@@ -36,25 +36,31 @@
         <Button
             android:id="@+id/logmore"
             style="@style/StandardButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:text="@string/thanks_log_button"
             android:onClick="@{() -> vm.onCheckInClick()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/headline" />
 
         <Button
             android:id="@+id/exposures"
             style="@style/StandardButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:text="@string/thanks_exposures_button"
             android:onClick="@{() -> vm.onSeeAlertsClick()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logmore" />
 
         <Button
             android:id="@+id/home"
             style="@style/StandardButton"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:text="@string/thanks_home_button"
             android:onClick="@{() -> vm.onCloseClick()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exposures" />
 
 
