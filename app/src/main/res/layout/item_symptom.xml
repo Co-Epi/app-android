@@ -27,6 +27,7 @@
             android:text="@{item.name}"
             android:textColor="@color/item_symptom_text"
             android:textSize="@dimen/text_size_30"
+            android:paddingBottom="5dp"
             tools:text="test" />
 
     </LinearLayout>
