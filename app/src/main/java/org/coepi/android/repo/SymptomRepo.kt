@@ -3,9 +3,9 @@ package org.coepi.android.repo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.Single.just
+import org.coepi.android.cen.CenReportRepo
 import org.coepi.android.cen.SymptomReport
 import org.coepi.android.domain.UnixTime.Companion.now
-import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
@@ -16,6 +16,7 @@ import org.coepi.android.domain.symptomflow.SymptomId.MUSCLE_ACHES
 import org.coepi.android.domain.symptomflow.SymptomId.NONE
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
+import org.coepi.android.system.rx.VoidOperationState
 import java.util.UUID.randomUUID
 
 interface SymptomRepo {
@@ -26,10 +27,10 @@ interface SymptomRepo {
 }
 
 class SymptomRepoImpl(
-    private val coEpiRepo: CoEpiRepo
+    private val reportRepo: CenReportRepo
 ): SymptomRepo {
 
-    override val sendReportState: Observable<VoidOperationState> = coEpiRepo.sendReportState.share()
+    override val sendReportState: Observable<VoidOperationState> = reportRepo.sendState.share()
 
     override fun symptoms(): Single<List<Symptom>> = just(listOf(
         Symptom(NONE, "I don\'t have any symptoms today"),
@@ -44,7 +45,7 @@ class SymptomRepoImpl(
     ))
 
     override fun submitSymptoms(symptoms: List<Symptom>) {
-        coEpiRepo.sendReport(symptoms.toReport())
+        reportRepo.send(symptoms.toReport())
     }
 
     private fun List<Symptom>.toReport(): SymptomReport = SymptomReport(

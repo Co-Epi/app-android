@@ -3,6 +3,7 @@ package org.coepi.android.repo
 import io.reactivex.Observable
 import org.coepi.android.cen.CenReportRepo
 import org.coepi.android.cen.SymptomReport
+import org.coepi.android.repo.reportsupdate.ReportsUpdater
 import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.VoidOperationState
 
@@ -16,12 +17,13 @@ interface AlertsRepo {
 
 class AlertRepoImpl(
     private val cenReportRepo: CenReportRepo,
-    private val coEpiRepo: CoEpiRepo
+    private val reportsUpdater: ReportsUpdater
 ): AlertsRepo {
 
     override val alerts: Observable<List<SymptomReport>> = cenReportRepo.reports
 
-    override val updateReportsState: Observable<OperationState<Unit>> = coEpiRepo.updateReportsState
+    override val updateReportsState: Observable<OperationState<Unit>> = reportsUpdater
+        .updateState
 
     // Dummy test data
 //    override val alerts: Observable<List<ReceivedCenReport>> = just(listOf(
@@ -39,6 +41,6 @@ class AlertRepoImpl(
     }
 
     override fun updateReports() {
-        coEpiRepo.requestUpdateReports()
+        reportsUpdater.requestUpdateReports()
     }
 }
