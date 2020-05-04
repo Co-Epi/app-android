@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="org.coepi.android.ui.thanks.ThanksViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.ThanksFragments"
+        android:background="@drawable/ic_geometric_background">
+
+
+        <TextView
+            android:id="@+id/headline"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            style="@style/Text.Headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginTop="100dp"
+            android:text="@string/thanks_message"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_headline"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/logmore"
+            style="@style/StandardButton"
+            android:layout_width="0dp"
+            android:text="@string/thanks_log_button"
+            android:onClick="@{() -> vm.onCheckInClick()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headline" />
+
+        <Button
+            android:id="@+id/exposures"
+            style="@style/StandardButton"
+            android:layout_width="0dp"
+            android:text="@string/thanks_exposures_button"
+            android:onClick="@{() -> vm.onSeeAlertsClick()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logmore" />
+
+        <Button
+            android:id="@+id/home"
+            style="@style/StandardButton"
+            android:layout_width="0dp"
+            android:text="@string/thanks_home_button"
+            android:onClick="@{() -> vm.onCloseClick()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exposures" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

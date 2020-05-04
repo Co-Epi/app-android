@@ -21,6 +21,8 @@ class SymptomsFragment : Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
+        toolbar.setNavigationOnClickListener { viewModel.onBack() }
+
         productsRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, VERTICAL, false)

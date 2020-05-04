@@ -19,7 +19,7 @@
     <string name="label_fragment_onboarding">Onboarding</string>
     <string name="label_fragment_alerts">Alerts</string>
     <string name="label_fragment_alerts_details">Alerts details</string>
-    <string name="label_fragment_symptoms">Symptoms</string>
+    <string name="label_fragment_symptoms">Symptom Report</string>
     <string name="label_fragment_api">API</string>
 
     <!-- BLE Testing -->
@@ -35,9 +35,16 @@
     <string name="postReportInfo">Users share reports with revealed CENKeys to reduce spread of disease</string>
 
     <!-- Symptoms -->
-    <string name="symptoms_headline">Are you experiencing any of the following symptoms?</string>
+    <string name="symptoms_headline">What symptoms do you have today?</string>
+    <string name="symptoms_caption">Select all that apply</string>
     <string name="symptoms_submit_button">Submit</string>
     <string name="symptoms_success_message">Symptoms submitted!</string>
+
+    <!-- Thank you -->
+    <string name="thanks_message">Thank you for saving your symptoms! We will keep notified about exposures this week.</string>
+    <string name="thanks_log_button">Log more symptoms</string>
+    <string name="thanks_exposures_button">View exposures</string>
+    <string name="thanks_home_button">Return to home screen</string>
 
     <!-- Onboarding -->
     <string name="onboarding_title">CoEpi</string>
