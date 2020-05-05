@@ -124,6 +124,7 @@ class ReportsUpdaterImpl(
 
     /**
      * Retrieves paginated reports from api and matches them.
+     * If fetching/processing one chunk fails, it makes the whole operation fail.
      */
     fun matchingReports(startInterval: ReportsInterval, until: UnixTime)
             : Result<List<MatchedReportsChunk>, Throwable> =
