@@ -26,6 +26,7 @@ import org.coepi.android.extensions.toHex
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.PreferencesKey.LAST_COMPLETED_REPORTS_INTERVAL
+import org.coepi.android.system.log.LogTag.NET
 import org.coepi.android.system.log.LogTag.TCN_MATCHING
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.OperationState
@@ -158,7 +159,7 @@ class ReportsUpdaterImpl(
             .flatMap { it.toResult() }
 
         reportsStringsResult.doIfSuccess { reports ->
-            log.i("Retrieved ${reports.size} reports. Start matching...", TCN_MATCHING)
+            log.i("Retrieved ${reports.size} reports.", NET)
         }
 
         return reportsStringsResult.map { reportStrings ->
@@ -194,6 +195,7 @@ class ReportsUpdaterImpl(
 
     fun findMatches(reports: List<SignedReport>): List<SignedReport> {
         val matchingStartTime = currentTimeMillis()
+        log.i("Start matching...", TCN_MATCHING)
 
         val matchedReports: List<SignedReport> = tcnDao.all().map { it.tcn }.let { tcns ->
             log.i("DB TCNs count: ${tcns.size}")
