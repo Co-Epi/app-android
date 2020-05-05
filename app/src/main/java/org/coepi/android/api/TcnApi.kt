@@ -12,9 +12,7 @@ interface TcnApi {
 
     @GET("tcnreport/")
     fun getReports(@Query("intervalNumber") intervalNumber: Long,
-
-                   // TODO: will be probably changed to seconds / renamed
-                   @Query("intervalLengthMs") intervalLength: Long): Call<List<String>>
+                   @Query("intervalLength") intervalLength: Long): Call<List<String>>
 
     @POST("tcnreport/")
     fun postReport(@Body report: RequestBody): Completable

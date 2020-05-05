@@ -2,7 +2,14 @@ package org.coepi.android.repo.reportsupdate
 
 import org.coepi.android.domain.UnixTime
 
+// TODO maybe rename in something more generic
 data class ReportsInterval(val number: Long, val length: Long) {
+    init {
+        if (length <= 0) {
+            throw IllegalArgumentException("Invalid interval length: $length")
+        }
+    }
+
     fun next(): ReportsInterval = ReportsInterval(
         number + 1,
         length
@@ -16,12 +23,10 @@ data class ReportsInterval(val number: Long, val length: Long) {
     fun endsBefore(time: UnixTime): Boolean = end < time.value
 
     companion object {
-        fun createFor(time: UnixTime): ReportsInterval {
-            val intervalLengthSeconds = 21600L
-            return ReportsInterval(
-                number = time.value / intervalLengthSeconds,
-                length = intervalLengthSeconds
+        fun createFor(time: UnixTime, lengthSeconds: Long = 21600L): ReportsInterval =
+            ReportsInterval(
+                number = time.value / lengthSeconds,
+                length = lengthSeconds
             )
-        }
     }
 }
