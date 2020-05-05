@@ -93,5 +93,10 @@
         android:id="@+id/action_global_thanksFragment"
         app:destination="@id/thanksFragment"
         app:popUpTo="@id/tabs_container" />
+    <fragment
+        android:id="@+id/coughTypeFragment"
+        android:name="org.coepi.android.ui.symptoms.cough.CoughTypeFragment"
+        android:label="CoughTypeFragment"
+        tools:layout="@layout/fragment_cough_type"/><action android:id="@+id/action_global_coughTypeFragment" app:destination="@id/coughTypeFragment"/>
 
 </navigation>

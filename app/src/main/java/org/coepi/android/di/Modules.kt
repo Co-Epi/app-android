@@ -46,6 +46,7 @@ import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
+import org.coepi.android.ui.symptoms.cough.CoughTypeViewModel
 import org.coepi.android.worker.cenfetcher.ContactsFetchManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -64,6 +65,7 @@ val viewModelModule = module {
     viewModel { DebugBleViewModel(get()) }
     viewModel { ContainerViewModel(get()) }
     viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args) }
+    viewModel { CoughTypeViewModel(get(), get(), get(), get()) }
 }
 
 val systemModule = module {

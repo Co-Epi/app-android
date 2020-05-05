@@ -82,4 +82,12 @@
     <string name="infection_notification_channel_name">Exposures</string>
     <string name="infection_notification_channel_description">Detected virus exposures</string>
 
+    <!-- Symptom Report - Cough Type -->
+    <string name="symptom_report_cough_title">Follow up: Cough</string>
+    <string name="symptom_report_cough_type_headline">I would describe my cough as:</string>
+    <string name="symptom_report_cough_type_wet">Wet</string>
+    <string name="symptom_report_cough_type_dry">Dry</string>
+    <string name="symptom_report_cough_type_wet_description">It feels like there is mucus in my throat and\/or chest</string>
+    <string name="symptom_report_cough_type_dry_description">My throat feels \'tickly\' or \'scratchy\' without mucus</string>
+
 </resources>
