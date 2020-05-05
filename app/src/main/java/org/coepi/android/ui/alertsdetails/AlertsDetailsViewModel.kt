@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
 import org.coepi.android.R.drawable.ic_alert
-import org.coepi.android.cen.SymptomReport
+import org.coepi.android.tcn.SymptomReport
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.extensions.rx.toLiveData
 

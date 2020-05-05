@@ -3,8 +3,8 @@ package org.coepi.android.repo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.Single.just
-import org.coepi.android.cen.CenReportRepo
-import org.coepi.android.cen.SymptomReport
+import org.coepi.android.tcn.TcnReportRepo
+import org.coepi.android.tcn.SymptomReport
 import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
@@ -27,7 +27,7 @@ interface SymptomRepo {
 }
 
 class SymptomRepoImpl(
-    private val reportRepo: CenReportRepo
+    private val reportRepo: TcnReportRepo
 ): SymptomRepo {
 
     override val sendReportState: Observable<VoidOperationState> = reportRepo.sendState.share()

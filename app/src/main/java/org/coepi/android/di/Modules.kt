@@ -5,15 +5,16 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.coepi.android.NonReferencedDependenciesActivator
+import org.coepi.android.NotReferencedDependenciesActivator
 import org.coepi.android.ble.BleEnabler
 import org.coepi.android.ble.BleManager
+import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
 import org.coepi.android.ble.BleSimulator
-import org.coepi.android.cen.CENModule
-import org.coepi.android.cen.apiModule
+import org.coepi.android.tcn.TcnModule
+import org.coepi.android.tcn.apiModule
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
@@ -52,7 +53,7 @@ import org.coepi.android.ui.symptoms.cough.CoughDurationViewModel
 import org.coepi.android.ui.symptoms.cough.CoughStatusViewModel
 import org.coepi.android.ui.symptoms.cough.CoughTypeViewModel
 import org.coepi.android.ui.thanks.ThanksViewModel
-import org.coepi.android.worker.cenfetcher.ContactsFetchManager
+import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -84,8 +85,8 @@ val systemModule = module {
     single { BleEnabler() }
     single { Resources(androidApplication()) }
     single<BleManager> { BleManagerImpl(androidApplication(), get()) }
-//    single<BleManager> { BleSimulator(get()) }  // Disable BleManagerImpl and enable this to use BLE simulator
-    single { NonReferencedDependenciesActivator(get(), get(), get(), get()) }
+//    single<BleManager> { BleSimulator() }  // Disable BleManagerImpl and enable this to use BLE simulator
+    single { NotReferencedDependenciesActivator(get(), get(), get(), get()) }
     single { ContactsFetchManager(get()) }
     single<DebugBleObservable> { DebugBleObservableImpl() }
     single<Clipboard> { ClipboardImpl(get()) }
@@ -109,7 +110,7 @@ val appModule = listOf(
     viewModelModule,
     systemModule,
     apiModule,
-    CENModule,
+    TcnModule,
     uiModule
 )
 

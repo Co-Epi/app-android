@@ -9,10 +9,10 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
-import org.coepi.android.api.CENApi
-import org.coepi.android.cen.CenDao
-import org.coepi.android.cen.CenReport
-import org.coepi.android.cen.CenReportDao
+import org.coepi.android.api.TcnApi
+import org.coepi.android.tcn.TcnDao
+import org.coepi.android.tcn.TcnReport
+import org.coepi.android.tcn.TcnReportDao
 import org.coepi.android.common.Result
 import org.coepi.android.common.Result.Failure
 import org.coepi.android.common.Result.Success
@@ -20,7 +20,7 @@ import org.coepi.android.common.doIfSuccess
 import org.coepi.android.common.flatMap
 import org.coepi.android.common.map
 import org.coepi.android.common.successOrNull
-import org.coepi.android.domain.CenMatcher
+import org.coepi.android.domain.TcnMatcher
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.extensions.retrofit.executeSafe
@@ -28,7 +28,7 @@ import org.coepi.android.extensions.toHex
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.PreferencesKey.LAST_COMPLETED_REPORTS_INTERVAL
-import org.coepi.android.system.log.LogTag.CEN_MATCHING
+import org.coepi.android.system.log.LogTag.TCN_MATCHING
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.NotStarted
@@ -45,10 +45,10 @@ interface ReportsUpdater {
 }
 
 class ReportsUpdaterImpl(
-    private val cenMatcher: CenMatcher,
-    private val api: CENApi,
-    private val cenDao: CenDao,
-    private val reportsDao: CenReportDao,
+    private val tcnMatcher: TcnMatcher,
+    private val api: TcnApi,
+    private val tcnDao: TcnDao,
+    private val reportsDao: TcnReportDao,
     private val preferences: Preferences,
     private val newAlertsNotificationShower: NewAlertsNotificationShower
 ) : ReportsUpdater {
@@ -88,7 +88,7 @@ class ReportsUpdaterImpl(
      */
     private fun storeReports(reports: List<SignedReport>): Int {
         val insertedCount: Int = reports.map {
-            reportsDao.insert(CenReport(
+            reportsDao.insert(TcnReport(
                 id = it.signature.toByteArray().toHex(),
                 report = it.report.memoData.toString(UTF_8),
                 timestamp = now().value // TODO extract this from memo, when protocol implemented
@@ -156,7 +156,7 @@ class ReportsUpdaterImpl(
             .flatMap { it.toResult() }
 
         reportsResult.doIfSuccess { reports ->
-            log.i("Retrieved ${reports.size} reports. Start matching...", CEN_MATCHING)
+            log.i("Retrieved ${reports.size} reports. Start matching...", TCN_MATCHING)
         }
 
         val result = reportsResult.map { reports ->
@@ -182,18 +182,18 @@ class ReportsUpdaterImpl(
     private fun findMatches(reports: List<String>): List<SignedReport> {
         val matchingStartTime = currentTimeMillis()
 
-        val matchedReports: List<SignedReport> = cenDao.all().map { it.cen }.let { cens ->
-            log.i("DB CENs count: ${cens.size}")
-            cenMatcher.match(cens, reports.distinct())
+        val matchedReports: List<SignedReport> = tcnDao.all().map { it.tcn }.let { tcns ->
+            log.i("DB TCNs count: ${tcns.size}")
+            tcnMatcher.match(tcns, reports.distinct())
         }
 
         val time = (currentTimeMillis() - matchingStartTime) / 1000
-        log.i("Took ${time}s to match reports", CEN_MATCHING)
+        log.i("Took ${time}s to match reports", TCN_MATCHING)
 
         if (matchedReports.isNotEmpty()) {
-            log.i("Matches found (${matchedReports.size}): $matchedReports", CEN_MATCHING)
+            log.i("Matches found (${matchedReports.size}): $matchedReports", TCN_MATCHING)
         } else {
-            log.i("No matches found", CEN_MATCHING)
+            log.i("No matches found", TCN_MATCHING)
         }
 
         return matchedReports

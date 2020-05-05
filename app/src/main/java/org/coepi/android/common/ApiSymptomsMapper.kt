@@ -1,8 +1,8 @@
 package org.coepi.android.common
 
 import android.content.Context
-import org.coepi.android.cen.CenReport
-import org.coepi.android.cen.SymptomReport
+import org.coepi.android.tcn.TcnReport
+import org.coepi.android.tcn.SymptomReport
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets.UTF_8
 
 interface ApiSymptomsMapper {
     fun toApiReport(report: SymptomReport): String
-    fun fromCenReport(report: CenReport): SymptomReport
+    fun fromTcnReport(report: TcnReport): SymptomReport
 }
 
 class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) : ApiSymptomsMapper {
@@ -31,7 +31,7 @@ class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) 
             report.toMemoData()
         ).toByteArray().toBase64String()
 
-    override fun fromCenReport(report: CenReport): SymptomReport = SymptomReport(
+    override fun fromTcnReport(report: TcnReport): SymptomReport = SymptomReport(
         id = report.id,
         symptoms = fromApiSymptomString(report.report),
         timestamp = UnixTime.fromValue(report.timestamp)
