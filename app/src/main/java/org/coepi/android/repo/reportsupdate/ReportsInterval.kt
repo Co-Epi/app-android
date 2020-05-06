@@ -22,6 +22,8 @@ data class ReportsInterval(val number: Long, val length: Long) {
 
     fun endsBefore(time: UnixTime): Boolean = end < time.value
 
+    fun contains(time: UnixTime): Boolean = time.value in start..end
+
     companion object {
         fun createFor(time: UnixTime, lengthSeconds: Long = 21600L): ReportsInterval =
             ReportsInterval(

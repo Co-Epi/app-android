@@ -83,27 +83,6 @@ class ReportsUpdaterImpl(
         }
     }
 
-    /**
-     * Stores reports in the database
-     * @return count of inserted reports. This can differ from reports count, if reports
-     * are already in the db.
-     */
-    fun storeReports(reports: List<SignedReport>): Int {
-        val insertedCount: Int = reports.map {
-            reportsDao.insert(TcnReport(
-                id = it.signature.toByteArray().toHex(),
-                report = it.report.memoData.toString(UTF_8),
-                timestamp = now().value // TODO extract this from memo, when protocol implemented
-            ))
-        }.filter { it }.size
-
-        if (insertedCount >= 0) {
-            log.d("Added $insertedCount new reports")
-        }
-
-        return insertedCount
-    }
-
     fun retrieveAndMatchNewReports(): Result<List<SignedReport>, Throwable> {
         val now: UnixTime = now()
         return matchingReports(
@@ -213,6 +192,27 @@ class ReportsUpdaterImpl(
         }
 
         return matchedReports
+    }
+
+    /**
+     * Stores reports in the database
+     * @return count of inserted reports. This can differ from reports count, if reports
+     * are already in the db.
+     */
+    fun storeReports(reports: List<SignedReport>): Int {
+        val insertedCount: Int = reports.map {
+            reportsDao.insert(TcnReport(
+                id = it.signature.toByteArray().toHex(),
+                report = it.report.memoData.toString(UTF_8),
+                timestamp = now().value // TODO extract this from memo, when protocol implemented
+            ))
+        }.filter { it }.size
+
+        if (insertedCount >= 0) {
+            log.d("Added $insertedCount new reports")
+        }
+
+        return insertedCount
     }
 
     private fun updateOperationStateWithMatchResult(result: Result<MatchedReportsChunk, Throwable>) {
