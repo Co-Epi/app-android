@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="vm"
+            type="org.coepi.android.ui.symptoms.cough.CoughDurationViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/ic_geometric_background_white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:title="@string/symptom_report_cough_title"
+        app:titleTextColor="@android:color/white">
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/headline"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        style="@style/Text.Headline"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:gravity="center_vertical"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:background="@color/colorPrimary"
+        android:layout_width="0dp"
+        android:layout_height="109dp"
+        android:text="@string/symptom_report_cough_duration_headline"
+        android:textSize="@dimen/text_size_headline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        
+        <EditText
+            android:id="@+id/cough_duration"
+            android:layout_width="167dp"
+            android:layout_height="71dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginStart="31dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headline"
+            android:inputType="number"
+            />
+        <TextView
+            android:layout_marginStart="23dp"
+            android:layout_width="148dp"
+            android:layout_height="78dp"
+            app:layout_constraintTop_toTopOf="@id/cough_duration"
+            app:layout_constraintStart_toEndOf="@id/cough_duration"
+            android:gravity="center_vertical"
+            android:text="@string/symptom_report_cough_duration_days"
+            android:textSize="56sp"
+            />
+        <TextView
+            android:onClick="@{() -> vm.onClickSkip()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="182dp"
+            android:layout_marginLeft="46dp"
+            app:layout_constraintTop_toBottomOf="@id/cough_duration"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="18sp"
+            android:text="Skip"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

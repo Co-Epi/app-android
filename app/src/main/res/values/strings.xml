@@ -90,4 +90,8 @@
     <string name="symptom_report_cough_type_wet_description">It feels like there is mucus in my throat and\/or chest</string>
     <string name="symptom_report_cough_type_dry_description">My throat feels \'tickly\' or \'scratchy\' without mucus</string>
 
+    <!-- Symptom Report - Cough Duration -->
+    <string name="symptom_report_cough_duration_headline">How many days have you been coughing?</string>
+    <string name="symptom_report_cough_duration_days">days</string>
+
 </resources>

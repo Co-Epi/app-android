@@ -26,6 +26,7 @@ import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalThanksFragment
+import org.coepi.android.ui.symptoms.cough.CoughTypeFragmentDirections.Companion.actionGlobalCoughTypeFragment
 
 class SymptomsViewModel (
     private val symptomRepo: SymptomRepo,
@@ -88,7 +89,8 @@ class SymptomsViewModel (
     }
 
     fun onSubmit() {
-        submitTrigger.onNext(Unit)
+        navigation.navigate((ToDestination(actionGlobalCoughTypeFragment())))
+        //submitTrigger.onNext(Unit)
     }
 
     fun onBack(){
