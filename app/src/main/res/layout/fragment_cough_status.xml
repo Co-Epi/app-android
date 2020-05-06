@@ -5,7 +5,7 @@
     <data>
         <variable
             name="vm"
-            type="org.coepi.android.ui.symptoms.cough.CoughDurationViewModel" />
+            type="org.coepi.android.ui.symptoms.cough.CoughStatusViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:background="@drawable/ic_geometric_light_background"
@@ -35,62 +35,47 @@
         android:paddingEnd="32dp"
         android:background="@color/colorPrimary"
         android:layout_width="0dp"
-        android:layout_height="109dp"
-        android:text="@string/symptom_report_cough_duration_headline"
+        android:layout_height="wrap_content"
+        android:text="@string/symptom_report_cough_status_headline"
         android:textSize="@dimen/text_size_headline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
-        
-        <EditText
-            android:id="@+id/cough_duration"
-            android:layout_width="167dp"
-            android:layout_height="71dp"
-            android:layout_marginTop="27dp"
-            android:layout_marginStart="31dp"
+        <TextView
+            android:id="@+id/caption"
+            android:background="@color/colorPrimary"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:textColor="@color/white"
+            android:text="@string/symptom_report_cough_status_caption"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline"
-            android:inputType="number"
+            android:paddingTop="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/products_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="263dp"
+            android:layout_marginStart="33dp"
+            android:layout_marginTop="42dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toTopOf="@id/skip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/caption" />
         <TextView
-            android:id="@+id/days"
-            android:layout_marginStart="23dp"
-            android:layout_width="148dp"
-            android:layout_height="78dp"
-            app:layout_constraintTop_toTopOf="@id/cough_duration"
-            app:layout_constraintStart_toEndOf="@id/cough_duration"
-            android:gravity="center_vertical"
-            android:text="@string/symptom_report_cough_duration_days"
-            android:textSize="56sp"
-            />
-        <Button
-            android:id="@+id/unknown"
-            style="@style/ButtonUnselected"
-            android:layout_marginTop="24dp"
-            android:layout_height="31dp"
-            android:layout_width="131dp"
-            app:layout_constraintTop_toBottomOf="@id/cough_duration"
-            app:layout_constraintStart_toStartOf="@id/cough_duration"
-            android:text="@string/symptom_report_cough_duration_unknown"
-            android:onClick="@{() -> vm.onClickUnknown()}"
-            />
-        <Button
-            android:id="@+id/submit"
-            style="@style/Button"
-            android:layout_height="32dp"
-            android:layout_width="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/unknown"
-            app:layout_constraintStart_toStartOf="@id/days"
-            android:text="@string/symptoms_submit_button"
-            android:onClick="@{() -> vm.onClickSubmit()}"
-            />
-        <TextView
+            android:id="@+id/skip"
             android:onClick="@{() -> vm.onClickSkip()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="182dp"
+            android:layout_marginTop="18dp"
             android:layout_marginLeft="46dp"
-            app:layout_constraintTop_toBottomOf="@id/cough_duration"
+            app:layout_constraintTop_toBottomOf="@id/products_recycler_view"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="18sp"
             android:text="Skip"/>

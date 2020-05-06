@@ -5,7 +5,9 @@ import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.navigation.NavigationCommand.Back
+import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.symptoms.cough.CoughStatusFragmentDirections.Companion.actionGlobalCoughStatusFragment
 
 class CoughDurationViewModel (
     private val symptomRepo: SymptomRepo,
@@ -14,8 +16,20 @@ class CoughDurationViewModel (
     val navigation: RootNavigation
 ) : ViewModel(){
 
-    fun onClickSkip(){
+    fun onClickSubmit(){
+        navigateNextScreen()
+    }
 
+    fun onClickUnknown(){
+        navigateNextScreen()
+    }
+
+    fun onClickSkip(){
+        navigateNextScreen()
+    }
+
+    private fun navigateNextScreen(){
+        navigation.navigate(ToDestination(actionGlobalCoughStatusFragment()))
     }
 
     fun onBack(){

@@ -18,15 +18,13 @@ import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.system.Resources
-import org.coepi.android.ui.thanks.ThanksFragmentDirections
-import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.extensions.rx.toNotification
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalThanksFragment
-import org.coepi.android.ui.symptoms.cough.CoughTypeFragmentDirections.Companion.actionGlobalCoughTypeFragment
+
 
 class SymptomsViewModel (
     private val symptomRepo: SymptomRepo,
@@ -89,8 +87,7 @@ class SymptomsViewModel (
     }
 
     fun onSubmit() {
-        navigation.navigate((ToDestination(actionGlobalCoughTypeFragment())))
-        //submitTrigger.onNext(Unit)
+        submitTrigger.onNext(Unit)
     }
 
     fun onBack(){

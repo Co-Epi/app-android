@@ -47,6 +47,7 @@ import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
 import org.coepi.android.ui.symptoms.cough.CoughDurationViewModel
+import org.coepi.android.ui.symptoms.cough.CoughStatusViewModel
 import org.coepi.android.ui.symptoms.cough.CoughTypeViewModel
 import org.coepi.android.worker.cenfetcher.ContactsFetchManager
 import org.koin.android.ext.koin.androidApplication
@@ -68,6 +69,7 @@ val viewModelModule = module {
     viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args) }
     viewModel { CoughTypeViewModel(get(), get(), get(), get()) }
     viewModel { CoughDurationViewModel(get(), get(), get(), get()) }
+    viewModel { CoughStatusViewModel(get(), get(), get()) }
 }
 
 val systemModule = module {

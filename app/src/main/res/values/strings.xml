@@ -93,5 +93,10 @@
     <!-- Symptom Report - Cough Duration -->
     <string name="symptom_report_cough_duration_headline">How many days have you been coughing?</string>
     <string name="symptom_report_cough_duration_days">days</string>
+    <string name="symptom_report_cough_duration_unknown">I don\'t know</string>
+
+    <!-- Symptom Report - Cough Status -->
+    <string name="symptom_report_cough_status_headline">Today my cough has:</string>
+    <string name="symptom_report_cough_status_caption">@string/symptoms_caption</string>
 
 </resources>
