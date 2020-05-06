@@ -24,6 +24,14 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="DarkFragment">
+        <item name="android:background">@drawable/ic_geometric_dark_background</item>
+    </style>
+
+    <style name="LightFragment">
+        <item name="android:background">@drawable/ic_geometric_light_background</item>
+    </style>
+
     <style name="Button" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@color/colorAccent</item>
         <item name="android:textAllCaps">true</item>
