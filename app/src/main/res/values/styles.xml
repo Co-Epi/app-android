@@ -45,7 +45,7 @@
     </style>
 
     <style name="StandardButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:background">@drawable/item_symptom_background</item>
+        <item name="android:background">@drawable/rounded_shadowed_button</item>
         <item name="android:textAppearance">@style/Text</item>
         <item name="android:textColor">@color/item_symptom_text</item>
         <item name="android:textSize">@dimen/text_size_30</item>
