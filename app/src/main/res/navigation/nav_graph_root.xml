@@ -93,5 +93,23 @@
         android:id="@+id/action_global_thanksFragment"
         app:destination="@id/thanksFragment"
         app:popUpTo="@id/tabs_container" />
+    <fragment
+        android:id="@+id/coughTypeFragment"
+        android:name="org.coepi.android.ui.symptoms.cough.CoughTypeFragment"
+        android:label="CoughTypeFragment"
+        tools:layout="@layout/fragment_cough_type"/>
+    <action android:id="@+id/action_global_coughTypeFragment" app:destination="@id/coughTypeFragment" />
+    <fragment
+        android:id="@+id/coughDurationFragment"
+        android:name="org.coepi.android.ui.symptoms.cough.CoughDurationFragment"
+        android:label="CoughDurationFragment"
+        tools:layout="@layout/fragment_cough_duration"/>
+    <action android:id="@+id/action_global_coughDurationFragment" app:destination="@id/coughDurationFragment" />
+    <fragment
+        android:id="@+id/coughStatusFragment"
+        android:name="org.coepi.android.ui.symptoms.cough.CoughStatusFragment"
+        android:label="CoughStatusFragment"
+        tools:layout="@layout/fragment_cough_status"/>
+    <action android:id="@+id/action_global_coughStatusFragment" app:destination="@id/coughStatusFragment" />
 
 </navigation>

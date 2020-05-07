@@ -43,15 +43,18 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="StandardButton" parent="Widget.AppCompat.Button.Colored">
+    <style name="ButtonUnselected" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/rounded_shadowed_button</item>
         <item name="android:textAppearance">@style/Text</item>
         <item name="android:textColor">@color/item_symptom_text</item>
         <item name="android:textSize">@dimen/text_size_30</item>
         <item name="android:buttonTint">@color/colorPrimary</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">50dp</item>
         <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="StandardButton" parent="ButtonUnselected">
+        <item name="android:layout_margin">50dp</item>
     </style>
 
     <style name="card_view_title">
