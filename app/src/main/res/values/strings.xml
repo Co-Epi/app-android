@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CoEpi</string>
-
+    <string name="privacy_link"><a href="https://www.coepi.org/privacy/">How is my data being used?</a></string>
     <!-- Tabs container -->
     <string name="tab_container_debug">Debug</string>
 
@@ -50,19 +50,18 @@
     <string name="onboarding_title">CoEpi</string>
     <string name="onboarding_cta">GET STARTED</string>
     <string name="onboarding_tagline">Collaborate. Inform. Protect.</string>
-    <string name="onboarding_link"><a href="https://www.coepi.org/privacy/">How is my data used?</a></string>
+    <string name="onboarding_link">@string/privacy_link</string>
     <string name="onboarding_banner_1"><b>Track</b> where you\'ve been</string>
     <string name="onboarding_banner_2"><b>Monitor</b> your health</string>
     <string name="onboarding_banner_3">Get <b>contextualized alerts</b> about possible exposure to infectious illness</string>
 
     <!-- Home -->
-    <string name="home_my_health_card_title">My Health</string>
-    <string name="home_contact_alerts_card_title">Contact Alerts</string>
-    <string name="home_my_health_card_description">Monitor your health and report symptoms.</string>
-    <string name="home_contact_alerts_card_description">Approximate times that you may have been exposed to a symptomatic individual.</string>
-    <string name="home_my_health_card_check_in_button">CHECK-IN</string>
-    <string name="home_contact_alerts_card_see_alerts_button">SEE ALERTS</string>
+    <string name="home_my_health_card_title">My Symptom Report</string>
+    <string name="home_contact_alerts_card_title">Exposure Alerts</string>
+    <string name="home_my_health_card_description">Track how you are feeling</string>
+    <string name="home_contact_alerts_card_description">Find out reported alerts around you</string>
     <string name="home_version">Version: %s</string>
+    <string name="home_privacy_link_text">How is my data being used?</string>
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
