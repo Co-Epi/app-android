@@ -5,6 +5,7 @@
 
     <data>
 
+        <import type="android.view.View"/>
         <variable
             name="vm"
             type="org.coepi.android.ui.home.HomeViewModel" />
@@ -58,21 +59,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:onClick="@{() -> vm.onCheckInClick()}">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="35dp"
                 android:layout_marginStart="19dp"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="13dp">
 
                 <TextView
                     android:id="@+id/my_health_title"
                     style="@style/card_view_title"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:text="@string/home_my_health_card_title"/>
 
                 <TextView
@@ -80,12 +79,11 @@
                     style="@style/card_view_body"
                     android:layout_width="344dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/my_health_title"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/default_line_height"
+                    android:layout_marginBottom="@dimen/default_line_height"
                     android:text="@string/home_my_health_card_description"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:id="@+id/contact_alerts_card"
@@ -98,35 +96,54 @@
             app:cardCornerRadius="8dp"
             android:layout_marginTop="51dp"
             android:onClick="@{() -> vm.onSeeAlertsClick()}">
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="19dp"
-                android:layout_marginBottom="24dp">
-
+                android:layout_height="match_parent">
                 <TextView
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/alert_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_line_height"
+                    android:layout_marginStart="48dp"
+                    android:text="@{vm.title}"
+                    android:textSize="17sp"
+                    android:textColor="@color/red"
+                    android:visibility="@{vm.newAlerts ? View.VISIBLE : View.GONE}"
+                    tools:text="2 new exposures detected" />
+                <TextView
                     style="@style/card_view_title"
                     android:id="@+id/contact_alerts_title"
                     android:layout_width="208dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_line_height"
+                    android:layout_marginStart="19dp"
                     android:text="@string/home_contact_alerts_card_title"/>
-
                 <TextView
                     android:id="@+id/contact_alerts_description"
                     style="@style/card_view_body"
                     android:layout_width="242dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/home_contact_alerts_card_description"
-                    app:layout_constraintTop_toBottomOf="@id/contact_alerts_title"
-                    app:layout_constraintStart_toStartOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_marginTop="@dimen/default_line_height"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginBottom="@dimen/default_line_height"
+                    android:text="@string/home_contact_alerts_card_description"/>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
         <!-- ************************************************************ -->
         <!-- ************************************************************ -->
+
+            <ImageView
+                android:id="@+id/alert_icon"
+                app:layout_constraintStart_toStartOf="@id/contact_alerts_card"
+                app:layout_constraintTop_toTopOf="@id/contact_alerts_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_alert_circle"
+                android:elevation="2dp"
+                android:translationY="-8dp"
+                android:translationX="-8dp"
+                android:visibility="@{vm.newAlerts ? View.VISIBLE : View.GONE}"/>
         <TextView
             android:id="@+id/privacy_link"
             android:layout_width="wrap_content"

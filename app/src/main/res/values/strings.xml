@@ -62,6 +62,10 @@
     <string name="home_contact_alerts_card_description">Find out reported alerts around you</string>
     <string name="home_version">Version: %s</string>
     <string name="home_privacy_link_text">How is my data being used?</string>
+    <plurals name="home_new_exposure_alert">
+        <item quantity="one">%s new exposure detected</item>
+        <item quantity="other">%s new exposures detected</item>
+    </plurals>
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
