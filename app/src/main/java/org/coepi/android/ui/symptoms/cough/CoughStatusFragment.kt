@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import org.coepi.android.databinding.FragmentCoughStatusBinding
+import org.coepi.android.databinding.FragmentCoughStatusBinding.inflate
 import org.coepi.android.extensions.observeWith
+import org.coepi.android.ui.extensions.onBack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CoughStatusFragment  : Fragment() {
@@ -16,21 +19,23 @@ class CoughStatusFragment  : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?
-    ): View? = FragmentCoughStatusBinding.inflate(inflater, container, false).apply {
+    ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        toolbar.setNavigationOnClickListener { viewModel.onBack() }
+        onBack { viewModel.onBack() }
+        toolbar.setNavigationOnClickListener { viewModel.onBackPressed() }
 
-        productsRecyclerView.apply {
+        statusRecyclerView.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, VERTICAL, false)
         }
 
         val adapter = CoughStatusAdapter(onItemChecked = { item ->
-            //viewModel.onChecked(item)
+            viewModel.onSelected(item)
         })
-        productsRecyclerView.adapter = adapter
+
+        statusRecyclerView.adapter = adapter
 
         viewModel.statuses.observeWith(viewLifecycleOwner) {
             adapter.submitList(it.toMutableList())

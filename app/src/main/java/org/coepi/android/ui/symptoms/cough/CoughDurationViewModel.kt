@@ -1,38 +1,43 @@
 package org.coepi.android.ui.symptoms.cough
 
 import androidx.lifecycle.ViewModel
-import org.coepi.android.repo.SymptomRepo
-import org.coepi.android.system.Resources
-import org.coepi.android.ui.common.UINotifier
+import org.coepi.android.domain.symptomflow.SymptomFlowManager
+import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
 import org.coepi.android.ui.navigation.NavigationCommand.Back
-import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
-import org.coepi.android.ui.symptoms.cough.CoughStatusFragmentDirections.Companion.actionGlobalCoughStatusFragment
 
-class CoughDurationViewModel (
-    private val symptomRepo: SymptomRepo,
-    resources: Resources,
-    uiNotifier: UINotifier,
-    val navigation: RootNavigation
-) : ViewModel(){
+class CoughDurationViewModel(
+    val navigation: RootNavigation,
+    private val symptomFlowManager: SymptomFlowManager
+) : ViewModel() {
 
-    fun onClickSubmit(){
-        navigateNextScreen()
+    fun onDurationChanged(durationStr: String) {
+        if (durationStr.isEmpty()) {
+            symptomFlowManager.setCoughDays(null)
+        } else {
+            val duration: Int = durationStr.toIntOrNull() ?: error("Invalid input: $durationStr")
+            symptomFlowManager.setCoughDays(Cough.Days(duration))
+        }
     }
 
-    fun onClickUnknown(){
-        navigateNextScreen()
+    fun onClickSubmit() {
+        symptomFlowManager.navigateForward()
     }
 
-    fun onClickSkip(){
-        navigateNextScreen()
+    fun onClickUnknown() {
+        symptomFlowManager.navigateForward()
     }
 
-    private fun navigateNextScreen(){
-        navigation.navigate(ToDestination(actionGlobalCoughStatusFragment()))
+    fun onClickSkip() {
+        symptomFlowManager.navigateForward()
     }
 
-    fun onBack(){
+    fun onBack() {
+        symptomFlowManager.onBack()
+    }
+
+    fun onBackPressed() {
+        onBack()
         navigation.navigate(Back)
     }
 }

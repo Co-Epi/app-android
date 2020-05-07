@@ -1,38 +1,37 @@
 package org.coepi.android.ui.symptoms.cough
 
 import androidx.lifecycle.ViewModel
-import org.coepi.android.repo.SymptomRepo
-import org.coepi.android.system.Resources
-import org.coepi.android.ui.common.UINotifier
+import org.coepi.android.domain.symptomflow.SymptomFlowManager
+import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Type.DRY
+import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Type.WET
 import org.coepi.android.ui.navigation.NavigationCommand.Back
-import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
-import org.coepi.android.ui.symptoms.cough.CoughDurationFragmentDirections.Companion.actionGlobalCoughDurationFragment
 
 class CoughTypeViewModel (
-    private val symptomRepo: SymptomRepo,
-    resources: Resources,
-    uiNotifier: UINotifier,
-    val navigation: RootNavigation
-) : ViewModel(){
+    private val navigation: RootNavigation,
+    private val symptomFlowManager: SymptomFlowManager
+) : ViewModel() {
 
-    fun onClickWet(){
-        navigateNextScreen()
+    fun onClickWet() {
+        symptomFlowManager.setCoughType(WET)
+        symptomFlowManager.navigateForward()
     }
 
-    fun onClickDry(){
-        navigateNextScreen()
+    fun onClickDry() {
+        symptomFlowManager.setCoughType(DRY)
+        symptomFlowManager.navigateForward()
     }
 
-    fun onClickSkip(){
-        navigateNextScreen()
+    fun onClickSkip() {
+        symptomFlowManager.navigateForward()
     }
 
-    private fun navigateNextScreen(){
-        navigation.navigate(ToDestination(actionGlobalCoughDurationFragment()))
+    fun onBack() {
+        symptomFlowManager.onBack()
     }
 
-    fun onBack(){
+    fun onBackPressed() {
+        onBack()
         navigation.navigate(Back)
     }
 }

@@ -9,28 +9,24 @@ import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
-import org.coepi.android.R.string.symptoms_success_message
 import org.coepi.android.domain.model.Symptom
+import org.coepi.android.domain.symptomflow.SymptomFlowManager
+import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toIsInProgress
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
-import org.coepi.android.system.Resources
-import org.coepi.android.ui.common.UINotifier
-import org.coepi.android.ui.extensions.rx.toNotification
+import org.coepi.android.system.log.log
 import org.coepi.android.ui.navigation.NavigationCommand.Back
-import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
-import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalThanksFragment
 
-
-class SymptomsViewModel (
-    private val symptomRepo: SymptomRepo,
-    resources: Resources,
-    uiNotifier: UINotifier,
-    val navigation: RootNavigation
+class SymptomsViewModel(
+    symptomRepo: SymptomRepo,
+    private val navigation: RootNavigation,
+    private val symptomFlowManager: SymptomFlowManager
 ) : ViewModel() {
 
     val isInProgress: LiveData<Boolean> = symptomRepo.sendReportState
@@ -38,8 +34,8 @@ class SymptomsViewModel (
         .observeOn(mainThread())
         .toLiveData()
 
-    private val selectedSymptomIds: BehaviorSubject<Set<String>> =
-        BehaviorSubject.createDefault(emptySet())
+    private val selectedSymptomIds: BehaviorSubject<Set<SymptomId>> =
+        createDefault(emptySet())
 
     private val checkedSymptomTrigger: PublishSubject<SymptomViewData> = create()
     private val submitTrigger: PublishSubject<Unit> = create()
@@ -55,9 +51,10 @@ class SymptomsViewModel (
     private val disposables = CompositeDisposable()
 
     private val selectedSymptoms = symptomsObservable
-        .map { symptoms -> symptoms
-            .filter { it.isChecked }
-            .map { it.symptom }
+        .map { symptoms ->
+            symptoms
+                .filter { it.isChecked }
+                .map { it.symptom }
         }
 
     init {
@@ -65,20 +62,18 @@ class SymptomsViewModel (
             .withLatestFrom(selectedSymptomIds)
             .subscribe { (selectedSymptom, selectedIds) ->
                 selectedSymptomIds.onNext(selectedIds.toggle(selectedSymptom.symptom.id))
-        }
+            }
 
         disposables += submitTrigger
             .withLatestFrom(selectedSymptoms)
-            .subscribe{ (_, symptoms) ->
-                symptomRepo.submitSymptoms(symptoms)
-            }
-
-        disposables += symptomRepo.sendReportState
-            .toNotification(resources.getString(symptoms_success_message))
-            .observeOn(mainThread())
-            .subscribe{
-                uiNotifier.notify(it)
-                navigation.navigate(ToDestination(actionGlobalThanksFragment()))
+            .subscribe { (_, symptoms) ->
+                symptomFlowManager.apply {
+                    if (!startFlow(symptoms.map { it.id })) {
+                        // TODO handle: Maybe don't enable button until something is selected
+                        // TODO or ensure there's always a selection
+                        log.e("Couldn't start flow")
+                    }
+                }
             }
     }
 
@@ -90,7 +85,7 @@ class SymptomsViewModel (
         submitTrigger.onNext(Unit)
     }
 
-    fun onBack(){
+    fun onBack() {
         navigation.navigate(Back)
     }
 

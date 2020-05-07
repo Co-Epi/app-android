@@ -35,7 +35,7 @@ class CoughStatusAdapter(
 
     private class CoughStatusDiffCallback : ItemCallback<CoughStatusViewData>() {
         override fun areItemsTheSame(oldItem: CoughStatusViewData, newItem: CoughStatusViewData): Boolean =
-            oldItem.symptom.id == newItem.symptom.id
+            oldItem.status == newItem.status
 
         override fun areContentsTheSame(oldItem: CoughStatusViewData, newItem: CoughStatusViewData): Boolean =
             oldItem == newItem
