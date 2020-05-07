@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.coepi.android.databinding.FragmentCoughTypeBinding
+import org.coepi.android.databinding.FragmentCoughTypeBinding.inflate
+import org.coepi.android.ui.extensions.onBack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CoughTypeFragment : Fragment() {
@@ -14,10 +16,11 @@ class CoughTypeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?
-    ): View? = FragmentCoughTypeBinding.inflate(inflater, container, false).apply {
+    ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        toolbar.setNavigationOnClickListener { viewModel.onBack() }
+        onBack { viewModel.onBack() }
+        toolbar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }.root
 }

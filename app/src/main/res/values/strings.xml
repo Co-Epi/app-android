@@ -98,5 +98,8 @@
     <!-- Symptom Report - Cough Status -->
     <string name="symptom_report_cough_status_headline">Today my cough has:</string>
     <string name="symptom_report_cough_status_caption">@string/symptoms_caption</string>
+    <string name="symptom_report_cough_status_option_better_worse_day">Felt better and worse throughout the day</string>
+    <string name="symptom_report_cough_status_option_worse_outside">Felt worse when I am outside</string>
+    <string name="symptom_report_cough_status_option_same_or_steadily_worse">Stayed the same or felt steadily worse</string>
 
 </resources>
