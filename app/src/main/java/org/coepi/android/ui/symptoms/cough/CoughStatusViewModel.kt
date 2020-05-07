@@ -12,7 +12,9 @@ import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.navigation.NavigationCommand.Back
+import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalThanksFragment
 
 class CoughStatusViewModel (
     resources: Resources,
@@ -37,7 +39,11 @@ class CoughStatusViewModel (
     }
 
     private fun navigateNextScreen() {
+        navigation.navigate(ToDestination(actionGlobalThanksFragment()))
+    }
 
+    fun onSubmit(){
+        navigateNextScreen()
     }
 
     fun onBack() {
