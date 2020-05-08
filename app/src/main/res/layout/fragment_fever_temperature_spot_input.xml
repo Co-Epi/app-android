@@ -5,7 +5,7 @@
     <data>
         <variable
             name="vm"
-            type="org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureViewModel" />
+            type="org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:background="@drawable/ic_geometric_light_background"
@@ -36,32 +36,23 @@
             android:background="@color/colorPrimary"
             android:layout_width="0dp"
             android:layout_height="109dp"
-            android:text="@string/symptom_report_fever_highest_temperature_headline"
+            android:text="@string/symptom_report_fever_temperature_spot_input_headline"
             android:textSize="@dimen/text_size_headline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <EditText
-            android:id="@+id/fever_temp"
-            android:layout_width="167dp"
+            android:id="@+id/measured_location"
+            android:layout_width="0dp"
             android:layout_height="71dp"
             android:layout_marginTop="27dp"
-            android:layout_marginStart="31dp"
+            android:layout_marginStart="33dp"
+            android:layout_marginEnd="36dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline"
-            android:inputType="numberDecimal"
-            />
-        <TextView
-            android:id="@+id/units"
-            android:layout_marginStart="23dp"
-            android:layout_width="148dp"
-            android:layout_height="78dp"
-            app:layout_constraintTop_toTopOf="@id/fever_temp"
-            app:layout_constraintStart_toEndOf="@id/fever_temp"
-            android:gravity="center_vertical"
-            android:text="@string/symptom_report_fever_highest_temperature_unit_f"
-            android:textSize="56sp"
+            android:inputType="text"
             />
         <Button
             android:id="@+id/unknown"
@@ -69,9 +60,9 @@
             android:layout_marginTop="24dp"
             android:layout_height="31dp"
             android:layout_width="131dp"
-            app:layout_constraintTop_toBottomOf="@id/fever_temp"
-            app:layout_constraintStart_toStartOf="@id/fever_temp"
-            android:text="@string/symptom_report_fever_duration_unknown"
+            app:layout_constraintTop_toBottomOf="@id/measured_location"
+            app:layout_constraintStart_toStartOf="@id/measured_location"
+            android:text="@string/symptom_report_fever_temperature_spot_input_unknown"
             android:onClick="@{() -> vm.onClickUnknown()}"
             />
         <Button
@@ -80,8 +71,8 @@
             android:layout_height="32dp"
             android:layout_width="wrap_content"
             app:layout_constraintTop_toTopOf="@id/unknown"
-            app:layout_constraintStart_toStartOf="@id/units"
-            android:text="@string/symptom_report_fever_duration_submit"
+            app:layout_constraintEnd_toEndOf="@id/measured_location"
+            android:text="@string/symptom_report_fever_temperature_spot_input_submit"
             android:onClick="@{() -> vm.onClickSubmit()}"
             />
         <TextView
@@ -90,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="182dp"
             android:layout_marginLeft="46dp"
-            app:layout_constraintTop_toBottomOf="@id/fever_temp"
+            app:layout_constraintTop_toBottomOf="@id/measured_location"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="18sp"
             android:text="Skip"/>

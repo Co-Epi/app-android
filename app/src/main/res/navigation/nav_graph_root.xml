@@ -129,5 +129,17 @@
         android:label="FeverHighestTemperatureFragment"
         tools:layout="@layout/fragment_fever_highest_temperature"/>
     <action android:id="@+id/action_global_feverHighestTemperatureFragment" app:destination="@id/feverHighestTemperatureFragment" />
+    <fragment
+        android:id="@+id/feverTemperatureSpotFragment"
+        android:name="org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotFragment"
+        android:label="FeverTemperatureSpotFragment"
+        tools:layout="@layout/fragment_fever_temperature_spot"/>
+    <action android:id="@+id/action_global_feverTemperatureSpotFragment" app:destination="@id/feverTemperatureSpotFragment" />
+    <fragment
+        android:id="@+id/feverTemperatureSpotInputFragment"
+        android:name="org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputFragment"
+        android:label="FeverTemperatureSpotInputFragment"
+        tools:layout="@layout/fragment_fever_temperature_spot_input"/>
+    <action android:id="@+id/action_global_feverTemperatureSpotInputFragment" app:destination="@id/feverTemperatureSpotInputFragment" />
 
 </navigation>

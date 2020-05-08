@@ -125,13 +125,19 @@
     <string name="symptom_report_fever_taken_today_yes">@string/yes</string>
     <string name="symptom_report_fever_taken_today_no">@string/no</string>
 
-
     <string name="symptom_report_fever_highest_temperature_headline">What was the highest temperature reading today?</string>
     <string name="symptom_report_fever_highest_temperature_unit_f">\u2109</string>
     <string name="symptom_report_fever_highest_temperature_unit_C">\u2103</string>
     <string name="symptom_report_fever_highest_temperature_unknown">@string/unknown</string>
     <string name="symptom_report_fever_highest_temperature_submit">@string/submit</string>
 
+    <string name="symptom_report_fever_temperature_spot_headline">Where did you take your temperature most recently?</string>
+    <string name="symptom_report_fever_temperature_spot_mouth">Mouth</string>
+    <string name="symptom_report_fever_temperature_spot_ear">Ear</string>
+    <string name="symptom_report_fever_temperature_spot_armpit">Armpit</string>
+    <string name="symptom_report_fever_temperature_spot_other">Other</string>
 
-
+    <string name="symptom_report_fever_temperature_spot_input_headline">Where did you take your temperature?</string>
+    <string name="symptom_report_fever_temperature_spot_input_unknown">@string/unknown</string>
+    <string name="symptom_report_fever_temperature_spot_input_submit">@string/submit</string>
 </resources>
