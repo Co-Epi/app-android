@@ -1,5 +1,7 @@
 package org.coepi.android.ui.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,5 +20,13 @@ class HomeFragment : Fragment() {
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
+
+        privacyLink.setOnClickListener {
+            val webpage: Uri = Uri.parse("https://www.coepi.org/privacy/")
+            val intent = Intent(Intent.ACTION_VIEW, webpage)
+            startActivity(intent)
+        }
     }.root
+
+
 }
