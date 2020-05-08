@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="android.view.View"/>
         <variable
             name="vm"
             type="org.coepi.android.ui.home.HomeViewModel" />
