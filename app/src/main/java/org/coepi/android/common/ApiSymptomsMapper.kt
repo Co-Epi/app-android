@@ -27,8 +27,8 @@ class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) 
 
     override fun toApiReport(report: SymptomReport): String =
         tcnKeys.createReport(
-            MemoType.CoEpiV1,
-            report.toMemoData()
+            report.toMemoData(),
+            MemoType.CoEpiV1
         ).toByteArray().toBase64String()
 
     override fun fromTcnReport(report: TcnReport): SymptomReport = SymptomReport(
