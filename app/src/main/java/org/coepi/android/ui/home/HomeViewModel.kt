@@ -3,7 +3,7 @@ package org.coepi.android.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.R.plurals
 import org.coepi.android.R.string.home_version
 import org.coepi.android.extensions.rx.toLiveData
@@ -11,8 +11,6 @@ import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlerts
-import org.coepi.android.ui.debug.DebugFragmentDirections
-import org.coepi.android.ui.debug.DebugFragmentDirections.Companion
 import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalDebug
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
@@ -31,15 +29,15 @@ class HomeViewModel(
             .toLiveData()
 
     val newAlerts: LiveData<Boolean> = alertsRepo.alerts
-        .map { newAlerts(it.size) }
-        .startWith(newAlerts(0))
-        .observeOn(AndroidSchedulers.mainThread())
+        .map { it.isNotEmpty() }
+        .startWith { false }
+        .observeOn(mainThread())
         .toLiveData()
 
     val title: LiveData<String> = alertsRepo.alerts
         .map { title(it.size) }
         .startWith(title(0))
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(mainThread())
         .toLiveData()
 
 
@@ -59,8 +57,4 @@ class HomeViewModel(
 
     private fun title(alertsSize: Int) =
         resources.getQuantityString(plurals.home_new_exposure_alert, alertsSize)
-
-    private fun newAlerts(alertSize: Int): Boolean {
-        return alertSize > 0
-    }
 }

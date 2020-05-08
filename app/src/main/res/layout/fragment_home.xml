@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="android.view.View"/>
         <variable
             name="vm"
             type="org.coepi.android.ui.home.HomeViewModel" />
@@ -109,7 +107,7 @@
                     android:text="@{vm.title}"
                     android:textSize="17sp"
                     android:textColor="@color/red"
-                    android:visibility="@{vm.newAlerts ? View.VISIBLE : View.GONE}"
+                    app:isVisible="@{vm.newAlerts}"
                     tools:text="2 new exposures detected" />
                 <TextView
                     style="@style/card_view_title"
@@ -143,7 +141,7 @@
                 android:elevation="2dp"
                 android:translationY="-8dp"
                 android:translationX="-8dp"
-                android:visibility="@{vm.newAlerts ? View.VISIBLE : View.GONE}"/>
+                app:isVisible="@{vm.newAlerts}"/>
         <TextView
             android:id="@+id/privacy_link"
             android:layout_width="wrap_content"
