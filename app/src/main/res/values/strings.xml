@@ -115,13 +115,22 @@
 
     <!-- Symptom Report - Fever -->
     <string name="symptom_report_fever_title">Follow up: Fever</string>
+
     <string name="symptom_report_fever_duration_headline">How many days have you had a fever?</string>
     <string name="symptom_report_fever_duration_days">@string/days</string>
     <string name="symptom_report_fever_duration_unknown">@string/unknown</string>
     <string name="symptom_report_fever_duration_submit">@string/submit</string>
+
     <string name="symptom_report_fever_taken_today_headline">Have you taken your temperature today?</string>
     <string name="symptom_report_fever_taken_today_yes">@string/yes</string>
     <string name="symptom_report_fever_taken_today_no">@string/no</string>
+
+
+    <string name="symptom_report_fever_highest_temperature_headline">What was the highest temperature reading today?</string>
+    <string name="symptom_report_fever_highest_temperature_unit_f">\u2109</string>
+    <string name="symptom_report_fever_highest_temperature_unit_C">\u2103</string>
+    <string name="symptom_report_fever_highest_temperature_unknown">@string/unknown</string>
+    <string name="symptom_report_fever_highest_temperature_submit">@string/submit</string>
 
 
 

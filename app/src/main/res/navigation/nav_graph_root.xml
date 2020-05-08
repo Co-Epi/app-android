@@ -123,5 +123,11 @@
         android:label="FeverTakenTodayFragment"
         tools:layout="@layout/fragment_fever_taken_today"/>
     <action android:id="@+id/action_global_feverTakenTodayFragment" app:destination="@id/feverTakenTodayFragment" />
+    <fragment
+        android:id="@+id/feverHighestTemperatureFragment"
+        android:name="org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureFragment"
+        android:label="FeverHighestTemperatureFragment"
+        tools:layout="@layout/fragment_fever_highest_temperature"/>
+    <action android:id="@+id/action_global_feverHighestTemperatureFragment" app:destination="@id/feverHighestTemperatureFragment" />
 
 </navigation>

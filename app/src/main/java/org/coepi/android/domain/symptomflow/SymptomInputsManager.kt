@@ -21,6 +21,7 @@ interface SymptomInputsProps {
     fun setFeverDays(days: Fever.Days?)
     fun setFeverTakenTemperatureToday(taken: Boolean?)
     fun setFeverTakenTemperatureSpot(spot: Fever.TemperatureSpot?)
+    fun setFeverHighestTemperatureTaken(temp: Temperature?)
 }
 
 interface SymptomInputsManager : SymptomInputsInitalizer, SymptomInputsProps {
@@ -83,6 +84,11 @@ class SymptomInputsManagerImpl :
     override fun setFeverTakenTemperatureSpot(spot: Fever.TemperatureSpot?) {
         val fever = inputs.fever ?: error("Fever not set")
         inputs = inputs.copy(fever = fever.copy(temperatureSpot = spot))
+    }
+
+    override fun setFeverHighestTemperatureTaken(temp: Temperature?) {
+        val fever = inputs.fever ?: error("Fever not set")
+        inputs = inputs.copy(fever = fever.copy(highestTemperature = temp))
     }
 
     override fun clear() {
