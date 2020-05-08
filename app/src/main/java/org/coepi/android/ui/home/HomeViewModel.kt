@@ -28,11 +28,13 @@ class HomeViewModel(
 
     val versionString: LiveData<String> =
         just(resources.getString(home_version, envInfos.appVersionString()))
-        .toLiveData()
-
-    val newAlerts : LiveData<Boolean> =
-        just(newAlerts())
             .toLiveData()
+
+    val newAlerts: LiveData<Boolean> = alertsRepo.alerts
+        .map { newAlerts(it.size) }
+        .startWith(newAlerts(0))
+        .observeOn(AndroidSchedulers.mainThread())
+        .toLiveData()
 
     val title: LiveData<String> = alertsRepo.alerts
         .map { title(it.size) }
@@ -58,5 +60,7 @@ class HomeViewModel(
     private fun title(alertsSize: Int) =
         resources.getQuantityString(plurals.home_new_exposure_alert, alertsSize)
 
-    private fun newAlerts() = true
+    private fun newAlerts(alertSize: Int): Boolean {
+        return alertSize > 0
+    }
 }
