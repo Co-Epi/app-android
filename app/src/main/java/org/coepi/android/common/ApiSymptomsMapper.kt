@@ -1,42 +1,44 @@
 package org.coepi.android.common
 
-import org.coepi.android.R.string.alerts_no_symptoms_reported
-import org.coepi.android.api.request.ApiParamsCenReport
-import org.coepi.android.cen.CenKey
-import org.coepi.android.cen.CenReport
-import org.coepi.android.cen.SymptomReport
+import android.content.Context
+import org.coepi.android.tcn.TcnReport
+import org.coepi.android.tcn.SymptomReport
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.extensions.base64ToUtf8
-import org.coepi.android.extensions.toBase64
-import org.coepi.android.extensions.toHex
+import org.coepi.android.extensions.toBase64String
 import org.coepi.android.system.Resources
 import org.coepi.android.system.log.log
+import org.tcncoalition.tcnclient.TcnKeys
+import java.util.UUID.randomUUID
+import org.coepi.android.R.string.alerts_no_symptoms_reported
+import org.coepi.android.extensions.toBase64
+import org.tcncoalition.tcnclient.crypto.MemoType
+import java.nio.charset.StandardCharsets.UTF_8
 
 interface ApiSymptomsMapper {
-    fun toApiReport(report: SymptomReport, keys: List<CenKey>): ApiParamsCenReport
-    fun fromCenReport(report: CenReport): SymptomReport
+    fun toApiReport(report: SymptomReport): String
+    fun fromTcnReport(report: TcnReport): SymptomReport
 }
 
-class ApiSymptomsMapperImpl(private val resources: Resources) : ApiSymptomsMapper {
+class ApiSymptomsMapperImpl(context: Context, private val resources: Resources) : ApiSymptomsMapper {
+    private val tcnKeys: TcnKeys = TcnKeys(context)
 
-    override fun toApiReport(report: SymptomReport, keys: List<CenKey>): ApiParamsCenReport =
-        ApiParamsCenReport(
-            reportID = report.id.toByteArray().toHex(),
-            report = report.symptoms.toApiSymptomString(),
-            cenKeys = keys.joinToString(",") { it.key }, // hex
-            reportTimeStamp = report.timestamp.value
-        )
+    override fun toApiReport(report: SymptomReport): String =
+        tcnKeys.createReport(
+            report.toMemoData(),
+            MemoType.CoEpiV1
+        ).toByteArray().toBase64String()
 
-    override fun fromCenReport(report: CenReport): SymptomReport = SymptomReport(
+    override fun fromTcnReport(report: TcnReport): SymptomReport = SymptomReport(
         id = report.id,
         symptoms = fromApiSymptomString(report.report),
         timestamp = UnixTime.fromValue(report.timestamp)
     )
 
-    private fun List<Symptom>.toApiSymptomString(): String =
-        joinToString(", ") { it.name }.toBase64()
+    private fun SymptomReport.toMemoData(): ByteArray =
+        symptoms.joinToString(", ") { it.name }.toBase64().toByteArray(UTF_8) // TODO
 
     private fun fromApiSymptomString(string: String): List<Symptom> =
         if (string.isEmpty()) {

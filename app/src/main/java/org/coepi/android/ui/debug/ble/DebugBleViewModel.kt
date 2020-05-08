@@ -13,15 +13,15 @@ class DebugBleViewModel(debugBleObservable: DebugBleObservable) : ViewModel() {
 
     val items: LiveData<List<DebugBleItemViewData>> = combineLatest(
         debugBleObservable.myKey.asSequence().map { it.distinct() },
-        debugBleObservable.myCen.asSequence().map { it.distinct() },
-        debugBleObservable.observedCens.asSequence().map { it.distinct() }
+        debugBleObservable.myTcn.asSequence().map { it.distinct() },
+        debugBleObservable.observedTcns.asSequence().map { it.distinct() }
 
-    ).map { (keys, myCens, observedCens) ->
+    ).map { (keys, myTcns, observedTcns) ->
         listOf(Header("My key")) +
         keys.map { Item(it.key) } +
-        listOf(Header("My CEN")) +
-        myCens.map { Item(it.toHex()) } +
+        listOf(Header("My TCN")) +
+        myTcns.map { Item(it.toHex()) } +
         listOf(Header("Discovered")) +
-        observedCens.map { Item(it.toHex()) }
+        observedTcns.map { Item(it.toHex()) }
     }.toLiveData()
 }

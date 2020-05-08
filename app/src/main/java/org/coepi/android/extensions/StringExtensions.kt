@@ -1,12 +1,8 @@
 package org.coepi.android.extensions
 
 import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.O
-import android.util.Base64.DEFAULT
-import android.util.Base64.NO_WRAP
 import org.coepi.android.system.log.log
-import java.nio.charset.Charset
-import java.util.Base64
+import org.coepi.android.util.Base64Ext
 import kotlin.text.Charsets.UTF_8
 
 fun String.hexToByteArray(): ByteArray {
@@ -23,23 +19,18 @@ fun String.hexToByteArray(): ByteArray {
     return res
 }
 
+fun ByteArray.toBase64String(): String =
+    Base64Ext.encodeBytes(this)
+
 fun String.toBase64(): String =
-    if (SDK_INT >= O) {
-        Base64.getEncoder().encodeToString(toByteArray(UTF_8))
-    } else {
-        android.util.Base64.encodeToString(toByteArray(UTF_8), NO_WRAP)
-    }
+    toByteArray(UTF_8).toBase64String()
 
 fun String.base64ToUtf8(): String? =
-    base64ToByteArray()?.toString(Charset.forName("utf-8"))
+    base64ToByteArray()?.toString(UTF_8)
 
-private fun String.base64ToByteArray(): ByteArray? =
+fun String.base64ToByteArray(): ByteArray? =
     try {
-        if (SDK_INT >= O) {
-            Base64.getDecoder().decode(this)
-        } else {
-            android.util.Base64.decode(this, DEFAULT)
-        }
+        Base64Ext.decode(this)
     } catch (t: Throwable) {
         log.e("Couldn't decode string with Base64: $this, api: $SDK_INT")
         null

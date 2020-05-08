@@ -12,7 +12,7 @@ import io.reactivex.rxkotlin.plusAssign
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.ble.BlePreconditions
-import org.coepi.android.cen.BleInitializer
+import org.coepi.android.tcn.BleInitializer
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
@@ -24,9 +24,9 @@ import org.koin.android.ext.android.inject
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
     private val onboardingShower: OnboardingShower by inject()
-    private val cenManager: BleInitializer by inject()
+    private val bleInitializer: BleInitializer by inject()
     private val blePreconditions: BlePreconditions by inject()
-    private val nonReferencedDependenciesActivator: NonReferencedDependenciesActivator by inject()
+    private val nonReferencedDependenciesActivator: NotReferencedDependenciesActivator by inject()
     private val intentForwarder: IntentForwarder by inject()
     private val uiNotifier: UINotifier by inject()
 
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         blePreconditions.onActivityCreated(this)
 
         AppCenter.start(application, "0bb1bf95-3b14-48a6-a769-db1ff1df0307", Analytics::class.java, Crashes::class.java)
-        cenManager.start()
+        bleInitializer.start()
     }
 
     override fun onNewIntent(intent: Intent?) {

@@ -51,5 +51,11 @@ fun <T, E> Result<T, E>.failureOrNull(): E? =
         is Failure -> error
     }
 
+fun <T, E> Result<T, E>.isSuccess(): Boolean =
+    this is Success
+
+fun <T, E> Result<T, E>.isFailure(): Boolean =
+    this is Failure
+
 fun <T: Any, E: Any> List<Result<T, E>>.group(): Pair<List<T>, List<E>> =
    Pair(mapNotNull { it.successOrNull() }, mapNotNull { it.failureOrNull() } )

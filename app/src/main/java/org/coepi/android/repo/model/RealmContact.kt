@@ -4,6 +4,6 @@ import io.realm.RealmObject
 import java.util.Date
 
 open class RealmContact(
-    var cen: String = "",
+    var tcn: String = "",
     var date: Date = Date()
 ): RealmObject()

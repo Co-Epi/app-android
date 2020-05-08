@@ -9,8 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import kotlinx.android.parcel.Parcelize
-import org.coepi.android.cen.ReceivedCenReport
-import org.coepi.android.cen.SymptomReport
+import org.coepi.android.tcn.SymptomReport
 import org.coepi.android.databinding.FragmentAlertsDetailsBinding.inflate
 import org.coepi.android.extensions.observeWith
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragmentArgs.Companion.fromBundle
