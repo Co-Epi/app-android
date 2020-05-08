@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">CoEpi</string>
     <string name="privacy_link"><a href="https://www.coepi.org/privacy/">How is my data being used?</a></string>
+
+    <!-- common -->
+    <string name="days">days</string>
+    <string name="unknown">I don\'t know</string>
+    <string name="submit">Submit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <!-- Tabs container -->
     <string name="tab_container_debug">Debug</string>
 
@@ -37,7 +45,7 @@
     <!-- Symptoms -->
     <string name="symptoms_headline">What symptoms do you have today?</string>
     <string name="symptoms_caption">Select all that apply</string>
-    <string name="symptoms_submit_button">Submit</string>
+    <string name="symptoms_submit_button">@string/submit</string>
     <string name="symptoms_success_message">Symptoms submitted!</string>
 
     <!-- Thank you -->
@@ -95,8 +103,8 @@
 
     <!-- Symptom Report - Cough Duration -->
     <string name="symptom_report_cough_duration_headline">How many days have you been coughing?</string>
-    <string name="symptom_report_cough_duration_days">days</string>
-    <string name="symptom_report_cough_duration_unknown">I don\'t know</string>
+    <string name="symptom_report_cough_duration_days">@string/days</string>
+    <string name="symptom_report_cough_duration_unknown">@string/unknown</string>
 
     <!-- Symptom Report - Cough Status -->
     <string name="symptom_report_cough_status_headline">Today my cough has:</string>
@@ -104,5 +112,17 @@
     <string name="symptom_report_cough_status_option_better_worse_day">Felt better and worse throughout the day</string>
     <string name="symptom_report_cough_status_option_worse_outside">Felt worse when I am outside</string>
     <string name="symptom_report_cough_status_option_same_or_steadily_worse">Stayed the same or felt steadily worse</string>
+
+    <!-- Symptom Report - Fever -->
+    <string name="symptom_report_fever_title">Follow up: Fever</string>
+    <string name="symptom_report_fever_duration_headline">How many days have you had a fever?</string>
+    <string name="symptom_report_fever_duration_days">@string/days</string>
+    <string name="symptom_report_fever_duration_unknown">@string/unknown</string>
+    <string name="symptom_report_fever_duration_submit">@string/submit</string>
+    <string name="symptom_report_fever_taken_today_headline">Have you taken your temperature today?</string>
+    <string name="symptom_report_fever_taken_today_yes">@string/yes</string>
+    <string name="symptom_report_fever_taken_today_no">@string/no</string>
+
+
 
 </resources>

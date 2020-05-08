@@ -1,6 +1,8 @@
 package org.coepi.android.domain.symptomflow
 
 import androidx.navigation.NavDirections
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverDurationFragment
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTakenTodayFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughDurationFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughStatusFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughTypeFragment
@@ -26,11 +28,11 @@ class SymptomRouterImpl : SymptomRouter {
             COUGH_TYPE -> actionGlobalCoughTypeFragment()
             COUGH_DAYS -> actionGlobalCoughDurationFragment()
             COUGH_DESCRIPTION -> actionGlobalCoughStatusFragment()
+            FEVER_DAYS -> actionGlobalFeverDurationFragment()
+            FEVER_TEMPERATURE_TAKEN_TODAY -> actionGlobalFeverTakenTodayFragment()
 
             // TODO new destinations
             BREATHLESSNESS_DESCRIPTION -> actionGlobalDebug()
-            FEVER_DAYS -> actionGlobalDebug()
-            FEVER_TEMPERATURE_TAKEN_TODAY -> actionGlobalDebug()
             FEVER_TEMPERATURE_SPOT -> actionGlobalDebug()
             FEVER_TEMPERATURE_SPOT_INPUT -> actionGlobalDebug()
             FEVER_HIGHEST_TEMPERATURE -> actionGlobalDebug()

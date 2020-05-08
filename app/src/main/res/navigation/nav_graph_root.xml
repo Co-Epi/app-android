@@ -111,5 +111,17 @@
         android:label="CoughStatusFragment"
         tools:layout="@layout/fragment_cough_status"/>
     <action android:id="@+id/action_global_coughStatusFragment" app:destination="@id/coughStatusFragment" />
+    <fragment
+        android:id="@+id/feverDurationFragment"
+        android:name="org.coepi.android.ui.symptoms.fever.FeverDurationFragment"
+        android:label="FeverDurationFragment"
+        tools:layout="@layout/fragment_fever_duration"/>
+    <action android:id="@+id/action_global_feverDurationFragment" app:destination="@id/feverDurationFragment" />
+    <fragment
+        android:id="@+id/feverTakenTodayFragment"
+        android:name="org.coepi.android.ui.symptoms.fever.FeverTakenTodayFragment"
+        android:label="FeverTakenTodayFragment"
+        tools:layout="@layout/fragment_fever_taken_today"/>
+    <action android:id="@+id/action_global_feverTakenTodayFragment" app:destination="@id/feverTakenTodayFragment" />
 
 </navigation>
