@@ -1,7 +1,5 @@
 package org.coepi.android.ui.home
 
-import android.view.View
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
