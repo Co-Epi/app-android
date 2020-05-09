@@ -27,8 +27,7 @@ class SymptomFlow(
         }
     }
 
-    private val steps: List<SymptomStep> =
-        toSteps(symptomIds)
+    private val steps: List<SymptomStep> = toSteps(symptomIds)
     private var currentStep: SymptomStep = steps.first()
 
     val firstStep: SymptomStep get() = steps.first()

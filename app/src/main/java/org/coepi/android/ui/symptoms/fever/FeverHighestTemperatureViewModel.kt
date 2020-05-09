@@ -1,9 +1,14 @@
 package org.coepi.android.ui.symptoms.fever
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import org.coepi.android.domain.symptomflow.SymptomFlowManager
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.coepi.android.domain.model.Temperature.Fahrenheit
-import org.coepi.android.domain.model.Temperature.Celsius
+import org.coepi.android.domain.symptomflow.SymptomFlowManager
+import org.coepi.android.domain.symptomflow.UserInput.None
+import org.coepi.android.domain.symptomflow.UserInput.Some
+import org.coepi.android.extensions.rx.toIsInProgress
+import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
 
@@ -11,13 +16,19 @@ class FeverHighestTemperatureViewModel(
     val navigation: RootNavigation,
     private val symptomFlowManager: SymptomFlowManager
 ) : ViewModel() {
+
+    val isInProgress: LiveData<Boolean> = symptomFlowManager.sendReportState
+        .toIsInProgress()
+        .observeOn(AndroidSchedulers.mainThread())
+        .toLiveData()
+
     // TODO Hardcoded to use Fahrenheit, add ability to select scale
     fun onTempChanged(tempStr: String) {
         if (tempStr.isEmpty()) {
-            symptomFlowManager.setFeverHighestTemperatureTaken(null)
+            symptomFlowManager.setFeverHighestTemperatureTaken(None)
         } else {
             val temperature: Float= tempStr.toFloatOrNull() ?: error("Invalid input: $tempStr")
-            symptomFlowManager.setFeverHighestTemperatureTaken(Fahrenheit(temperature))
+            symptomFlowManager.setFeverHighestTemperatureTaken(Some(Fahrenheit(temperature)))
         }
     }
 

@@ -2,8 +2,9 @@ package org.coepi.android.domain.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
-sealed class Temperature : Parcelable {
+sealed class Temperature : Parcelable, Serializable {
     @Parcelize
     data class Celsius(val value: Float) : Temperature() {
         override fun toFarenheit(): Fahrenheit =

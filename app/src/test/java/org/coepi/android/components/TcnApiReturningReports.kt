@@ -11,6 +11,5 @@ class TcnApiReturningReports(private val reports: List<String>) :
     override fun getReports(intervalNumber: Long, intervalLength: Long): Call<List<String>> =
         CallReturning(reports)
 
-    override fun postReport(report: RequestBody): Completable =
-        Completable.complete()
+    override fun postReport(report: RequestBody): Call<Unit> = CallReturning(Unit)
 }

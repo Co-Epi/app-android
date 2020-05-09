@@ -10,19 +10,19 @@ import org.coepi.android.domain.symptomflow.SymptomInputs.Fever
 import org.coepi.android.system.log.log
 
 interface SymptomInputsInitalizer {
-    fun selectSymptomIds(ids: List<SymptomId>)
+    fun selectSymptomIds(ids: Set<SymptomId>)
 }
 
 interface SymptomInputsProps {
     val inputs: SymptomInputs
-    fun setCoughType(type: Cough.Type?)
-    fun setCoughDays(days: Cough.Days?)
-    fun setCoughStatus(status: Cough.Status?)
-    fun setBreathlessnessCause(cause: Breathlessness.Cause?)
-    fun setFeverDays(days: Fever.Days?)
-    fun setFeverTakenTemperatureToday(taken: Boolean?)
-    fun setFeverTakenTemperatureSpot(spot: Fever.TemperatureSpot?)
-    fun setFeverHighestTemperatureTaken(temp: Temperature?)
+    fun setCoughType(type: UserInput<Cough.Type>)
+    fun setCoughDays(days: UserInput<Cough.Days>)
+    fun setCoughStatus(status: UserInput<Cough.Status>)
+    fun setBreathlessnessCause(cause: UserInput<Breathlessness.Cause>)
+    fun setFeverDays(days: UserInput<Fever.Days>)
+    fun setFeverTakenTemperatureToday(taken: UserInput<Boolean>)
+    fun setFeverTakenTemperatureSpot(spot: UserInput<Fever.TemperatureSpot>)
+    fun setFeverHighestTemperatureTaken(temp: UserInput<Temperature>)
 }
 
 interface SymptomInputsManager : SymptomInputsInitalizer, SymptomInputsProps {
@@ -35,11 +35,11 @@ class SymptomInputsManagerImpl :
         SymptomInputs()
         private set
 
-    override fun selectSymptomIds(ids: List<SymptomId>) {
-        inputs = initInputs(ids)
+    override fun selectSymptomIds(ids: Set<SymptomId>) {
+        inputs = initInputs(ids).copy(ids = ids)
     }
 
-    private fun initInputs(ids: List<SymptomId>): SymptomInputs =
+    private fun initInputs(ids: Set<SymptomId>): SymptomInputs =
         ids.fold(SymptomInputs()) { acc, e ->
             when (e) {
                 COUGH -> acc.copy(cough = Cough())
@@ -52,44 +52,44 @@ class SymptomInputsManagerImpl :
             }
         }
 
-    override fun setCoughType(type: Cough.Type?) {
-        val cough = inputs.cough ?: error("Cough not set")
-        inputs = inputs.copy(cough = cough.copy(type = type))
+    override fun setCoughType(type: UserInput<Cough.Type>) {
+        if (!inputs.ids.contains(COUGH)) error("Cough not set")
+        inputs = inputs.copy(cough = inputs.cough.copy(type = type))
     }
 
-    override fun setCoughDays(days: Cough.Days?) {
-        val cough = inputs.cough ?: error("Cough not set")
-        inputs = inputs.copy(cough = cough.copy(days = days))
+    override fun setCoughDays(days: UserInput<Cough.Days>) {
+        if (!inputs.ids.contains(COUGH)) error("Cough not set")
+        inputs = inputs.copy(cough = inputs.cough.copy(days = days))
     }
 
-    override fun setCoughStatus(status: Cough.Status?) {
-        val cough = inputs.cough ?: error("Cough not set")
-        inputs = inputs.copy(cough = cough.copy(status = status))
+    override fun setCoughStatus(status: UserInput<Cough.Status>) {
+        if (!inputs.ids.contains(COUGH)) error("Cough not set")
+        inputs = inputs.copy(cough = inputs.cough.copy(status = status))
     }
 
-    override fun setBreathlessnessCause(cause: Breathlessness.Cause?) {
-        val breathlessness = inputs.breathlessness ?: error("Breathlessness not set")
-        inputs = inputs.copy(breathlessness = breathlessness.copy(cause = cause))
+    override fun setBreathlessnessCause(cause: UserInput<Breathlessness.Cause>) {
+        if (!inputs.ids.contains(BREATHLESSNESS)) error("Breathlessness not set")
+        inputs = inputs.copy(breathlessness = inputs.breathlessness.copy(cause = cause))
     }
 
-    override fun setFeverDays(days: Fever.Days?) {
-        val fever = inputs.fever ?: error("Fever not set")
-        inputs = inputs.copy(fever = fever.copy(days = days))
+    override fun setFeverDays(days: UserInput<Fever.Days>) {
+        if (!inputs.ids.contains(FEVER)) error("Fever not set")
+        inputs = inputs.copy(fever = inputs.fever.copy(days = days))
     }
 
-    override fun setFeverTakenTemperatureToday(taken: Boolean?) {
-        val fever = inputs.fever ?: error("Fever not set")
-        inputs = inputs.copy(fever = fever.copy(takenTemperatureToday = taken))
+    override fun setFeverTakenTemperatureToday(taken: UserInput<Boolean>) {
+        if (!inputs.ids.contains(FEVER)) error("Fever not set")
+        inputs = inputs.copy(fever = inputs.fever.copy(takenTemperatureToday = taken))
     }
 
-    override fun setFeverTakenTemperatureSpot(spot: Fever.TemperatureSpot?) {
-        val fever = inputs.fever ?: error("Fever not set")
-        inputs = inputs.copy(fever = fever.copy(temperatureSpot = spot))
+    override fun setFeverTakenTemperatureSpot(spot: UserInput<Fever.TemperatureSpot>) {
+        if (!inputs.ids.contains(FEVER)) error("Fever not set")
+        inputs = inputs.copy(fever = inputs.fever.copy(temperatureSpot = spot))
     }
 
-    override fun setFeverHighestTemperatureTaken(temp: Temperature?) {
-        val fever = inputs.fever ?: error("Fever not set")
-        inputs = inputs.copy(fever = fever.copy(highestTemperature = temp))
+    override fun setFeverHighestTemperatureTaken(temp: UserInput<Temperature>) {
+        if (!inputs.ids.contains(FEVER)) error("Fever not set")
+        inputs = inputs.copy(fever = inputs.fever.copy(highestTemperature = temp))
     }
 
     override fun clear() {

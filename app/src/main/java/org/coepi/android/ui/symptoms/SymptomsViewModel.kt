@@ -20,16 +20,18 @@ import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.system.log.log
+import org.coepi.android.tcn.TcnReportRepo
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
 
 class SymptomsViewModel(
     symptomRepo: SymptomRepo,
     private val navigation: RootNavigation,
-    private val symptomFlowManager: SymptomFlowManager
+    private val symptomFlowManager: SymptomFlowManager,
+    reportRepo: TcnReportRepo
 ) : ViewModel() {
 
-    val isInProgress: LiveData<Boolean> = symptomRepo.sendReportState
+    val isInProgress: LiveData<Boolean> = reportRepo.sendState
         .toIsInProgress()
         .observeOn(mainThread())
         .toLiveData()

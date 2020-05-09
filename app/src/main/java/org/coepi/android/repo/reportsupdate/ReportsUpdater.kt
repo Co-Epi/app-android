@@ -203,7 +203,7 @@ class ReportsUpdaterImpl(
         val insertedCount: Int = reports.map {
             reportsDao.insert(TcnReport(
                 id = it.signature.toByteArray().toHex(),
-                report = it.report.memoData.toString(UTF_8),
+                memoStr = it.report.memoData.toString(UTF_8),
                 timestamp = now().value // TODO extract this from memo, when protocol implemented
             ))
         }.filter { it }.size

@@ -29,6 +29,26 @@ fun computeUUIDHash(selfUUID: UUID, otherUUID: UUID) : ByteArray {
     return md.digest(bytes.toByteArray()).toUByteArray().asByteArray()
 }
 
+// byte array expected in little endian format
+@ExperimentalUnsignedTypes
+fun UByteArray.toULong(): ULong {
+    val reversed = reversed()
+
+    var long: ULong = 0.toULong()
+    for (index in 0 until reversed.size) {
+        long = reversed[index].toULong().shl((reversed.count() - 1 - index) * 8) or long
+    }
+    return long
+}
+
+// byte array expected in little endian format
+@ExperimentalUnsignedTypes
+fun UByteArray.toUByte(): UByte = toULong().toUByte()
+
+// byte array expected in little endian format
+@ExperimentalUnsignedTypes
+fun UByteArray.toUShort(): UShort = toULong().toUShort()
+
 fun longToByteArray(i: Long): ByteArray? {
     val bb: ByteBuffer = ByteBuffer.allocate(Long.SIZE_BYTES)
     bb.order(ByteOrder.LITTLE_ENDIAN)

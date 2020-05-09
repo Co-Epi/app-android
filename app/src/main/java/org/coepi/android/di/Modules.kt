@@ -12,7 +12,6 @@ import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
-import org.coepi.android.ble.BleSimulator
 import org.coepi.android.tcn.TcnModule
 import org.coepi.android.tcn.apiModule
 import org.coepi.android.repo.repoModule
@@ -64,7 +63,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { SymptomsViewModel(get(), get(), get()) }
+    viewModel { SymptomsViewModel(get(), get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ThanksViewModel(get()) }
     viewModel { AlertsViewModel(get(), get(), get()) }
