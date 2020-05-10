@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="org.coepi.android.ui.symptoms.breathless.BreathlessViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/LightFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:title="@string/symptom_report_breathlessness_cause_title"
+            app:titleTextColor="@android:color/white">
+        </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/headline"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            style="@style/Text.Headline"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:background="@color/colorPrimary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/symptom_report_breathlessness_cause_headline"
+            android:textSize="@dimen/text_size_headline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <TextView
+            android:id="@+id/instruction"
+            android:background="@color/colorPrimary"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:textColor="@color/white"
+            android:text="@string/symptoms_select_one"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headline"
+            app:layout_constraintBottom_toTopOf="@id/cause_recycler_view"
+            android:paddingTop="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cause_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/instruction"
+            app:layout_constraintBottom_toTopOf="@id/skip" />
+
+        <TextView
+            android:id="@+id/skip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="30dp"
+            android:onClick="@{() -> vm.onClickSkip()}"
+            android:text="@string/symptoms_skip_button"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cause_recycler_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

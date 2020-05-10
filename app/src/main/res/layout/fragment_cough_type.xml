@@ -145,6 +145,6 @@
         app:layout_constraintTop_toBottomOf="@id/options"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="18sp"
-        android:text="Skip"/>
+        android:text="@string/symptoms_skip_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

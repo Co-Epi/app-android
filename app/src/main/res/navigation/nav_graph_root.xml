@@ -111,5 +111,11 @@
         android:label="CoughStatusFragment"
         tools:layout="@layout/fragment_cough_status"/>
     <action android:id="@+id/action_global_coughStatusFragment" app:destination="@id/coughStatusFragment" />
+    <fragment
+        android:id="@+id/breathlessFragment"
+        android:name="org.coepi.android.ui.symptoms.breathless.BreathlessFragment"
+        android:label="BreathlessFragment"
+        tools:layout="@layout/fragment_breathless" />
+    <action android:id="@+id/action_global_breathlessFragment" app:destination="@id/breathlessFragment" />
 
 </navigation>
