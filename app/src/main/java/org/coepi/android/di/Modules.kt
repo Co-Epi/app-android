@@ -52,6 +52,11 @@ import org.coepi.android.ui.symptoms.SymptomsViewModel
 import org.coepi.android.ui.symptoms.cough.CoughDurationViewModel
 import org.coepi.android.ui.symptoms.cough.CoughStatusViewModel
 import org.coepi.android.ui.symptoms.cough.CoughTypeViewModel
+import org.coepi.android.ui.symptoms.fever.FeverDurationViewModel
+import org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureViewModel
+import org.coepi.android.ui.symptoms.fever.FeverTakenTodayViewModel
+import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputViewModel
+import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotViewModel
 import org.coepi.android.ui.thanks.ThanksViewModel
 import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
 import org.koin.android.ext.koin.androidApplication
@@ -74,6 +79,11 @@ val viewModelModule = module {
     viewModel { CoughTypeViewModel(get(), get()) }
     viewModel { CoughDurationViewModel(get(), get()) }
     viewModel { CoughStatusViewModel(get(), get(), get()) }
+    viewModel { FeverDurationViewModel(get(), get()) }
+    viewModel { FeverTakenTodayViewModel(get(), get()) }
+    viewModel { FeverHighestTemperatureViewModel(get(), get()) }
+    viewModel { FeverTemperatureSpotViewModel(get(), get()) }
+    viewModel { FeverTemperatureSpotInputViewModel(get(), get()) }
 }
 
 val systemModule = module {

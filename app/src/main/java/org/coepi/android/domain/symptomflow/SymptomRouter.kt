@@ -1,10 +1,15 @@
 package org.coepi.android.domain.symptomflow
 
 import androidx.navigation.NavDirections
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverDurationFragment
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTakenTodayFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughDurationFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughStatusFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughTypeFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalDebug
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverHighestTemperatureFragment
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTemperatureSpotFragment
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTemperatureSpotInputFragment
 import org.coepi.android.domain.symptomflow.SymptomStep.BREATHLESSNESS_DESCRIPTION
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_DAYS
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_DESCRIPTION
@@ -26,13 +31,13 @@ class SymptomRouterImpl : SymptomRouter {
             COUGH_TYPE -> actionGlobalCoughTypeFragment()
             COUGH_DAYS -> actionGlobalCoughDurationFragment()
             COUGH_DESCRIPTION -> actionGlobalCoughStatusFragment()
+            FEVER_DAYS -> actionGlobalFeverDurationFragment()
+            FEVER_TEMPERATURE_TAKEN_TODAY -> actionGlobalFeverTakenTodayFragment()
+            FEVER_HIGHEST_TEMPERATURE -> actionGlobalFeverHighestTemperatureFragment()
+            FEVER_TEMPERATURE_SPOT -> actionGlobalFeverTemperatureSpotFragment()
+            FEVER_TEMPERATURE_SPOT_INPUT -> actionGlobalFeverTemperatureSpotInputFragment()
 
             // TODO new destinations
             BREATHLESSNESS_DESCRIPTION -> actionGlobalDebug()
-            FEVER_DAYS -> actionGlobalDebug()
-            FEVER_TEMPERATURE_TAKEN_TODAY -> actionGlobalDebug()
-            FEVER_TEMPERATURE_SPOT -> actionGlobalDebug()
-            FEVER_TEMPERATURE_SPOT_INPUT -> actionGlobalDebug()
-            FEVER_HIGHEST_TEMPERATURE -> actionGlobalDebug()
         }
 }

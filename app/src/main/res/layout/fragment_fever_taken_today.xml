@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="org.coepi.android.ui.symptoms.cough.CoughTypeViewModel" />
+            type="org.coepi.android.ui.symptoms.fever.FeverTakenTodayViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-            app:title="@string/symptom_report_cough_title"
+            app:title="@string/symptom_report_fever_title"
             app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
 
         <TextView
@@ -29,7 +29,8 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             style="@style/headline"
             android:layout_width="0dp"
-            android:text="@string/symptom_report_cough_type_headline"
+            android:gravity="center"
+            android:text="@string/symptom_report_fever_taken_today_headline"
             android:textSize="@dimen/text_size_headline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,47 +51,31 @@
                 android:layout_width="146dp"
                 android:layout_height="146dp"
                 android:background="@drawable/circle_button_background"
-                android:onClick="@{() -> vm.onClickWet()}">
+                android:onClick="@{() -> vm.onClickYes()}">
 
                 <TextView
-                    android:id="@+id/wet_headline"
+                    android:id="@+id/yes_headline"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="18dp"
-                    android:layout_marginTop="30dp"
                     android:layout_marginRight="18dp"
                     android:gravity="center"
                     android:letterSpacing="0.01"
                     android:lineSpacingExtra="1sp"
-                    android:text="@string/symptom_report_cough_type_wet"
+                    android:text="@string/symptom_report_fever_taken_today_yes"
                     android:textColor="@color/button_text_color"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginBottom="29dp"
-                    android:gravity="center"
-                    android:letterSpacing="0.01"
-                    android:lineSpacingExtra="1sp"
-                    android:text="@string/symptom_report_cough_type_wet_description"
-                    android:textColor="@color/button_text_color"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/wet_headline" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="146dp"
                 android:layout_height="146dp"
-                android:onClick="@{() -> vm.onClickDry()}">
+                android:onClick="@{() -> vm.onClickNo()}">
 
                 <ImageView
                     android:layout_width="146dp"
@@ -100,38 +85,22 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/dry_headline"
+                    android:id="@+id/no_headline"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="18dp"
-                    android:layout_marginTop="30dp"
                     android:layout_marginRight="18dp"
                     android:gravity="center"
                     android:letterSpacing="0.01"
                     android:lineSpacingExtra="1sp"
-                    android:text="@string/symptom_report_cough_type_dry"
+                    android:text="@string/symptom_report_fever_taken_today_no"
                     android:textColor="@color/button_text_color"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginBottom="29dp"
-                    android:gravity="center"
-                    android:letterSpacing="0.01"
-                    android:lineSpacingExtra="1sp"
-                    android:text="@string/symptom_report_cough_type_dry_description"
-                    android:textColor="@color/button_text_color"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/dry_headline" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
