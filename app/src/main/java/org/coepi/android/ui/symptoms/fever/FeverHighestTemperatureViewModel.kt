@@ -6,18 +6,19 @@ import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
 import org.coepi.android.domain.symptomflow.Temperature
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureViewModel.Temperature.Fahrenheit
 
 class FeverHighestTemperatureViewModel(
     val navigation: RootNavigation,
     private val symptomFlowManager: SymptomFlowManager
 ) : ViewModel() {
-
+    // TODO Hardcoded to use Fahrenheit, add ability to select scale
     fun onTempChanged(tempStr: String) {
         if (tempStr.isEmpty()) {
             symptomFlowManager.setFeverHighestTemperatureTaken(null)
         } else {
-            val temperature: Float = tempStr.toFloatOrNull() ?: error("Invalid input: $tempStr")
-            symptomFlowManager.setFeverHighestTemperatureTaken(Temperature(temperature))
+            val temperature: Float= tempStr.toFloatOrNull() ?: error("Invalid input: $tempStr")
+            symptomFlowManager.setFeverHighestTemperatureTaken(Temperature(Fahrenheit(temperature).value))
         }
     }
 
@@ -42,6 +43,24 @@ class FeverHighestTemperatureViewModel(
         navigation.navigate(Back)
     }
 
-    private fun cToF(c: Double) = (9/5.0 * c) + 32
-    private fun fToC(f: Double) = 5/9.0 * (f - 32)
+    sealed class Temperature {
+        data class Celsius(val value: Float) : Temperature() {
+            override fun toFarenheit(): Fahrenheit =
+                Fahrenheit(value) // TODO convert
+        }
+        data class Fahrenheit(val value: Float) : Temperature() {
+            override fun toCelsius(): Celsius =
+                Celsius(value) // TODO convert
+        }
+
+        open fun toCelsius(): Celsius = when (this) {
+            is Celsius -> this
+            is Fahrenheit -> toCelsius()
+        }
+
+        open fun toFarenheit(): Fahrenheit = when (this) {
+            is Fahrenheit -> this
+            is Celsius -> toFarenheit()
+        }
+    }
 }
