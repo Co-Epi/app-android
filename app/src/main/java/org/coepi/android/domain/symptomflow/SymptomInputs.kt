@@ -65,5 +65,26 @@ data class SymptomInputs(
     }
 }
 
-@Parcelize
-data class Temperature(val value: Float): Parcelable
+sealed class Temperature: Parcelable {
+    @Parcelize
+    data class Celsius(val value: Float) : Temperature() {
+        override fun toFarenheit(): Fahrenheit =
+            Fahrenheit(value) // TODO convert
+    }
+
+    @Parcelize
+    data class Fahrenheit(val value: Float) : Temperature() {
+        override fun toCelsius(): Celsius =
+            Celsius(value) // TODO convert
+    }
+
+    open fun toCelsius(): Celsius = when (this) {
+        is Celsius -> this
+        is Fahrenheit -> toCelsius()
+    }
+
+    open fun toFarenheit(): Fahrenheit = when (this) {
+        is Fahrenheit -> this
+        is Celsius -> toFarenheit()
+    }
+}

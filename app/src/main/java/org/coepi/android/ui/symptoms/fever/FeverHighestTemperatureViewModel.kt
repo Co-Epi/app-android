@@ -2,11 +2,10 @@ package org.coepi.android.ui.symptoms.fever
 
 import androidx.lifecycle.ViewModel
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
-import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
-import org.coepi.android.domain.symptomflow.Temperature
+import org.coepi.android.domain.symptomflow.Temperature.Fahrenheit
+import org.coepi.android.domain.symptomflow.Temperature.Celsius
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
-import org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureViewModel.Temperature.Fahrenheit
 
 class FeverHighestTemperatureViewModel(
     val navigation: RootNavigation,
@@ -18,7 +17,7 @@ class FeverHighestTemperatureViewModel(
             symptomFlowManager.setFeverHighestTemperatureTaken(null)
         } else {
             val temperature: Float= tempStr.toFloatOrNull() ?: error("Invalid input: $tempStr")
-            symptomFlowManager.setFeverHighestTemperatureTaken(Temperature(Fahrenheit(temperature).value))
+            symptomFlowManager.setFeverHighestTemperatureTaken(Fahrenheit(temperature))
         }
     }
 
@@ -41,26 +40,5 @@ class FeverHighestTemperatureViewModel(
     fun onBackPressed() {
         onBack()
         navigation.navigate(Back)
-    }
-
-    sealed class Temperature {
-        data class Celsius(val value: Float) : Temperature() {
-            override fun toFarenheit(): Fahrenheit =
-                Fahrenheit(value) // TODO convert
-        }
-        data class Fahrenheit(val value: Float) : Temperature() {
-            override fun toCelsius(): Celsius =
-                Celsius(value) // TODO convert
-        }
-
-        open fun toCelsius(): Celsius = when (this) {
-            is Celsius -> this
-            is Fahrenheit -> toCelsius()
-        }
-
-        open fun toFarenheit(): Fahrenheit = when (this) {
-            is Fahrenheit -> this
-            is Celsius -> toFarenheit()
-        }
     }
 }

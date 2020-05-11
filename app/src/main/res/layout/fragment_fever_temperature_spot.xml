@@ -56,8 +56,8 @@
                         android:text="@string/symptom_report_fever_temperature_spot_armpit"
                         android:layout_marginTop="44dp"
                         app:layout_constraintTop_toBottomOf="@id/mouth"
-                        app:layout_constraintStart_toStartOf="@id/mouth"
-                        app:layout_constraintEnd_toStartOf="other"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/other"
                         app:layout_constraintBottom_toTopOf="@id/skip"/>
                     <TextView
                         android:id="@+id/other"
