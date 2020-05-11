@@ -2,9 +2,12 @@ package org.coepi.android.domain.symptomflow
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import org.coepi.android.domain.model.Temperature
 
-enum class SymptomId { COUGH, BREATHLESSNESS, FEVER, MUSCLE_ACHES, LOSS_SMELL_OR_TASTE, DIARRHEA,
-    RUNNY_NOSE, OTHER, NONE }
+enum class SymptomId {
+    COUGH, BREATHLESSNESS, FEVER, MUSCLE_ACHES, LOSS_SMELL_OR_TASTE, DIARRHEA,
+    RUNNY_NOSE, OTHER, NONE
+}
 
 @Parcelize
 data class SymptomInputs(
@@ -62,29 +65,5 @@ data class SymptomInputs(
             @Parcelize
             data class Other(val description: String) : TemperatureSpot(), Parcelable
         }
-    }
-}
-
-sealed class Temperature: Parcelable {
-    @Parcelize
-    data class Celsius(val value: Float) : Temperature() {
-        override fun toFarenheit(): Fahrenheit =
-            Fahrenheit(value) // TODO convert
-    }
-
-    @Parcelize
-    data class Fahrenheit(val value: Float) : Temperature() {
-        override fun toCelsius(): Celsius =
-            Celsius(value) // TODO convert
-    }
-
-    open fun toCelsius(): Celsius = when (this) {
-        is Celsius -> this
-        is Fahrenheit -> toCelsius()
-    }
-
-    open fun toFarenheit(): Fahrenheit = when (this) {
-        is Fahrenheit -> this
-        is Celsius -> toFarenheit()
     }
 }

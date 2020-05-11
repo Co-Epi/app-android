@@ -2,15 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="vm"
             type="org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/ic_geometric_light_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_geometric_light_background">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/toolbar"
@@ -19,8 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_fever_title"
-            app:titleTextColor="@android:color/white">
-        </androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:id="@+id/headline"
@@ -37,44 +40,44 @@
             android:id="@+id/measured_location"
             android:layout_width="0dp"
             android:layout_height="71dp"
-            android:layout_marginTop="27dp"
             android:layout_marginStart="33dp"
+            android:layout_marginTop="27dp"
             android:layout_marginEnd="36dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline"
             android:inputType="text"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headline" />
+
         <Button
             android:id="@+id/unknown"
             style="@style/ButtonUnselected"
-            android:layout_marginTop="24dp"
-            android:layout_height="31dp"
             android:layout_width="131dp"
-            app:layout_constraintTop_toBottomOf="@id/measured_location"
-            app:layout_constraintStart_toStartOf="@id/measured_location"
-            android:text="@string/symptom_report_fever_temperature_spot_input_unknown"
+            android:layout_height="31dp"
+            android:layout_marginTop="24dp"
             android:onClick="@{() -> vm.onClickUnknown()}"
-            />
+            android:text="@string/symptom_report_fever_temperature_spot_input_unknown"
+            app:layout_constraintStart_toStartOf="@id/measured_location"
+            app:layout_constraintTop_toBottomOf="@id/measured_location" />
+
         <Button
             android:id="@+id/submit"
             style="@style/Button"
-            android:layout_height="32dp"
             android:layout_width="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/unknown"
-            app:layout_constraintEnd_toEndOf="@id/measured_location"
-            android:text="@string/symptom_report_fever_temperature_spot_input_submit"
+            android:layout_height="32dp"
             android:onClick="@{() -> vm.onClickSubmit()}"
-            />
+            android:text="@string/symptom_report_fever_temperature_spot_input_submit"
+            app:layout_constraintEnd_toEndOf="@id/measured_location"
+            app:layout_constraintTop_toTopOf="@id/unknown" />
+
         <TextView
-            android:onClick="@{() -> vm.onClickSkip()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="182dp"
             android:layout_marginLeft="46dp"
-            app:layout_constraintTop_toBottomOf="@id/measured_location"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="182dp"
+            android:onClick="@{() -> vm.onClickSkip()}"
+            android:text="Skip"
             android:textSize="18sp"
-            android:text="Skip"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/measured_location" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

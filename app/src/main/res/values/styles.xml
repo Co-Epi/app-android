@@ -16,7 +16,7 @@
     </style>
 
     <style name="Text.Title">
-      <item name="android:textSize">@dimen/text_size_title</item>
+        <item name="android:textSize">@dimen/text_size_title</item>
     </style>
 
     <style name="Text.Alert">
@@ -62,11 +62,13 @@
         <item name="android:letterSpacing">0.01</item>
         <item name="android:textColor">#DE000000</item>
     </style>
+
     <style name="card_view_body">
         <item name="android:textSize">22sp</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textColor">#DE000000</item>
     </style>
+
     <style name="card_view_link">
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0.05</item>

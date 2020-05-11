@@ -2,8 +2,8 @@ package org.coepi.android.ui.symptoms.fever
 
 import androidx.lifecycle.ViewModel
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
-import org.coepi.android.domain.symptomflow.Temperature.Fahrenheit
-import org.coepi.android.domain.symptomflow.Temperature.Celsius
+import org.coepi.android.domain.model.Temperature.Fahrenheit
+import org.coepi.android.domain.model.Temperature.Celsius
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
 

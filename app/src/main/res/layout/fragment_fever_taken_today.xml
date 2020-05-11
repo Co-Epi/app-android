@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="vm"
             type="org.coepi.android.ui.symptoms.fever.FeverTakenTodayViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/ic_geometric_light_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_geometric_light_background">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/toolbar"
@@ -18,29 +22,29 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_fever_title"
-            app:titleTextColor="@android:color/white">
-        </androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:id="@+id/headline"
             android:name="androidx.navigation.fragment.NavHostFragment"
             style="@style/headline"
-            android:gravity="center"
             android:layout_width="0dp"
+            android:gravity="center"
             android:text="@string/symptom_report_fever_taken_today_headline"
             android:textSize="@dimen/text_size_headline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
         <LinearLayout
             android:id="@+id/options"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_marginTop="82dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,22 +66,23 @@
                     android:textColor="@color/button_text_color"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="146dp"
                 android:layout_height="146dp"
                 android:onClick="@{() -> vm.onClickNo()}">
+
                 <ImageView
                     android:layout_width="146dp"
                     android:layout_height="146dp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/circle_button_background"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:src="@drawable/circle_button_background"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/no_headline"
@@ -92,21 +97,22 @@
                     android:textColor="@color/button_text_color"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
+
         <TextView
-            android:onClick="@{() -> vm.onClickSkip()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
             android:layout_marginLeft="46dp"
-            app:layout_constraintTop_toBottomOf="@id/options"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="48dp"
+            android:onClick="@{() -> vm.onClickSkip()}"
+            android:text="Skip"
             android:textSize="18sp"
-            android:text="Skip"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/options" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
