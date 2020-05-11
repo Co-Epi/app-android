@@ -13,9 +13,7 @@
         android:layout_height="match_parent">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorAccent"
+        style="@style/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,17 +25,9 @@
     <TextView
         android:id="@+id/headline"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        style="@style/Text.Headline"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:gravity="center_vertical"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:background="@color/colorPrimary"
+        style="@style/headline"
         android:layout_width="0dp"
-        android:layout_height="109dp"
         android:text="@string/symptom_report_cough_duration_headline"
-        android:textSize="@dimen/text_size_headline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
