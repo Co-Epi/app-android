@@ -5,6 +5,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import okhttp3.logging.HttpLoggingInterceptor.Logger
 import org.coepi.android.api.TcnApi
+import org.coepi.android.api.memo.MemoMapper
+import org.coepi.android.api.memo.MemoMapperImpl
 import org.coepi.android.common.ApiSymptomsMapper
 import org.coepi.android.common.ApiSymptomsMapperImpl
 import org.coepi.android.system.log.LogTag.NET
@@ -18,7 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 val apiModule = module {
     single { provideRetrofit() }
     single { provideTcnApi(get()) }
-    single<ApiSymptomsMapper> { ApiSymptomsMapperImpl(androidApplication(), get()) }
+    single<MemoMapper> { MemoMapperImpl() }
+    single<ApiSymptomsMapper> { ApiSymptomsMapperImpl(androidApplication(), get(), get()) }
 }
 
 private fun provideRetrofit() : Retrofit {

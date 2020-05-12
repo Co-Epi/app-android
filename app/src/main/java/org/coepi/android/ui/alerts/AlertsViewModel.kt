@@ -45,7 +45,7 @@ class AlertsViewModel(
 
     private fun SymptomReport.toViewData(): AlertViewData =
         AlertViewData(
-            exposureType = symptoms.joinToString(", ") { it.name },
+            exposureType = inputs.ids.joinToString(", ") { it.name }, // TODO map to localized names
             time = timestamp.toDate().toString(), // TODO which date format?
             report = this
         )

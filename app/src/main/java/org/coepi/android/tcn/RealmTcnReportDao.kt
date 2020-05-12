@@ -36,7 +36,7 @@ class RealmTcnReportDao(private val realmProvider: RealmProvider) : TcnReportDao
         if (findReportById(report.id) != null) return false
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmTcnReport>(report.id)
-            realmObj.report = report.report
+            realmObj.report = report.memoStr
             realmObj.timestamp = report.timestamp
         }
         return true
@@ -67,5 +67,5 @@ class RealmTcnReportDao(private val realmProvider: RealmProvider) : TcnReportDao
     }
 
     private fun RealmTcnReport.toReceivedTcnReport(): ReceivedTcnReport = ReceivedTcnReport(
-        TcnReport(id = id, report = report, timestamp = timestamp ))
+        TcnReport(id = id, memoStr = report, timestamp = timestamp ))
 }

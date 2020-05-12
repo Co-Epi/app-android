@@ -111,4 +111,7 @@
         <item name="android:layout_height">109dp</item>
     </style>
 
+    <!-- No custom style for now -->
+    <style name="screen_progress_indicator" />
+
 </resources>

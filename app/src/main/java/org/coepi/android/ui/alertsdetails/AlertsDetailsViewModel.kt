@@ -6,6 +6,7 @@ import io.reactivex.Observable.just
 import org.coepi.android.R.drawable.ic_alert
 import org.coepi.android.tcn.SymptomReport
 import org.coepi.android.domain.model.Symptom
+import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toLiveData
 
 class AlertsDetailsViewModel(
@@ -20,8 +21,9 @@ class AlertsDetailsViewModel(
         .toLiveData()
 
     private fun SymptomReport.toViewData(): List<AlertDetailsSymptomViewData> =
-        symptoms.map { it.toViewData() }
+        inputs.ids.map { it.toViewData() }
 
-    private fun Symptom.toViewData(): AlertDetailsSymptomViewData =
+    private fun SymptomId.toViewData(): AlertDetailsSymptomViewData =
+        // TODO map to localized names
         AlertDetailsSymptomViewData(ic_alert, name, this)
 }

@@ -11,6 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
+import org.coepi.android.R.style.AppTheme
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.tcn.BleInitializer
 import org.coepi.android.system.intent.IntentForwarder
@@ -37,9 +38,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
+        setTheme(AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
+
         observeRootNavigation()
         observeUINotifier()
         onboardingShower.showIfNeeded()

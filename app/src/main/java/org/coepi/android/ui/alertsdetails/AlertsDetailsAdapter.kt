@@ -33,7 +33,7 @@ class AlertsDetailsAdapter : ListAdapter<AlertDetailsSymptomViewData, ItemViewHo
 
 private class AlertsDetailsDiffCallback : ItemCallback<AlertDetailsSymptomViewData>() {
     override fun areItemsTheSame(oldItem: AlertDetailsSymptomViewData, newItem: AlertDetailsSymptomViewData): Boolean =
-        oldItem.symptom.id == newItem.symptom.id
+        oldItem.symptom == newItem.symptom
 
     override fun areContentsTheSame(oldItem: AlertDetailsSymptomViewData, newItem: AlertDetailsSymptomViewData): Boolean =
         oldItem == newItem

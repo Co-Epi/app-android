@@ -3,6 +3,7 @@ package org.coepi.android.ui.symptoms.cough
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import org.coepi.android.R.string.symptom_report_cough_status_option_better_worse_day
@@ -16,6 +17,8 @@ import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Status.BETTER_AND_WORSE_THROUGH_DAY
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Status.SAME_OR_STEADILY_WORSE
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Status.WORSE_WHEN_OUTSIDE
+import org.coepi.android.domain.symptomflow.UserInput.Some
+import org.coepi.android.extensions.rx.toIsInProgress
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.navigation.NavigationCommand.Back
@@ -26,6 +29,11 @@ class CoughStatusViewModel (
     private val resources: Resources,
     private val symptomFlowManager: SymptomFlowManager
 ) : ViewModel() {
+
+    val isInProgress: LiveData<Boolean> = symptomFlowManager.sendReportState
+        .toIsInProgress()
+        .observeOn(AndroidSchedulers.mainThread())
+        .toLiveData()
 
     private val selectedStatus: BehaviorSubject<Optional<Cough.Status>> = createDefault(None)
 
@@ -63,7 +71,7 @@ class CoughStatusViewModel (
     }.let { resources.getString(it) }
 
     fun onSelected(item: CoughStatusViewData) {
-        symptomFlowManager.setCoughStatus(item.status)
+        symptomFlowManager.setCoughStatus(Some(item.status))
         symptomFlowManager.navigateForward()
     }
 }

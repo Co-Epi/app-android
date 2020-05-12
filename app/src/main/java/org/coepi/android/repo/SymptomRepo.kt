@@ -3,9 +3,6 @@ package org.coepi.android.repo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.Single.just
-import org.coepi.android.tcn.TcnReportRepo
-import org.coepi.android.tcn.SymptomReport
-import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
@@ -17,20 +14,13 @@ import org.coepi.android.domain.symptomflow.SymptomId.NONE
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
 import org.coepi.android.system.rx.VoidOperationState
-import java.util.UUID.randomUUID
+import org.coepi.android.tcn.TcnReportRepo
 
 interface SymptomRepo {
-    val sendReportState: Observable<VoidOperationState>
-
     fun symptoms(): Single<List<Symptom>>
-    fun submitSymptoms(symptoms: List<Symptom>)
 }
 
-class SymptomRepoImpl(
-    private val reportRepo: TcnReportRepo
-): SymptomRepo {
-
-    override val sendReportState: Observable<VoidOperationState> = reportRepo.sendState.share()
+class SymptomRepoImpl(reportRepo: TcnReportRepo): SymptomRepo {
 
     override fun symptoms(): Single<List<Symptom>> = just(listOf(
         Symptom(NONE, "I don\'t have any symptoms today"),
@@ -43,14 +33,4 @@ class SymptomRepoImpl(
         Symptom(RUNNY_NOSE, "Runny nose"),
         Symptom(OTHER, "I have symptoms that are not on the list")
     ))
-
-    override fun submitSymptoms(symptoms: List<Symptom>) {
-        reportRepo.send(symptoms.toReport())
-    }
-
-    private fun List<Symptom>.toReport(): SymptomReport = SymptomReport(
-        id = randomUUID().toString(),
-        symptoms = this,
-        timestamp = now()
-    )
 }

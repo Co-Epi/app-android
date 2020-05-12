@@ -13,6 +13,6 @@ val repoModule = module {
     single<SymptomRepo> { SymptomRepoImpl(get()) }
     single<AlertsRepo> { AlertRepoImpl(get(), get()) }
     single<SymptomInputsManager> { SymptomInputsManagerImpl() }
-    single { SymptomFlowManager(get(), get(), get()) }
+    single { SymptomFlowManager(get(), get(), get(), get(), get()) }
     single<SymptomRouter> { SymptomRouterImpl() }
 }
