@@ -49,6 +49,7 @@ import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
+import org.coepi.android.ui.symptoms.breathless.BreathlessViewModel
 import org.coepi.android.ui.symptoms.cough.CoughDurationViewModel
 import org.coepi.android.ui.symptoms.cough.CoughStatusViewModel
 import org.coepi.android.ui.symptoms.cough.CoughTypeViewModel
@@ -79,6 +80,7 @@ val viewModelModule = module {
     viewModel { CoughTypeViewModel(get(), get()) }
     viewModel { CoughDurationViewModel(get(), get()) }
     viewModel { CoughStatusViewModel(get(), get(), get()) }
+    viewModel { BreathlessViewModel(get(), get(), get()) }
     viewModel { FeverDurationViewModel(get(), get()) }
     viewModel { FeverTakenTodayViewModel(get(), get()) }
     viewModel { FeverHighestTemperatureViewModel(get(), get()) }

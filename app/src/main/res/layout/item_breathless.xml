@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="org.coepi.android.ui.symptoms.breathless.BreathlessViewData" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@{item.icon}"
+            android:background="@drawable/background_circle"
+            android:layout_marginEnd="17dp" />
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:gravity="left|center_vertical"
+            android:button="@null"
+            android:buttonTint="@color/colorPrimary"
+            android:clickable="false"
+            android:text="@{item.name}"
+            android:textSize="@dimen/text_size_30"
+            tools:text="test" />
+
+    </LinearLayout>
+</layout>

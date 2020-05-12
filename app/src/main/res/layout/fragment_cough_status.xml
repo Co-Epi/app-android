@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_geometric_light_background">
+        style="@style/LightFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -39,11 +39,11 @@
             android:id="@+id/caption"
             android:layout_width="0dp"
             android:layout_height="54dp"
+            android:text="@string/symptoms_select_one"
             android:background="@color/colorPrimary"
             android:paddingStart="32dp"
             android:paddingTop="16dp"
             android:paddingEnd="32dp"
-            android:text="@string/symptom_report_cough_status_caption"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,8 +69,8 @@
             android:layout_marginStart="46dp"
             android:layout_marginTop="18dp"
             android:onClick="@{() -> vm.onClickSkip()}"
-            android:text="Skip"
             android:textSize="18sp"
+            android:text="@string/symptoms_skip_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/status_recycler_view" />
     </androidx.constraintlayout.widget.ConstraintLayout>

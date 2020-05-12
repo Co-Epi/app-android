@@ -6,6 +6,7 @@ import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTaken
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughDurationFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughStatusFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughTypeFragment
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalBreathlessFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalDebug
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverHighestTemperatureFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTemperatureSpotFragment
@@ -31,13 +32,11 @@ class SymptomRouterImpl : SymptomRouter {
             COUGH_TYPE -> actionGlobalCoughTypeFragment()
             COUGH_DAYS -> actionGlobalCoughDurationFragment()
             COUGH_DESCRIPTION -> actionGlobalCoughStatusFragment()
+            BREATHLESSNESS_DESCRIPTION -> actionGlobalBreathlessFragment()
             FEVER_DAYS -> actionGlobalFeverDurationFragment()
             FEVER_TEMPERATURE_TAKEN_TODAY -> actionGlobalFeverTakenTodayFragment()
             FEVER_HIGHEST_TEMPERATURE -> actionGlobalFeverHighestTemperatureFragment()
             FEVER_TEMPERATURE_SPOT -> actionGlobalFeverTemperatureSpotFragment()
             FEVER_TEMPERATURE_SPOT_INPUT -> actionGlobalFeverTemperatureSpotInputFragment()
-
-            // TODO new destinations
-            BREATHLESSNESS_DESCRIPTION -> actionGlobalDebug()
         }
 }

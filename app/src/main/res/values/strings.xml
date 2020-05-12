@@ -33,6 +33,8 @@
     <!-- Symptoms -->
     <string name="symptoms_headline">What symptoms do you have today?</string>
     <string name="symptoms_caption">Select all that apply</string>
+    <string name="symptoms_select_one">Select one option</string>
+    <string name="symptoms_skip_button">Skip</string>
     <string name="symptoms_submit_button">@string/submit</string>
     <string name="symptoms_success_message">Symptoms submitted!</string>
 
@@ -96,10 +98,18 @@
 
     <!-- Symptom Report - Cough Status -->
     <string name="symptom_report_cough_status_headline">Today my cough has:</string>
-    <string name="symptom_report_cough_status_caption">@string/symptoms_caption</string>
     <string name="symptom_report_cough_status_option_better_worse_day">Felt better and worse throughout the day</string>
     <string name="symptom_report_cough_status_option_worse_outside">Felt worse when I am outside</string>
     <string name="symptom_report_cough_status_option_same_or_steadily_worse">Stayed the same or felt steadily worse</string>
+
+    <!-- Symptom Report - Breathlessness Cause -->
+    <string name="symptom_report_breathlessness_cause_title">Follow up: Breathlessness</string>
+    <string name="symptom_report_breathlessness_cause_headline">I feel breathless when:</string>
+    <string name="symptom_report_breathlessness_cause_option_leaving_house_or_dressing">I am too breathless to leave the house or I am breathless when dressing</string>
+    <string name="symptom_report_breathlessness_cause_option_walking_yards_or_mins_on_ground">I stop for breath after walking about 100 yards or after a few minutes on level ground</string>
+    <string name="symptom_report_breathlessness_cause_option_ground_own_pace">On level ground, I have to stop for breath when walking at my own pace</string>
+    <string name="symptom_report_breathlessness_cause_option_hurry_or_hill">I get short of breath when hurrying on level ground or walking up a slight hill</string>
+    <string name="symptom_report_breathlessness_cause_option_exercise">I only get breathless with strenuous exercise</string>
 
     <!-- Symptom Report - Fever -->
     <string name="symptom_report_fever_title">Follow up: Fever</string>
