@@ -27,6 +27,7 @@ import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.G
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.HURRY_OR_HILL
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.LEAVING_HOUSE_OR_DRESSING
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.WALKING_YARDS_OR_MINS_ON_GROUND
+import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.navigation.NavigationCommand.Back
@@ -84,7 +85,7 @@ class BreathlessViewModel(
     }.let { resources.getDrawable(it) }
 
     fun onSelected(item: BreathlessViewData) {
-        symptomFlowManager.setBreathlessnessCause(item.breathless)
+        symptomFlowManager.setBreathlessnessCause(Some(item.breathless))
         symptomFlowManager.navigateForward()
     }
 }
