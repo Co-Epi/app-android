@@ -15,6 +15,13 @@
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal">
 
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@{item.icon}"
+            android:background="@drawable/background_circle"
+            android:layout_marginEnd="17dp" />
+
         <CheckBox
             android:id="@+id/checkbox"
             android:layout_width="match_parent"
@@ -25,8 +32,6 @@
             android:clickable="false"
             android:text="@{item.name}"
             android:textSize="@dimen/text_size_30"
-            android:drawableLeft="@{item.icon}"
-            android:drawablePadding="17dp"
             tools:text="test" />
 
     </LinearLayout>

@@ -51,7 +51,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline"
-            app:layout_constraintBottom_toTopOf="@id/cause_recycler_view"
             android:paddingTop="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp" />
@@ -59,7 +58,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cause_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="400dp"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"
             android:layout_marginLeft="40dp"
@@ -67,7 +66,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/instruction"
-            app:layout_constraintBottom_toTopOf="@id/skip" />
+            app:layout_constraintBottom_toTopOf="@id/skip"
+            android:background="@drawable/background_bar"/>
 
         <TextView
             android:id="@+id/skip"
