@@ -75,7 +75,7 @@ class BreathlessViewModel(
         EXERCISE ->  symptom_report_breathlessness_cause_option_exercise
     }.let { resources.getString(it) }
 
-    private fun Breathlessness.Cause.icon(): Drawable = when (this) {
+    private fun Breathlessness.Cause.icon(): Drawable? = when (this) {
         LEAVING_HOUSE_OR_DRESSING ->  ic_breathless_house
         WALKING_YARDS_OR_MINS_ON_GROUND ->  ic_breathless_tired
         GROUND_OWN_PACE ->  ic_breathless_ground
