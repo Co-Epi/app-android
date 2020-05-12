@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="org.coepi.android.ui.symptoms.cough.CoughDurationViewModel" />
+            type="org.coepi.android.ui.symptoms.fever.FeverDurationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-            app:title="@string/symptom_report_cough_title"
+            app:title="@string/symptom_report_fever_title"
             app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
 
         <TextView
@@ -30,13 +30,14 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             style="@style/headline"
             android:layout_width="0dp"
-            android:text="@string/symptom_report_cough_duration_headline"
+            android:layout_height="109dp"
+            android:text="@string/symptom_report_fever_duration_headline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <EditText
-            android:id="@+id/cough_duration"
+            android:id="@+id/fever_duration"
             android:layout_width="167dp"
             android:layout_height="71dp"
             android:layout_marginStart="31dp"
@@ -51,10 +52,10 @@
             android:layout_height="78dp"
             android:layout_marginStart="23dp"
             android:gravity="center_vertical"
-            android:text="@string/symptom_report_cough_duration_days"
+            android:text="@string/symptom_report_fever_duration_days"
             android:textSize="56sp"
-            app:layout_constraintStart_toEndOf="@id/cough_duration"
-            app:layout_constraintTop_toTopOf="@id/cough_duration" />
+            app:layout_constraintStart_toEndOf="@id/fever_duration"
+            app:layout_constraintTop_toTopOf="@id/fever_duration" />
 
         <Button
             android:id="@+id/unknown"
@@ -63,9 +64,9 @@
             android:layout_height="31dp"
             android:layout_marginTop="24dp"
             android:onClick="@{() -> vm.onClickUnknown()}"
-            android:text="@string/symptom_report_cough_duration_unknown"
-            app:layout_constraintStart_toStartOf="@id/cough_duration"
-            app:layout_constraintTop_toBottomOf="@id/cough_duration" />
+            android:text="@string/symptom_report_fever_duration_unknown"
+            app:layout_constraintStart_toStartOf="@id/fever_duration"
+            app:layout_constraintTop_toBottomOf="@id/fever_duration" />
 
         <Button
             android:id="@+id/submit"
@@ -73,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:onClick="@{() -> vm.onClickSubmit()}"
-            android:text="@string/symptoms_submit_button"
+            android:text="@string/symptom_report_fever_duration_submit"
             app:layout_constraintStart_toStartOf="@id/days"
             app:layout_constraintTop_toTopOf="@id/unknown" />
 
@@ -86,6 +87,6 @@
             android:text="Skip"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cough_duration" />
+            app:layout_constraintTop_toBottomOf="@id/fever_duration" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

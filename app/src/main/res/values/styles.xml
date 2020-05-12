@@ -16,7 +16,7 @@
     </style>
 
     <style name="Text.Title">
-      <item name="android:textSize">@dimen/text_size_title</item>
+        <item name="android:textSize">@dimen/text_size_title</item>
     </style>
 
     <style name="Text.Alert">
@@ -62,11 +62,13 @@
         <item name="android:letterSpacing">0.01</item>
         <item name="android:textColor">#DE000000</item>
     </style>
+
     <style name="card_view_body">
         <item name="android:textSize">22sp</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textColor">#DE000000</item>
     </style>
+
     <style name="card_view_link">
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">0.05</item>
@@ -77,4 +79,36 @@
     <style name="AppTheme.Launcher">
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
+
+    <style name="circle_button">
+        <item name="android:background">@drawable/circle_button_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:lineSpacingExtra">1sp</item>
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="small_circle_button" parent="circle_button">
+        <item name="android:layout_width">126dp</item>
+        <item name="android:layout_height">126dp</item>
+    </style>
+
+    <style name="toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
+    <style name="headline" parent="Text.Headline">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:layout_height">109dp</item>
+    </style>
+
 </resources>

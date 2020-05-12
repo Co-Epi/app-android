@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">CoEpi</string>
     <string name="privacy_link"><a href="https://www.coepi.org/privacy/">How is my data being used?</a></string>
+
+    <!-- common -->
+    <string name="days">days</string>
+    <string name="unknown">I don\'t know</string>
+    <string name="submit">Submit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <!-- Tabs container -->
     <string name="tab_container_debug">Debug</string>
 
@@ -26,8 +34,8 @@
     <string name="symptoms_headline">What symptoms do you have today?</string>
     <string name="symptoms_caption">Select all that apply</string>
     <string name="symptoms_select_one">Select one option</string>
-    <string name="symptoms_submit_button">Submit</string>
     <string name="symptoms_skip_button">Skip</string>
+    <string name="symptoms_submit_button">@string/submit</string>
     <string name="symptoms_success_message">Symptoms submitted!</string>
 
     <!-- Thank you -->
@@ -85,8 +93,8 @@
 
     <!-- Symptom Report - Cough Duration -->
     <string name="symptom_report_cough_duration_headline">How many days have you been coughing?</string>
-    <string name="symptom_report_cough_duration_days">days</string>
-    <string name="symptom_report_cough_duration_unknown">I don\'t know</string>
+    <string name="symptom_report_cough_duration_days">@string/days</string>
+    <string name="symptom_report_cough_duration_unknown">@string/unknown</string>
 
     <!-- Symptom Report - Cough Status -->
     <string name="symptom_report_cough_status_headline">Today my cough has:</string>
@@ -103,4 +111,31 @@
     <string name="symptom_report_breathlessness_cause_option_hurry_or_hill">I get short of breath when hurrying on level ground or walking up a slight hill</string>
     <string name="symptom_report_breathlessness_cause_option_exercise">I only get breathless with strenuous exercise</string>
 
+    <!-- Symptom Report - Fever -->
+    <string name="symptom_report_fever_title">Follow up: Fever</string>
+
+    <string name="symptom_report_fever_duration_headline">How many days have you had a fever?</string>
+    <string name="symptom_report_fever_duration_days">@string/days</string>
+    <string name="symptom_report_fever_duration_unknown">@string/unknown</string>
+    <string name="symptom_report_fever_duration_submit">@string/submit</string>
+
+    <string name="symptom_report_fever_taken_today_headline">Have you taken your temperature today?</string>
+    <string name="symptom_report_fever_taken_today_yes">@string/yes</string>
+    <string name="symptom_report_fever_taken_today_no">@string/no</string>
+
+    <string name="symptom_report_fever_highest_temperature_headline">What was the highest temperature reading today?</string>
+    <string name="symptom_report_fever_highest_temperature_unit_f">\u2109</string>
+    <string name="symptom_report_fever_highest_temperature_unit_C">\u2103</string>
+    <string name="symptom_report_fever_highest_temperature_unknown">@string/unknown</string>
+    <string name="symptom_report_fever_highest_temperature_submit">@string/submit</string>
+
+    <string name="symptom_report_fever_temperature_spot_headline">Where did you take your temperature most recently?</string>
+    <string name="symptom_report_fever_temperature_spot_mouth">Mouth</string>
+    <string name="symptom_report_fever_temperature_spot_ear">Ear</string>
+    <string name="symptom_report_fever_temperature_spot_armpit">Armpit</string>
+    <string name="symptom_report_fever_temperature_spot_other">Other</string>
+
+    <string name="symptom_report_fever_temperature_spot_input_headline">Where did you take your temperature?</string>
+    <string name="symptom_report_fever_temperature_spot_input_unknown">@string/unknown</string>
+    <string name="symptom_report_fever_temperature_spot_input_submit">@string/submit</string>
 </resources>

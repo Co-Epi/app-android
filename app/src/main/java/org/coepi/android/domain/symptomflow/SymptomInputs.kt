@@ -2,9 +2,12 @@ package org.coepi.android.domain.symptomflow
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import org.coepi.android.domain.model.Temperature
 
-enum class SymptomId { COUGH, BREATHLESSNESS, FEVER, MUSCLE_ACHES, LOSS_SMELL_OR_TASTE, DIARRHEA,
-    RUNNY_NOSE, OTHER, NONE }
+enum class SymptomId {
+    COUGH, BREATHLESSNESS, FEVER, MUSCLE_ACHES, LOSS_SMELL_OR_TASTE, DIARRHEA,
+    RUNNY_NOSE, OTHER, NONE
+}
 
 @Parcelize
 data class SymptomInputs(
@@ -64,6 +67,3 @@ data class SymptomInputs(
         }
     }
 }
-
-@Parcelize
-data class Temperature(val value: Float): Parcelable
