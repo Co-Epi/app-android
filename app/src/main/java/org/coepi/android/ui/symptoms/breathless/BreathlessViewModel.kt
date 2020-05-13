@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import org.coepi.android.R.drawable.ic_breathless_house
@@ -28,6 +30,7 @@ import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.H
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.LEAVING_HOUSE_OR_DRESSING
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.WALKING_YARDS_OR_MINS_ON_GROUND
 import org.coepi.android.domain.symptomflow.UserInput.Some
+import org.coepi.android.extensions.rx.toIsInProgress
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.navigation.NavigationCommand.Back
@@ -38,6 +41,11 @@ class BreathlessViewModel(
     private val resources: Resources,
     private val symptomFlowManager: SymptomFlowManager
 ) : ViewModel() {
+
+    val isInProgress: LiveData<Boolean> = symptomFlowManager.sendReportState
+        .toIsInProgress()
+        .observeOn(mainThread())
+        .toLiveData()
 
     private val selectedCause: BehaviorSubject<Optional<Breathlessness.Cause>> = createDefault(None)
 
