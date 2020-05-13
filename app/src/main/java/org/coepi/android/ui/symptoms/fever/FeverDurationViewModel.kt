@@ -3,6 +3,7 @@ package org.coepi.android.ui.symptoms.fever
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
 import org.coepi.android.domain.symptomflow.SymptomInputs.Fever.Days
 import org.coepi.android.domain.symptomflow.UserInput.None
@@ -19,7 +20,7 @@ class FeverDurationViewModel(
 
     val isInProgress: LiveData<Boolean> = symptomFlowManager.sendReportState
         .toIsInProgress()
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(mainThread())
         .toLiveData()
 
     fun onDurationChanged(durationStr: String) {

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import org.coepi.android.R.string.symptom_report_cough_status_option_better_worse_day
@@ -32,7 +33,7 @@ class CoughStatusViewModel (
 
     val isInProgress: LiveData<Boolean> = symptomFlowManager.sendReportState
         .toIsInProgress()
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(mainThread())
         .toLiveData()
 
     private val selectedStatus: BehaviorSubject<Optional<Cough.Status>> = createDefault(None)
