@@ -49,18 +49,36 @@ class SymptomFlowManager(
             return false
         }
         symptomInputsManager.selectSymptomIds(symptomIds.toSet())
-        val symptomFlow = SymptomFlow(symptomIds)
+        val symptomFlow = SymptomFlow.create(symptomIds)
         this.symptomFlow = symptomFlow
 
-        rootNavigation.navigate(ToDestination(symptomRouter.destination(symptomFlow.firstStep)))
+        updateNavigation()
         return true
     }
 
     fun navigateForward() {
-        val symptomFlow = symptomFlow ?: error("Symptom flow not set")
-        symptomFlow.next()?.let {
+        val symptomFlow = this.symptomFlow
+            // Navigate forward is called from screens in the input flow
+            ?: error("Can't navigate forward if there's no input flow")
+
+        if (symptomFlow.next() == null) {
+            finishFlowTrigger.onNext(inputs)
+        } else {
+            updateNavigation()
+        }
+    }
+
+    private fun updateNavigation() {
+        val symptomFlow = this.symptomFlow
+        if (symptomFlow == null) {
+            log.d("No symptom inputs. Showing thanks screen.")
+            finishFlowTrigger.onNext(inputs)
+            return
+        }
+
+        symptomFlow.currentStep.let {
             rootNavigation.navigate(ToDestination(symptomRouter.destination(it)))
-        } ?: finishFlowTrigger.onNext(inputs)
+        }
     }
 
     private fun handleSubmitReportResult(result: Result<Unit, Throwable>) {

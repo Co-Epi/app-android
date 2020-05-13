@@ -17,20 +17,17 @@ import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_DAYS
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_HIGHEST_TEMPERATURE
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_TEMPERATURE_SPOT
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_TEMPERATURE_TAKEN_TODAY
+import org.coepi.android.system.log.log
 
-class SymptomFlow(
-    symptomIds: List<SymptomId>
-) {
+class SymptomFlow(private val steps: List<SymptomStep>) {
     init {
-        if (symptomIds.isEmpty()) {
-            error("Symptoms ids must not be empty")
+        if (steps.isEmpty()) {
+            error("Symptoms steps must not be empty")
         }
     }
 
-    private val steps: List<SymptomStep> = toSteps(symptomIds)
-    private var currentStep: SymptomStep = steps.first()
-
-    val firstStep: SymptomStep get() = steps.first()
+    var currentStep: SymptomStep = steps.first()
+        private set
 
     fun previous(): SymptomStep? =
         steps.getOrNull(steps.indexOf(currentStep) - 1)?.also {
@@ -41,6 +38,23 @@ class SymptomFlow(
         steps.getOrNull(steps.indexOf(currentStep) + 1)?.also {
             currentStep = it
         }
+
+    companion object {
+        fun create(symptomIds: List<SymptomId>): SymptomFlow? {
+            if (symptomIds.isEmpty()) {
+                log.w("Symptoms ids empty")
+                return null
+            }
+
+            val steps = toSteps(symptomIds)
+            if (steps.isEmpty()) {
+                log.d("Symptoms have no steps. Not creating a flow.")
+                return null
+            }
+
+            return SymptomFlow(steps)
+        }
+    }
 }
 
 private fun toSteps(symptomIds: List<SymptomId>): List<SymptomStep> =
