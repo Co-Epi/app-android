@@ -8,15 +8,6 @@
     android:id="@+id/nav_graph_root"
     app:startDestination="@id/homeFragment">
 
-    <!--    <fragment-->
-    <!--        android:id="@+id/tabs_container"-->
-    <!--        android:name="org.coepi.android.ui.container.ContainerFragment"-->
-    <!--        tools:layout="@layout/fragment_tabs_container" />-->
-    <!--    <action-->
-    <!--        android:id="@+id/action_global_homeFragment"-->
-    <!--        app:destination="@id/tabs_container"-->
-    <!--        app:popUpTo="@id/tabs_container" />-->
-
     <action
         android:id="@+id/action_global_onboarding"
         app:destination="@id/onboarding"
