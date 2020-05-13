@@ -6,16 +6,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_root"
-    app:startDestination="@id/tabs_container">
+    app:startDestination="@id/homeFragment">
 
-    <fragment
-        android:id="@+id/tabs_container"
-        android:name="org.coepi.android.ui.container.ContainerFragment"
-        tools:layout="@layout/fragment_tabs_container" />
-    <action
-        android:id="@+id/action_global_homeFragment"
-        app:destination="@id/tabs_container"
-        app:popUpTo="@id/tabs_container" />
+    <!--    <fragment-->
+    <!--        android:id="@+id/tabs_container"-->
+    <!--        android:name="org.coepi.android.ui.container.ContainerFragment"-->
+    <!--        tools:layout="@layout/fragment_tabs_container" />-->
+    <!--    <action-->
+    <!--        android:id="@+id/action_global_homeFragment"-->
+    <!--        app:destination="@id/tabs_container"-->
+    <!--        app:popUpTo="@id/tabs_container" />-->
 
     <action
         android:id="@+id/action_global_onboarding"
@@ -57,13 +57,13 @@
     <action
         android:id="@+id/action_global_alerts"
         app:destination="@id/alerts"
-        app:popUpTo="@id/tabs_container"/>
+        app:popUpTo="@id/homeFragment" />
 
     <fragment
         android:id="@+id/alert_details_fragment"
         android:name="org.coepi.android.ui.alertsdetails.AlertsDetailsFragment"
         android:label="@string/label_fragment_alerts_details"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <argument
             android:name="args"
             app:argType="org.coepi.android.ui.alertsdetails.AlertsDetailsFragment$Args" />
@@ -72,8 +72,7 @@
         android:id="@+id/action_global_alerts_details"
         app:destination="@id/alert_details_fragment"
         app:enterAnim="@android:anim/fade_in"
-        app:popExitAnim="@android:anim/fade_out"
-        />
+        app:popExitAnim="@android:anim/fade_out" />
 
     <fragment
         android:id="@+id/symptomsFragment"
@@ -83,7 +82,7 @@
     <action
         android:id="@+id/action_global_symptomsFragment"
         app:destination="@id/symptomsFragment"
-        app:popUpTo="@id/tabs_container" />
+        app:popUpTo="@id/homeFragment" />
 
     <fragment
         android:id="@+id/thanksFragment"
@@ -92,60 +91,86 @@
     <action
         android:id="@+id/action_global_thanksFragment"
         app:destination="@id/thanksFragment"
-        app:popUpTo="@id/tabs_container" />
+        app:popUpTo="@id/homeFragment" />
     <fragment
         android:id="@+id/coughTypeFragment"
         android:name="org.coepi.android.ui.symptoms.cough.CoughTypeFragment"
         android:label="CoughTypeFragment"
-        tools:layout="@layout/fragment_cough_type"/>
-    <action android:id="@+id/action_global_coughTypeFragment" app:destination="@id/coughTypeFragment" />
+        tools:layout="@layout/fragment_cough_type" />
+    <action
+        android:id="@+id/action_global_coughTypeFragment"
+        app:destination="@id/coughTypeFragment" />
     <fragment
         android:id="@+id/coughDurationFragment"
         android:name="org.coepi.android.ui.symptoms.cough.CoughDurationFragment"
         android:label="CoughDurationFragment"
-        tools:layout="@layout/fragment_cough_duration"/>
-    <action android:id="@+id/action_global_coughDurationFragment" app:destination="@id/coughDurationFragment" />
+        tools:layout="@layout/fragment_cough_duration" />
+    <action
+        android:id="@+id/action_global_coughDurationFragment"
+        app:destination="@id/coughDurationFragment" />
     <fragment
         android:id="@+id/coughStatusFragment"
         android:name="org.coepi.android.ui.symptoms.cough.CoughStatusFragment"
         android:label="CoughStatusFragment"
-        tools:layout="@layout/fragment_cough_status"/>
-    <action android:id="@+id/action_global_coughStatusFragment" app:destination="@id/coughStatusFragment" />
+        tools:layout="@layout/fragment_cough_status" />
+    <action
+        android:id="@+id/action_global_coughStatusFragment"
+        app:destination="@id/coughStatusFragment" />
     <fragment
         android:id="@+id/breathlessFragment"
         android:name="org.coepi.android.ui.symptoms.breathless.BreathlessFragment"
         android:label="BreathlessFragment"
         tools:layout="@layout/fragment_breathless" />
-    <action android:id="@+id/action_global_breathlessFragment" app:destination="@id/breathlessFragment" />
+    <action
+        android:id="@+id/action_global_breathlessFragment"
+        app:destination="@id/breathlessFragment" />
     <fragment
         android:id="@+id/feverDurationFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverDurationFragment"
         android:label="FeverDurationFragment"
-        tools:layout="@layout/fragment_fever_duration"/>
-    <action android:id="@+id/action_global_feverDurationFragment" app:destination="@id/feverDurationFragment" />
+        tools:layout="@layout/fragment_fever_duration" />
+    <action
+        android:id="@+id/action_global_feverDurationFragment"
+        app:destination="@id/feverDurationFragment" />
     <fragment
         android:id="@+id/feverTakenTodayFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverTakenTodayFragment"
         android:label="FeverTakenTodayFragment"
-        tools:layout="@layout/fragment_fever_taken_today"/>
-    <action android:id="@+id/action_global_feverTakenTodayFragment" app:destination="@id/feverTakenTodayFragment" />
+        tools:layout="@layout/fragment_fever_taken_today" />
+    <action
+        android:id="@+id/action_global_feverTakenTodayFragment"
+        app:destination="@id/feverTakenTodayFragment" />
     <fragment
         android:id="@+id/feverHighestTemperatureFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureFragment"
         android:label="FeverHighestTemperatureFragment"
-        tools:layout="@layout/fragment_fever_highest_temperature"/>
-    <action android:id="@+id/action_global_feverHighestTemperatureFragment" app:destination="@id/feverHighestTemperatureFragment" />
+        tools:layout="@layout/fragment_fever_highest_temperature" />
+    <action
+        android:id="@+id/action_global_feverHighestTemperatureFragment"
+        app:destination="@id/feverHighestTemperatureFragment" />
     <fragment
         android:id="@+id/feverTemperatureSpotFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotFragment"
         android:label="FeverTemperatureSpotFragment"
-        tools:layout="@layout/fragment_fever_temperature_spot"/>
-    <action android:id="@+id/action_global_feverTemperatureSpotFragment" app:destination="@id/feverTemperatureSpotFragment" />
+        tools:layout="@layout/fragment_fever_temperature_spot" />
+    <action
+        android:id="@+id/action_global_feverTemperatureSpotFragment"
+        app:destination="@id/feverTemperatureSpotFragment" />
     <fragment
         android:id="@+id/feverTemperatureSpotInputFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputFragment"
         android:label="FeverTemperatureSpotInputFragment"
-        tools:layout="@layout/fragment_fever_temperature_spot_input"/>
-    <action android:id="@+id/action_global_feverTemperatureSpotInputFragment" app:destination="@id/feverTemperatureSpotInputFragment" />
+        tools:layout="@layout/fragment_fever_temperature_spot_input" />
+    <action
+        android:id="@+id/action_global_feverTemperatureSpotInputFragment"
+        app:destination="@id/feverTemperatureSpotInputFragment" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="org.coepi.android.ui.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home" />
+    <action
+        android:id="@+id/action_global_homeFragment"
+        app:destination="@id/homeFragment" />
 
 </navigation>
