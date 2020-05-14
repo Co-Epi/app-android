@@ -8,7 +8,7 @@ import java.io.Serializable
 
 enum class SymptomId {
     COUGH, BREATHLESSNESS, FEVER, MUSCLE_ACHES, LOSS_SMELL_OR_TASTE, DIARRHEA,
-    RUNNY_NOSE, OTHER, NONE
+    RUNNY_NOSE, OTHER, NONE, EARLIESTSYMPTOM
 }
 
 @Parcelize
@@ -16,7 +16,8 @@ data class SymptomInputs(
     val ids: Set<SymptomId> = emptySet(),
     val cough: Cough = Cough(),
     val breathlessness: Breathlessness = Breathlessness(),
-    val fever: Fever = Fever()
+    val fever: Fever = Fever(),
+    val earliestSymptomDate: EarliestSymptom = EarliestSymptom()
 ) : Parcelable {
 
     @Parcelize
@@ -64,6 +65,14 @@ data class SymptomInputs(
             object Armpit : TemperatureSpot()
             data class Other(val description: String) : TemperatureSpot()
         }
+    }
+
+    @Parcelize
+    data class EarliestSymptom(
+        val days: UserInput<Days> = None
+    ) : Parcelable {
+
+        data class Days(val days: Int) : Serializable
     }
 }
 

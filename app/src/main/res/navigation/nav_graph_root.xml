@@ -94,6 +94,14 @@
         app:destination="@id/thanksFragment"
         app:popUpTo="@id/tabs_container" />
     <fragment
+        android:id="@+id/earliestSymptomFragment"
+        android:name="org.coepi.android.ui.symptoms.earliestsymptom.EarliestSymptomFragment"
+        android:label="earliestSymptomFragment"
+        tools:layout="@layout/fragment_earliest_symptom"/>
+    <action android:id="@+id/action_global_earliestSymptomFragment" app:destination="@id/earliestSymptomFragment" />
+
+
+    <fragment
         android:id="@+id/coughTypeFragment"
         android:name="org.coepi.android.ui.symptoms.cough.CoughTypeFragment"
         android:label="CoughTypeFragment"
@@ -147,5 +155,6 @@
         android:label="FeverTemperatureSpotInputFragment"
         tools:layout="@layout/fragment_fever_temperature_spot_input"/>
     <action android:id="@+id/action_global_feverTemperatureSpotInputFragment" app:destination="@id/feverTemperatureSpotInputFragment" />
+
 
 </navigation>
