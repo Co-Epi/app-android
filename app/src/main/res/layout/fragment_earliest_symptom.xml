@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="org.coepi.android.ui.symptoms.earliestsymptom.EarliestSymptomViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_geometric_light_background">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:title="@string/symptom_report_earliest_symptom_title"
+            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/headline"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            style="@style/headline"
+            android:layout_width="0dp"
+            android:text="@string/symptom_report_earliest_symptom_headline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <EditText
+            android:id="@+id/earliest_symptom"
+            android:layout_width="167dp"
+            android:layout_height="71dp"
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="27dp"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headline" />
+
+        <TextView
+            android:id="@+id/days"
+            android:layout_width="148dp"
+            android:layout_height="78dp"
+            android:layout_marginStart="23dp"
+            android:gravity="center_vertical"
+            android:text="@string/symptom_report_earliest_symptom_days"
+            android:textSize="56sp"
+            app:layout_constraintStart_toEndOf="@id/earliest_symptom"
+            app:layout_constraintTop_toTopOf="@id/earliest_symptom" />
+
+        <Button
+            android:id="@+id/unknown"
+            style="@style/ButtonUnselected"
+            android:layout_width="131dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="24dp"
+            android:onClick="@{() -> vm.onClickUnknown()}"
+            android:text="@string/symptom_report_earliest_symptom_unknown"
+            app:layout_constraintStart_toStartOf="@id/earliest_symptom"
+            app:layout_constraintTop_toBottomOf="@id/earliest_symptom" />
+
+        <Button
+            android:id="@+id/submit"
+            style="@style/Button"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:onClick="@{() -> vm.onClickSubmit()}"
+            android:text="@string/symptoms_submit_button"
+            app:layout_constraintStart_toStartOf="@id/days"
+            app:layout_constraintTop_toTopOf="@id/unknown" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="46dp"
+            android:layout_marginTop="182dp"
+            android:onClick="@{() -> vm.onClickSkip()}"
+            android:text="Skip"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/earliest_symptom" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/screen_progress_indicator"
+            isVisible="@{vm.isInProgress}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

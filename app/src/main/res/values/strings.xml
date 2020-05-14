@@ -138,4 +138,12 @@
     <string name="symptom_report_fever_temperature_spot_input_headline">Where did you take your temperature?</string>
     <string name="symptom_report_fever_temperature_spot_input_unknown">@string/unknown</string>
     <string name="symptom_report_fever_temperature_spot_input_submit">@string/submit</string>
+
+    <!-- Symptom Report - Earliest Symptoms -->
+    <string name="symptom_report_earliest_symptom_title">Follow up: Earliest Symptoms</string>
+    <string name="symptom_report_earliest_symptom_headline">How many days ago did the symptoms begin?</string>
+    <string name="symptom_report_earliest_symptom_days">@string/days</string>
+    <string name="symptom_report_earliest_symptom_unknown">@string/unknown</string>
+
+
 </resources>

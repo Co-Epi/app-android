@@ -3,9 +3,12 @@ package org.coepi.android.domain.symptomflow
 import org.coepi.android.domain.model.Temperature
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
+import org.coepi.android.domain.symptomflow.SymptomId.EARLIESTSYMPTOM
 import org.coepi.android.domain.symptomflow.SymptomId.FEVER
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
+import org.coepi.android.domain.symptomflow.SymptomInputs.EarliestSymptom
+import org.coepi.android.domain.symptomflow.SymptomInputs.EarliestSymptom.Days
 import org.coepi.android.domain.symptomflow.SymptomInputs.Fever
 import org.coepi.android.system.log.log
 
@@ -23,6 +26,7 @@ interface SymptomInputsProps {
     fun setFeverTakenTemperatureToday(taken: UserInput<Boolean>)
     fun setFeverTakenTemperatureSpot(spot: UserInput<Fever.TemperatureSpot>)
     fun setFeverHighestTemperatureTaken(temp: UserInput<Temperature>)
+    fun setEarliestSymptom(days: UserInput<Days>)
 }
 
 interface SymptomInputsManager : SymptomInputsInitalizer, SymptomInputsProps {
@@ -45,6 +49,7 @@ class SymptomInputsManagerImpl :
                 COUGH -> acc.copy(cough = Cough())
                 BREATHLESSNESS -> acc.copy(breathlessness = Breathlessness())
                 FEVER -> acc.copy(fever = Fever())
+                EARLIESTSYMPTOM -> acc.copy(earliestSymptomDate = EarliestSymptom())
                 else -> {
                     log.i("TODO handle inputs: $e")
                     acc
@@ -90,6 +95,12 @@ class SymptomInputsManagerImpl :
     override fun setFeverHighestTemperatureTaken(temp: UserInput<Temperature>) {
         if (!inputs.ids.contains(FEVER)) error("Fever not set")
         inputs = inputs.copy(fever = inputs.fever.copy(highestTemperature = temp))
+    }
+
+    override fun setEarliestSymptom(days: UserInput<Days>) {
+        if(!inputs.ids.contains(EARLIESTSYMPTOM)) error("Earliest Symptom Date")
+        inputs = inputs.copy(
+            earliestSymptomDate = inputs.earliestSymptomDate.copy(days = days))
     }
 
     override fun clear() {
