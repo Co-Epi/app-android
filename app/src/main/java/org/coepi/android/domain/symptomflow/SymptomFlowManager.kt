@@ -1,5 +1,6 @@
 package org.coepi.android.domain.symptomflow
 
+import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
@@ -10,6 +11,7 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.common.Result
 import org.coepi.android.common.doIfError
 import org.coepi.android.common.doIfSuccess
+import org.coepi.android.domain.symptomflow.SymptomInputs.EarliestSymptom
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.TcnReportRepo

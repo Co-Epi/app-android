@@ -97,9 +97,9 @@ class SymptomInputsManagerImpl :
     }
 
     override fun setEarliestSymptom(days: UserInput<EarliestSymptom.Days>) {
-        if(!inputs.ids.contains(EARLIESTSYMPTOM)) error("Earliest Symptom Date")
-        inputs = inputs.copy(
-            earliestSymptomDate = inputs.earliestSymptomDate.copy(days = days))
+        //There's no need to check if the ID's contain EARLIESTSYMPTOM because
+        //earliest symptom needs to get checked no matter what (kinda like thanks screen)
+        inputs = inputs.copy(earliestSymptomDate = inputs.earliestSymptomDate.copy(days = days))
     }
 
     override fun clear() {

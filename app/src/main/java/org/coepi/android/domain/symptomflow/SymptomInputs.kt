@@ -71,7 +71,8 @@ data class SymptomInputs(
     data class EarliestSymptom(
         val days: UserInput<Days> = None
     ) : Parcelable {
-        data class Days(val value: Int) : Serializable
+
+        data class Days(val days: Int) : Serializable
     }
 }
 

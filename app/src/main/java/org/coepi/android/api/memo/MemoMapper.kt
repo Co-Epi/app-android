@@ -7,6 +7,7 @@ import org.coepi.android.api.memo.mapper.VersionMapper
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
+import org.coepi.android.domain.symptomflow.SymptomId.EARLIESTSYMPTOM
 import org.coepi.android.domain.symptomflow.SymptomId.FEVER
 import org.coepi.android.domain.symptomflow.SymptomId.NONE
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
@@ -45,6 +46,7 @@ class MemoMapperImpl: MemoMapper {
         val hasCough: Boolean = inputs.ids.contains(COUGH)
         val hasFever: Boolean = inputs.ids.contains(FEVER)
         val hasBreathlessness: Boolean = inputs.ids.contains(BREATHLESSNESS)
+        val hasEarliestSymptom: Boolean = inputs.ids.contains(EARLIESTSYMPTOM)
 
         val bits: List<BitList> = listOf(
             versionMapper.toBits(memoVersion),
@@ -53,7 +55,8 @@ class MemoMapperImpl: MemoMapper {
             booleanMapper.toBits(otherSymptoms),
             booleanMapper.toBits(hasCough),
             booleanMapper.toBits(hasBreathlessness),
-            booleanMapper.toBits(hasFever)
+            booleanMapper.toBits(hasFever),
+            booleanMapper.toBits(hasEarliestSymptom)
         )
 
         return bits.fold(BitList(emptyList())) { acc, e ->
@@ -80,6 +83,7 @@ class MemoMapperImpl: MemoMapper {
         val hasCough = extract(bitArray, booleanMapper, next).value { next += it }
         val hasBreathlessness = extract(bitArray, booleanMapper, next).value { next += it }
         val hasFever = extract(bitArray, booleanMapper, next).value { next += it }
+        val hasEarliestSymptom = extract(bitArray, booleanMapper, next).value { next += it}
 
         return SymptomInputs(
             ids = listOfNotNull(
@@ -87,7 +91,8 @@ class MemoMapperImpl: MemoMapper {
                 symptomsNotInList.takeIf { it }?.let { OTHER },
                 hasCough.takeIf { it }?.let { COUGH },
                 hasBreathlessness.takeIf { it }?.let { BREATHLESSNESS },
-                hasFever.takeIf { it }?.let { FEVER }
+                hasFever.takeIf { it }?.let { FEVER },
+                hasEarliestSymptom.takeIf { it }?.let {EARLIESTSYMPTOM}
             ).toSet()
         )
     }
