@@ -26,7 +26,7 @@ interface SymptomInputsProps {
     fun setFeverTakenTemperatureToday(taken: UserInput<Boolean>)
     fun setFeverTakenTemperatureSpot(spot: UserInput<Fever.TemperatureSpot>)
     fun setFeverHighestTemperatureTaken(temp: UserInput<Temperature>)
-    fun setEarliestSymptom(days: UserInput<Days>)
+    fun setEarliestSymptom(days: UserInput<EarliestSymptom.Days>)
 }
 
 interface SymptomInputsManager : SymptomInputsInitalizer, SymptomInputsProps {

@@ -17,6 +17,7 @@ import org.coepi.android.ui.common.UINotificationData.Failure
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalEarliestSymptomFragment
 import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalThanksFragment
 
 class SymptomFlowManager(
@@ -66,6 +67,7 @@ class SymptomFlowManager(
     private fun handleSubmitReportResult(result: Result<Unit, Throwable>) {
         result
             .doIfSuccess {
+
                 rootNavigation.navigate(ToDestination(actionGlobalThanksFragment())).also {
                     clear()
                 }

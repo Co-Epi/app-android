@@ -1,5 +1,6 @@
 package org.coepi.android.ui.symptoms.earliestsymptom
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
