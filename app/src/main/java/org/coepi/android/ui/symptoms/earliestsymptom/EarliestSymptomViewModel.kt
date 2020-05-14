@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
+import org.coepi.android.domain.symptomflow.SymptomInputs.EarliestSymptom
 import org.coepi.android.domain.symptomflow.SymptomInputs.EarliestSymptom.Days
 import org.coepi.android.domain.symptomflow.UserInput.None
 import org.coepi.android.domain.symptomflow.UserInput.Some
@@ -25,10 +26,11 @@ class EarliestSymptomViewModel(
 
 
     fun onDurationChanged(durationStr: String) {
-        if(durationStr.isEmpty()) {
+        if (durationStr.isEmpty()) {
             symptomFlowManager.setEarliestSymptom(None)
         } else {
             val duration: Int = durationStr.toIntOrNull() ?: error("Invalid input: $durationStr")
+            Log.i("Duration > ", duration.toString())
             symptomFlowManager.setEarliestSymptom(Some(Days(duration)))
         }
     }

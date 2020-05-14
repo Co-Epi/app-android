@@ -45,20 +45,27 @@ class SymptomFlow(
         }
 }
 
-private fun toSteps(symptomIds: List<SymptomId>): List<SymptomStep> =
-    symptomIds.flatMap { it.toSteps() }
+private fun toSteps(symptomIds: List<SymptomId>): List<SymptomStep>
+    {
+        var symptomStepList: MutableList<SymptomStep> = symptomIds.flatMap { it.toSteps() } as MutableList<SymptomStep>
+        symptomStepList.add(EARLIEST_SYMPTOM_DATE)
+        return symptomStepList
+    }
+
 
 private fun SymptomId.toSteps(): List<SymptomStep> =
     when (this) {
         COUGH -> listOf(COUGH_TYPE, COUGH_DAYS, COUGH_DESCRIPTION)
         BREATHLESSNESS -> listOf(BREATHLESSNESS_DESCRIPTION)
-        FEVER -> listOf(FEVER_DAYS, FEVER_TEMPERATURE_TAKEN_TODAY, FEVER_TEMPERATURE_SPOT,
-            FEVER_HIGHEST_TEMPERATURE)
+        FEVER -> listOf(
+            FEVER_DAYS, FEVER_TEMPERATURE_TAKEN_TODAY, FEVER_TEMPERATURE_SPOT,
+            FEVER_HIGHEST_TEMPERATURE
+        )
         MUSCLE_ACHES -> listOf()
         LOSS_SMELL_OR_TASTE -> listOf()
         DIARRHEA -> listOf()
         RUNNY_NOSE -> listOf()
         OTHER -> listOf()
-        EARLIESTSYMPTOM -> listOf(EARLIEST_SYMPTOM_DATE)
         NONE -> listOf()
+        EARLIESTSYMPTOM -> listOf(EARLIEST_SYMPTOM_DATE)
     }

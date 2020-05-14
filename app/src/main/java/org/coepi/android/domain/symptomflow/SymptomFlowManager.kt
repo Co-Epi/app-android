@@ -67,7 +67,6 @@ class SymptomFlowManager(
     private fun handleSubmitReportResult(result: Result<Unit, Throwable>) {
         result
             .doIfSuccess {
-
                 rootNavigation.navigate(ToDestination(actionGlobalThanksFragment())).also {
                     clear()
                 }

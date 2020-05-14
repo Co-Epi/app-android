@@ -8,7 +8,6 @@ import org.coepi.android.domain.symptomflow.SymptomId.FEVER
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
 import org.coepi.android.domain.symptomflow.SymptomInputs.EarliestSymptom
-import org.coepi.android.domain.symptomflow.SymptomInputs.EarliestSymptom.Days
 import org.coepi.android.domain.symptomflow.SymptomInputs.Fever
 import org.coepi.android.system.log.log
 
@@ -97,7 +96,7 @@ class SymptomInputsManagerImpl :
         inputs = inputs.copy(fever = inputs.fever.copy(highestTemperature = temp))
     }
 
-    override fun setEarliestSymptom(days: UserInput<Days>) {
+    override fun setEarliestSymptom(days: UserInput<EarliestSymptom.Days>) {
         if(!inputs.ids.contains(EARLIESTSYMPTOM)) error("Earliest Symptom Date")
         inputs = inputs.copy(
             earliestSymptomDate = inputs.earliestSymptomDate.copy(days = days))
