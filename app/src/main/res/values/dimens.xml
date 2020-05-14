@@ -2,5 +2,6 @@
 <resources>
     <dimen name="default_margin">24dp</dimen>
     <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_80">80dp</dimen>
     <dimen name="default_line_height">26dp</dimen>
 </resources>

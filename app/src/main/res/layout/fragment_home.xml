@@ -41,126 +41,142 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/logo" />
 
-        <!-- ************************************************************ -->
-        <!--  TODO entries should be in recycler view -->
-        <!-- ************************************************************ -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/my_health_card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_40"
-            android:layout_marginTop="58dp"
-            android:layout_marginEnd="@dimen/margin_40"
-            android:onClick="@{() -> vm.onCheckInClick()}"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="8dp"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toTopOf="@id/version"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_title">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="35dp"
-                android:layout_marginBottom="13dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
+                <!-- ************************************************************ -->
+                <!--  TODO entries should be in recycler view -->
+                <!-- ************************************************************ -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/my_health_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_40"
+                    android:layout_marginTop="58dp"
+                    android:layout_marginEnd="@dimen/margin_40"
+                    android:onClick="@{() -> vm.onCheckInClick()}"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/my_health_title"
-                    style="@style/card_view_title"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_margin"
+                        android:layout_marginTop="35dp"
+                        android:layout_marginEnd="@dimen/default_margin"
+                        android:layout_marginBottom="13dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/my_health_title"
+                            style="@style/card_view_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_my_health_card_title" />
+
+                        <TextView
+                            android:id="@+id/my_health_description"
+                            style="@style/card_view_body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_line_height"
+                            android:layout_marginBottom="@dimen/default_line_height"
+                            android:text="@string/home_my_health_card_description" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/contact_alerts_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="51dp"
+                    android:onClick="@{() -> vm.onSeeAlertsClick()}"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/my_health_card"
+                    app:layout_constraintStart_toStartOf="@id/my_health_card"
+                    app:layout_constraintTop_toBottomOf="@id/my_health_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/default_margin"
+                        android:layout_marginEnd="@dimen/default_margin"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/alert_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_line_height"
+                            android:text="@{vm.title}"
+                            android:textColor="@color/red"
+                            android:textSize="17sp"
+                            app:isVisible="@{vm.newAlerts}"
+                            tools:text="2 new exposures detected" />
+
+                        <TextView
+                            android:id="@+id/contact_alerts_title"
+                            style="@style/card_view_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_line_height"
+                            android:text="@string/home_contact_alerts_card_title" />
+
+                        <TextView
+                            android:id="@+id/contact_alerts_description"
+                            style="@style/card_view_body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_line_height"
+                            android:layout_marginBottom="@dimen/default_line_height"
+                            android:text="@string/home_contact_alerts_card_description" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <!-- ************************************************************ -->
+                <!-- ************************************************************ -->
+
+                <ImageView
+                    android:id="@+id/alert_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/home_my_health_card_title" />
-
-                <TextView
-                    android:id="@+id/my_health_description"
-                    style="@style/card_view_body"
-                    android:layout_width="344dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_line_height"
-                    android:layout_marginBottom="@dimen/default_line_height"
-                    android:text="@string/home_my_health_card_description" />
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/contact_alerts_card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="51dp"
-            android:onClick="@{() -> vm.onSeeAlertsClick()}"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintEnd_toEndOf="@id/my_health_card"
-            app:layout_constraintStart_toStartOf="@id/my_health_card"
-            app:layout_constraintTop_toBottomOf="@id/my_health_card">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/alert_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="48dp"
-                    android:layout_marginTop="@dimen/default_line_height"
-                    android:text="@{vm.title}"
-                    android:textColor="@color/red"
-                    android:textSize="17sp"
+                    android:elevation="2dp"
+                    android:src="@drawable/ic_alert_circle"
+                    android:translationX="-8dp"
+                    android:translationY="-8dp"
                     app:isVisible="@{vm.newAlerts}"
-                    tools:text="2 new exposures detected" />
+                    app:layout_constraintStart_toStartOf="@id/contact_alerts_card"
+                    app:layout_constraintTop_toTopOf="@id/contact_alerts_card" />
 
                 <TextView
-                    android:id="@+id/contact_alerts_title"
-                    style="@style/card_view_title"
-                    android:layout_width="208dp"
+                    android:id="@+id/privacy_link"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="19dp"
-                    android:layout_marginTop="@dimen/default_line_height"
-                    android:text="@string/home_contact_alerts_card_title" />
+                    android:layout_marginTop="@dimen/margin_40"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="@string/home_privacy_link_text"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/contact_alerts_card" />
 
-                <TextView
-                    android:id="@+id/contact_alerts_description"
-                    style="@style/card_view_body"
-                    android:layout_width="242dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="19dp"
-                    android:layout_marginTop="@dimen/default_line_height"
-                    android:layout_marginBottom="@dimen/default_line_height"
-                    android:text="@string/home_contact_alerts_card_description" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <!-- ************************************************************ -->
-        <!-- ************************************************************ -->
-
-        <ImageView
-            android:id="@+id/alert_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="2dp"
-            android:src="@drawable/ic_alert_circle"
-            android:translationX="-8dp"
-            android:translationY="-8dp"
-            app:isVisible="@{vm.newAlerts}"
-            app:layout_constraintStart_toStartOf="@id/contact_alerts_card"
-            app:layout_constraintTop_toTopOf="@id/contact_alerts_card" />
-
-        <TextView
-            android:id="@+id/privacy_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="73dp"
-            android:gravity="center"
-            android:text="@string/home_privacy_link_text"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/contact_alerts_card" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <TextView
             android:id="@+id/version"
@@ -186,7 +202,7 @@
             android:text="@string/tab_container_debug"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="@id/version"
-            app:layout_constraintEnd_toEndOf="@id/contact_alerts_card"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/version" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
