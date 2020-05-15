@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import org.coepi.android.databinding.FragmentBreathlessBinding.inflate
@@ -40,4 +41,16 @@ class BreathlessFragment : Fragment() {
             adapter.submitList(it.toMutableList())
         }
     }.root
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewModel.isInProgress.observe(viewLifecycleOwner, onChanged = {
+            if(it) {
+                this.view?.isClickable = false
+            }
+        })
+
+    }
+
 }

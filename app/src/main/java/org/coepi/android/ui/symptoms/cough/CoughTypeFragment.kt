@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.observe
 import org.coepi.android.databinding.FragmentCoughTypeBinding
 import org.coepi.android.databinding.FragmentCoughTypeBinding.inflate
 import org.coepi.android.ui.extensions.onBack
@@ -23,4 +24,14 @@ class CoughTypeFragment : Fragment() {
         onBack { viewModel.onBack() }
         toolbar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }.root
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewModel.isInProgress.observe(viewLifecycleOwner, onChanged = {
+            if(it) {
+                this.view?.isClickable = false
+            }
+        })
+
+    }
 }
