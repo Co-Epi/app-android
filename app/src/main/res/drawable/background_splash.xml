@@ -2,13 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@color/colorBackgroundSecondary"/>
+        android:drawable="@drawable/ic_geometric_dark_background"/>
 
     <item
         android:gravity="center"
-        android:width="350dp"
-        android:height="280dp"
-        android:drawable="@drawable/ic_coepicloud_splash"/>
+        android:width="98dp"
+        android:height="152dp"
+        android:drawable="@drawable/ic_coepi_family_logo_text"/>
     <item
         android:gravity="bottom|center"
         android:bottom="55dp"
