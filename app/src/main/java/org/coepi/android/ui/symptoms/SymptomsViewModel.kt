@@ -63,17 +63,10 @@ class SymptomsViewModel(
         disposables += checkedSymptomTrigger
             .withLatestFrom(selectedSymptomIds)
             .subscribe { (selectedSymptom, selectedIds) ->
-                if (selectedSymptom.symptom.id == SymptomId.NONE && !selectedSymptom.isChecked) {
-                    // "No symptoms" selected. Unselect all other symptoms that were selected/highlighted
-                    selectedSymptomIds.onNext(emptySet<SymptomId>().toggle(selectedSymptom.symptom.id))
-                } else if (selectedSymptom.symptom.id == SymptomId.NONE && selectedIds.size == 1) {
-                    // "No symptoms" selected with no other symptoms highlighted. Only toggles NONE
-                    selectedSymptomIds.onNext(selectedIds.toggle(selectedSymptom.symptom.id))
-                } else {
-                    selectedSymptomIds.onNext(
-                        selectedIds.minus(SymptomId.NONE).toggle(selectedSymptom.symptom.id)
-                    )
-                }
+                selectedSymptomIds.onNext(
+                    selectedIds.toggle(selectedSymptom.symptom.id)
+                        .solveConflicts(selectedSymptom.symptom.id, !selectedSymptom.isChecked)
+                )
             }
 
         disposables += submitTrigger
@@ -108,4 +101,15 @@ class SymptomsViewModel(
 
     private fun Symptom.toViewData(isChecked: Boolean): SymptomViewData =
         SymptomViewData(name, isChecked, this)
+
+    private fun Set<SymptomId>.solveConflicts(
+        selectedId: SymptomId,
+        wasChecked: Boolean
+    ): Set<SymptomId> =
+        when {
+            !wasChecked -> this // We can't run in conflicts when unchecking, so return set unchanged
+            selectedId == SymptomId.NONE -> setOf(selectedId) // Selected NONE: deselect everything else
+            contains(SymptomId.NONE) -> minus(SymptomId.NONE) // Selected something other than NONE and NONE is selected: deselect NONE
+            else -> this
+        }
 }
