@@ -1,6 +1,5 @@
 package org.coepi.android.repo
 
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.Single.just
 import org.coepi.android.domain.model.Symptom
@@ -13,7 +12,6 @@ import org.coepi.android.domain.symptomflow.SymptomId.MUSCLE_ACHES
 import org.coepi.android.domain.symptomflow.SymptomId.NONE
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
-import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.TcnReportRepo
 
 interface SymptomRepo {

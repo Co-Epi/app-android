@@ -15,7 +15,7 @@ import org.koin.dsl.module
 @OptIn(ExperimentalUnsignedTypes::class)
 val TcnModule = module {
     single<TcnDao>(createdAtStart = true) { RealmTcnDao(get()) }
-    single<TcnReportDao>(createdAtStart = true) { RealmTcnReportDao(get()) }
+    single<TcnReportDao>(createdAtStart = true) { RealmRawAlertDao(get()) }
     single<TcnKeyDao>(createdAtStart = true) { RealmTcnKeyDao(get()) }
     single<TcnReportRepo> { TcnReportRepoImpl(get(), get(), get(), get()) }
     single<ReportsUpdater> { ReportsUpdaterImpl(get(), get(), get(), get(), get(), get()) }

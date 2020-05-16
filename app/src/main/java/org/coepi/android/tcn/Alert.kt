@@ -6,7 +6,7 @@ import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.domain.UnixTime
 
 @Parcelize
-data class SymptomReport(
+data class Alert(
     var id: String,
     var report: PublicReport,
     var timestamp: UnixTime // TODO ReceivedTcn timestamp

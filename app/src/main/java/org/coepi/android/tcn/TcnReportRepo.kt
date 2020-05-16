@@ -23,11 +23,11 @@ import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.VoidOperationState
 
 interface TcnReportRepo {
-    val reports: Observable<List<SymptomReport>>
+    val alerts: Observable<List<Alert>>
 
     val sendState: Observable<VoidOperationState>
 
-    fun delete(report: SymptomReport)
+    fun delete(report: Alert)
 
     fun submitReport(inputs: SymptomInputs): Result<Unit, Throwable>
 }
@@ -42,11 +42,11 @@ class TcnReportRepoImpl(
 
     override val sendState: PublishSubject<VoidOperationState> = create()
 
-    override val reports: Observable<List<SymptomReport>> = tcnReportDao.reports.map { reports ->
-        reports.mapNotNull { report ->
-            apiReportMapper.fromTcnReport(report.report).also { symptomReport ->
-                if (symptomReport == null) {
-                    log.e("Couldn't parse report: $symptomReport. Skipped.")
+    override val alerts: Observable<List<Alert>> = tcnReportDao.rawAlerts.map { rawAlerts ->
+        rawAlerts.mapNotNull { rawAlert ->
+            apiReportMapper.fromRawAlert(rawAlert).also { alert ->
+                if (alert == null) {
+                    log.e("Couldn't raw alert: $alert. Skipped.")
                 }
             }
         }
@@ -82,7 +82,7 @@ class TcnReportRepoImpl(
         }
     }
 
-    override fun delete(report: SymptomReport) {
+    override fun delete(report: Alert) {
         tcnReportDao.delete(report)
     }
 }

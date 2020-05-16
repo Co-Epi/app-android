@@ -4,18 +4,17 @@ import android.content.Context
 import org.coepi.android.api.memo.Memo
 import org.coepi.android.api.memo.MemoMapper
 import org.coepi.android.api.publicreport.PublicReport
-import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.extensions.base64ToByteArray
 import org.coepi.android.extensions.toBase64String
-import org.coepi.android.tcn.SymptomReport
-import org.coepi.android.tcn.TcnReport
+import org.coepi.android.tcn.Alert
+import org.coepi.android.tcn.RawAlert
 import org.tcncoalition.tcnclient.TcnKeys
 import org.tcncoalition.tcnclient.crypto.MemoType
 
 interface ApiReportMapper {
     fun toApiReport(report: PublicReport): String
-    fun fromTcnReport(report: TcnReport): SymptomReport?
+    fun fromRawAlert(report: RawAlert): Alert?
 }
 
 @ExperimentalUnsignedTypes
@@ -32,12 +31,12 @@ class ApiSymptomsMapperImpl(
             MemoType.CoEpiV1
         ).toByteArray().toBase64String()
 
-    override fun fromTcnReport(report: TcnReport): SymptomReport? =
+    override fun fromRawAlert(report: RawAlert): Alert? =
         report.memoStr.base64ToByteArray()?.toUByteArray()?.let { memoBytes ->
-            SymptomReport(
+            Alert(
                 id = report.id,
                 report = memoMapper.toReport(Memo(memoBytes)),
-                timestamp = UnixTime.fromValue(report.timestamp)
+                timestamp = report.timestamp
             )
         }
 }

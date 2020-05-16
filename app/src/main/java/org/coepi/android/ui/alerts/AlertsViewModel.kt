@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.R.plurals.alerts_new_notifications_count
 import org.coepi.android.api.publicreport.PublicReport
-import org.coepi.android.tcn.SymptomReport
+import org.coepi.android.tcn.Alert
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -44,7 +44,7 @@ class AlertsViewModel(
     private fun title(alertsSize: Int) =
         resources.getQuantityString(alerts_new_notifications_count, alertsSize)
 
-    private fun SymptomReport.toViewData(): AlertViewData =
+    private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
             exposureType = report.toExposuresString(),
             time = timestamp.toDate().toString(), // TODO which date format?
