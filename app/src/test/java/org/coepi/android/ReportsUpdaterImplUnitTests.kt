@@ -73,7 +73,8 @@ class ReportsUpdaterImplUnitTests {
         val matches = reportsUpdater.findMatches(reports)
 
         assertThat(matches.count()).isEqualTo(1)
-        assertThat(matches[0].signature).isEqualTo(reports[0].signature)
+        assertThat(matches[0].report.signature).isEqualTo(reports[0].signature)
+        assertThat(matches[0].contactTime).isEqualTo(now)
     }
 
     @Test

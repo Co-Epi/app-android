@@ -8,5 +8,5 @@ import org.coepi.android.domain.UnixTime
 data class RawAlert(
     val id: String,
     val memoStr: String, // Base64
-    val timestamp: UnixTime
+    val contactTime: UnixTime
 ) : Parcelable

@@ -38,7 +38,7 @@ class RealmRawAlertDao(private val realmProvider: RealmProvider) : TcnReportDao 
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmRawAlert>(alert.id)
             realmObj.report = alert.memoStr
-            realmObj.timestamp = alert.timestamp.value
+            realmObj.timestamp = alert.contactTime.value
         }
         return true
     }
@@ -68,5 +68,5 @@ class RealmRawAlertDao(private val realmProvider: RealmProvider) : TcnReportDao 
     }
 
     private fun RealmRawAlert.toRawAlert(): RawAlert =
-        RawAlert(id = id, memoStr = report, timestamp = UnixTime.fromValue(timestamp))
+        RawAlert(id = id, memoStr = report, contactTime = UnixTime.fromValue(timestamp))
 }

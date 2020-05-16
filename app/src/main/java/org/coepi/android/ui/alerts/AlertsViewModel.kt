@@ -47,7 +47,7 @@ class AlertsViewModel(
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
             exposureType = report.toExposuresString(),
-            time = timestamp.toDate().toString(), // TODO which date format?
+            contactTime = contactTime.toDate().toString(), // TODO which date format?
             report = this
         )
 
