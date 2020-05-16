@@ -76,14 +76,14 @@ class ReportsUpdaterImpl(
     }
 
     private fun updateReports() {
-        val reports: List<SignedReport> = retrieveAndMatchNewReports().successOrNull() ?: return
+        val reports: List<MatchedReport> = retrieveAndMatchNewReports().successOrNull() ?: return
         val insertedCount = storeReports(reports)
         if (insertedCount > 0) {
             newAlertsNotificationShower.showNotification(insertedCount)
         }
     }
 
-    fun retrieveAndMatchNewReports(): Result<List<SignedReport>, Throwable> {
+    fun retrieveAndMatchNewReports(): Result<List<MatchedReport>, Throwable> {
         val now: UnixTime = now()
         return matchingReports(
             startInterval = determineStartInterval(now),
@@ -172,11 +172,11 @@ class ReportsUpdaterImpl(
     fun toMatchedReportsChunk(chunk: SignedReportsChunk): MatchedReportsChunk =
         MatchedReportsChunk(chunk.reports, findMatches(chunk.reports), chunk.interval)
 
-    fun findMatches(reports: List<SignedReport>): List<SignedReport> {
+    fun findMatches(reports: List<SignedReport>): List<MatchedReport> {
         val matchingStartTime = currentTimeMillis()
         log.i("Start matching...", TCN_MATCHING)
 
-        val matchedReports: List<SignedReport> = tcnDao.all().map { it.tcn }.let { tcns ->
+        val matchedReports: List<MatchedReport> = tcnDao.all().let { tcns ->
             log.i("DB TCNs count: ${tcns.size}")
             // TODO review: Do we still need distinct? Does the api still send repeated reports?
             tcnMatcher.match(tcns, reports.distinct())
@@ -199,12 +199,12 @@ class ReportsUpdaterImpl(
      * @return count of inserted reports. This can differ from reports count, if reports
      * are already in the db.
      */
-    fun storeReports(reports: List<SignedReport>): Int {
+    fun storeReports(reports: List<MatchedReport>): Int {
         val insertedCount: Int = reports.map {
             reportsDao.insert(RawAlert(
-                id = it.signature.toByteArray().toHex(),
-                memoStr = it.report.memoData.toString(UTF_8),
-                timestamp = now() // TODO extract this from memo, when protocol implemented
+                id = it.report.signature.toByteArray().toHex(),
+                memoStr = it.report.report.memoData.toString(UTF_8),
+                contactTime = it.contactTime
             ))
         }.filter { it }.size
 

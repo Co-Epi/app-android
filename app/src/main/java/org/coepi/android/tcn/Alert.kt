@@ -9,5 +9,5 @@ import org.coepi.android.domain.UnixTime
 data class Alert(
     var id: String,
     var report: PublicReport,
-    var timestamp: UnixTime // TODO ReceivedTcn timestamp
+    var contactTime: UnixTime
 ) : Parcelable

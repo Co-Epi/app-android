@@ -36,7 +36,7 @@ class ApiSymptomsMapperImpl(
             Alert(
                 id = report.id,
                 report = memoMapper.toReport(Memo(memoBytes)),
-                timestamp = report.timestamp
+                contactTime = report.contactTime
             )
         }
 }
