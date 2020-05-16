@@ -2,9 +2,7 @@ package org.coepi.android.api.memo
 
 import com.google.common.truth.Truth
 import org.coepi.android.api.publicreport.CoughSeverity
-import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
 import org.coepi.android.api.publicreport.FeverSeverity
-import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.api.publicreport.PublicReportMapper
 import org.coepi.android.api.publicreport.PublicReportMapperImpl
@@ -28,23 +26,20 @@ import org.coepi.android.domain.symptomflow.UserInput.None
 import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.junit.Test
 
-// Public report <-> memo
+// (Integration tests) Symptom inputs -> public report <-> Memo
 @ExperimentalUnsignedTypes
-class MemoMapperTests {
-
+class PublicReportAndMemoMapperTests {
     /**
-     * Maps public report to memo and back.
-     * Public report has NONE or equivalent inputs.
+     * Maps inputs to memo and back.
+     * Inputs have no symptoms selected.
      */
     @Test
     fun maps_no_symptoms() {
         val mapper: MemoMapper = MemoMapperImpl()
-        val report = PublicReport(
-            earliestSymptomTime = None,
-            feverSeverity = FeverSeverity.NONE,
-            breathlessness = false,
-            coughSeverity = CoughSeverity.NONE
-        )
+        val inputs = SymptomInputs(setOf(NONE))
+
+        val reportMapper: PublicReportMapper = PublicReportMapperImpl()
+        val report = reportMapper.toPublicReport(inputs)
 
         val memo: Memo = mapper.toMemo(report, UnixTime.fromValue(1589209754L))
         val mappedReport = mapper.toReport(memo)
@@ -53,25 +48,36 @@ class MemoMapperTests {
     }
 
     /**
-     * Maps public report to memo and back.
-     * Public report has an arbitrary (non-NONE) value for all the inputs.
+     * Maps inputs to memo and back.
+     * Inputs have an arbitrary value for all the inputs.
      */
     @Test
     fun maps_all_symptoms_set_arbitrary() {
         val mapper: MemoMapper = MemoMapperImpl()
 
-        val report = PublicReport(
-            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
-            feverSeverity = SERIOUS,
-            breathlessness = true,
-            coughSeverity = EXISTING
+        val inputs = SymptomInputs(
+            ids = setOf(NONE, FEVER, BREATHLESSNESS, COUGH, OTHER),
+            cough = Cough(
+                type = Some(DRY),
+                days = Some(Days(60)),
+                status = Some(WORSE_WHEN_OUTSIDE)
+            ),
+            breathlessness = Breathlessness(
+                cause = Some(WALKING_YARDS_OR_MINS_ON_GROUND)
+            ),
+            fever = Fever(
+                days = Some(Fever.Days(1)),
+                takenTemperatureToday = Some(true),
+                highestTemperature = Some(Celsius(39f)),
+                temperatureSpot = Some(Armpit)
+            )
         )
+
+        val reportMapper: PublicReportMapper = PublicReportMapperImpl()
+        val report = reportMapper.toPublicReport(inputs)
 
         val memo: Memo = mapper.toMemo(report, UnixTime.fromValue(1589209754L))
         val mappedReport = mapper.toReport(memo)
         Truth.assertThat(mappedReport).isEqualTo(report)
     }
-
-    // TODO test more public report symptom combinations
-
 }

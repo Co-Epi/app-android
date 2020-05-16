@@ -7,6 +7,7 @@ import org.koin.core.context.startKoin
 
 class App : Application() {
 
+    @ExperimentalUnsignedTypes
     override fun onCreate() {
         super.onCreate()
         startKoin {

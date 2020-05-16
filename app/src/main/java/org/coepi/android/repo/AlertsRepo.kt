@@ -1,6 +1,7 @@
 package org.coepi.android.repo
 
 import io.reactivex.Observable
+import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.tcn.TcnReportRepo
 import org.coepi.android.tcn.SymptomReport
 import org.coepi.android.repo.reportsupdate.ReportsUpdater

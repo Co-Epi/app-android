@@ -116,6 +116,7 @@ val uiModule = module {
     single { NotificationsShower(get()) }
 }
 
+@ExperimentalUnsignedTypes
 val appModule = listOf(
     repoModule,
     viewModelModule,

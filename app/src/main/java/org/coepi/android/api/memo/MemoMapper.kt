@@ -2,21 +2,18 @@ package org.coepi.android.api.memo
 
 import org.coepi.android.api.memo.mapper.BitMapper
 import org.coepi.android.api.memo.mapper.BooleanMapper
+import org.coepi.android.api.memo.mapper.CoughSeverityMapper
+import org.coepi.android.api.memo.mapper.FeverSeverityMapper
 import org.coepi.android.api.memo.mapper.TimeMapper
+import org.coepi.android.api.memo.mapper.TimeUserInputMapper
 import org.coepi.android.api.memo.mapper.VersionMapper
+import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.domain.UnixTime
-import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
-import org.coepi.android.domain.symptomflow.SymptomId.COUGH
-import org.coepi.android.domain.symptomflow.SymptomId.EARLIESTSYMPTOM
-import org.coepi.android.domain.symptomflow.SymptomId.FEVER
-import org.coepi.android.domain.symptomflow.SymptomId.NONE
-import org.coepi.android.domain.symptomflow.SymptomId.OTHER
-import org.coepi.android.domain.symptomflow.SymptomInputs
 
 @ExperimentalUnsignedTypes
 interface MemoMapper {
-    fun toMemo(inputs: SymptomInputs, time: UnixTime): Memo
-    fun toInputs(memo: Memo): SymptomInputs
+    fun toMemo(report: PublicReport, time: UnixTime): Memo
+    fun toReport(memo: Memo): PublicReport
 }
 
 /**
@@ -37,26 +34,21 @@ class MemoMapperImpl: MemoMapper {
 
     private val versionMapper = VersionMapper()
     private val timeMapper = TimeMapper()
+    private val timeUserInputMapper = TimeUserInputMapper()
     private val booleanMapper = BooleanMapper()
+    private val coughSeverityMapper = CoughSeverityMapper()
+    private val feverSeverityMapper = FeverSeverityMapper()
 
-    override fun toMemo(inputs: SymptomInputs, time: UnixTime): Memo {
+    override fun toMemo(report: PublicReport, time: UnixTime): Memo {
         val memoVersion: UShort = 1.toUShort()
-        val noSymptomsToday: Boolean = inputs.ids.contains(NONE)
-        val otherSymptoms: Boolean = inputs.ids.contains(OTHER)
-        val hasCough: Boolean = inputs.ids.contains(COUGH)
-        val hasFever: Boolean = inputs.ids.contains(FEVER)
-        val hasBreathlessness: Boolean = inputs.ids.contains(BREATHLESSNESS)
-        val hasEarliestSymptom: Boolean = inputs.ids.contains(EARLIESTSYMPTOM)
 
         val bits: List<BitList> = listOf(
             versionMapper.toBits(memoVersion),
             timeMapper.toBits(time),
-            booleanMapper.toBits(noSymptomsToday),
-            booleanMapper.toBits(otherSymptoms),
-            booleanMapper.toBits(hasCough),
-            booleanMapper.toBits(hasBreathlessness),
-            booleanMapper.toBits(hasFever),
-            booleanMapper.toBits(hasEarliestSymptom)
+            timeUserInputMapper.toBits(report.earliestSymptomTime),
+            coughSeverityMapper.toBits(report.coughSeverity),
+            feverSeverityMapper.toBits(report.feverSeverity),
+            booleanMapper.toBits(report.breathlessness)
         )
 
         return bits.fold(BitList(emptyList())) { acc, e ->
@@ -65,7 +57,7 @@ class MemoMapperImpl: MemoMapper {
         }.toUByteArray().let { Memo(it) }
     }
 
-    override fun toInputs(memo: Memo): SymptomInputs {
+    override fun toReport(memo: Memo): PublicReport {
         val bitArray: List<Boolean> = memo.bytes.flatMap {
             it.toBits().bits
         }
@@ -75,25 +67,19 @@ class MemoMapperImpl: MemoMapper {
         // Version for now not handled
         val versionResult = extract(bitArray, versionMapper, next).value { next += it }
 
-        // TODO handle time
+        // TODO handle report time?
         val timeResult = extract(bitArray, timeMapper, next).value { next += it }
 
-        val noSymptomsToday = extract(bitArray, booleanMapper, next).value { next += it }
-        val symptomsNotInList = extract(bitArray, booleanMapper, next).value { next += it }
-        val hasCough = extract(bitArray, booleanMapper, next).value { next += it }
-        val hasBreathlessness = extract(bitArray, booleanMapper, next).value { next += it }
-        val hasFever = extract(bitArray, booleanMapper, next).value { next += it }
-        val hasEarliestSymptom = extract(bitArray, booleanMapper, next).value { next += it}
+        val earliestSymptomTime = extract(bitArray, timeUserInputMapper, next).value { next += it }
+        val coughSeverity = extract(bitArray, coughSeverityMapper, next).value { next += it }
+        val feverSeverity = extract(bitArray, feverSeverityMapper, next).value { next += it }
+        val breathlessness = extract(bitArray, booleanMapper, next).value { next += it }
 
-        return SymptomInputs(
-            ids = listOfNotNull(
-                noSymptomsToday.takeIf { it }?.let { NONE },
-                symptomsNotInList.takeIf { it }?.let { OTHER },
-                hasCough.takeIf { it }?.let { COUGH },
-                hasBreathlessness.takeIf { it }?.let { BREATHLESSNESS },
-                hasFever.takeIf { it }?.let { FEVER },
-                hasEarliestSymptom.takeIf { it }?.let {EARLIESTSYMPTOM}
-            ).toSet()
+        return PublicReport(
+            earliestSymptomTime = earliestSymptomTime,
+            feverSeverity = feverSeverity,
+            coughSeverity = coughSeverity,
+            breathlessness = breathlessness
         )
     }
 

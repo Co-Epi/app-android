@@ -1,14 +1,8 @@
 package org.coepi.android.api.memo.mapper
 
 import com.google.common.truth.Truth
-import org.coepi.android.api.memo.BitList
-import org.coepi.android.api.memo.mapper.MapperTestUtils.bits
 import org.coepi.android.api.memo.toBits
 import org.coepi.android.domain.UnixTime
-import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.GROUND_OWN_PACE
-import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
-import org.coepi.android.domain.symptomflow.UserInput.None
-import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.junit.Test
 
 @ExperimentalUnsignedTypes

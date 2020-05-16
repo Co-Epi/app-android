@@ -12,11 +12,12 @@ import org.coepi.android.repo.reportsupdate.ReportsUpdaterImpl
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
+@OptIn(ExperimentalUnsignedTypes::class)
 val TcnModule = module {
     single<TcnDao>(createdAtStart = true) { RealmTcnDao(get()) }
     single<TcnReportDao>(createdAtStart = true) { RealmTcnReportDao(get()) }
     single<TcnKeyDao>(createdAtStart = true) { RealmTcnKeyDao(get()) }
-    single<TcnReportRepo> { TcnReportRepoImpl(get(), get(), get()) }
+    single<TcnReportRepo> { TcnReportRepoImpl(get(), get(), get(), get()) }
     single<ReportsUpdater> { ReportsUpdaterImpl(get(), get(), get(), get(), get(), get()) }
     single<NewAlertsNotificationShower> { NewAlertsNotificationShowerImpl(get(), get(), get()) }
     single<TcnMatcher> { TcnMatcherImpl() }
