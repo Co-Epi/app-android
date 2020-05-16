@@ -34,7 +34,7 @@ import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.TcnDao
-import org.coepi.android.tcn.TcnReport
+import org.coepi.android.tcn.RawAlert
 import org.coepi.android.tcn.TcnReportDao
 import org.tcncoalition.tcnclient.crypto.SignedReport
 import java.lang.System.currentTimeMillis
@@ -201,10 +201,10 @@ class ReportsUpdaterImpl(
      */
     fun storeReports(reports: List<SignedReport>): Int {
         val insertedCount: Int = reports.map {
-            reportsDao.insert(TcnReport(
+            reportsDao.insert(RawAlert(
                 id = it.signature.toByteArray().toHex(),
                 memoStr = it.report.memoData.toString(UTF_8),
-                timestamp = now().value // TODO extract this from memo, when protocol implemented
+                timestamp = now() // TODO extract this from memo, when protocol implemented
             ))
         }.filter { it }.size
 
