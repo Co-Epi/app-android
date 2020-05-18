@@ -3,6 +3,7 @@ package org.coepi.android.ui.symptoms.earliestsymptom
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
 import org.coepi.android.domain.symptomflow.UserInput.None
@@ -34,9 +35,9 @@ class EarliestSymptomViewModel(
     }
 
     fun onClickSubmit() {
-        Log.i("Submit", "Submit pressed")
         symptomFlowManager.navigateForward()
     }
+
 
     fun onClickUnknown() {
         symptomFlowManager.navigateForward()
@@ -44,10 +45,6 @@ class EarliestSymptomViewModel(
 
     fun onClickSkip() {
         symptomFlowManager.navigateForward()
-    }
-
-    fun onProgress() {
-        log.i("progress clicked")
     }
 
     fun onBack() {

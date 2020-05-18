@@ -15,6 +15,12 @@ object XmlBindingAdapters {
     }
 
     @JvmStatic
+    @BindingAdapter("isClickable")
+    fun setIsClickable(view: View, isClickable: Boolean?) {
+        view.isClickable = !(isClickable == true)
+    }
+
+    @JvmStatic
     @BindingAdapter("android:src")
     fun setImageResource(imageView: ImageView, resource: Int) {
         imageView.setImageResource(resource)

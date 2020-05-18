@@ -30,15 +30,4 @@ class CoughDurationFragment : Fragment() {
         onBack { viewModel.onBack() }
         toolbar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }.root
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel.isInProgress.observe(viewLifecycleOwner, onChanged = {
-            if(it) {
-                this.view?.isClickable = false
-            }
-        })
-
-    }
 }

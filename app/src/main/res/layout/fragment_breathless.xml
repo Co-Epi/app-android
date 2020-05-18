@@ -76,23 +76,33 @@
             android:layout_marginStart="40dp"
             android:layout_marginBottom="30dp"
             android:onClick="@{() -> vm.onClickSkip()}"
+            isClickable="@{vm.isInProgress}"
             android:text="@string/symptoms_skip_button"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cause_recycler_view" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/screen_progress_indicator"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             isVisible="@{vm.isInProgress}"
-            android:clickable="@{vm.isInProgress}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:clickable="true"
+            android:focusable="true">
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@style/screen_progress_indicator"
+                isVisible="@{vm.isInProgress}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

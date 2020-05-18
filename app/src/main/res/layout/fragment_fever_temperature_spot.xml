@@ -39,6 +39,7 @@
             style="@style/small_circle_button"
             android:layout_marginTop="44dp"
             android:onClick="@{() -> vm.onClickMouth()}"
+            isClickable="@{vm.isInProgress}"
             android:text="@string/symptom_report_fever_temperature_spot_mouth"
             app:layout_constraintEnd_toStartOf="@id/ear"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +49,7 @@
             android:id="@+id/ear"
             style="@style/small_circle_button"
             android:onClick="@{() -> vm.onClickEar()}"
+            isClickable="@{vm.isInProgress}"
             android:text="@string/symptom_report_fever_temperature_spot_ear"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/mouth"
@@ -58,6 +60,7 @@
             style="@style/small_circle_button"
             android:layout_marginTop="44dp"
             android:onClick="@{() -> vm.onClickArmpit()}"
+            isClickable="@{vm.isInProgress}"
             android:text="@string/symptom_report_fever_temperature_spot_armpit"
             app:layout_constraintBottom_toTopOf="@id/skip"
             app:layout_constraintEnd_toStartOf="@id/other"
@@ -68,6 +71,7 @@
             android:id="@+id/other"
             style="@style/small_circle_button"
             android:onClick="@{() -> vm.onClickOther()}"
+            isClickable="@{vm.isInProgress}"
             android:text="@string/symptom_report_fever_temperature_spot_other"
             app:layout_constraintStart_toStartOf="@id/ear"
             app:layout_constraintTop_toTopOf="@id/armpit" />
@@ -78,21 +82,31 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:onClick="@{() -> vm.onClickSkip()}"
+            isClickable="@{vm.isInProgress}"
             android:text="Skip"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@id/armpit"
             app:layout_constraintTop_toBottomOf="@id/armpit" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/screen_progress_indicator"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             isVisible="@{vm.isInProgress}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:clickable="true"
+            android:focusable="true">
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@style/screen_progress_indicator"
+                isVisible="@{vm.isInProgress}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

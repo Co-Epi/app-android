@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.observe
 import org.coepi.android.databinding.FragmentFeverTakenTodayBinding.inflate
 import org.coepi.android.ui.extensions.onBack
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,15 +22,4 @@ class FeverTakenTodayFragment : Fragment() {
         onBack { viewModel.onBack() }
         toolbar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }.root
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel.isInProgress.observe(viewLifecycleOwner, onChanged = {
-            if(it) {
-                this.view?.isClickable = false
-            }
-        })
-
-    }
 }

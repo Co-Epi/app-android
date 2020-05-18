@@ -51,7 +51,8 @@
                 android:layout_width="146dp"
                 android:layout_height="146dp"
                 android:background="@drawable/circle_button_background"
-                android:onClick="@{() -> vm.onClickYes()}">
+                android:onClick="@{() -> vm.onClickYes()}"
+                isClickable="@{vm.isInProgress}">
 
                 <TextView
                     android:id="@+id/yes_headline"
@@ -75,7 +76,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="146dp"
                 android:layout_height="146dp"
-                android:onClick="@{() -> vm.onClickNo()}">
+                android:onClick="@{() -> vm.onClickNo()}"
+                isClickable="@{vm.isInProgress}">
 
                 <ImageView
                     android:layout_width="146dp"
@@ -110,21 +112,30 @@
             android:layout_marginLeft="46dp"
             android:layout_marginTop="48dp"
             android:onClick="@{() -> vm.onClickSkip()}"
+            isClickable="@{vm.isInProgress}"
             android:text="Skip"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/options" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/screen_progress_indicator"
-            isVisible="@{vm.isInProgress}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        isVisible="@{vm.isInProgress}"
+        android:clickable="true"
+        android:focusable="true">
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@style/screen_progress_indicator"
+                isVisible="@{vm.isInProgress}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

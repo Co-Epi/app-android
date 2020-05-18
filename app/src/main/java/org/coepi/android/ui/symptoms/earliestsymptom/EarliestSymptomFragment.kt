@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import org.coepi.android.databinding.FragmentEarliestSymptomBinding.inflate
 import org.coepi.android.ui.extensions.onBack
 import org.coepi.android.ui.extensions.onTextChanged
@@ -26,20 +25,7 @@ class EarliestSymptomFragment : Fragment() {
             viewModel.onDurationChanged(it)
         }
 
-
         onBack { viewModel.onBack() }
         toolbar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }.root
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel.isInProgress.observe(viewLifecycleOwner, onChanged = {
-            if(it) {
-                this.view?.isClickable = false
-            }
-        })
-
-    }
-
 }

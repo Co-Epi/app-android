@@ -62,6 +62,7 @@
             android:layout_height="31dp"
             android:layout_marginTop="24dp"
             android:onClick="@{() -> vm.onClickUnknown()}"
+            isClickable="@{vm.isInProgress}"
             android:text="@string/symptom_report_cough_duration_unknown"
             app:layout_constraintStart_toStartOf="@id/cough_duration"
             app:layout_constraintTop_toBottomOf="@id/cough_duration" />
@@ -72,6 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:onClick="@{() -> vm.onClickSubmit()}"
+            isClickable="@{vm.isInProgress}"
             android:text="@string/symptoms_submit_button"
             app:layout_constraintStart_toStartOf="@id/days"
             app:layout_constraintTop_toTopOf="@id/unknown" />
@@ -82,21 +84,30 @@
             android:layout_marginLeft="46dp"
             android:layout_marginTop="182dp"
             android:onClick="@{() -> vm.onClickSkip()}"
+            isClickable="@{vm.isInProgress}"
             android:text="Skip"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cough_duration" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/screen_progress_indicator"
-            isVisible="@{vm.isInProgress}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        isVisible="@{vm.isInProgress}"
+        android:clickable="true"
+        android:focusable="true">
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@style/screen_progress_indicator"
+                isVisible="@{vm.isInProgress}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
