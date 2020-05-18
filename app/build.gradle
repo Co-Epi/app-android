@@ -102,4 +102,5 @@ dependencies {
     implementation 'com.github.TCNCoalition:tcn-client-android:0.0.4'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
 }

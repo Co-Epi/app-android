@@ -39,7 +39,7 @@
             android:id="@+id/exposure_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.time}"
+            android:text="@{item.contactTime}"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@id/exposure_type"
             app:layout_constraintTop_toBottomOf="@id/exposure_type"

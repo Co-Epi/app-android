@@ -4,8 +4,6 @@ import org.coepi.android.api.memo.BitList
 import org.coepi.android.api.memo.toBits
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.tcn.toULong
-import org.coepi.android.tcn.toUShort
-import java.nio.ByteBuffer
 
 @ExperimentalUnsignedTypes
 class TimeMapper : BitMapper<UnixTime> {
