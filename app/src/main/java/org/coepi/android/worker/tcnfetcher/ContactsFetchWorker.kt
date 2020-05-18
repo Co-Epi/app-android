@@ -15,11 +15,11 @@ class ContactsFetchWorker(
     workerParams: WorkerParameters
 ) : CoroutineWorker(appContext, workerParams), KoinComponent {
 
-    private val reportsUpdater: ReportsUpdater by inject()
+    private val alertsUpdater: ReportsUpdater by inject()
 
     override suspend fun doWork(): Result {
         log.d("Contacts fetch worker started.", TCN_MATCHING)
-        reportsUpdater.requestUpdateReports()
+        alertsUpdater.requestUpdateReports()
         log.d("Contacts fetch worker finished.", TCN_MATCHING)
         return success()
     }
