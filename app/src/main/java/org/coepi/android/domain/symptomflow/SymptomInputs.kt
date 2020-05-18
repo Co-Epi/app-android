@@ -8,7 +8,7 @@ import java.io.Serializable
 
 enum class SymptomId {
     COUGH, BREATHLESSNESS, FEVER, MUSCLE_ACHES, LOSS_SMELL_OR_TASTE, DIARRHEA,
-    RUNNY_NOSE, OTHER, NONE, EARLIESTSYMPTOM
+    RUNNY_NOSE, OTHER, NONE
 }
 
 @Parcelize

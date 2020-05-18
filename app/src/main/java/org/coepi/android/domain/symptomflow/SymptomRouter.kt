@@ -16,7 +16,7 @@ import org.coepi.android.domain.symptomflow.SymptomStep.BREATHLESSNESS_DESCRIPTI
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_DAYS
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_DESCRIPTION
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_TYPE
-import org.coepi.android.domain.symptomflow.SymptomStep.EARLIEST_SYMPTOM_DATE
+import org.coepi.android.domain.symptomflow.SymptomStep.EARLIEST_SYMPTOM
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_DAYS
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_HIGHEST_TEMPERATURE
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_TEMPERATURE_SPOT
@@ -40,6 +40,6 @@ class SymptomRouterImpl : SymptomRouter {
             FEVER_HIGHEST_TEMPERATURE -> actionGlobalFeverHighestTemperatureFragment()
             FEVER_TEMPERATURE_SPOT -> actionGlobalFeverTemperatureSpotFragment()
             FEVER_TEMPERATURE_SPOT_INPUT -> actionGlobalFeverTemperatureSpotInputFragment()
-            EARLIEST_SYMPTOM_DATE -> actionGlobalEarliestSymptomFragment()
+            EARLIEST_SYMPTOM -> actionGlobalEarliestSymptomFragment()
         }
 }
