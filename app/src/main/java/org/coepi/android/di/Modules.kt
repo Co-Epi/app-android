@@ -31,7 +31,6 @@ import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.common.UINotifierImpl
-import org.coepi.android.ui.container.ContainerViewModel
 import org.coepi.android.ui.debug.DebugBleObservable
 import org.coepi.android.ui.debug.DebugBleObservableImpl
 import org.coepi.android.ui.debug.DebugViewModel
@@ -75,7 +74,6 @@ val viewModelModule = module {
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
-    viewModel { ContainerViewModel(get()) }
     viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args) }
     viewModel { CoughTypeViewModel(get(), get()) }
     viewModel { CoughDurationViewModel(get(), get()) }

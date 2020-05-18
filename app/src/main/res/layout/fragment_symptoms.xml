@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/label_fragment_symptoms"
-            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white" />
 
         <TextView
             android:id="@+id/headline"

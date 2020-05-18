@@ -3,6 +3,7 @@ package org.coepi.android.ui.symptoms.fever
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
 import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toIsInProgress
@@ -17,7 +18,7 @@ class FeverTakenTodayViewModel (
 
     val isInProgress: LiveData<Boolean> = symptomFlowManager.sendReportState
         .toIsInProgress()
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(mainThread())
         .toLiveData()
 
     // TODO toggle? Does it make sense to let user clear selection?

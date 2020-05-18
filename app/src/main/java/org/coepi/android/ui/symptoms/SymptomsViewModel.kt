@@ -63,7 +63,17 @@ class SymptomsViewModel(
         disposables += checkedSymptomTrigger
             .withLatestFrom(selectedSymptomIds)
             .subscribe { (selectedSymptom, selectedIds) ->
-                selectedSymptomIds.onNext(selectedIds.toggle(selectedSymptom.symptom.id))
+                if (selectedSymptom.symptom.id == SymptomId.NONE && !selectedSymptom.isChecked) {
+                    // "No symptoms" selected. Unselect all other symptoms that were selected/highlighted
+                    selectedSymptomIds.onNext(emptySet<SymptomId>().toggle(selectedSymptom.symptom.id))
+                } else if (selectedSymptom.symptom.id == SymptomId.NONE && selectedIds.size == 1) {
+                    // "No symptoms" selected with no other symptoms highlighted. Only toggles NONE
+                    selectedSymptomIds.onNext(selectedIds.toggle(selectedSymptom.symptom.id))
+                } else {
+                    selectedSymptomIds.onNext(
+                        selectedIds.minus(SymptomId.NONE).toggle(selectedSymptom.symptom.id)
+                    )
+                }
             }
 
         disposables += submitTrigger
