@@ -86,6 +86,7 @@
             android:id="@+id/progress"
             style="@style/screen_progress_indicator"
             isVisible="@{vm.isInProgress}"
+            android:clickable="@{vm.isInProgress}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
