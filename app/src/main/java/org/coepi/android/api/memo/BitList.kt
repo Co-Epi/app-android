@@ -40,6 +40,10 @@ data class BitList(val bits: List<Boolean>) {
             .joinToString(separator = " ") { it.toBitString() }
 }
 
+@ExperimentalUnsignedTypes
+fun BitList.toUNibbleBitList(): BitList =
+    BitList(bits.fillUntilSize(4, false).take(4))
+
 private fun <T> List<T>.fillUntilSize(size: Int, with: T): List<T> {
     val mutableList = toMutableList()
     while (mutableList.size < size) {

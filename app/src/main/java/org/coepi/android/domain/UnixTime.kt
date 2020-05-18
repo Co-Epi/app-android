@@ -2,20 +2,20 @@ package org.coepi.android.domain
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import org.threeten.bp.Instant
+import java.io.Serializable
 import java.util.Date
 
 @Parcelize
-class UnixTime private constructor(val value: Long) : Parcelable {
+class UnixTime private constructor(val value: Long) : Parcelable, Serializable {
 
     companion object {
-        fun fromValue(value: Long): UnixTime =
-            UnixTime(value)
+        fun fromValue(value: Long): UnixTime = UnixTime(value)
+        fun minTimestamp(): UnixTime = UnixTime(0)
+        fun now(): UnixTime = fromDate(Date())
+        fun fromDate(date: Date) = UnixTime(date.time / 1000)
 
-        fun minTimestamp(): UnixTime =
-            UnixTime(0)
-
-        fun now(): UnixTime =
-            UnixTime(Date().time / 1000)
+        fun fromInstant(instant: Instant) = UnixTime(instant.epochSecond)
     }
 
     override fun equals(other: Any?): Boolean =

@@ -3,9 +3,9 @@ package org.coepi.android.tcn
 import io.reactivex.Observable
 
 interface TcnReportDao {
-    val reports: Observable<List<ReceivedTcnReport>>
+    val rawAlerts: Observable<List<RawAlert>>
 
-    fun all(): List<ReceivedTcnReport>
-    fun insert(report: TcnReport): Boolean
-    fun delete(report: SymptomReport)
+    fun all(): List<RawAlert>
+    fun insert(alert: RawAlert): Boolean
+    fun delete(alert: Alert)
 }

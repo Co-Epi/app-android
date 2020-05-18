@@ -6,8 +6,9 @@ import io.reactivex.subjects.PublishSubject.create
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.coepi.android.api.TcnApi
-import org.coepi.android.common.ApiSymptomsMapper
-import org.coepi.android.api.memo.MemoMapper
+import org.coepi.android.api.publicreport.PublicReportMapper
+import org.coepi.android.api.publicreport.shouldBeSent
+import org.coepi.android.common.ApiReportMapper
 import org.coepi.android.common.Result
 import org.coepi.android.common.Result.Success
 import org.coepi.android.common.doIfError
@@ -20,40 +21,49 @@ import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.VoidOperationState
-import java.util.UUID
 
 interface TcnReportRepo {
-    val reports: Observable<List<SymptomReport>>
+    val alerts: Observable<List<Alert>>
 
     val sendState: Observable<VoidOperationState>
 
-    fun delete(report: SymptomReport)
+    fun delete(report: Alert)
 
     fun submitReport(inputs: SymptomInputs): Result<Unit, Throwable>
 }
 
+@ExperimentalUnsignedTypes
 class TcnReportRepoImpl(
     private val tcnReportDao: TcnReportDao,
-    private val symptomsProcessor: ApiSymptomsMapper,
-    private val api: TcnApi
+    private val apiReportMapper: ApiReportMapper,
+    private val api: TcnApi,
+    private val publicReportMapper: PublicReportMapper
 ) : TcnReportRepo {
 
     override val sendState: PublishSubject<VoidOperationState> = create()
 
-    override val reports: Observable<List<SymptomReport>> = tcnReportDao.reports.map { reports ->
-        reports.mapNotNull { report ->
-            symptomsProcessor.fromTcnReport(report.report).also { symptomReport ->
-                if (symptomReport == null) {
-                    log.e("Couldn't parse report: $symptomReport. Skipped.")
+    override val alerts: Observable<List<Alert>> = tcnReportDao.rawAlerts.map { rawAlerts ->
+        rawAlerts.mapNotNull { rawAlert ->
+            apiReportMapper.fromRawAlert(rawAlert).also { alert ->
+                if (alert == null) {
+                    log.e("Couldn't raw alert: $alert. Skipped.")
                 }
             }
         }
     }
 
     override fun submitReport(inputs: SymptomInputs): Result<Unit, Throwable> {
+        val publicReport = publicReportMapper.toPublicReport(inputs)
+
+        if (!publicReport.shouldBeSent()) {
+            log.i("Public report: $publicReport doesn't contain infos relevant to other " +
+                    "users. Not sending.")
+            return Success(Unit)
+        }
+
         sendState.onNext(Progress)
 
-        return symptomsProcessor.toApiReport(inputs).let { apiReport ->
+        return apiReportMapper.toApiReport(publicReport).let { apiReport ->
             // NOTE: Needs to be sent as text/plain to not add quotes
             val requestBody = apiReport.toRequestBody("text/plain".toMediaType())
             api.postReport(requestBody).executeSafe().flatMap {
@@ -72,7 +82,7 @@ class TcnReportRepoImpl(
         }
     }
 
-    override fun delete(report: SymptomReport) {
+    override fun delete(report: Alert) {
         tcnReportDao.delete(report)
     }
 }
