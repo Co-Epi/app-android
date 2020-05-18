@@ -25,10 +25,10 @@ class EarliestSymptomViewModel(
 
     fun onDurationChanged(durationStr: String) {
         if (durationStr.isEmpty()) {
-            symptomFlowManager.setEarliestSymptom(None)
+            symptomFlowManager.setEarliestSymptomDays(None)
         } else {
             val duration: Int = durationStr.toIntOrNull() ?: error("Invalid input: $durationStr")
-            symptomFlowManager.setEarliestSymptom(Some(Days(duration)))
+            symptomFlowManager.setEarliestSymptomDays(Some(Days(duration)))
         }
     }
 

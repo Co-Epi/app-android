@@ -8,10 +8,10 @@ import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughStatu
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughTypeFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalBreathlessFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalDebug
+import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalEarliestSymptomFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverHighestTemperatureFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTemperatureSpotFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTemperatureSpotInputFragment
-import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalEarliestSymptomFragment
 import org.coepi.android.domain.symptomflow.SymptomStep.BREATHLESSNESS_DESCRIPTION
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_DAYS
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_DESCRIPTION
