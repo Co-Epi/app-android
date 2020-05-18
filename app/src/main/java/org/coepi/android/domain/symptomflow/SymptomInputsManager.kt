@@ -98,8 +98,6 @@ class SymptomInputsManagerImpl :
     }
 
     override fun setEarliestSymptomStartedDaysAgo(days: UserInput<Int>) {
-        //There's no need to check if the ID's contain EARLIESTSYMPTOM because
-        //earliest symptom needs to get checked no matter what (kinda like thanks screen)
         inputs = inputs.copy(earliestSymptom = inputs.earliestSymptom.copy(time = days.map {
             // TODO unit tests for days <-> timestamp
             Instant.now().minus(it.toLong(), DAYS).toUnixTime()
