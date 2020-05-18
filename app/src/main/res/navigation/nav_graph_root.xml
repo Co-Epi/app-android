@@ -89,15 +89,7 @@
         android:label="earliestSymptomFragment"
         tools:layout="@layout/fragment_earliest_symptom"/>
     <action android:id="@+id/action_global_earliestSymptomFragment" app:destination="@id/earliestSymptomFragment" />
-
-
-    <fragment
-        android:id="@+id/earliestSymptomFragment"
-        android:name="org.coepi.android.ui.symptoms.earliestsymptom.EarliestSymptomFragment"
-        android:label="earliestSymptomFragment"
-        tools:layout="@layout/fragment_earliest_symptom"/>
-    <action android:id="@+id/action_global_earliestSymptomFragment" app:destination="@id/earliestSymptomFragment" />
-
+    
 
     <fragment
         android:id="@+id/coughTypeFragment"
