@@ -3,7 +3,6 @@ package org.coepi.android.domain.symptomflow
 import org.coepi.android.domain.model.Temperature
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
-import org.coepi.android.domain.symptomflow.SymptomId.EARLIESTSYMPTOM
 import org.coepi.android.domain.symptomflow.SymptomId.FEVER
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
@@ -51,7 +50,6 @@ class SymptomInputsManagerImpl :
                 COUGH -> acc.copy(cough = Cough())
                 BREATHLESSNESS -> acc.copy(breathlessness = Breathlessness())
                 FEVER -> acc.copy(fever = Fever())
-                EARLIESTSYMPTOM -> acc.copy(earliestSymptom = EarliestSymptom())
                 else -> {
                     log.i("TODO handle inputs: $e")
                     acc
@@ -100,8 +98,6 @@ class SymptomInputsManagerImpl :
     }
 
     override fun setEarliestSymptomStartedDaysAgo(days: UserInput<Int>) {
-        //There's no need to check if the ID's contain EARLIESTSYMPTOM because
-        //earliest symptom needs to get checked no matter what (kinda like thanks screen)
         inputs = inputs.copy(earliestSymptom = inputs.earliestSymptom.copy(time = days.map {
             // TODO unit tests for days <-> timestamp
             Instant.now().minus(it.toLong(), DAYS).toUnixTime()
