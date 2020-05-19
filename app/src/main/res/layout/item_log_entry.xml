@@ -21,7 +21,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="@{item.level.text}"
-            android:textSize="12dp"
+            android:textSize="12sp"
             tools:text="Verbose" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@{item.text}"
-            android:textSize="12dp"
+            android:textSize="12sp"
             tools:text="Some Message" />
 
     </LinearLayout>

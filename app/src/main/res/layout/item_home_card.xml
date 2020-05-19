@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="org.coepi.android.domain.model.HomeCard" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/home_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:orientation="vertical">
+
+            <!--            TODO: add app:isVisible="@{vm.newAlerts}"-->
+            <TextView
+                android:id="@+id/alert_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_line_height"
+                android:text="@{item.title}"
+                android:textColor="@color/red"
+                android:textSize="17sp"
+                tools:text="2 new exposures detected" />
+
+            <TextView
+                android:id="@+id/card_title"
+                style="@style/card_view_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_line_height"
+                android:text="@string/home_contact_alerts_card_title" />
+
+            <TextView
+                android:id="@+id/card_description"
+                style="@style/card_view_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_line_height"
+                android:layout_marginBottom="@dimen/default_line_height"
+                android:text="@{item.message}" />
+        </LinearLayout>
+
+        <!--    TODO: add app:isVisible="@{item.newAlerts}"-->
+        <!--        <ImageView-->
+        <!--            android:id="@+id/alert_icon"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:elevation="2dp"-->
+        <!--            android:src="@drawable/ic_alert_circle"-->
+        <!--            android:translationX="-8dp"-->
+        <!--            android:translationY="-8dp"-->
+        <!--            app:isVisible="false"/>-->
+    </androidx.cardview.widget.CardView>
+
+</layout>
