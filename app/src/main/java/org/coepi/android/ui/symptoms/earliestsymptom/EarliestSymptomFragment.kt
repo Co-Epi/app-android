@@ -34,18 +34,9 @@ class EarliestSymptomFragment : Fragment() {
     }.root
 
     override fun onStop() {
-        hideKeyboardFrom(this.requireContext(),
-            this.requireView())
+        val imm: InputMethodManager =
+            context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
         super.onStop()
     }
-
-    private fun hideKeyboardFrom(
-        context: Context,
-        view: View
-    ) {
-        val imm: InputMethodManager =
-            context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
 }
