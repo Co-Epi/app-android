@@ -42,7 +42,7 @@ private fun provideRetrofit() : Retrofit {
     return Retrofit.Builder()
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("https://zmqh8rwdx4.execute-api.us-west-2.amazonaws.com/v4/0.4.0/")
+        .baseUrl("https://zmqh8rwdx4.execute-api.us-west-2.amazonaws.com/v4/")
         .client(client)
         .build()
 }
