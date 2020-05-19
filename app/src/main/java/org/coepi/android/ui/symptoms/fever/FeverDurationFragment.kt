@@ -2,14 +2,12 @@ package org.coepi.android.ui.symptoms.fever
 
 
 import android.app.Activity
-import android.content.Context
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import org.coepi.android.databinding.FragmentFeverDurationBinding
 import org.coepi.android.databinding.FragmentFeverDurationBinding.inflate
 import org.coepi.android.ui.extensions.onBack
 import org.coepi.android.ui.extensions.onTextChanged
