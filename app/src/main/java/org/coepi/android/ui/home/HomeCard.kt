@@ -1,12 +1,12 @@
-package org.coepi.android.domain.model
+package org.coepi.android.ui.home
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import org.coepi.android.ui.home.HomeCardId
 
 @Parcelize
 data class HomeCard(
     val cardId: HomeCardId,
     val title: String,
-    val message: String
+    val message: String,
+    val newAlerts: Boolean
 ) : Parcelable

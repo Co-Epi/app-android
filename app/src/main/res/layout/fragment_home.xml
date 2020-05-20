@@ -41,19 +41,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/logo" />
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/home_cards_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="45dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toTopOf="@id/home_title"
+            android:layout_marginEnd="45dp"
+            app:layout_constraintBottom_toTopOf="@+id/privacy_link"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/privacy_link" />
+            app:layout_constraintTop_toBottomOf="@id/home_title" />
 
         <TextView
             android:id="@+id/privacy_link"
@@ -65,9 +63,9 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/version"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/home_cards_recycler_view" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/version"

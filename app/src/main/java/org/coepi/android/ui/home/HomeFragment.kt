@@ -39,6 +39,4 @@ class HomeFragment : Fragment() {
         adapter.submitList(viewModel.homeCardItems.toMutableList())
 
     }.root
-
-
 }

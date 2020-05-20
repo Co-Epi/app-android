@@ -7,10 +7,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.subjects.PublishSubject
-import org.coepi.android.R
 import org.coepi.android.R.plurals
+import org.coepi.android.R.string
 import org.coepi.android.R.string.home_version
-import org.coepi.android.domain.model.HomeCard
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.EnvInfos
@@ -35,19 +34,19 @@ class HomeViewModel(
     alertsRepo: AlertsRepo
 ) : ViewModel() {
 
+    // TODO: add this to separate repo like how we do Symptoms
     val homeCardItems = listOf(
         HomeCard(
             CHECK_IN,
-            resources.getString(R.string.home_my_health_card_title),
-            resources.getString(R.string.home_my_health_card_description)
+            resources.getString(string.home_my_health_card_title),
+            resources.getString(string.home_my_health_card_description), false
         ),
         HomeCard(
             SEE_ALERTS,
-            resources.getString(R.string.home_contact_alerts_card_title),
-            resources.getString(R.string.home_contact_alerts_card_description)
+            resources.getString(string.home_contact_alerts_card_title),
+            resources.getString(string.home_contact_alerts_card_description), true
         )
     )
-
 
     private val disposables = CompositeDisposable()
 
@@ -67,6 +66,7 @@ class HomeViewModel(
         just(resources.getString(home_version, envInfos.appVersionString()))
             .toLiveData()
 
+    // TODO: update alerts badge for HomeCard items
     val newAlerts: LiveData<Boolean> = alertsRepo.alerts
         .map { it.isNotEmpty() }
         .startWith { false }
@@ -78,15 +78,6 @@ class HomeViewModel(
         .startWith(title(0))
         .observeOn(mainThread())
         .toLiveData()
-
-
-//    fun onCheckInClick() {
-//        rootNav.navigate(ToDestination(actionGlobalSymptomsFragment()))
-//    }
-//
-//    fun onSeeAlertsClick() {
-//        rootNav.navigate(ToDestination(actionGlobalAlerts()))
-//    }
 
     fun onClicked(item: HomeCard) {
         homeCardClickSubject.onNext(item)

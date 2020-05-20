@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.coepi.android.databinding.ItemHomeCardBinding
 import org.coepi.android.databinding.ItemHomeCardBinding.inflate
-import org.coepi.android.domain.model.HomeCard
 import org.coepi.android.ui.home.HomeAdapter.ViewHolder
 
 class HomeAdapter(
