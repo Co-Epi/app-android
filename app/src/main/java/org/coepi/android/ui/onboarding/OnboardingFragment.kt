@@ -8,21 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_onboarding.*
-import org.coepi.android.R
 import org.coepi.android.R.string
 import org.coepi.android.databinding.FragmentOnboardingBinding.inflate
 import org.coepi.android.ui.onboarding.OnboardingCard.LargeOnboardingCard
 import org.coepi.android.ui.onboarding.OnboardingCard.SmallOnboardingCard
-import org.coepi.android.ui.onboarding.OnboardingClickEvent.faqClicked
-import org.coepi.android.ui.onboarding.OnboardingClickEvent.joinClicked
-import org.coepi.android.ui.onboarding.OnboardingClickEvent.nextClicked
-import org.coepi.android.ui.onboarding.OnboardingClickEvent.privacyLinkClicked
+import org.coepi.android.ui.onboarding.OnboardingClickEvent.FaqClicked
+import org.coepi.android.ui.onboarding.OnboardingClickEvent.JoinClicked
+import org.coepi.android.ui.onboarding.OnboardingClickEvent.NextClicked
+import org.coepi.android.ui.onboarding.OnboardingClickEvent.PrivacyLinkClicked
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingFragment : Fragment() {
@@ -55,16 +53,16 @@ class OnboardingFragment : Fragment() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         when (it) {
-                            is nextClicked ->
+                            is NextClicked ->
                                 onboarding_info_recycler.layoutManager?.scrollToPosition(it.currentPosition + 1)
 
-                            is privacyLinkClicked -> startActivity(
+                            is PrivacyLinkClicked -> startActivity(
                                 Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_WEBPAGE_URL))
                             )
 
-                            is joinClicked -> viewModel.onCloseClick()
+                            is JoinClicked -> viewModel.onCloseClick()
 
-                            is faqClicked -> startActivity(
+                            is FaqClicked -> startActivity(
                                 Intent(Intent.ACTION_VIEW, Uri.parse(FAQ_WEBPAGE_URL)
                                 )
                             )

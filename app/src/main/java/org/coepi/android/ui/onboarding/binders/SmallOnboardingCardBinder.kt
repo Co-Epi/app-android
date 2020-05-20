@@ -27,11 +27,11 @@ object SmallOnboardingCardBinder: OnboardingCardBinder {
         }
 
         itemView.data_usage_link_label.setOnClickListener {
-            onboardingEventSubject.onNext(OnboardingClickEvent.privacyLinkClicked())
+            onboardingEventSubject.onNext(OnboardingClickEvent.PrivacyLinkClicked)
         }
 
         itemView.onboarding_card_small_next_button.setOnClickListener {
-            onboardingEventSubject.onNext(OnboardingClickEvent.nextClicked(onboardingCard.order))
+            onboardingEventSubject.onNext(OnboardingClickEvent.NextClicked(onboardingCard.order))
         }
     }
 }

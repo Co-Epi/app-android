@@ -20,15 +20,15 @@ object LargeOnboardingCardBinder: OnboardingCardBinder {
         itemView.onboarding_card_large_content.text = onboardingCard.message
 
         itemView.onboarding_card_large_join_button.setOnClickListener {
-            onboardingEventSubject.onNext(OnboardingClickEvent.joinClicked())
+            onboardingEventSubject.onNext(OnboardingClickEvent.JoinClicked)
         }
 
         itemView.onboarding_card_large_faq_button.setOnClickListener {
-            onboardingEventSubject.onNext(OnboardingClickEvent.faqClicked())
+            onboardingEventSubject.onNext(OnboardingClickEvent.FaqClicked)
         }
 
         itemView.data_usage_link_label.setOnClickListener {
-            onboardingEventSubject.onNext(OnboardingClickEvent.privacyLinkClicked())
+            onboardingEventSubject.onNext(OnboardingClickEvent.PrivacyLinkClicked)
         }
 
     }
