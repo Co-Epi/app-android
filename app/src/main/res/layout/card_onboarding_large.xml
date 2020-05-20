@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_onboarding_large_root"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/large_card_view_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/onboarding_card_large_height"
+        android:background="@drawable/background_onboarding_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/onboarding_card_large_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_line_height"
+            android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
+            style="@style/card_view_title"
+            android:textSize="19sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="@string/onboarding_card_title_4" />
+
+        <TextView
+            android:id="@+id/onboarding_card_large_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_line_height"
+            android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
+            android:layout_marginEnd="@dimen/onboarding_card_text_horizontal_margins"
+            android:textColor="#DE000000"
+            android:letterSpacing="0.02"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_card_large_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="@string/onboarding_card_content_4" />
+
+        <Button
+            android:id="@+id/onboarding_card_large_join_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/ButtonUnselected"
+            android:text="@string/onboarding_join_button_label"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
+            android:layout_marginEnd="@dimen/onboarding_card_text_horizontal_margins"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_card_large_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/onboarding_card_large_faq_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/ButtonUnselected"
+            android:text="@string/onboarding_faq_button_label"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
+            android:layout_marginEnd="@dimen/onboarding_card_text_horizontal_margins"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_card_large_join_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/data_usage_link_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textSize="12sp"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginTop="@dimen/default_line_height"
+            android:text="@string/onboarding_data_usage_link_label"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_card_large_faq_button"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <LinearLayout
+            android:id="@+id/card_progress_icons_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="@dimen/margin_40"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/data_usage_link_label"
+            app:layout_constraintStart_toStartOf="@id/data_usage_link_label"
+            app:layout_constraintBottom_toBottomOf="parent" >
+
+            <ImageView
+                android:id="@+id/progress_icon_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:src="@drawable/stepper_icon_unselected" />
+
+            <ImageView
+                android:id="@+id/progress_icon_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:src="@drawable/stepper_icon_unselected" />
+
+            <ImageView
+                android:id="@+id/progress_icon_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:src="@drawable/stepper_icon_unselected" />
+
+            <ImageView
+                android:id="@+id/progress_icon_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/stepper_icon_selected" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

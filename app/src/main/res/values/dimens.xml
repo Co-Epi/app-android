@@ -4,5 +4,11 @@
     <dimen name="margin_40">40dp</dimen>
     <dimen name="margin_80">80dp</dimen>
     <dimen name="default_line_height">26dp</dimen>
-    <dimen name="max_elevation_for_overlays">1000dp</dimen>
+
+    <!-- Onboarding Screen -->
+    <dimen name="onboarding_card_small_height">336dp</dimen>
+    <dimen name="onboarding_card_large_height">504dp</dimen>
+    <dimen name="onboarding_card_text_horizontal_margins">34dp</dimen>
+    <dimen name="onboarding_card_data_link_label_margin_top">136dp</dimen>
+
 </resources>

@@ -64,6 +64,38 @@
         <item quantity="one">%s new exposure detected</item>
         <item quantity="other">%s new exposures detected</item>
     </plurals>
+    
+    <!-- Onboarding -->
+    <string name="onboarding_card_title_1">Track where you\'ve been.</string>
+    <string name="onboarding_card_title_2">Monitor your health</string>
+    <string name="onboarding_card_title_3">Stay informed</string>
+    <string name="onboarding_card_title_4">Collaborate. Inform. Protect.</string>
+
+    <string name="onboarding_card_content_1">Know if you\'ve come in contact with
+        others who may have been contagious
+        based on proximity, arrival times, and departure times.
+    </string>
+
+    <string name="onboarding_card_content_2">Along with your community, <b>monitor your health,</b>
+        and if relevant, the health of <b>your family.</b>
+        Help keep yourself and others safe!
+    </string>
+
+    <string name="onboarding_card_content_3">Get <b>contextualized alerts</b> about exposure to transmissable illnesses,
+        including <b>locations and times,</b>
+        giving you time to seek medical attention.
+    </string>
+
+    <string name="onboarding_card_content_4">Halt the spread of contagious illnesses.View <b>screening tests and
+        results,</b> find the <b>right advice,</b> and above all,
+        <b>understand and stop the spread of disease.</b>
+    </string>
+
+    <string name="onboarding_data_usage_link_label"><u>How will my data be used?</u></string>
+    <string name="onboarding_next_button_label">NEXT</string>
+    <string name="onboarding_join_button_label">Join</string>
+    <string name="onboarding_faq_button_label">Frequently Asked Questions</string>
+    
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
