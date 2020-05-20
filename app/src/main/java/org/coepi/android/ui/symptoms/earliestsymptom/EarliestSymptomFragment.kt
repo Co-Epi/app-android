@@ -25,7 +25,9 @@ class EarliestSymptomFragment : Fragment() {
             viewModel.onDurationChanged(it)
         }
 
+        
         onBack { viewModel.onBack() }
         toolbar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }.root
+
 }
