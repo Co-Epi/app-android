@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.coepi.android.databinding.FragmentFeverTemperatureSpotBinding.inflate
+import org.coepi.android.ui.common.KeyboardHider
 import org.coepi.android.ui.extensions.onBack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,4 +23,9 @@ class FeverTemperatureSpotFragment : Fragment() {
         onBack { viewModel.onBack() }
         toolbar.setNavigationOnClickListener { viewModel.onBackPressed() }
     }.root
+
+    override fun onStop() {
+        KeyboardHider().hideKeyboard(this.requireContext(), this.requireView())
+        super.onStop()
+    }
 }

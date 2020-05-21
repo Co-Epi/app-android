@@ -9,10 +9,10 @@ import retrofit2.http.Query
 
 interface TcnApi {
 
-    @GET("tcnreport/")
+    @GET("tcnreport/0.4.0")
     fun getReports(@Query("intervalNumber") intervalNumber: Long,
                    @Query("intervalLength") intervalLength: Long): Call<List<String>>
 
-    @POST("tcnreport/")
+    @POST("tcnreport/0.4.0")
     fun postReport(@Body report: RequestBody): Call<Unit>
 }

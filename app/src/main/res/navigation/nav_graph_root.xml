@@ -89,7 +89,7 @@
         android:label="earliestSymptomFragment"
         tools:layout="@layout/fragment_earliest_symptom"/>
     <action android:id="@+id/action_global_earliestSymptomFragment" app:destination="@id/earliestSymptomFragment" />
-
+    
 
     <fragment
         android:id="@+id/coughTypeFragment"
@@ -171,6 +171,7 @@
     <action
         android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
+
 
 
 </navigation>
