@@ -20,7 +20,7 @@ interface SymptomRepo {
 
 class SymptomRepoImpl(reportRepo: TcnReportRepo): SymptomRepo {
 
-    // TODO: locallize strings
+    // TODO: localize strings
     override fun symptoms(): Single<List<Symptom>> = just(listOf(
         Symptom(NONE, "I don\'t have any symptoms today"),
         Symptom(COUGH, "Cough"),
