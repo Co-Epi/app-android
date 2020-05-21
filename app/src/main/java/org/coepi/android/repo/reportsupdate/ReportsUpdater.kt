@@ -39,8 +39,6 @@ import org.coepi.android.tcn.RawAlert
 import org.coepi.android.tcn.TcnReportDao
 import org.tcncoalition.tcnclient.crypto.SignedReport
 import java.lang.System.currentTimeMillis
-import java.nio.charset.StandardCharsets.UTF_8
-import kotlin.text.Charsets.US_ASCII
 
 interface ReportsUpdater {
     fun requestUpdateReports()
