@@ -34,23 +34,38 @@ class HomeViewModel(
     alertsRepo: AlertsRepo
 ) : ViewModel() {
 
-    // TODO: add this to separate repo like how we do Symptoms
-    val homeCardItems = listOf(
-        HomeCard(
-            CHECK_IN,
-            resources.getString(string.home_my_health_card_title),
-            resources.getString(string.home_my_health_card_description), false
-        ),
-        HomeCard(
-            SEE_ALERTS,
-            resources.getString(string.home_contact_alerts_card_title),
-            resources.getString(string.home_contact_alerts_card_description), true
-        )
-    )
+    private val newAlerts: LiveData<Boolean> = alertsRepo.alerts
+        .map { it.isNotEmpty() }
+        .startWith { false }
+        .observeOn(mainThread())
+        .toLiveData()
 
     private val disposables = CompositeDisposable()
 
     private val homeCardClickSubject: PublishSubject<HomeCard> = PublishSubject.create()
+
+    val versionString: LiveData<String> =
+        just(resources.getString(home_version, envInfos.appVersionString()))
+            .toLiveData()
+
+    val title: LiveData<String> = alertsRepo.alerts
+        .map { title(it.size) }
+        .startWith(title(0))
+        .observeOn(mainThread())
+        .toLiveData()
+
+    val homeCardItems = listOf(
+        HomeCard(
+            CHECK_IN,
+            resources.getString(string.home_my_health_card_title),
+            resources.getString(string.home_my_health_card_description), newAlerts()
+        ),
+        HomeCard(
+            SEE_ALERTS,
+            resources.getString(string.home_contact_alerts_card_title),
+            resources.getString(string.home_contact_alerts_card_description), newAlerts()
+        )
+    )
 
     init {
         disposables += homeCardClickSubject
@@ -62,29 +77,17 @@ class HomeViewModel(
             }
     }
 
-    val versionString: LiveData<String> =
-        just(resources.getString(home_version, envInfos.appVersionString()))
-            .toLiveData()
-
-    // TODO: update alerts badge for HomeCard items
-    val newAlerts: LiveData<Boolean> = alertsRepo.alerts
-        .map { it.isNotEmpty() }
-        .startWith { false }
-        .observeOn(mainThread())
-        .toLiveData()
-
-    val title: LiveData<String> = alertsRepo.alerts
-        .map { title(it.size) }
-        .startWith(title(0))
-        .observeOn(mainThread())
-        .toLiveData()
-
     fun onClicked(item: HomeCard) {
         homeCardClickSubject.onNext(item)
     }
 
     fun onDebugClick() {
         rootNav.navigate(ToDirections(actionGlobalDebug()))
+    }
+
+    private fun newAlerts(): Boolean {
+        newAlerts.value?.let { return it }
+        return false
     }
 
     private fun EnvInfos.appVersionString() = "$appVersionName ($appVersionCode)"
