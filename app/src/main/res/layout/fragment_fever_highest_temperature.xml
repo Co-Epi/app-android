@@ -89,16 +89,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fever_temp" />
 
-        <org.coepi.android.ui.extensions.ProgressBarViewExtension
-            android:id="@+id/progress"
-            style="@style/screen_progress_indicator"
-            isVisible="@{vm.isInProgress}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            layout="@layout/progress_bar_layout"
+            isVisible="@{vm.isInProgress}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
