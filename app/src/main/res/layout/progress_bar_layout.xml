@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
         <import type="android.view.View"/>
         <variable
-            name="isVisible"
+            name="visibility"
             type="boolean"/>
     </data>
     <FrameLayout
@@ -12,8 +12,8 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
-        android:elevation="@dimen/max_elevation"
-        android:visibility="@{isVisible ? View.VISIBLE : View.GONE}">
+        android:elevation="@dimen/max_elevation_for_overlays"
+        isVisible="@{visibility ? View.VISIBLE : View.GONE}">
         <ProgressBar
             android:id="@+id/progress"
             style="@style/screen_progress_indicator"

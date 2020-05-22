@@ -148,7 +148,11 @@
 
         <include
             layout="@layout/progress_bar_layout"
-            isVisible="@{vm.isInProgress}"/>
+            isVisible="@{vm.isInProgress}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
