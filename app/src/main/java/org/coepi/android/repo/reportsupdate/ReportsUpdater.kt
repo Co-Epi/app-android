@@ -22,6 +22,7 @@ import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.extensions.base64ToByteArray
 import org.coepi.android.extensions.retrofit.executeSafe
+import org.coepi.android.extensions.toBase64String
 import org.coepi.android.extensions.toHex
 import org.coepi.android.extensions.toResult
 import org.coepi.android.system.Preferences
@@ -38,7 +39,6 @@ import org.coepi.android.tcn.RawAlert
 import org.coepi.android.tcn.TcnReportDao
 import org.tcncoalition.tcnclient.crypto.SignedReport
 import java.lang.System.currentTimeMillis
-import java.nio.charset.StandardCharsets.UTF_8
 
 interface ReportsUpdater {
     fun requestUpdateReports()
@@ -203,7 +203,7 @@ class ReportsUpdaterImpl(
         val insertedCount: Int = reports.map {
             reportsDao.insert(RawAlert(
                 id = it.report.signature.toByteArray().toHex(),
-                memoStr = it.report.report.memoData.toString(UTF_8),
+                memoStr = it.report.report.memoData.toBase64String(),
                 contactTime = it.contactTime
             ))
         }.filter { it }.size
