@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import org.coepi.android.databinding.FragmentHomeBinding.inflate
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,7 +30,7 @@ class HomeFragment : Fragment() {
 
         homeCardsRecyclerView.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, VERTICAL, false)
         }
 
         val adapter = HomeAdapter(onItemClicked = { item ->

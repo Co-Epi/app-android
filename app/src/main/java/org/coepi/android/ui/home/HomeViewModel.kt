@@ -8,7 +8,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.subjects.PublishSubject
 import org.coepi.android.R.plurals
-import org.coepi.android.R.string
+import org.coepi.android.R.string.home_contact_alerts_card_description
+import org.coepi.android.R.string.home_contact_alerts_card_title
+import org.coepi.android.R.string.home_my_health_card_description
+import org.coepi.android.R.string.home_my_health_card_title
 import org.coepi.android.R.string.home_version
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
@@ -16,15 +19,15 @@ import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlerts
 import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalDebug
-import org.coepi.android.ui.home.HomeCardId.CHECK_IN
-import org.coepi.android.ui.home.HomeCardId.SEE_ALERTS
+import org.coepi.android.ui.home.HomieCardId.SEE_ALERTS
+import org.coepi.android.ui.home.HomeCardId.SYMPTOM_REPORTING
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.symptoms.SymptomsFragmentDirections.Companion.actionGlobalSymptomsFragment
 
 enum class HomeCardId {
-    CHECK_IN, SEE_ALERTS
+    SYMPTOM_REPORTING, SEE_ALERTS
 }
 
 class HomeViewModel(
@@ -56,14 +59,14 @@ class HomeViewModel(
 
     val homeCardItems = listOf(
         HomeCard(
-            CHECK_IN,
-            resources.getString(string.home_my_health_card_title),
-            resources.getString(string.home_my_health_card_description), newAlerts()
+            SYMPTOM_REPORTING,
+            resources.getString(home_my_health_card_title),
+            resources.getString(home_my_health_card_description), newAlerts()
         ),
         HomeCard(
             SEE_ALERTS,
-            resources.getString(string.home_contact_alerts_card_title),
-            resources.getString(string.home_contact_alerts_card_description), newAlerts()
+            resources.getString(home_contact_alerts_card_title),
+            resources.getString(home_contact_alerts_card_description), newAlerts()
         )
     )
 
@@ -71,7 +74,7 @@ class HomeViewModel(
         disposables += homeCardClickSubject
             .subscribe { homeCardItem ->
                 when (homeCardItem.cardId) {
-                    CHECK_IN -> rootNav.navigate(ToDestination(actionGlobalSymptomsFragment()))
+                    SYMPTOM_REPORTING -> rootNav.navigate(ToDestination(actionGlobalSymptomsFragment()))
                     SEE_ALERTS -> rootNav.navigate(ToDestination(actionGlobalAlerts()))
                 }
             }

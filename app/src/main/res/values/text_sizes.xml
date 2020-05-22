@@ -3,6 +3,7 @@
     <dimen name="text_size_title">@dimen/text_size_100</dimen>
     <dimen name="text_size_headline">@dimen/text_size_50</dimen>
 
+    <dimen name="text_size_10">12sp</dimen>
     <dimen name="text_size_20">14sp</dimen>
     <dimen name="text_size_30">16sp</dimen>
     <dimen name="text_size_40">18sp</dimen>
