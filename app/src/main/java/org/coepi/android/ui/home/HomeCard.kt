@@ -8,5 +8,6 @@ data class HomeCard(
     val cardId: HomeCardId,
     val title: String,
     val message: String,
-    val newAlerts: Boolean
+    var newAlerts: Boolean = false,
+    var newAlertsTitle: String = ""
 ) : Parcelable

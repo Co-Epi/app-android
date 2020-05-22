@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import org.coepi.android.databinding.FragmentHomeBinding.inflate
+import org.coepi.android.extensions.observeWith
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
@@ -37,7 +38,10 @@ class HomeFragment : Fragment() {
             viewModel.onClicked(item)
         })
         homeCardsRecyclerView.adapter = adapter
-        adapter.submitList(viewModel.homeCardItems.toMutableList())
+        //adapter.submitList(viewModel.homeCardItems)
 
+        viewModel.homeCardObservable.observeWith(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }.root
 }

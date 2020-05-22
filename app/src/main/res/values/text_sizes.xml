@@ -8,5 +8,5 @@
     <dimen name="text_size_30">16sp</dimen>
     <dimen name="text_size_40">18sp</dimen>
     <dimen name="text_size_50">26sp</dimen>
-  <dimen name="text_size_100">72sp</dimen>
+    <dimen name="text_size_100">72sp</dimen>
 </resources>

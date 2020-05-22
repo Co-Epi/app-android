@@ -19,7 +19,7 @@ import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlerts
 import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalDebug
-import org.coepi.android.ui.home.HomieCardId.SEE_ALERTS
+import org.coepi.android.ui.home.HomeCardId.SEE_ALERTS
 import org.coepi.android.ui.home.HomeCardId.SYMPTOM_REPORTING
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
@@ -37,15 +37,32 @@ class HomeViewModel(
     alertsRepo: AlertsRepo
 ) : ViewModel() {
 
-    private val newAlerts: LiveData<Boolean> = alertsRepo.alerts
-        .map { it.isNotEmpty() }
-        .startWith { false }
-        .observeOn(mainThread())
-        .toLiveData()
-
     private val disposables = CompositeDisposable()
 
     private val homeCardClickSubject: PublishSubject<HomeCard> = PublishSubject.create()
+
+    var homeCardItems = listOf(
+        HomeCard(
+            SYMPTOM_REPORTING,
+            resources.getString(home_my_health_card_title),
+            resources.getString(home_my_health_card_description)
+        ),
+        HomeCard(
+            SEE_ALERTS,
+            resources.getString(home_contact_alerts_card_title),
+            resources.getString(home_contact_alerts_card_description)
+        )
+    ).toMutableList()
+
+    val homeCardObservable: LiveData<MutableList<HomeCard>> = alertsRepo.alerts
+        .map {
+            homeCardItems[1].newAlerts = it.isNotEmpty()
+            homeCardItems[1].newAlertsTitle = title(it.size)
+            return@map homeCardItems
+        }
+        .startWith { homeCardItems }
+        .observeOn(mainThread())
+        .toLiveData()
 
     val versionString: LiveData<String> =
         just(resources.getString(home_version, envInfos.appVersionString()))
@@ -57,19 +74,6 @@ class HomeViewModel(
         .observeOn(mainThread())
         .toLiveData()
 
-    val homeCardItems = listOf(
-        HomeCard(
-            SYMPTOM_REPORTING,
-            resources.getString(home_my_health_card_title),
-            resources.getString(home_my_health_card_description), newAlerts()
-        ),
-        HomeCard(
-            SEE_ALERTS,
-            resources.getString(home_contact_alerts_card_title),
-            resources.getString(home_contact_alerts_card_description), newAlerts()
-        )
-    )
-
     init {
         disposables += homeCardClickSubject
             .subscribe { homeCardItem ->
@@ -78,6 +82,7 @@ class HomeViewModel(
                     SEE_ALERTS -> rootNav.navigate(ToDestination(actionGlobalAlerts()))
                 }
             }
+
     }
 
     fun onClicked(item: HomeCard) {
@@ -86,11 +91,6 @@ class HomeViewModel(
 
     fun onDebugClick() {
         rootNav.navigate(ToDirections(actionGlobalDebug()))
-    }
-
-    private fun newAlerts(): Boolean {
-        newAlerts.value?.let { return it }
-        return false
     }
 
     private fun EnvInfos.appVersionString() = "$appVersionName ($appVersionCode)"
