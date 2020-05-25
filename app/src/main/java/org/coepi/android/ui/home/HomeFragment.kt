@@ -38,7 +38,6 @@ class HomeFragment : Fragment() {
             viewModel.onClicked(item)
         })
         homeCardsRecyclerView.adapter = adapter
-        //adapter.submitList(viewModel.homeCardItems)
 
         viewModel.homeCardObservable.observeWith(viewLifecycleOwner) {
             adapter.submitList(it)

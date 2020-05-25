@@ -17,6 +17,7 @@ import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
+import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlerts
 import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalDebug
 import org.coepi.android.ui.home.HomeCardId.SEE_ALERTS
@@ -41,7 +42,7 @@ class HomeViewModel(
 
     private val homeCardClickSubject: PublishSubject<HomeCard> = PublishSubject.create()
 
-    var homeCardItems = listOf(
+    private var homeCardItems = listOf(
         HomeCard(
             SYMPTOM_REPORTING,
             resources.getString(home_my_health_card_title),
@@ -52,15 +53,20 @@ class HomeViewModel(
             resources.getString(home_contact_alerts_card_title),
             resources.getString(home_contact_alerts_card_description)
         )
-    ).toMutableList()
+    )
 
-    val homeCardObservable: LiveData<MutableList<HomeCard>> = alertsRepo.alerts
-        .map {
-            homeCardItems[1].newAlerts = it.isNotEmpty()
-            homeCardItems[1].newAlertsTitle = title(it.size)
-            return@map homeCardItems
+    val homeCardObservable: LiveData<List<HomeCard>> = alertsRepo.alerts
+        .startWith(emptyList<List<Alert>>())
+        .distinctUntilChanged()
+        .map { alerts ->
+            homeCardItems.map {
+                if (it.cardId == SEE_ALERTS) {
+                    it.copy(newAlerts = alerts.isNotEmpty(), newAlertsTitle = title(alerts.size))
+                } else {
+                    it
+                }
+            }
         }
-        .startWith { homeCardItems }
         .observeOn(mainThread())
         .toLiveData()
 
