@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@{item.symptomName}"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_40"
             app:layout_constraintBottom_toBottomOf="@id/alert_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/alert_icon"
