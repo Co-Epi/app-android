@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 val repoModule = module {
     single { RealmProvider(androidApplication()) }
-    single<SymptomRepo> { SymptomRepoImpl(get()) }
+    single<SymptomRepo> { SymptomRepoImpl(get(), get()) }
     single<AlertsRepo> { AlertRepoImpl(get(), get()) }
     single<SymptomInputsManager> { SymptomInputsManagerImpl() }
     single { SymptomFlowManager(get(), get(), get(), get(), get()) }
