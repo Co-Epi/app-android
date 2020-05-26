@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.coepi.android.databinding.FragmentCoughTypeBinding
 import org.coepi.android.databinding.FragmentCoughTypeBinding.inflate
 import org.coepi.android.ui.extensions.onBack
 import org.koin.androidx.viewmodel.ext.android.viewModel
