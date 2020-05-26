@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@{item.exposureType}"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_40"
             app:layout_constraintStart_toEndOf="@id/alert_icon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Exposure type" />
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{item.contactTime}"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_40"
             app:layout_constraintStart_toStartOf="@id/exposure_type"
             app:layout_constraintTop_toBottomOf="@id/exposure_type"
             tools:text="Time" />
