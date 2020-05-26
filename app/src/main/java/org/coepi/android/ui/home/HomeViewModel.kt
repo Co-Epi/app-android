@@ -42,7 +42,7 @@ class HomeViewModel(
 
     private val homeCardClickSubject: PublishSubject<HomeCard> = PublishSubject.create()
 
-    private var homeCardItems = listOf(
+    private val homeCardItems = listOf(
         HomeCard(
             SYMPTOM_REPORTING,
             resources.getString(home_my_health_card_title),
