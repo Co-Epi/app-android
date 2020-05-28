@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import org.coepi.android.databinding.FragmentAlertsBinding.inflate
 import org.coepi.android.extensions.observeWith
+import org.coepi.android.ui.common.NotificationsObserver
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertsFragment: Fragment() {
