@@ -20,6 +20,7 @@ import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
+import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
 
@@ -70,6 +71,10 @@ class AlertsViewModel(
 
     fun onSwipeToRefresh() {
         alertsRepo.updateReports()
+    }
+
+    fun onBack() {
+        navigation.navigate(Back)
     }
 
     fun testAlertData(): MutableList<AlertViewData> {

@@ -21,6 +21,8 @@ class AlertsFragment : Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
+        toolbar.setNavigationOnClickListener { viewModel.onBack() }
+
         val alertsAdapter = AlertsAdapter(onAckClick = {
             viewModel.onAlertAckClick(it)
         }, onAlertClick = {
