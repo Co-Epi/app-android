@@ -19,9 +19,8 @@ class AlertsDetailsViewModel(
     val title: LiveData<String> = just(args.report.contactTime.toMonthAndDay())
         .toLiveData()
 
-    val reportedTime: LiveData<String> = just("Reported on ${args.report.report.earliestSymptomTime
-        .map { it.toTime() }} at ${args.report.report.earliestSymptomTime.map {it.toTime()}}")
-        .toLiveData()
+    //TODO Show when the symptoms were reported. Maybe the earliestSymptom Date?
+    val reportedTime: LiveData<String> = just(" ").toLiveData()
 
     private fun Alert.toViewData(): List<AlertDetailsSymptomViewData> =
         emptyList()
