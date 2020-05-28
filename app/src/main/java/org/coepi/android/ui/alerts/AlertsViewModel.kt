@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.R.plurals.alerts_new_notifications_count
+import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
+import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.api.publicreport.PublicReport
-import org.coepi.android.tcn.Alert
+import org.coepi.android.domain.UnixTime
+import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -14,6 +17,7 @@ import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationState.Success
 import org.coepi.android.system.rx.VoidOperationState
+import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
@@ -41,8 +45,9 @@ class AlertsViewModel(
         .observeOn(mainThread())
         .toLiveData()
 
+    // TODO: jedi change alert size
     private fun title(alertsSize: Int) =
-        resources.getQuantityString(alerts_new_notifications_count, alertsSize)
+        resources.getQuantityString(alerts_new_notifications_count, testAlertData().size)
 
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
@@ -67,10 +72,47 @@ class AlertsViewModel(
         alertsRepo.updateReports()
     }
 
+    fun testAlertData(): MutableList<AlertViewData> {
+
+        val report1 = PublicReport(
+            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
+            feverSeverity = SERIOUS,
+            breathlessness = true,
+            coughSeverity = EXISTING
+        )
+
+        val report2 = PublicReport(
+            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
+            feverSeverity = SERIOUS,
+            breathlessness = true,
+            coughSeverity = EXISTING
+        )
+
+        val report3 = PublicReport(
+            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
+            feverSeverity = SERIOUS,
+            breathlessness = true,
+            coughSeverity = EXISTING
+        )
+
+        return listOf(
+            AlertViewData(
+                "exposureType1", "contactTime3", Alert("id1", report1, UnixTime.fromValue(1589209754L))
+            ),
+            AlertViewData(
+                "exposureType2", "contactTime2", Alert("id2", report2, UnixTime.fromValue(1589209754L))
+            ),
+            AlertViewData(
+                "exposureType3", "contactTime3", Alert("id3", report3, UnixTime.fromValue(1589209754L))
+            )
+        ).toMutableList()
+
+    }
+
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
         when (operationState) {
             is NotStarted, is Success -> ""
             is Progress -> "Updating..."
             is Failure -> "Error updating: ${operationState.t}"
-    }
+        }
 }
