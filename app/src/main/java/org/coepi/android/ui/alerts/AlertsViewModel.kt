@@ -100,37 +100,6 @@ class AlertsViewModel(
         navigation.navigate(Back)
     }
 
-    fun testAlertData(): MutableList<AlertViewData> {
-
-        val report1 = PublicReport(
-            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
-            feverSeverity = SERIOUS,
-            breathlessness = true,
-            coughSeverity = EXISTING
-        )
-
-        val report2 = PublicReport(
-            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
-            feverSeverity = MILD,
-            breathlessness = false,
-            coughSeverity = DRY
-        )
-
-        val report3 = PublicReport(
-            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
-            feverSeverity = SERIOUS,
-            breathlessness = true,
-            coughSeverity = WET
-        )
-
-        return listOf(
-            Alert("id1", report1, UnixTime.fromValue(1589209754L)).toViewData(),
-            Alert("id2", report2, UnixTime.fromValue(1589209754L)).toViewData(),
-            Alert("id3", report3, UnixTime.fromValue(1589209754L)).toViewData()
-        ).toMutableList()
-
-    }
-
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
         when (operationState) {
             is NotStarted, is Success -> ""

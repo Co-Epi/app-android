@@ -66,14 +66,12 @@
     </plurals>
 
     <!-- Alerts -->
-    <!-- TODO: Remove old strings vvv-->
     <string name="alerts_button_acknowledge">Acknowledge</string>
     <plurals name="alerts_new_notifications_count">
         <item quantity="one">%s new contact alert</item>
         <item quantity="other">%s new contact alerts</item>
     </plurals>
     <string name="alerts_no_symptoms_reported">No symptoms reported</string>
-    <!-- TODO: Remove old strings ^^^-->
     <string name="alerts_headline">Exposure Alerts</string>
     <string name="alerts_learn_more">Click each alert to learn more</string>
     <string name="alerts_info_button">What are exposure alerts?</string>
