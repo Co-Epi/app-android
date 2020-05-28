@@ -77,6 +77,9 @@
     <string name="alerts_headline">Exposure Alerts</string>
     <string name="alerts_learn_more">Click each alert to learn more</string>
     <string name="alerts_info_button">What are exposure alerts?</string>
+    <string name="alerts_cough_report">cough</string>
+    <string name="alerts_fever_report">Fever</string>
+    <string name="alerts_breathlessness_report">Breathlessness</string>
 
     <!-- Alert details -->
     <!-- TODO clarify whether this is needed -->

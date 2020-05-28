@@ -23,9 +23,7 @@ class AlertsFragment : Fragment() {
 
         toolbar.setNavigationOnClickListener { viewModel.onBack() }
 
-        val alertsAdapter = AlertsAdapter(onAckClick = {
-            viewModel.onAlertAckClick(it)
-        }, onAlertClick = {
+        val alertsAdapter = AlertsAdapter(onAlertClick = {
             viewModel.onAlertClick(it)
         })
 

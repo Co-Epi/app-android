@@ -1,10 +1,20 @@
 package org.coepi.android.ui.alerts
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import org.coepi.android.R.plurals.alerts_new_notifications_count
+import org.coepi.android.R.string.alerts_breathlessness_report
+import org.coepi.android.R.string.alerts_cough_report
+import org.coepi.android.R.string.alerts_fever_report
+import org.coepi.android.R.string.symptom_report_cough_type_dry
+import org.coepi.android.R.string.symptom_report_cough_type_wet
+import org.coepi.android.api.publicreport.CoughSeverity
+import org.coepi.android.api.publicreport.CoughSeverity.DRY
 import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
+import org.coepi.android.api.publicreport.CoughSeverity.WET
+import org.coepi.android.api.publicreport.FeverSeverity
+import org.coepi.android.api.publicreport.FeverSeverity.MILD
 import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.domain.UnixTime
@@ -23,6 +33,7 @@ import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
+import java.text.SimpleDateFormat
 
 class AlertsViewModel(
     private val alertsRepo: AlertsRepo,
@@ -35,34 +46,46 @@ class AlertsViewModel(
         .observeOn(mainThread())
         .toLiveData()
 
-    val title: LiveData<String> = alertsRepo.alerts
-        .map { title(it.size) }
-        .startWith(title(0))
-        .observeOn(mainThread())
-        .toLiveData()
-
     val updateStatusText: LiveData<String> = alertsRepo.updateReportsState
         .map { toUpdateStatusText(it) }
         .observeOn(mainThread())
         .toLiveData()
 
-    // TODO: jedi change alert size
-    private fun title(alertsSize: Int) =
-        resources.getQuantityString(alerts_new_notifications_count, testAlertData().size)
-
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
             exposureType = report.toExposuresString(),
-            contactTime = contactTime.toDate().toString(), // TODO which date format?
+            contactTime = contactTime.toTimeString(),
             report = this
         )
 
-    private fun PublicReport.toExposuresString(): String =
-        "Fever: $feverSeverity, cough: $coughSeverity, breathlessness: $breathlessness, " +
-                "earliestSymptomTime: $earliestSymptomTime"
+    @SuppressLint("SimpleDateFormat")
+    private fun UnixTime.toTimeString(): String {
+        val sdf = SimpleDateFormat("h:mm a")
+        return sdf.format(toDate())
+    }
 
-    fun onAlertAckClick(alert: AlertViewData) {
-        alertsRepo.removeAlert(alert.report)
+    @SuppressLint("DefaultLocale")
+    private fun PublicReport.toExposuresString(): String {
+        val cough = when (coughSeverity) {
+            CoughSeverity.NONE -> ""
+            EXISTING -> resources.getString(alerts_cough_report).capitalize() + "\n"
+            WET -> resources.getString(symptom_report_cough_type_wet) + " " + resources.getString(
+                alerts_cough_report
+            ) + "\n"
+            DRY -> resources.getString(symptom_report_cough_type_dry) + " " + resources.getString(
+                alerts_cough_report
+            ) + "\n"
+        }
+
+        val breathless =
+            if (breathlessness) resources.getString(alerts_breathlessness_report) + "\n" else ""
+
+        val fever = when (feverSeverity) {
+            FeverSeverity.NONE -> ""
+            else -> resources.getString(alerts_fever_report)
+        }
+
+        return cough + breathless + fever
     }
 
     fun onAlertClick(alert: AlertViewData) {
@@ -88,28 +111,22 @@ class AlertsViewModel(
 
         val report2 = PublicReport(
             earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
-            feverSeverity = SERIOUS,
-            breathlessness = true,
-            coughSeverity = EXISTING
+            feverSeverity = MILD,
+            breathlessness = false,
+            coughSeverity = DRY
         )
 
         val report3 = PublicReport(
             earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
             feverSeverity = SERIOUS,
             breathlessness = true,
-            coughSeverity = EXISTING
+            coughSeverity = WET
         )
 
         return listOf(
-            AlertViewData(
-                "exposureType1", "contactTime3", Alert("id1", report1, UnixTime.fromValue(1589209754L))
-            ),
-            AlertViewData(
-                "exposureType2", "contactTime2", Alert("id2", report2, UnixTime.fromValue(1589209754L))
-            ),
-            AlertViewData(
-                "exposureType3", "contactTime3", Alert("id3", report3, UnixTime.fromValue(1589209754L))
-            )
+            Alert("id1", report1, UnixTime.fromValue(1589209754L)).toViewData(),
+            Alert("id2", report2, UnixTime.fromValue(1589209754L)).toViewData(),
+            Alert("id3", report3, UnixTime.fromValue(1589209754L)).toViewData()
         ).toMutableList()
 
     }
