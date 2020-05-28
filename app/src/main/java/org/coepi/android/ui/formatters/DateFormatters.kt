@@ -10,6 +10,13 @@ object DateFormatters {
 
 class DotDateFormatter {
     @SuppressLint("SimpleDateFormat")
-    val format = SimpleDateFormat("dd.MM.yyyy")
-    fun format(date: Date): String = format.format(date)
+    val formatDayMonthYear = SimpleDateFormat("dd.MM.yyyy")
+    @SuppressLint("SimpleDateFormat")
+    val formatMonthDay = SimpleDateFormat("MMM dd")
+    @SuppressLint("SimpleDateFormat")
+    val formatTime = SimpleDateFormat("h:mm a")
+
+    fun formatDayMonthYear(date: Date): String = formatDayMonthYear.format(date)
+    fun formatMonthDay(date: Date): String = formatMonthDay.format(date)
+    fun formatTime(date: Date): String = formatTime.format(date)
 }

@@ -16,8 +16,11 @@ class AlertsDetailsViewModel(
     val report: LiveData<List<AlertDetailsSymptomViewData>> = just(args.report.toViewData())
         .toLiveData()
 
-    // FIXME temporary title to identify the report. No design yet for this screen.
-    val title: LiveData<String> = just("Report: ${args.report.id}")
+    val title: LiveData<String> = just(args.report.contactTime.toMonthAndDay())
+        .toLiveData()
+
+    val reportedTime: LiveData<String> = just("Reported on ${args.report.report.earliestSymptomTime
+        .map { it.toTime() }} at ${args.report.report.earliestSymptomTime.map {it.toTime()}}")
         .toLiveData()
 
     private fun Alert.toViewData(): List<AlertDetailsSymptomViewData> =

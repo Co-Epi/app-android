@@ -4,7 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.R.plurals.alerts_new_notifications_count
+import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
+import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.api.publicreport.PublicReport
+import org.coepi.android.domain.UnixTime
+import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.tcn.Alert
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
