@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.R.string.alerts_breathlessness_report
 import org.coepi.android.R.string.alerts_cough_report
+import org.coepi.android.R.string.alerts_cough_report_detail
 import org.coepi.android.R.string.alerts_fever_report
 import org.coepi.android.R.string.symptom_report_cough_type_dry
 import org.coepi.android.R.string.symptom_report_cough_type_wet
@@ -14,8 +15,6 @@ import org.coepi.android.api.publicreport.CoughSeverity.DRY
 import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
 import org.coepi.android.api.publicreport.CoughSeverity.WET
 import org.coepi.android.api.publicreport.FeverSeverity
-import org.coepi.android.api.publicreport.PublicReport
-import org.coepi.android.domain.UnixTime
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -66,39 +65,38 @@ class AlertsViewModel(
      */
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
-            exposureType = report.toCoughString() + report.toBreathlessString() + report.toFeverString(),
-            contactTime = contactTime.toTimeString(),
+            exposureType = listOfNotNull(
+                report.coughSeverity.toUIString(),
+                toBreathlessnessString(report.breathlessness),
+                report.feverSeverity.toUIString()
+            ).joinToString("\n"),
+            contactTime = DateFormatters.timeFormatter.format(contactTime.toDate()),
             report = this
         )
 
-    private fun UnixTime.toTimeString(): String {
-        return DateFormatters.timeFormatter.format(toDate())
-    }
+    private fun toBreathlessnessString(breathless: Boolean): String? =
+        if (breathless) resources.getString(alerts_breathlessness_report) else null
 
-    @SuppressLint("DefaultLocale")
-    private fun PublicReport.toCoughString(): String {
-        return when (coughSeverity) {
-            CoughSeverity.NONE -> ""
-            EXISTING -> resources.getString(alerts_cough_report).capitalize() + "\n"
-            WET -> resources.getString(symptom_report_cough_type_wet) + " " + resources.getString(
-                alerts_cough_report
-            ) + "\n"
-            DRY -> resources.getString(symptom_report_cough_type_dry) + " " + resources.getString(
-                alerts_cough_report
-            ) + "\n"
-        }
-    }
-
-    private fun PublicReport.toBreathlessString(): String {
-        return if (breathlessness) resources.getString(alerts_breathlessness_report) + "\n" else ""
-    }
-
-    private fun PublicReport.toFeverString(): String {
-        return when (feverSeverity) {
-            FeverSeverity.NONE -> ""
+    private fun FeverSeverity.toUIString(): String? =
+        when (this) {
+            FeverSeverity.NONE -> null
             else -> resources.getString(alerts_fever_report)
         }
-    }
+
+    @SuppressLint("DefaultLocale")
+    private fun CoughSeverity.toUIString(): String? =
+        when (this) {
+            CoughSeverity.NONE -> null
+            EXISTING -> resources.getString(alerts_cough_report)
+            WET -> resources.getString(
+                alerts_cough_report_detail,
+                resources.getString(symptom_report_cough_type_wet)
+            )
+            DRY -> resources.getString(
+                alerts_cough_report_detail,
+                resources.getString(symptom_report_cough_type_dry)
+            )
+        }
 
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
         when (operationState) {
