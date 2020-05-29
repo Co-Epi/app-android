@@ -14,11 +14,8 @@ import org.coepi.android.api.publicreport.CoughSeverity.DRY
 import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
 import org.coepi.android.api.publicreport.CoughSeverity.WET
 import org.coepi.android.api.publicreport.FeverSeverity
-import org.coepi.android.api.publicreport.FeverSeverity.MILD
-import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.domain.UnixTime
-import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -30,10 +27,10 @@ import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
+import org.coepi.android.ui.formatters.DateFormatters
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
-import java.text.SimpleDateFormat
 
 class AlertsViewModel(
     private val alertsRepo: AlertsRepo,
@@ -51,43 +48,6 @@ class AlertsViewModel(
         .observeOn(mainThread())
         .toLiveData()
 
-    private fun Alert.toViewData(): AlertViewData =
-        AlertViewData(
-            exposureType = report.toExposuresString(),
-            contactTime = contactTime.toTimeString(),
-            report = this
-        )
-
-    @SuppressLint("SimpleDateFormat")
-    private fun UnixTime.toTimeString(): String {
-        val sdf = SimpleDateFormat("h:mm a")
-        return sdf.format(toDate())
-    }
-
-    @SuppressLint("DefaultLocale")
-    private fun PublicReport.toExposuresString(): String {
-        val cough = when (coughSeverity) {
-            CoughSeverity.NONE -> ""
-            EXISTING -> resources.getString(alerts_cough_report).capitalize() + "\n"
-            WET -> resources.getString(symptom_report_cough_type_wet) + " " + resources.getString(
-                alerts_cough_report
-            ) + "\n"
-            DRY -> resources.getString(symptom_report_cough_type_dry) + " " + resources.getString(
-                alerts_cough_report
-            ) + "\n"
-        }
-
-        val breathless =
-            if (breathlessness) resources.getString(alerts_breathlessness_report) + "\n" else ""
-
-        val fever = when (feverSeverity) {
-            FeverSeverity.NONE -> ""
-            else -> resources.getString(alerts_fever_report)
-        }
-
-        return cough + breathless + fever
-    }
-
     fun onAlertClick(alert: AlertViewData) {
         navigation.navigate(ToDirections(actionGlobalAlertsDetails(Args(alert.report))))
     }
@@ -98,6 +58,46 @@ class AlertsViewModel(
 
     fun onBack() {
         navigation.navigate(Back)
+    }
+
+    /**
+     * This function parses [Alert] objects received from the [AlertsRepo] into readable strings that get displayed
+     * in the recycler view item_alert views bound by the [AlertsAdapter]
+     */
+    private fun Alert.toViewData(): AlertViewData =
+        AlertViewData(
+            exposureType = report.toCoughString() + report.toBreathlessString() + report.toFeverString(),
+            contactTime = contactTime.toTimeString(),
+            report = this
+        )
+
+    private fun UnixTime.toTimeString(): String {
+        return DateFormatters.timeFormatter.format(toDate())
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun PublicReport.toCoughString(): String {
+        return when (coughSeverity) {
+            CoughSeverity.NONE -> ""
+            EXISTING -> resources.getString(alerts_cough_report).capitalize() + "\n"
+            WET -> resources.getString(symptom_report_cough_type_wet) + " " + resources.getString(
+                alerts_cough_report
+            ) + "\n"
+            DRY -> resources.getString(symptom_report_cough_type_dry) + " " + resources.getString(
+                alerts_cough_report
+            ) + "\n"
+        }
+    }
+
+    private fun PublicReport.toBreathlessString(): String {
+        return if (breathlessness) resources.getString(alerts_breathlessness_report) + "\n" else ""
+    }
+
+    private fun PublicReport.toFeverString(): String {
+        return when (feverSeverity) {
+            FeverSeverity.NONE -> ""
+            else -> resources.getString(alerts_fever_report)
+        }
     }
 
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
