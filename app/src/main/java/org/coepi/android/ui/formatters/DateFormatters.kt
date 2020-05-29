@@ -6,7 +6,7 @@ import java.util.Date
 
 object DateFormatters {
     val dotFormatter = DotDateFormatter()
-    val timeFormatter = TimeFormatter()
+    val hourMinuteFormatter = HourMinuteFormatter()
     val monthDayFormatter = MonthDayFormatter()
 }
 
@@ -17,7 +17,7 @@ class DotDateFormatter {
     fun formatDayMonthYear(date: Date): String = formatDayMonthYear.format(date)
 }
 
-class TimeFormatter {
+class HourMinuteFormatter {
     @SuppressLint("SimpleDateFormat")
     val formatTime = SimpleDateFormat("h:mm a")
 

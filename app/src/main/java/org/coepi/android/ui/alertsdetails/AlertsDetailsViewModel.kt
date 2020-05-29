@@ -21,7 +21,7 @@ class AlertsDetailsViewModel(
     val title: LiveData<String> = just(toMonthAndDay(args.report.contactTime))
         .toLiveData()
 
-    val exposureTime: LiveData<String> = just(toTime(args.report.contactTime))
+    val exposureTime: LiveData<String> = just(toHourMinute(args.report.contactTime))
         .toLiveData()
 
     //TODO Show when the symptoms were reported. Maybe the earliestSymptom Date?
@@ -35,13 +35,11 @@ class AlertsDetailsViewModel(
         // TODO map to localized names
         AlertDetailsSymptomViewData(ic_alert, name, this)
 
-    companion object {
-        fun toMonthAndDay(time: UnixTime ) =
-            DateFormatters.monthDayFormatter.formatMonthDay(time.toDate())
+    private fun toMonthAndDay(time: UnixTime ): String =
+        DateFormatters.monthDayFormatter.formatMonthDay(time.toDate())
 
-        fun toTime(time: UnixTime) =
-            DateFormatters.timeFormatter.formatTime(time.toDate())
-    }
+    private fun toHourMinute(time: UnixTime): String =
+        DateFormatters.hourMinuteFormatter.formatTime(time.toDate())
 }
 
 
