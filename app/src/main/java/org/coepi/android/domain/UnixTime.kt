@@ -29,7 +29,4 @@ class UnixTime private constructor(val value: Long) : Parcelable, Serializable {
     fun toDate() =
         Date(value * 1000)
 
-    fun toMonthAndDay() = DateFormatters.dotFormatter.formatMonthDay(toDate())
-
-    fun toTime() = DateFormatters.dotFormatter.formatTime(toDate())
 }
