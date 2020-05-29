@@ -25,7 +25,7 @@ data class BitList(val bits: List<Boolean>) {
             .toUByteArray()
 
     private fun List<Boolean>.asByteChunks(): List<List<Boolean>> =
-        fillUntilSize(ceil(bits.size / 8.0).toInt(), false)
+        fillUntilSize(ceil(size / 8.0).toInt() * 8, false)
         .chunked(8)
 
     private fun List<Boolean>.toBitString() =
