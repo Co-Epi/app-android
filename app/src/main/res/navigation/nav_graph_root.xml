@@ -48,6 +48,8 @@
     <action
         android:id="@+id/action_global_alerts"
         app:destination="@id/alerts"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
         app:popUpTo="@id/homeFragment" />
 
     <fragment
@@ -73,6 +75,8 @@
     <action
         android:id="@+id/action_global_symptomsFragment"
         app:destination="@id/symptomsFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
         app:popUpTo="@id/homeFragment" />
 
     <fragment
@@ -82,14 +86,20 @@
     <action
         android:id="@+id/action_global_thanksFragment"
         app:destination="@id/thanksFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
         app:popUpTo="@id/homeFragment" />
     <fragment
         android:id="@+id/earliestSymptomFragment"
         android:name="org.coepi.android.ui.symptoms.earliestsymptom.EarliestSymptomFragment"
         android:label="earliestSymptomFragment"
-        tools:layout="@layout/fragment_earliest_symptom"/>
-    <action android:id="@+id/action_global_earliestSymptomFragment" app:destination="@id/earliestSymptomFragment" />
-    
+        tools:layout="@layout/fragment_earliest_symptom" />
+    <action
+        android:id="@+id/action_global_earliestSymptomFragment"
+        app:destination="@id/earliestSymptomFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
+
 
     <fragment
         android:id="@+id/coughTypeFragment"
@@ -98,7 +108,9 @@
         tools:layout="@layout/fragment_cough_type" />
     <action
         android:id="@+id/action_global_coughTypeFragment"
-        app:destination="@id/coughTypeFragment" />
+        app:destination="@id/coughTypeFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/coughDurationFragment"
         android:name="org.coepi.android.ui.symptoms.cough.CoughDurationFragment"
@@ -114,7 +126,9 @@
         tools:layout="@layout/fragment_cough_status" />
     <action
         android:id="@+id/action_global_coughStatusFragment"
-        app:destination="@id/coughStatusFragment" />
+        app:destination="@id/coughStatusFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/breathlessFragment"
         android:name="org.coepi.android.ui.symptoms.breathless.BreathlessFragment"
@@ -122,7 +136,9 @@
         tools:layout="@layout/fragment_breathless" />
     <action
         android:id="@+id/action_global_breathlessFragment"
-        app:destination="@id/breathlessFragment" />
+        app:destination="@id/breathlessFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/feverDurationFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverDurationFragment"
@@ -130,7 +146,9 @@
         tools:layout="@layout/fragment_fever_duration" />
     <action
         android:id="@+id/action_global_feverDurationFragment"
-        app:destination="@id/feverDurationFragment" />
+        app:destination="@id/feverDurationFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/feverTakenTodayFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverTakenTodayFragment"
@@ -138,7 +156,9 @@
         tools:layout="@layout/fragment_fever_taken_today" />
     <action
         android:id="@+id/action_global_feverTakenTodayFragment"
-        app:destination="@id/feverTakenTodayFragment" />
+        app:destination="@id/feverTakenTodayFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/feverHighestTemperatureFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureFragment"
@@ -146,7 +166,9 @@
         tools:layout="@layout/fragment_fever_highest_temperature" />
     <action
         android:id="@+id/action_global_feverHighestTemperatureFragment"
-        app:destination="@id/feverHighestTemperatureFragment" />
+        app:destination="@id/feverHighestTemperatureFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/feverTemperatureSpotFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotFragment"
@@ -154,7 +176,9 @@
         tools:layout="@layout/fragment_fever_temperature_spot" />
     <action
         android:id="@+id/action_global_feverTemperatureSpotFragment"
-        app:destination="@id/feverTemperatureSpotFragment" />
+        app:destination="@id/feverTemperatureSpotFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/feverTemperatureSpotInputFragment"
         android:name="org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputFragment"
@@ -162,7 +186,9 @@
         tools:layout="@layout/fragment_fever_temperature_spot_input" />
     <action
         android:id="@+id/action_global_feverTemperatureSpotInputFragment"
-        app:destination="@id/feverTemperatureSpotInputFragment" />
+        app:destination="@id/feverTemperatureSpotInputFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/homeFragment"
         android:name="org.coepi.android.ui.home.HomeFragment"
@@ -170,8 +196,7 @@
         tools:layout="@layout/fragment_home" />
     <action
         android:id="@+id/action_global_homeFragment"
-        app:destination="@id/homeFragment" />
-
-
-
+        app:destination="@id/homeFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
 </navigation>
