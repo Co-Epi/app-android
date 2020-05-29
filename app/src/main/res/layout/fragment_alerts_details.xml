@@ -14,32 +14,77 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:title="@string/alerts_details_title"
+            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
+
+
         <TextView
             android:id="@+id/headline"
             android:name="androidx.navigation.fragment.NavHostFragment"
             style="@style/Text.Headline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginStart="@dimen/margin_40"
             android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.title}"
+            tools:text="Headline"
+            android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_headline"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Headline" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <View
-            android:id="@+id/divider"
+        <TextView
+            android:id="@+id/exposure_time"
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/grey"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@{vm.exposureTime}"
+            tools:text="Exposure Time"
+            android:textColor="@color/textDefault"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline" />
+
+        <TextView
+            android:id="@+id/symptomsTag"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            style="@style/Text.Headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:layout_marginTop="10dp"
+            android:text="@string/tab_symptoms"
+            android:textColor="@color/textDefault"
+            android:textSize="@dimen/text_size_30"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exposure_time" />
+
+        <TextView
+            android:id="@+id/reported_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@{vm.reportedTime}"
+            tools:text="Reported Time"
+            android:textColor="@color/textDefault"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/symptomsTag" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -48,7 +93,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider" />
+            app:layout_constraintTop_toBottomOf="@id/reported_time"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
