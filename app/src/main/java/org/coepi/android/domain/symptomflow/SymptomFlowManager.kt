@@ -49,8 +49,7 @@ class SymptomFlowManager(
             return false
         }
         symptomInputsManager.selectSymptomIds(symptomIds.toSet())
-        val symptomFlow = SymptomFlow.create(symptomIds)
-        this.symptomFlow = symptomFlow
+        symptomFlow = SymptomFlow.create(symptomIds)
 
         updateNavigation()
         return true
@@ -75,10 +74,7 @@ class SymptomFlowManager(
             finishFlowTrigger.onNext(inputs)
             return
         }
-
-        symptomFlow.currentStep.let {
-            rootNavigation.navigate(ToDestination(symptomRouter.destination(it)))
-        }
+        rootNavigation.navigate(ToDestination(symptomRouter.destination(symptomFlow.currentStep)))
     }
 
     private fun handleSubmitReportResult(result: Result<Unit, Throwable>) {

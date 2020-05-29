@@ -61,6 +61,25 @@ class BitListTests {
     }
 
     @Test
+    fun converts_86055_to_bytes() {
+        val bits = Array(17) { false }.toMutableList()
+        bits[0] = true
+        bits[1] = true
+        bits[2] = true
+        bits[5] = true
+        bits[12] = true
+        bits[14] = true
+        bits[16] = true
+
+        val bitlist = BitList(bits)
+        val byteArray = bitlist.toUByteArray()
+        Truth.assertThat(byteArray.size).isEqualTo(3)
+        Truth.assertThat(byteArray[0]).isEqualTo(39.toUByte()) // the LSB of 1234 is 39
+        Truth.assertThat(byteArray[1]).isEqualTo(80.toUByte())
+        Truth.assertThat(byteArray[2]).isEqualTo(1.toUByte()) // MSB of 1234 is 1
+    }
+
+    @Test
     fun converts_1234_to_bytes() {
         val bits = Array(16) { false }.toMutableList()
         bits[1] = true
