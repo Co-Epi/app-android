@@ -70,7 +70,7 @@ class AlertsViewModel(
                 toBreathlessnessString(report.breathlessness),
                 report.feverSeverity.toUIString()
             ).joinToString("\n"),
-            contactTime = DateFormatters.timeFormatter.format(contactTime.toDate()),
+            contactTime = DateFormatters.hourMinuteFormatter.formatTime(contactTime.toDate()),
             report = this
         )
 
