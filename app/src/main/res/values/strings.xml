@@ -72,6 +72,13 @@
         <item quantity="other">%s new contact alerts</item>
     </plurals>
     <string name="alerts_no_symptoms_reported">No symptoms reported</string>
+    <string name="alerts_headline">Exposure Alerts</string>
+    <string name="alerts_learn_more">Click each alert to learn more</string>
+    <string name="alerts_info_button">What are exposure alerts?</string>
+    <string name="alerts_cough_report">Cough</string>
+    <string name="alerts_cough_report_detail">%s cough</string>
+    <string name="alerts_fever_report">Fever</string>
+    <string name="alerts_breathlessness_report">Breathlessness</string>
 
     <!-- Alert details -->
     <!-- TODO clarify whether this is needed -->
@@ -79,7 +86,7 @@
 
     <!-- Infection contact notifications -->
     <string name="infection_notification_title">Exposure</string>
-<!--    <string name="infection_notification_text">You were exposed to the virus. Click to see reports.</string>-->
+    <!--    <string name="infection_notification_text">You were exposed to the virus. Click to see reports.</string>-->
     <string name="infection_notification_channel_name">Exposures</string>
     <string name="infection_notification_channel_description">Detected virus exposures</string>
 

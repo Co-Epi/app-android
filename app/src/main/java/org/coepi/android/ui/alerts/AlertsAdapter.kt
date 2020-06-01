@@ -10,22 +10,20 @@ import org.coepi.android.databinding.ItemAlertBinding.inflate
 import org.coepi.android.ui.alerts.AlertsAdapter.ViewHolder
 
 class AlertsAdapter(
-    private val onAlertClick: (AlertViewData) -> Unit,
-    private val onAckClick: (AlertViewData) -> Unit
+    private val onAlertClick: (AlertViewData) -> Unit
 ) : ListAdapter<AlertViewData, ViewHolder>(AlertsDiffCallback()) {
 
-    class ViewHolder(parent: ViewGroup, private val binding: ItemAlertBinding =
-        inflate(from(parent.context), parent, false)
+    class ViewHolder(
+        parent: ViewGroup, private val binding: ItemAlertBinding =
+            inflate(from(parent.context), parent, false)
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AlertViewData, onAckClick: (AlertViewData) -> Unit,
-                 onAlertClick: (AlertViewData) -> Unit): Unit = binding.run {
+        fun bind(
+            item: AlertViewData, onAlertClick: (AlertViewData) -> Unit
+        ): Unit = binding.run {
             this.item = item
             root.setOnClickListener {
                 onAlertClick(item)
-            }
-            ackButton.setOnClickListener {
-                onAckClick(item)
             }
         }
     }
@@ -34,7 +32,7 @@ class AlertsAdapter(
         ViewHolder(parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onAckClick, onAlertClick)
+        holder.bind(getItem(position), onAlertClick)
     }
 }
 
