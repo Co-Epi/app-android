@@ -11,9 +11,19 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/LightFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/LightFragment">
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:title="@string/label_fragment_alerts"
+            app:titleTextColor="@android:color/white" />
 
         <TextView
             android:id="@+id/headline"
@@ -21,61 +31,77 @@
             style="@style/Text.Headline"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginStart="@dimen/margin_40"
             android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginEnd="@dimen/default_margin"
-            android:text="@{vm.title}"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@string/alerts_headline"
+            android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_headline"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Headline" />
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/grey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            tools:text="@string/alerts_headline" />
 
         <TextView
-            android:id="@+id/status_label"
+            android:id="@+id/caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="@dimen/default_margin"
-            android:gravity="end"
-            android:maxLines="3"
-            android:text="@{vm.updateStatusText}"
-            android:textColor="@color/grey"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:layout_marginBottom="20dp"
+            android:text="@string/alerts_learn_more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider" />
+            app:layout_constraintTop_toBottomOf="@id/headline"
+            tools:text="@string/alerts_learn_more" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/exposure_alert_info_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/status_label">
+            app:layout_constraintTop_toBottomOf="@id/caption">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:fadingEdgeLength="100dp"
+                android:requiresFadingEdge="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <Button
+            android:id="@+id/exposure_alert_info_button"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ripple_symptom_button"
+            android:buttonTint="@color/colorPrimary"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            android:text="@string/alerts_info_button"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/alerts_info_button">
+        </Button>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
