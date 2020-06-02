@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
 import org.coepi.android.R.drawable.ic_alert
+import org.coepi.android.R.string
 import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
-import org.coepi.android.ui.extensions.AlertDetailToUIString
+import org.coepi.android.ui.extensions.toBreathlessnessUIString
+import org.coepi.android.ui.extensions.toUIString
 import org.coepi.android.ui.formatters.DateFormatters
 
 class AlertsDetailsViewModel(
@@ -31,7 +33,7 @@ class AlertsDetailsViewModel(
 
     @SuppressLint("DefaultLocale")
     private fun symptomList(report: PublicReport): String =
-        report.AlertDetailToUIString(resources)
+        report.toUIString(resources)
 
     private fun SymptomId.toViewData(): AlertDetailsSymptomViewData =
         // TODO map to localized names
@@ -42,6 +44,13 @@ class AlertsDetailsViewModel(
 
     private fun toHourMinute(time: UnixTime): String =
         DateFormatters.hourMinuteFormatter.formatTime(time.toDate())
+
+    fun PublicReport.toUIString(resources: Resources) : String =
+        listOfNotNull(
+            coughSeverity.toUIString(resources),
+            toBreathlessnessUIString(resources),
+            feverSeverity.toUIString(resources)
+        ).joinToString("\n") { "${resources.getString(string.bullet_point)} $it" }
 
 }
 
