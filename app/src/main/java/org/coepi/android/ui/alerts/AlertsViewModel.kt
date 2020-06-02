@@ -71,6 +71,7 @@ class AlertsViewModel(
                 report.feverSeverity.toUIString()
             ).joinToString("\n"),
             contactTime = DateFormatters.hourMinuteFormatter.formatTime(contactTime.toDate()),
+            contactTimeMonth = DateFormatters.monthDayFormatter.formatMonthDay(contactTime.toDate()),
             report = this
         )
 

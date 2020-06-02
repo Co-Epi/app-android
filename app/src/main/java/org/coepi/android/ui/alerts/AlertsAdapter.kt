@@ -19,8 +19,11 @@ class AlertsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            item: AlertViewData, onAlertClick: (AlertViewData) -> Unit
+            item: AlertViewData,
+            monthHeaderVisible: Boolean,
+            onAlertClick: (AlertViewData) -> Unit
         ): Unit = binding.run {
+            item.showMonthHeader = monthHeaderVisible
             this.item = item
             root.setOnClickListener {
                 onAlertClick(item)
@@ -32,7 +35,19 @@ class AlertsAdapter(
         ViewHolder(parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onAlertClick)
+        val currentItem = getItem(position)
+        var previousItem: AlertViewData? = null
+        var monthHeaderVisible = true
+
+        if (position > 0) {
+            previousItem = getItem(position - 1)
+        }
+
+        previousItem?.let {
+            monthHeaderVisible = currentItem.contactTimeMonth != previousItem.contactTimeMonth
+        }
+
+        holder.bind(currentItem, monthHeaderVisible, onAlertClick)
     }
 }
 
