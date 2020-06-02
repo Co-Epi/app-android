@@ -28,16 +28,6 @@ class AlertsDetailsFragment: Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        val alertsAdapter = AlertsDetailsAdapter()
-
-        recyclerView.run {
-            layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)
-            adapter = alertsAdapter
-        }
-
-        viewModel.report.observeWith(viewLifecycleOwner) {
-            alertsAdapter.submitList(it)
-        }
     }.root
 
     @Parcelize

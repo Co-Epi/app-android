@@ -74,7 +74,7 @@ val viewModelModule = module {
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
-    viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args) }
+    viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args, get()) }
     viewModel { CoughTypeViewModel(get(), get()) }
     viewModel { CoughDurationViewModel(get(), get()) }
     viewModel { CoughStatusViewModel(get(), get(), get()) }
