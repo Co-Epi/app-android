@@ -14,10 +14,13 @@ import org.coepi.android.system.Resources
 import org.coepi.android.ui.extensions.toBreathlessnessUIString
 import org.coepi.android.ui.extensions.toUIString
 import org.coepi.android.ui.formatters.DateFormatters
+import org.coepi.android.ui.navigation.NavigationCommand.Back
+import org.coepi.android.ui.navigation.RootNavigation
 
 class AlertsDetailsViewModel(
     args: AlertsDetailsFragment.Args,
-    private val resources: Resources
+    private val resources: Resources,
+    private val navigation: RootNavigation
 ) : ViewModel() {
 
     val title: LiveData<String> = just(toMonthAndDay(args.report.contactTime))
@@ -45,12 +48,16 @@ class AlertsDetailsViewModel(
     private fun toHourMinute(time: UnixTime): String =
         DateFormatters.hourMinuteFormatter.formatTime(time.toDate())
 
-    fun PublicReport.toUIString(resources: Resources) : String =
+    private fun PublicReport.toUIString(resources: Resources) : String =
         listOfNotNull(
             coughSeverity.toUIString(resources),
             toBreathlessnessUIString(resources),
             feverSeverity.toUIString(resources)
         ).joinToString("\n") { "${resources.getString(string.bullet_point)} $it" }
+
+    fun onBack() {
+        navigation.navigate(Back)
+    }
 
 }
 
