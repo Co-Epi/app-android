@@ -1,60 +1,88 @@
 package org.coepi.android.ui.onboarding
 
-import android.view.LayoutInflater
-import android.view.View
+import android.view.LayoutInflater.from
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
-import org.coepi.android.R
-import org.coepi.android.ui.onboarding.OnboardingCard.LargeOnboardingCard
-import org.coepi.android.ui.onboarding.OnboardingCard.SmallOnboardingCard
-import org.coepi.android.ui.onboarding.OnboardingFragment.Companion.LARGE_CARD
-import org.coepi.android.ui.onboarding.OnboardingFragment.Companion.SMALL_CARD
-import org.coepi.android.ui.onboarding.binders.LargeOnboardingCardBinder
-import org.coepi.android.ui.onboarding.binders.SmallOnboardingCardBinder
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import org.coepi.android.R.drawable
+import org.coepi.android.databinding.CardOnboardingLargeBinding
+import org.coepi.android.databinding.CardOnboardingSmallBinding
+import org.coepi.android.ui.onboarding.OnboardingCardViewData.LargeCard
+import org.coepi.android.ui.onboarding.OnboardingCardViewData.SmallCard
+import org.coepi.android.ui.onboarding.OnboardingClickEvent.FaqClicked
+import org.coepi.android.ui.onboarding.OnboardingClickEvent.JoinClicked
+import org.coepi.android.ui.onboarding.OnboardingClickEvent.NextClicked
+import org.coepi.android.ui.onboarding.OnboardingClickEvent.PrivacyLinkClicked
 
-class OnboardingAdapter(private val data: List<OnboardingCard>) :
-    RecyclerView.Adapter<OnboardingViewHolder>() {
+class OnboardingAdapter(
+    private val data: List<OnboardingCardViewData>,
+    private val onEvent: (OnboardingClickEvent) -> Unit
+) : RecyclerView.Adapter<ViewHolder>() {
 
-    val onboardingEventStream: Observable<OnboardingClickEvent>
-        get() = onboardingEventSubject
-
-    private val onboardingEventSubject = PublishSubject.create<OnboardingClickEvent>()
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        OnboardingViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         when (viewType) {
-            SMALL_CARD -> LayoutInflater.from(parent.context).inflate(R.layout.card_onboarding_small, parent, false)
-            LARGE_CARD -> LayoutInflater.from(parent.context).inflate(R.layout.card_onboarding_large, parent, false)
-            else -> LayoutInflater.from(parent.context).inflate(R.layout.card_onboarding_unknown, parent, false)
-        },
-        onboardingEventSubject
-    )
-
-
-    override fun onBindViewHolder(holder: OnboardingViewHolder, position: Int) = holder.bind(data[position])
-
-    override fun getItemCount(): Int = data.size
-
-    override fun getItemViewType(position: Int): Int =
-        when (data[position]) {
-            is SmallOnboardingCard -> SMALL_CARD
-            is LargeOnboardingCard -> LARGE_CARD
+            0 -> OnboardingSmallCardViewHolder(parent)
+            1 -> OnboardingLargeCardViewHolder(parent)
+            else -> error("Not handled: $viewType")
         }
 
+    override fun getItemViewType(position: Int): Int = when (data[position]) {
+        is SmallCard -> 0
+        is LargeCard -> 1
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        when (val item = data[position]) {
+            is SmallCard -> (holder as OnboardingSmallCardViewHolder).bind(item, onEvent)
+            is LargeCard -> (holder as OnboardingLargeCardViewHolder).bind(item, onEvent)
+        }
+    }
+
+    override fun getItemCount(): Int = data.size
 }
 
-class OnboardingViewHolder(
-    view: View,
-    private val onboardingEventSubject: Subject<OnboardingClickEvent>
-) : RecyclerView.ViewHolder(view) {
+class OnboardingSmallCardViewHolder(
+    private val parent: ViewGroup,
+    private val binding: CardOnboardingSmallBinding =
+        CardOnboardingSmallBinding.inflate(from(parent.context), parent, false))
+    : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(onboardingCard: OnboardingCard) {
-        when (onboardingCard) {
-            is SmallOnboardingCard -> SmallOnboardingCardBinder
-            is LargeOnboardingCard -> LargeOnboardingCardBinder
-        }.bind(itemView, onboardingCard, onboardingEventSubject)
+    fun bind(viewData: SmallCard, onEvent: (OnboardingClickEvent) -> Unit): Unit = binding.run {
+        this.viewData = viewData
+
+        when (viewData.highlightedDot) {
+            0 -> progressIcon1
+            1 -> progressIcon2
+            2 -> progressIcon3
+            else -> error("Not handled: ${viewData.highlightedDot}")
+        }.setImageResource(drawable.stepper_icon_selected)
+
+        dataUsageLinkLabel.setOnClickListener {
+            onEvent(PrivacyLinkClicked)
+        }
+        onboardingCardSmallNextButton.setOnClickListener {
+            onEvent(NextClicked)
+        }
+    }
+}
+
+class OnboardingLargeCardViewHolder(
+    private val parent: ViewGroup,
+    private val binding: CardOnboardingLargeBinding =
+        CardOnboardingLargeBinding.inflate(from(parent.context), parent, false))
+    : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(viewData: LargeCard, onEvent: (OnboardingClickEvent) -> Unit): Unit = binding.run {
+        this.viewData = viewData
+
+        onboardingCardLargeJoinButton.setOnClickListener {
+            onEvent(JoinClicked)
+        }
+        onboardingCardLargeFaqButton.setOnClickListener {
+            onEvent(FaqClicked)
+        }
+        dataUsageLinkLabel.setOnClickListener {
+            onEvent(PrivacyLinkClicked)
+        }
     }
 }

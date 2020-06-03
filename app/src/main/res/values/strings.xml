@@ -8,6 +8,8 @@
     <string name="submit">Submit</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="link_privacy">https://www.coepi.org/privacy/</string>
+    <string name="link_faq">https://www.coepi.org/faq/</string>
 
     <!-- Tabs container -->
     <string name="tab_container_debug">Debug</string>

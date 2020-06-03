@@ -1,10 +1,8 @@
 package org.coepi.android.ui.onboarding
 
 sealed class OnboardingClickEvent {
-
-    class NextClicked(val currentPosition: Int) : OnboardingClickEvent()
+    object NextClicked : OnboardingClickEvent()
     object PrivacyLinkClicked : OnboardingClickEvent()
     object JoinClicked : OnboardingClickEvent()
     object FaqClicked : OnboardingClickEvent()
-
 }
