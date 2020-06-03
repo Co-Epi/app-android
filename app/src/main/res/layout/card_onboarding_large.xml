@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/large_card_view_wrapper"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/onboarding_card_large_height"
         android:background="@drawable/background_onboarding_card"
         app:layout_constraintBottom_toBottomOf="parent"
