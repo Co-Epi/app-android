@@ -48,7 +48,8 @@ class OnboardingSmallCardViewHolder(
     : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(viewData: SmallCard, onEvent: (OnboardingClickEvent) -> Unit): Unit = binding.run {
-        this.viewData = viewData
+        onboardingCardSmallTitle.text = viewData.title
+        onboardingCardSmallContent.text = viewData.message
 
         when (viewData.highlightedDot) {
             0 -> progressIcon1
@@ -73,7 +74,8 @@ class OnboardingLargeCardViewHolder(
     : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(viewData: LargeCard, onEvent: (OnboardingClickEvent) -> Unit): Unit = binding.run {
-        this.viewData = viewData
+        onboardingCardLargeTitle.text = viewData.title
+        onboardingCardLargeContent.text = viewData.message
 
         onboardingCardLargeJoinButton.setOnClickListener {
             onEvent(JoinClicked)
