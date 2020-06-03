@@ -70,7 +70,7 @@ val viewModelModule = module {
     viewModel { AlertsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { LocationViewModel() }
-    viewModel { OnboardingViewModel(get(), get()) }
+    viewModel { OnboardingViewModel(get(), get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
