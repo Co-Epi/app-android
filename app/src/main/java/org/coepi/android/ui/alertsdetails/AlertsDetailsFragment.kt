@@ -28,6 +28,8 @@ class AlertsDetailsFragment: Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
+        toolbar.setNavigationOnClickListener { viewModel.onBack() }
+
     }.root
 
     @Parcelize
