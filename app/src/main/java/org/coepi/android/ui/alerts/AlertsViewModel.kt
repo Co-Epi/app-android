@@ -32,7 +32,7 @@ import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
 
 class AlertsViewModel(
-    private val alertsRepo: AlertsRepo,
+    val alertsRepo: AlertsRepo,
     private val resources: Resources,
     private val navigation: RootNavigation
 ) : ViewModel() {

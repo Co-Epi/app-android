@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.coepi.android.databinding.ItemAlertBinding
 import org.coepi.android.databinding.ItemAlertBinding.inflate
+import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.ui.alerts.AlertsAdapter.ViewHolder
 
 class AlertsAdapter(
-    private val onAlertClick: (AlertViewData) -> Unit
+    private val onAlertClick: (AlertViewData) -> Unit,
+    private val alertsRepo: AlertsRepo
 ) : ListAdapter<AlertViewData, ViewHolder>(AlertsDiffCallback()) {
 
     class ViewHolder(
@@ -48,6 +50,13 @@ class AlertsAdapter(
         }
 
         holder.bind(currentItem, monthHeaderVisible, onAlertClick)
+    }
+
+    fun removeAt(position: Int) {
+        alertsRepo.removeAlert(getItem(position).report)
+        alertsRepo.updateReports()
+        notifyItemRemoved(position)
+        notifyDataSetChanged()
     }
 }
 
