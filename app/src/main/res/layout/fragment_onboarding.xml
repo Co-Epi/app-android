@@ -1,137 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="vm"
             type="org.coepi.android.ui.onboarding.OnboardingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/onboardingLayout"
+        style="@style/DarkFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_gradient">
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:context=".ui.onboarding.OnboardingFragment">
 
-        <TextView
-            android:id="@+id/onboardingTitle"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/logo"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="475dp"
-            android:background="@drawable/ic_coepi_cloud"
-            android:gravity="center_horizontal|center_vertical"
-            android:paddingTop="20dp"
-            android:text="@string/onboarding_title"
-            android:textAppearance="@style/Text.Title"
-            android:textSize="64sp"
+            android:src="@drawable/ic_family_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            app:layout_constraintBottom_toTopOf="@id/onboardingCta"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/onboardingTitle">
-
-            <TextView
-                android:id="@+id/onboardingBanner_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/onboarding_banner_1"
-                android:textAppearance="@style/Text"
-                android:textSize="@dimen/text_size_40" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:background="@android:color/transparent" />
-
-            <TextView
-                android:id="@+id/onboardingBanner_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/onboarding_banner_2"
-                android:textSize="@dimen/text_size_40" />
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:background="@android:color/transparent" />
-
-            <TextView
-                android:id="@+id/onboardingBanner_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/onboarding_banner_3"
-                android:textSize="@dimen/text_size_40" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/onboardingCta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="75dp"
-            android:layout_marginEnd="75dp"
-            android:layout_marginBottom="110dp"
-            android:background="@drawable/rounded_button"
-            android:onClick="@{() -> vm.onCloseClick()}"
-            android:paddingTop="25dp"
-            android:paddingBottom="25dp"
-            android:text="@string/onboarding_cta"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <TextView
-            android:id="@+id/onboardingTagline"
-            android:layout_width="wrap_content"
+            android:id="@+id/home_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="80dp"
-            android:text="@string/onboarding_tagline"
-            android:textAppearance="@style/Text.Headline"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/onboardingCta" />
+            app:layout_constraintTop_toBottomOf="@id/logo" />
 
-        <TextView
-            android:id="@+id/onboardingLink"
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/onboarding_info_recycler"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="25dp"
-            android:text="@string/onboarding_link"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="@color/colorLink"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.853"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/onboardingTagline"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
