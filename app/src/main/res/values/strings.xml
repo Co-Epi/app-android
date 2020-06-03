@@ -39,9 +39,9 @@
     <string name="symptoms_success_message">Symptoms submitted!</string>
 
     <!-- Thank you -->
-    <string name="thanks_message">Thank you for saving your symptoms! We will keep notified about exposures this week.</string>
-    <string name="thanks_log_button">Log more symptoms</string>
-    <string name="thanks_exposures_button">View exposures</string>
+    <string name="thanks_message">Thank you for logging your symptoms! We will alert if you have any relevant exposures to review.</string>
+    <string name="thanks_log_button">Update your symptom report</string>
+    <string name="thanks_exposures_button">View exposure alerts</string>
     <string name="thanks_home_button">Return to home screen</string>
 
     <!-- Onboarding -->
@@ -49,7 +49,7 @@
     <string name="onboarding_cta">GET STARTED</string>
     <string name="onboarding_tagline">Collaborate. Inform. Protect.</string>
     <string name="onboarding_link">@string/privacy_link</string>
-    <string name="onboarding_banner_1"><b>Track</b> where you\'ve been</string>
+    <string name="onboarding_banner_1"><b>Log your</b> interactions</string>
     <string name="onboarding_banner_2"><b>Monitor</b> your health</string>
     <string name="onboarding_banner_3">Get <b>contextualized alerts</b> about possible exposure to infectious illness</string>
 
@@ -68,8 +68,8 @@
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
     <plurals name="alerts_new_notifications_count">
-        <item quantity="one">%s new contact alert</item>
-        <item quantity="other">%s new contact alerts</item>
+        <item quantity="one">%s new exposure alert</item>
+        <item quantity="other">%s new exposure alerts</item>
     </plurals>
     <string name="alerts_no_symptoms_reported">No symptoms reported</string>
     <string name="alerts_headline">Exposure Alerts</string>
