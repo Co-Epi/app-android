@@ -56,10 +56,10 @@
     <string name="onboarding_banner_3">Get <b>contextualized alerts</b> about possible exposure to infectious illness</string>
 
     <!-- Home -->
-    <string name="home_my_health_card_title">My Symptom Report</string>
+    <string name="home_my_health_card_title">Symptom Reporting</string>
     <string name="home_contact_alerts_card_title">Exposure Alerts</string>
-    <string name="home_my_health_card_description">Track how you are feeling</string>
-    <string name="home_contact_alerts_card_description">Find out reported alerts around you</string>
+    <string name="home_my_health_card_description">Share how you are feeling</string>
+    <string name="home_contact_alerts_card_description">Review your potential exposures</string>
     <string name="home_version">Version: %s</string>
     <string name="home_privacy_link_text">How is my data being used?</string>
     <plurals name="home_new_exposure_alert">
@@ -68,34 +68,30 @@
     </plurals>
     
     <!-- Onboarding -->
-    <string name="onboarding_card_title_1">Track where you\'ve been.</string>
+    <string name="onboarding_card_title_1">Log your interactions</string>
     <string name="onboarding_card_title_2">Monitor your health</string>
     <string name="onboarding_card_title_3">Stay informed</string>
     <string name="onboarding_card_title_4">Collaborate. Inform. Protect.</string>
 
-    <string name="onboarding_card_content_1">Know if you\'ve come in contact with
-        others who may have been contagious
-        based on proximity, arrival times, and departure times.
+    <string name="onboarding_card_content_1">CoEpi will anonymously log interactions
+            with other devices using compatible apps.
     </string>
 
-    <string name="onboarding_card_content_2">Along with your community, <b>monitor your health,</b>
-        and if relevant, the health of <b>your family.</b>
-        Help keep yourself and others safe!
+    <string name="onboarding_card_content_2">Share any symptoms you may have,
+        <b>when you notice them.</b>
     </string>
 
-    <string name="onboarding_card_content_3">Get <b>contextualized alerts</b> about exposure to transmissable illnesses,
-        including <b>locations and times,</b>
-        giving you time to seek medical attention.
+    <string name="onboarding_card_content_3">You will get alerts about potential <b>
+        exposure to individuals with contagious illnesses. </b>
     </string>
 
-    <string name="onboarding_card_content_4">Halt the spread of contagious illnesses.View <b>screening tests and
-        results,</b> find the <b>right advice,</b> and above all,
-        <b>understand and stop the spread of disease.</b>
+    <string name="onboarding_card_content_4">
+        "Help prevent the spread of contagious illnesses. <b> Together, we can make a difference. </b>
     </string>
 
     <string name="onboarding_data_usage_link_label"><u>How will my data be used?</u></string>
     <string name="onboarding_next_button_label">NEXT</string>
-    <string name="onboarding_join_button_label">Join</string>
+    <string name="onboarding_join_button_label">Get started</string>
     <string name="onboarding_faq_button_label">Frequently Asked Questions</string>
     
 
