@@ -93,7 +93,6 @@
     <string name="onboarding_next_button_label">NEXT</string>
     <string name="onboarding_join_button_label">Get started</string>
     <string name="onboarding_faq_button_label">Frequently Asked Questions</string>
-    
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
@@ -105,10 +104,13 @@
     <string name="alerts_headline">Exposure Alerts</string>
     <string name="alerts_learn_more">Click each alert to learn more</string>
     <string name="alerts_info_button">What are exposure alerts?</string>
-    <string name="alerts_cough_report">Cough</string>
-    <string name="alerts_cough_report_detail">%s cough</string>
-    <string name="alerts_fever_report">Fever</string>
-    <string name="alerts_breathlessness_report">Breathlessness</string>
+
+    <string name="alerts_report_fever_mild">Mild fever</string>
+    <string name="alerts_report_fever_serious">Serious fever</string>
+    <string name="alerts_report_cough">Cough</string>
+    <string name="alerts_report_cough_wet">Wet cough</string>
+    <string name="alerts_report_cough_dry">Dry cough</string>
+    <string name="alerts_report_breathlessness">Breathlessness</string>
 
     <!-- Alert details -->
     <!-- TODO clarify whether this is needed -->
@@ -187,9 +189,8 @@
     <string name="symptom_report_fever_temperature_spot_input_unknown">@string/unknown</string>
     <string name="symptom_report_fever_temperature_spot_input_submit">@string/submit</string>
 
-    <string name="alerts_fever_report_detail">%s fever</string>
-    <string name="symptom_report_fever_severity_mild">Mild</string>
-    <string name="symptom_report_fever_severity_serious">Serious</string>
+    <string name="symptom_report_fever_severity_mild">Mild fever</string>
+    <string name="symptom_report_fever_severity_serious">Serious fever</string>
 
     <!-- Symptom Report - Earliest Symptoms -->
     <string name="symptom_report_earliest_symptom_title">Follow up: Earliest Symptoms</string>

@@ -1,6 +1,11 @@
 package org.coepi.android.ui.extensions
 
-import org.coepi.android.R.string
+import org.coepi.android.R.string.alerts_report_breathlessness
+import org.coepi.android.R.string.alerts_report_cough_dry
+import org.coepi.android.R.string.alerts_report_cough
+import org.coepi.android.R.string.alerts_report_cough_wet
+import org.coepi.android.R.string.alerts_report_fever_mild
+import org.coepi.android.R.string.alerts_report_fever_serious
 import org.coepi.android.api.publicreport.CoughSeverity
 import org.coepi.android.api.publicreport.CoughSeverity.DRY
 import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
@@ -11,33 +16,22 @@ import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.system.Resources
 
-
-
 fun FeverSeverity.toUIString(resources: Resources): String? =
     when (this) {
         FeverSeverity.NONE -> null
-
-        MILD -> resources.getString(string.alerts_fever_report_detail,
-            resources.getString(string.symptom_report_fever_severity_mild))
-
-        SERIOUS -> resources.getString(string.alerts_fever_report_detail,
-                resources.getString(string.symptom_report_fever_severity_serious))
+        MILD -> resources.getString(alerts_report_fever_mild)
+        SERIOUS -> resources.getString(alerts_report_fever_serious)
     }
 
 fun CoughSeverity.toUIString(resources: Resources): String? =
     when (this) {
         CoughSeverity.NONE -> null
-        EXISTING -> resources.getString(string.alerts_cough_report)
-
-        WET -> resources.getString(string.alerts_cough_report_detail,
-            resources.getString(string.symptom_report_cough_type_wet)
-        )
-        DRY -> resources.getString(string.alerts_cough_report_detail,
-            resources.getString(string.symptom_report_cough_type_dry)
-        )
+        EXISTING -> resources.getString(alerts_report_cough)
+        WET -> resources.getString(alerts_report_cough_wet)
+        DRY -> resources.getString(alerts_report_cough_dry)
     }
 
-fun PublicReport.toBreathlessnessUIString(resources: Resources): String? =
+fun PublicReport.breathlessnessUIString(resources: Resources): String? =
     if (breathlessness)
-            resources.getString(string.alerts_breathlessness_report)
+        resources.getString(alerts_report_breathlessness)
     else null
