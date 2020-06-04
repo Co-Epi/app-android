@@ -1,12 +1,15 @@
 package org.coepi.android.ui.onboarding
 
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.coepi.android.databinding.FragmentOnboardingBinding.inflate
+import org.coepi.android.extensions.observeWith
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingFragment : Fragment() {
@@ -19,6 +22,22 @@ class OnboardingFragment : Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        onboardingLink.movementMethod = LinkMovementMethod.getInstance()
+        onboardingInfoRecycler.layoutManager =
+            object : LinearLayoutManager(context, HORIZONTAL, false) {
+                override fun canScrollHorizontally(): Boolean = false
+            }
+
+        onboardingInfoRecycler.adapter = OnboardingAdapter(
+            viewModel.viewData,
+            onEvent = viewModel::onCardEvent
+        )
+
+        viewModel.openLink.observeWith(viewLifecycleOwner) { uri ->
+            startActivity(Intent(ACTION_VIEW, uri))
+        }
+
+        viewModel.recyclerViewScrollPosition.observeWith(viewLifecycleOwner) { position ->
+            onboardingInfoRecycler.scrollToPosition(position)
+        }
     }.root
 }

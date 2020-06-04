@@ -4,17 +4,19 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import org.coepi.android.R.string.alerts_breathlessness_report
-import org.coepi.android.R.string.alerts_cough_report
-import org.coepi.android.R.string.alerts_cough_report_detail
-import org.coepi.android.R.string.alerts_fever_report
-import org.coepi.android.R.string.symptom_report_cough_type_dry
-import org.coepi.android.R.string.symptom_report_cough_type_wet
+import org.coepi.android.R.string.alerts_report_breathlessness
+import org.coepi.android.R.string.alerts_report_cough
+import org.coepi.android.R.string.alerts_report_cough_dry
+import org.coepi.android.R.string.alerts_report_cough_wet
+import org.coepi.android.R.string.alerts_report_fever_mild
+import org.coepi.android.R.string.alerts_report_fever_serious
 import org.coepi.android.api.publicreport.CoughSeverity
 import org.coepi.android.api.publicreport.CoughSeverity.DRY
 import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
 import org.coepi.android.api.publicreport.CoughSeverity.WET
 import org.coepi.android.api.publicreport.FeverSeverity
+import org.coepi.android.api.publicreport.FeverSeverity.MILD
+import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -101,27 +103,22 @@ class AlertsViewModel(
     }
 
     private fun toBreathlessnessString(breathless: Boolean): String? =
-        if (breathless) resources.getString(alerts_breathlessness_report) else null
+        if (breathless) resources.getString(alerts_report_breathlessness) else null
 
     private fun FeverSeverity.toUIString(): String? =
         when (this) {
             FeverSeverity.NONE -> null
-            else -> resources.getString(alerts_fever_report)
+            MILD -> resources.getString(alerts_report_fever_mild)
+            SERIOUS -> resources.getString(alerts_report_fever_serious)
         }
 
     @SuppressLint("DefaultLocale")
     private fun CoughSeverity.toUIString(): String? =
         when (this) {
             CoughSeverity.NONE -> null
-            EXISTING -> resources.getString(alerts_cough_report)
-            WET -> resources.getString(
-                alerts_cough_report_detail,
-                resources.getString(symptom_report_cough_type_wet)
-            )
-            DRY -> resources.getString(
-                alerts_cough_report_detail,
-                resources.getString(symptom_report_cough_type_dry)
-            )
+            EXISTING -> resources.getString(alerts_report_cough)
+            WET -> resources.getString(alerts_report_cough_wet)
+            DRY -> resources.getString(alerts_report_cough_dry)
         }
 
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
