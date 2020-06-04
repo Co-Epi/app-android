@@ -81,7 +81,7 @@
                     android:lineSpacingExtra="1sp"
                     android:text="@string/symptom_report_cough_type_wet_description"
                     android:textColor="@color/button_text_color"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/wet_headline" />
@@ -128,7 +128,7 @@
                     android:lineSpacingExtra="1sp"
                     android:text="@string/symptom_report_cough_type_dry_description"
                     android:textColor="@color/button_text_color"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dry_headline" />
@@ -142,20 +142,17 @@
             android:layout_marginTop="48dp"
             android:onClick="@{() -> vm.onClickSkip()}"
             android:text="@string/symptoms_skip_button"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_40"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/options" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/screen_progress_indicator"
+        <include
+            layout="@layout/progress_bar_layout"
             isVisible="@{vm.isInProgress}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

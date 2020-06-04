@@ -70,7 +70,7 @@
     </style>
 
     <style name="card_view_link">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
         <item name="android:letterSpacing">0.05</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorAccent</item>

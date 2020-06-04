@@ -2,6 +2,7 @@ package org.coepi.android.domain
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import org.coepi.android.ui.formatters.DateFormatters
 import org.threeten.bp.Instant
 import java.io.Serializable
 import java.util.Date
@@ -14,7 +15,6 @@ class UnixTime private constructor(val value: Long) : Parcelable, Serializable {
         fun minTimestamp(): UnixTime = UnixTime(0)
         fun now(): UnixTime = fromDate(Date())
         fun fromDate(date: Date) = UnixTime(date.time / 1000)
-
         fun fromInstant(instant: Instant) = UnixTime(instant.epochSecond)
     }
 
@@ -28,4 +28,5 @@ class UnixTime private constructor(val value: Long) : Parcelable, Serializable {
 
     fun toDate() =
         Date(value * 1000)
+
 }

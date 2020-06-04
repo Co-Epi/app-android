@@ -7,15 +7,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.coepi.android.databinding.ItemAlertDetailsBinding
 import org.coepi.android.databinding.ItemAlertDetailsBinding.inflate
-import org.coepi.android.ui.alerts.AlertsAdapter.ViewHolder
 import org.coepi.android.ui.alertsdetails.AlertsDetailsAdapter.ItemViewHolder
 
 class AlertsDetailsAdapter : ListAdapter<AlertDetailsSymptomViewData, ItemViewHolder>(
     AlertsDetailsDiffCallback()
 ) {
 
-    class ItemViewHolder(parent: ViewGroup, private val binding: ItemAlertDetailsBinding =
-        inflate(from(parent.context), parent, false)
+    class ItemViewHolder(
+        parent: ViewGroup, private val binding: ItemAlertDetailsBinding =
+            inflate(from(parent.context), parent, false)
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: AlertDetailsSymptomViewData): Unit = binding.run {
@@ -32,9 +32,15 @@ class AlertsDetailsAdapter : ListAdapter<AlertDetailsSymptomViewData, ItemViewHo
 }
 
 private class AlertsDetailsDiffCallback : ItemCallback<AlertDetailsSymptomViewData>() {
-    override fun areItemsTheSame(oldItem: AlertDetailsSymptomViewData, newItem: AlertDetailsSymptomViewData): Boolean =
+    override fun areItemsTheSame(
+        oldItem: AlertDetailsSymptomViewData,
+        newItem: AlertDetailsSymptomViewData
+    ): Boolean =
         oldItem.symptom == newItem.symptom
 
-    override fun areContentsTheSame(oldItem: AlertDetailsSymptomViewData, newItem: AlertDetailsSymptomViewData): Boolean =
+    override fun areContentsTheSame(
+        oldItem: AlertDetailsSymptomViewData,
+        newItem: AlertDetailsSymptomViewData
+    ): Boolean =
         oldItem == newItem
 }

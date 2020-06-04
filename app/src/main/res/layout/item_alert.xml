@@ -13,51 +13,38 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="30dp"
-        android:paddingTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/background_black_rounded_border"
+        android:paddingTop="10dp"
         android:paddingEnd="30dp"
-        android:paddingBottom="20dp">
-
-        <ImageView
-            android:id="@+id/alert_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_alert" />
-
-        <TextView
-            android:id="@+id/exposure_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@{item.exposureType}"
-            android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@id/alert_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Exposure type" />
+        android:paddingBottom="15dp">
 
         <TextView
             android:id="@+id/exposure_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="19dp"
+            android:paddingEnd="19dp"
             android:text="@{item.contactTime}"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="@id/exposure_type"
-            app:layout_constraintTop_toBottomOf="@id/exposure_type"
-            tools:text="Time" />
-
-        <Button
-            android:id="@+id/ack_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@null"
-            android:clickable="false"
-            android:text="@string/alerts_button_acknowledge"
-            android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_30"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/exposure_time" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Time" />
+
+        <TextView
+            android:id="@+id/exposure_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="@{item.exposureType}"
+            android:textSize="@dimen/text_size_30"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exposure_time"
+            tools:text="Exposure type" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

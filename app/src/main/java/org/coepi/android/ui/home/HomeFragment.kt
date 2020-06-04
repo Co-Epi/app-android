@@ -7,16 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import org.coepi.android.databinding.FragmentHomeBinding.inflate
+import org.coepi.android.extensions.observeWith
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
-    // TODO: Refactor to use list, see Symptoms
-
     private val viewModel by viewModel<HomeViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
@@ -26,7 +28,19 @@ class HomeFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW, webpage)
             startActivity(intent)
         }
+
+        homeCardsRecyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, VERTICAL, false)
+        }
+
+        val adapter = HomeAdapter(onItemClicked = { item ->
+            viewModel.onClicked(item)
+        })
+        homeCardsRecyclerView.adapter = adapter
+
+        viewModel.homeCardObservable.observeWith(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }.root
-
-
 }

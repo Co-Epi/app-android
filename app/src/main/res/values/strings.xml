@@ -8,6 +8,8 @@
     <string name="submit">Submit</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="link_privacy">https://www.coepi.org/privacy/</string>
+    <string name="link_faq">https://www.coepi.org/faq/</string>
 
     <!-- Tabs container -->
     <string name="tab_container_debug">Debug</string>
@@ -64,6 +66,38 @@
         <item quantity="one">%s new exposure detected</item>
         <item quantity="other">%s new exposures detected</item>
     </plurals>
+    
+    <!-- Onboarding -->
+    <string name="onboarding_card_title_1">Track where you\'ve been.</string>
+    <string name="onboarding_card_title_2">Monitor your health</string>
+    <string name="onboarding_card_title_3">Stay informed</string>
+    <string name="onboarding_card_title_4">Collaborate. Inform. Protect.</string>
+
+    <string name="onboarding_card_content_1">Know if you\'ve come in contact with
+        others who may have been contagious
+        based on proximity, arrival times, and departure times.
+    </string>
+
+    <string name="onboarding_card_content_2">Along with your community, <b>monitor your health,</b>
+        and if relevant, the health of <b>your family.</b>
+        Help keep yourself and others safe!
+    </string>
+
+    <string name="onboarding_card_content_3">Get <b>contextualized alerts</b> about exposure to transmissable illnesses,
+        including <b>locations and times,</b>
+        giving you time to seek medical attention.
+    </string>
+
+    <string name="onboarding_card_content_4">Halt the spread of contagious illnesses.View <b>screening tests and
+        results,</b> find the <b>right advice,</b> and above all,
+        <b>understand and stop the spread of disease.</b>
+    </string>
+
+    <string name="onboarding_data_usage_link_label"><u>How will my data be used?</u></string>
+    <string name="onboarding_next_button_label">NEXT</string>
+    <string name="onboarding_join_button_label">Join</string>
+    <string name="onboarding_faq_button_label">Frequently Asked Questions</string>
+    
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
@@ -72,6 +106,13 @@
         <item quantity="other">%s new contact alerts</item>
     </plurals>
     <string name="alerts_no_symptoms_reported">No symptoms reported</string>
+    <string name="alerts_headline">Exposure Alerts</string>
+    <string name="alerts_learn_more">Click each alert to learn more</string>
+    <string name="alerts_info_button">What are exposure alerts?</string>
+    <string name="alerts_cough_report">Cough</string>
+    <string name="alerts_cough_report_detail">%s cough</string>
+    <string name="alerts_fever_report">Fever</string>
+    <string name="alerts_breathlessness_report">Breathlessness</string>
 
     <!-- Alert details -->
     <!-- TODO clarify whether this is needed -->
@@ -79,9 +120,20 @@
 
     <!-- Infection contact notifications -->
     <string name="infection_notification_title">Exposure</string>
-<!--    <string name="infection_notification_text">You were exposed to the virus. Click to see reports.</string>-->
+    <!--    <string name="infection_notification_text">You were exposed to the virus. Click to see reports.</string>-->
     <string name="infection_notification_channel_name">Exposures</string>
     <string name="infection_notification_channel_description">Detected virus exposures</string>
+
+    <!-- Symptom Report Titles -->
+    <string name="symptom_report_title_no_symptoms">I don\'t have any symptoms today</string>
+    <string name="symptom_report_title_cough">Cough</string>
+    <string name="symptom_report_title_breathless">Breathless</string>
+    <string name="symptom_report_title_fever">Fever</string>
+    <string name="symptom_report_title_muscle_aches">Muscle aches</string>
+    <string name="symptom_report_title_loss_smell">Loss of smell or taste</string>
+    <string name="symptom_report_title_diarrhea">Diarrhea</string>
+    <string name="symptom_report_title_runny_nose">Runny nose</string>
+    <string name="symptom_report_title_other">I have symptoms that are not on the list</string>
 
     <!-- Symptom Report - Cough Type -->
     <string name="symptom_report_cough_title">Follow up: Cough</string>
@@ -139,11 +191,15 @@
     <string name="symptom_report_fever_temperature_spot_input_unknown">@string/unknown</string>
     <string name="symptom_report_fever_temperature_spot_input_submit">@string/submit</string>
 
+    <string name="alerts_fever_report_detail">%s fever</string>
+    <string name="symptom_report_fever_severity_mild">Mild</string>
+    <string name="symptom_report_fever_severity_serious">Serious</string>
+
     <!-- Symptom Report - Earliest Symptoms -->
     <string name="symptom_report_earliest_symptom_title">Follow up: Earliest Symptoms</string>
     <string name="symptom_report_earliest_symptom_headline">How many days ago did the symptoms begin?</string>
     <string name="symptom_report_earliest_symptom_days">@string/days</string>
     <string name="symptom_report_earliest_symptom_unknown">@string/unknown</string>
 
-
+    <string name="bullet_point">\u2022 </string>
 </resources>
