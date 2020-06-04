@@ -1,8 +1,22 @@
 package org.coepi.android.ui.alerts
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import org.coepi.android.R.string.alerts_report_breathlessness
+import org.coepi.android.R.string.alerts_report_cough
+import org.coepi.android.R.string.alerts_report_cough_dry
+import org.coepi.android.R.string.alerts_report_cough_wet
+import org.coepi.android.R.string.alerts_report_fever_mild
+import org.coepi.android.R.string.alerts_report_fever_serious
+import org.coepi.android.api.publicreport.CoughSeverity
+import org.coepi.android.api.publicreport.CoughSeverity.DRY
+import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
+import org.coepi.android.api.publicreport.CoughSeverity.WET
+import org.coepi.android.api.publicreport.FeverSeverity
+import org.coepi.android.api.publicreport.FeverSeverity.MILD
+import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -14,8 +28,6 @@ import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
-import org.coepi.android.ui.extensions.breathlessnessUIString
-import org.coepi.android.ui.extensions.toUIString
 import org.coepi.android.ui.formatters.DateFormatters
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
@@ -28,7 +40,12 @@ class AlertsViewModel(
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
-        .map { reports -> reports.map { it.toViewData() } }
+        .sorted()
+        .map { reports ->
+            reports.map {
+                it.toViewData(reports)
+            }
+        }
         .observeOn(mainThread())
         .toLiveData()
 
@@ -53,16 +70,56 @@ class AlertsViewModel(
      * This function parses [Alert] objects received from the [AlertsRepo] into readable strings that get displayed
      * in the recycler view item_alert views bound by the [AlertsAdapter]
      */
-    private fun Alert.toViewData(): AlertViewData =
+    private fun Alert.toViewData(alerts: List<Alert>): AlertViewData =
         AlertViewData(
             exposureType = listOfNotNull(
-                report.coughSeverity.toUIString(resources),
-                report.breathlessnessUIString(resources),
-                report.feverSeverity.toUIString(resources)
+                report.coughSeverity.toUIString(),
+                toBreathlessnessString(report.breathlessness),
+                report.feverSeverity.toUIString()
             ).joinToString("\n"),
             contactTime = DateFormatters.hourMinuteFormatter.formatTime(contactTime.toDate()),
+            contactTimeMonth = DateFormatters.monthDayFormatter.formatMonthDay(contactTime.toDate()),
+            showMonthHeader = showMonthHeader(alerts),
             report = this
         )
+
+    private fun Alert.showMonthHeader(alerts: List<Alert>): Boolean {
+        val currentIndex = alerts.indexOf(this)
+        val currentItemDate =
+            DateFormatters.monthDayFormatter.formatMonthDay(this.contactTime.toDate())
+        var previousItem: Alert? = null
+        var monthHeaderVisible = true
+
+        if (currentIndex > 0) {
+            previousItem = alerts[currentIndex - 1]
+        }
+
+        previousItem?.let {
+            monthHeaderVisible =
+                currentItemDate != DateFormatters.monthDayFormatter.formatMonthDay(previousItem.contactTime.toDate())
+        }
+
+        return monthHeaderVisible
+    }
+
+    private fun toBreathlessnessString(breathless: Boolean): String? =
+        if (breathless) resources.getString(alerts_report_breathlessness) else null
+
+    private fun FeverSeverity.toUIString(): String? =
+        when (this) {
+            FeverSeverity.NONE -> null
+            MILD -> resources.getString(alerts_report_fever_mild)
+            SERIOUS -> resources.getString(alerts_report_fever_serious)
+        }
+
+    @SuppressLint("DefaultLocale")
+    private fun CoughSeverity.toUIString(): String? =
+        when (this) {
+            CoughSeverity.NONE -> null
+            EXISTING -> resources.getString(alerts_report_cough)
+            WET -> resources.getString(alerts_report_cough_wet)
+            DRY -> resources.getString(alerts_report_cough_dry)
+        }
 
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
         when (operationState) {
