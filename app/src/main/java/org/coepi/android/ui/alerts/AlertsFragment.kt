@@ -37,8 +37,8 @@ class AlertsFragment : Fragment() {
             swipeRefresh.isRefreshing = false
         }
 
-        viewModel.alerts.observeWith(viewLifecycleOwner) { alerts ->
-            alertsAdapter.submitList(alerts.sortedWith(compareByDescending { it.report.contactTime.value }))
+        viewModel.alerts.observeWith(viewLifecycleOwner) {
+            alertsAdapter.submitList(it)
         }
     }.root
 }

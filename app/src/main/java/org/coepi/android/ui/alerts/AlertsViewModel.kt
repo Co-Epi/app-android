@@ -38,7 +38,12 @@ class AlertsViewModel(
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
-        .map { reports -> reports.map { it.toViewData() } }
+        .sorted()
+        .map { reports ->
+            reports.map {
+                it.toViewData(reports)
+            }
+        }
         .observeOn(mainThread())
         .toLiveData()
 
@@ -63,7 +68,7 @@ class AlertsViewModel(
      * This function parses [Alert] objects received from the [AlertsRepo] into readable strings that get displayed
      * in the recycler view item_alert views bound by the [AlertsAdapter]
      */
-    private fun Alert.toViewData(): AlertViewData =
+    private fun Alert.toViewData(alerts: List<Alert>): AlertViewData =
         AlertViewData(
             exposureType = listOfNotNull(
                 report.coughSeverity.toUIString(),
@@ -72,8 +77,28 @@ class AlertsViewModel(
             ).joinToString("\n"),
             contactTime = DateFormatters.hourMinuteFormatter.formatTime(contactTime.toDate()),
             contactTimeMonth = DateFormatters.monthDayFormatter.formatMonthDay(contactTime.toDate()),
+            showMonthHeader = showMonthHeader(alerts),
             report = this
         )
+
+    private fun Alert.showMonthHeader(alerts: List<Alert>): Boolean {
+        val currentIndex = alerts.indexOf(this)
+        val currentItemDate =
+            DateFormatters.monthDayFormatter.formatMonthDay(this.contactTime.toDate())
+        var previousItem: Alert? = null
+        var monthHeaderVisible = true
+
+        if (currentIndex > 0) {
+            previousItem = alerts[currentIndex - 1]
+        }
+
+        previousItem?.let {
+            monthHeaderVisible =
+                currentItemDate != DateFormatters.monthDayFormatter.formatMonthDay(previousItem.contactTime.toDate())
+        }
+
+        return monthHeaderVisible
+    }
 
     private fun toBreathlessnessString(breathless: Boolean): String? =
         if (breathless) resources.getString(alerts_breathlessness_report) else null
