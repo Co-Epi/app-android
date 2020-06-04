@@ -1,20 +1,8 @@
 package org.coepi.android.ui.alerts
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import org.coepi.android.R.string.alerts_breathlessness_report
-import org.coepi.android.R.string.alerts_cough_report
-import org.coepi.android.R.string.alerts_cough_report_detail
-import org.coepi.android.R.string.alerts_fever_report
-import org.coepi.android.R.string.symptom_report_cough_type_dry
-import org.coepi.android.R.string.symptom_report_cough_type_wet
-import org.coepi.android.api.publicreport.CoughSeverity
-import org.coepi.android.api.publicreport.CoughSeverity.DRY
-import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
-import org.coepi.android.api.publicreport.CoughSeverity.WET
-import org.coepi.android.api.publicreport.FeverSeverity
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -26,6 +14,8 @@ import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
+import org.coepi.android.ui.extensions.breathlessnessUIString
+import org.coepi.android.ui.extensions.toUIString
 import org.coepi.android.ui.formatters.DateFormatters
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
@@ -66,37 +56,13 @@ class AlertsViewModel(
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
             exposureType = listOfNotNull(
-                report.coughSeverity.toUIString(),
-                toBreathlessnessString(report.breathlessness),
-                report.feverSeverity.toUIString()
+                report.coughSeverity.toUIString(resources),
+                report.breathlessnessUIString(resources),
+                report.feverSeverity.toUIString(resources)
             ).joinToString("\n"),
             contactTime = DateFormatters.hourMinuteFormatter.formatTime(contactTime.toDate()),
             report = this
         )
-
-    private fun toBreathlessnessString(breathless: Boolean): String? =
-        if (breathless) resources.getString(alerts_breathlessness_report) else null
-
-    private fun FeverSeverity.toUIString(): String? =
-        when (this) {
-            FeverSeverity.NONE -> null
-            else -> resources.getString(alerts_fever_report)
-        }
-
-    @SuppressLint("DefaultLocale")
-    private fun CoughSeverity.toUIString(): String? =
-        when (this) {
-            CoughSeverity.NONE -> null
-            EXISTING -> resources.getString(alerts_cough_report)
-            WET -> resources.getString(
-                alerts_cough_report_detail,
-                resources.getString(symptom_report_cough_type_wet)
-            )
-            DRY -> resources.getString(
-                alerts_cough_report_detail,
-                resources.getString(symptom_report_cough_type_dry)
-            )
-        }
 
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
         when (operationState) {
