@@ -11,7 +11,7 @@ import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
-import org.coepi.android.ui.extensions.toBreathlessnessUIString
+import org.coepi.android.ui.extensions.breathlessnessUIString
 import org.coepi.android.ui.extensions.toUIString
 import org.coepi.android.ui.formatters.DateFormatters
 import org.coepi.android.ui.navigation.NavigationCommand.Back
@@ -48,17 +48,14 @@ class AlertsDetailsViewModel(
     private fun toHourMinute(time: UnixTime): String =
         DateFormatters.hourMinuteFormatter.formatTime(time.toDate())
 
-    private fun PublicReport.toUIString(resources: Resources) : String =
+    private fun PublicReport.toUIString(resources: Resources): String =
         listOfNotNull(
             coughSeverity.toUIString(resources),
-            toBreathlessnessUIString(resources),
+            breathlessnessUIString(resources),
             feverSeverity.toUIString(resources)
         ).joinToString("\n") { "${resources.getString(string.bullet_point)} $it" }
 
     fun onBack() {
         navigation.navigate(Back)
     }
-
 }
-
-

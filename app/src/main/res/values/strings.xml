@@ -8,6 +8,8 @@
     <string name="submit">Submit</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="link_privacy">https://www.coepi.org/privacy/</string>
+    <string name="link_faq">https://www.coepi.org/faq/</string>
 
     <!-- Tabs container -->
     <string name="tab_container_debug">Debug</string>
@@ -39,9 +41,9 @@
     <string name="symptoms_success_message">Symptoms submitted!</string>
 
     <!-- Thank you -->
-    <string name="thanks_message">Thank you for saving your symptoms! We will keep notified about exposures this week.</string>
-    <string name="thanks_log_button">Log more symptoms</string>
-    <string name="thanks_exposures_button">View exposures</string>
+    <string name="thanks_message">Thank you for logging your symptoms! We will alert if you have any relevant exposures to review.</string>
+    <string name="thanks_log_button">Update your symptom report</string>
+    <string name="thanks_exposures_button">View exposure alerts</string>
     <string name="thanks_home_button">Return to home screen</string>
 
     <!-- Onboarding -->
@@ -49,36 +51,66 @@
     <string name="onboarding_cta">GET STARTED</string>
     <string name="onboarding_tagline">Collaborate. Inform. Protect.</string>
     <string name="onboarding_link">@string/privacy_link</string>
-    <string name="onboarding_banner_1"><b>Track</b> where you\'ve been</string>
+    <string name="onboarding_banner_1"><b>Log your</b> interactions</string>
     <string name="onboarding_banner_2"><b>Monitor</b> your health</string>
     <string name="onboarding_banner_3">Get <b>contextualized alerts</b> about possible exposure to infectious illness</string>
 
     <!-- Home -->
-    <string name="home_my_health_card_title">My Symptom Report</string>
+    <string name="home_my_health_card_title">Symptom Reporting</string>
     <string name="home_contact_alerts_card_title">Exposure Alerts</string>
-    <string name="home_my_health_card_description">Track how you are feeling</string>
-    <string name="home_contact_alerts_card_description">Find out reported alerts around you</string>
+    <string name="home_my_health_card_description">Share how you are feeling</string>
+    <string name="home_contact_alerts_card_description">Review your potential exposures</string>
     <string name="home_version">Version: %s</string>
     <string name="home_privacy_link_text">How is my data being used?</string>
     <plurals name="home_new_exposure_alert">
         <item quantity="one">%s new exposure detected</item>
         <item quantity="other">%s new exposures detected</item>
     </plurals>
+    
+    <!-- Onboarding -->
+    <string name="onboarding_card_title_1">Log your interactions</string>
+    <string name="onboarding_card_title_2">Monitor your health</string>
+    <string name="onboarding_card_title_3">Stay informed</string>
+    <string name="onboarding_card_title_4">Collaborate. Inform. Protect.</string>
+
+    <string name="onboarding_card_content_1">CoEpi will anonymously log interactions
+            with other devices using compatible apps.
+    </string>
+
+    <string name="onboarding_card_content_2">Share any symptoms you may have,
+        <b>when you notice them.</b>
+    </string>
+
+    <string name="onboarding_card_content_3">You will get alerts about potential <b>
+        exposure to individuals with contagious illnesses. </b>
+    </string>
+
+    <string name="onboarding_card_content_4">
+        "Help prevent the spread of contagious illnesses. <b> Together, we can make a difference. </b>
+    </string>
+
+    <string name="onboarding_data_usage_link_label"><u>How will my data be used?</u></string>
+    <string name="onboarding_next_button_label">NEXT</string>
+    <string name="onboarding_join_button_label">Get started</string>
+    <string name="onboarding_faq_button_label">Frequently Asked Questions</string>
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
     <plurals name="alerts_new_notifications_count">
-        <item quantity="one">%s new contact alert</item>
-        <item quantity="other">%s new contact alerts</item>
+        <item quantity="one">%s new exposure alert</item>
+        <item quantity="other">%s new exposure alerts</item>
     </plurals>
     <string name="alerts_no_symptoms_reported">No symptoms reported</string>
     <string name="alerts_headline">Exposure Alerts</string>
     <string name="alerts_learn_more">Click each alert to learn more</string>
     <string name="alerts_info_button">What are exposure alerts?</string>
-    <string name="alerts_cough_report">Cough</string>
-    <string name="alerts_cough_report_detail">%s cough</string>
-    <string name="alerts_fever_report">Fever</string>
-    <string name="alerts_breathlessness_report">Breathlessness</string>
+
+    <string name="alerts_report_fever_mild">Mild fever</string>
+    <string name="alerts_report_fever_serious">Serious fever</string>
+    <string name="alerts_report_cough">Cough</string>
+    <string name="alerts_report_cough_wet">Wet cough</string>
+    <string name="alerts_report_cough_dry">Dry cough</string>
+    <string name="alerts_report_breathlessness">Breathlessness</string>
 
     <!-- Alert details -->
     <!-- TODO clarify whether this is needed -->
@@ -157,9 +189,8 @@
     <string name="symptom_report_fever_temperature_spot_input_unknown">@string/unknown</string>
     <string name="symptom_report_fever_temperature_spot_input_submit">@string/submit</string>
 
-    <string name="alerts_fever_report_detail">%s fever</string>
-    <string name="symptom_report_fever_severity_mild">Mild</string>
-    <string name="symptom_report_fever_severity_serious">Serious</string>
+    <string name="symptom_report_fever_severity_mild">Mild fever</string>
+    <string name="symptom_report_fever_severity_serious">Serious fever</string>
 
     <!-- Symptom Report - Earliest Symptoms -->
     <string name="symptom_report_earliest_symptom_title">Follow up: Earliest Symptoms</string>

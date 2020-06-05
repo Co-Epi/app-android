@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewData"
+            type="org.coepi.android.ui.onboarding.OnboardingCardViewData.SmallCard" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/card_onboarding_small_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/small_card_view_wrapper"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/onboarding_card_small_height"
+            android:background="@drawable/background_onboarding_card"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/onboarding_card_small_title"
+                style="@style/card_view_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/onboarding_card_text_horizontal_margins"
+                android:text="@{viewData.title}"
+                android:textSize="19sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/onboarding_card_title_1" />
+
+            <TextView
+                android:id="@+id/onboarding_card_small_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/onboarding_card_text_horizontal_margins"
+                android:letterSpacing="0.02"
+                android:text="@{viewData.message}"
+                android:textColor="#DE000000"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/onboarding_card_small_title"
+                tools:text="@string/onboarding_card_content_1" />
+
+            <TextView
+                android:id="@+id/data_usage_link_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_40"
+                android:layout_marginTop="@dimen/margin_40"
+                android:text="@string/onboarding_data_usage_link_label"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/onboarding_card_small_content" />
+
+            <LinearLayout
+                android:id="@+id/card_progress_icons_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="@dimen/margin_40"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/data_usage_link_label"
+                app:layout_constraintTop_toBottomOf="@id/data_usage_link_label">
+
+                <ImageView
+                    android:id="@+id/progress_icon_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:src="@drawable/stepper_icon_unselected" />
+
+                <ImageView
+                    android:id="@+id/progress_icon_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:src="@drawable/stepper_icon_unselected" />
+
+                <ImageView
+                    android:id="@+id/progress_icon_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:src="@drawable/stepper_icon_unselected" />
+
+                <ImageView
+                    android:id="@+id/progress_icon_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/stepper_icon_unselected" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/onboarding_card_small_next_button"
+                style="@style/Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onboarding_next_button_label"
+                app:layout_constraintBottom_toBottomOf="@id/card_progress_icons_wrapper"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/card_progress_icons_wrapper"
+                app:layout_constraintTop_toTopOf="@id/card_progress_icons_wrapper" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
