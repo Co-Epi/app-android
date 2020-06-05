@@ -51,8 +51,8 @@ class AlertsFragment : Fragment() {
             itemTouchHelper.attachToRecyclerView(recyclerView)
         }
 
-        viewModel.alerts.observeWith(viewLifecycleOwner) { alerts ->
-            alertsAdapter.submitList(alerts.sortedWith(compareByDescending { it.report.contactTime.value }))
+        viewModel.alerts.observeWith(viewLifecycleOwner) {
+            alertsAdapter.submitList(it)
         }
     }.root
 }
