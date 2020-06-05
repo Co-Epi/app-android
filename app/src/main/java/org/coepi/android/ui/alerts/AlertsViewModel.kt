@@ -40,7 +40,6 @@ class AlertsViewModel(
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
-        .sorted()
         .map { reports ->
             reports.map {
                 it.toViewData(reports)
