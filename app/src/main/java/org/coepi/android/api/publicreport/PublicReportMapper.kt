@@ -2,6 +2,7 @@ package org.coepi.android.api.publicreport
 
 import org.coepi.android.api.publicreport.FeverSeverity.MILD
 import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
+import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
 import org.coepi.android.domain.symptomflow.SymptomInputs
@@ -21,6 +22,7 @@ interface PublicReportMapper {
 class PublicReportMapperImpl : PublicReportMapper {
 
     override fun toPublicReport(inputs: SymptomInputs): PublicReport = PublicReport(
+        reportTime = now(),
         earliestSymptomTime = inputs.earliestSymptom.time,
         feverSeverity = inputs.fever.toSeverity(),
         coughSeverity = inputs.cough.toSeverity(inputs.ids.contains(COUGH)),
