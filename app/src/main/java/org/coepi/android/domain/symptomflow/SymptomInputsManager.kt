@@ -6,7 +6,6 @@ import org.coepi.android.domain.symptomflow.SymptomId.COUGH
 import org.coepi.android.domain.symptomflow.SymptomId.FEVER
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
-import org.coepi.android.domain.symptomflow.SymptomInputs.EarliestSymptom
 import org.coepi.android.domain.symptomflow.SymptomInputs.Fever
 import org.coepi.android.extensions.toUnixTime
 import org.coepi.android.system.log.log
@@ -34,8 +33,7 @@ interface SymptomInputsManager : SymptomInputsInitalizer, SymptomInputsProps {
     fun clear()
 }
 
-class SymptomInputsManagerImpl :
-    SymptomInputsManager {
+class SymptomInputsManagerImpl : SymptomInputsManager {
     override var inputs: SymptomInputs =
         SymptomInputs()
         private set
