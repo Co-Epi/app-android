@@ -39,9 +39,10 @@ class PublicReportAndMemoMapperTests {
         val inputs = SymptomInputs(setOf(NONE))
 
         val reportMapper: PublicReportMapper = PublicReportMapperImpl()
-        val report = reportMapper.toPublicReport(inputs)
+        val report = reportMapper.toPublicReport(inputs,
+            UnixTime.fromValue(1589209754L))
 
-        val memo: Memo = mapper.toMemo(report, UnixTime.fromValue(1589209754L))
+        val memo: Memo = mapper.toMemo(report)
         val mappedReport = mapper.toReport(memo)
 
         Truth.assertThat(mappedReport).isEqualTo(report)
@@ -74,9 +75,10 @@ class PublicReportAndMemoMapperTests {
         )
 
         val reportMapper: PublicReportMapper = PublicReportMapperImpl()
-        val report = reportMapper.toPublicReport(inputs)
+        val report = reportMapper.toPublicReport(inputs,
+            UnixTime.fromValue(1589209754L))
 
-        val memo: Memo = mapper.toMemo(report, UnixTime.fromValue(1589209754L))
+        val memo: Memo = mapper.toMemo(report)
         val mappedReport = mapper.toReport(memo)
         Truth.assertThat(mappedReport).isEqualTo(report)
     }

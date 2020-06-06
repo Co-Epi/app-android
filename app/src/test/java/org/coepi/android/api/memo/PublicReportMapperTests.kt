@@ -7,6 +7,7 @@ import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.api.publicreport.PublicReportMapper
 import org.coepi.android.api.publicreport.PublicReportMapperImpl
 import org.coepi.android.domain.UnixTime
+import org.coepi.android.domain.UnixTime.Companion
 import org.coepi.android.domain.model.Temperature
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
@@ -36,9 +37,10 @@ class PublicReportMapperTests {
         val inputs = SymptomInputs(setOf(NONE))
 
         val reportMapper: PublicReportMapper = PublicReportMapperImpl()
-        val report = reportMapper.toPublicReport(inputs)
+        val report = reportMapper.toPublicReport(inputs, UnixTime.fromValue(0))
 
         Truth.assertThat(report).isEqualTo(PublicReport(
+            reportTime = UnixTime.fromValue(0),
             earliestSymptomTime = None,
             feverSeverity = FeverSeverity.NONE,
             coughSeverity = CoughSeverity.NONE,
@@ -72,11 +74,13 @@ class PublicReportMapperTests {
         )
 
         val reportMapper: PublicReportMapper = PublicReportMapperImpl()
-        val report = reportMapper.toPublicReport(inputs)
+        val report = reportMapper.toPublicReport(inputs,
+            UnixTime.fromValue(1589209700L))
 
-        val memo: Memo = mapper.toMemo(report, UnixTime.fromValue(1589209754L))
+        val memo: Memo = mapper.toMemo(report)
         val mappedReport = mapper.toReport(memo)
         Truth.assertThat(report).isEqualTo(PublicReport(
+            reportTime = UnixTime.fromValue(1589209700L),
             earliestSymptomTime = Some(UnixTime.fromValue(1589202354L)),
             feverSeverity = FeverSeverity.MILD,
             coughSeverity = CoughSeverity.DRY,

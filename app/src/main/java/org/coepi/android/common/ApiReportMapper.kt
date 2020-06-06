@@ -27,7 +27,7 @@ class ApiSymptomsMapperImpl(
     override fun toApiReport(report: PublicReport): String =
         tcnKeys.createReport(
             // TODO modify TCN lib to use unsigned bytes?
-            memoMapper.toMemo(report, now()).bytes.asByteArray(),
+            memoMapper.toMemo(report).bytes.asByteArray(),
             MemoType.CoEpiV1
         ).toByteArray().toBase64String()
 
