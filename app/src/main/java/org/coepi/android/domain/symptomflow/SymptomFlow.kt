@@ -81,11 +81,17 @@ class SymptomFlow(private var steps: List<SymptomStep>) {
         }
     }
 }
-private fun toSteps(symptomIds: List<SymptomId>): List<SymptomStep> =
-    if(!symptomIds.contains(NONE))
-        symptomIds.flatMap { it.toSteps()}.plus(EARLIEST_SYMPTOM)
-    else
-        symptomIds.flatMap { it.toSteps() }
+private fun toSteps(symptomIds: List<SymptomId>): List<SymptomStep> {
+    if (symptomIds.contains(NONE) && symptomIds.size > 1) {
+        error("There must be no other symptoms selected when NONE is selected")
+    }
+
+    return symptomIds.flatMap { it.toInitialSteps() } + if (symptomIds != listOf(NONE)) {
+        listOf(EARLIEST_SYMPTOM)
+    } else {
+        emptyList()
+    }
+}
 
 private fun SymptomId.toInitialSteps(): List<SymptomStep> =
     when (this) {
