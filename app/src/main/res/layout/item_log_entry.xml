@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="org.coepi.android.system.log.LogMessage" />
+            type="org.coepi.android.ui.debug.logs.LogMessageViewData" />
     </data>
 
     <LinearLayout
@@ -17,15 +17,15 @@
         android:paddingBottom="5dp">
 
         <TextView
-            android:id="@+id/lblLogLevel"
+            android:id="@+id/time"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="@{item.level.text}"
+            android:text="@{item.time}"
             android:textSize="@dimen/text_size_10"
             tools:text="Verbose" />
 
         <TextView
-            android:id="@+id/lblMessage"
+            android:id="@+id/message"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@{item.text}"
