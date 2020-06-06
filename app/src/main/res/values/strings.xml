@@ -113,8 +113,7 @@
     <string name="alerts_report_breathlessness">Breathlessness</string>
 
     <!-- Alert details -->
-    <!-- TODO clarify whether this is needed -->
-    <string name="alerts_details_title">Details</string>
+    <string name="alerts_details_title">Exposure alert</string>
     <string name="alerts_details_reported_on">Reported on %s at %s</string>
 
     <!-- Infection contact notifications -->

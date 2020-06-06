@@ -12,6 +12,7 @@ import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
+import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.extensions.breathlessnessUIString
 import org.coepi.android.ui.extensions.toUIString
 import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
@@ -25,25 +26,21 @@ class AlertsDetailsViewModel(
     private val navigation: RootNavigation
 ) : ViewModel() {
 
-    val title: LiveData<String> = just(toMonthAndDay(args.report.contactTime))
+    val title: LiveData<String> = just(toMonthAndDay(args.alert.contactTime))
         .toLiveData()
 
-    val exposureTime: LiveData<String> = just(toHourMinute(args.report.contactTime))
+    val exposureTime: LiveData<String> = just(toHourMinute(args.alert.contactTime))
         .toLiveData()
 
     val reportedTime: LiveData<String> =
         just(args.alert.reportedOnString())
         .toLiveData()
 
-    val symptomList = symptomList(args.report.report)
+    val symptomList = symptomList(args.alert.report)
 
     @SuppressLint("DefaultLocale")
     private fun symptomList(report: PublicReport): String =
         report.toUIString(resources)
-
-    private fun SymptomId.toViewData(): AlertDetailsSymptomViewData =
-        // TODO map to localized names
-        AlertDetailsSymptomViewData(ic_alert, name, this)
 
     private fun toMonthAndDay(time: UnixTime): String =
         monthDayFormatter.formatMonthDay(time.toDate())

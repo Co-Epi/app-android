@@ -28,5 +28,5 @@ class AlertsDetailsFragment : Fragment() {
     }.root
 
     @Parcelize
-    data class Args(val report: Alert) : Parcelable
+    data class Args(val alert: Alert) : Parcelable
 }
