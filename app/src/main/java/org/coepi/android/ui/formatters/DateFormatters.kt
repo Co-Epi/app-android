@@ -8,6 +8,7 @@ object DateFormatters {
     val dotFormatter = DotDateFormatter()
     val hourMinuteFormatter = HourMinuteFormatter()
     val monthDayFormatter = MonthDayFormatter()
+    val hourMinuteSecFormatter = HourMinuteSecFormatter()
 }
 
 class DotDateFormatter {
@@ -20,6 +21,13 @@ class DotDateFormatter {
 class HourMinuteFormatter {
     @SuppressLint("SimpleDateFormat")
     val formatTime = SimpleDateFormat("h:mm a")
+
+    fun formatTime(date: Date): String = formatTime.format(date)
+}
+
+class HourMinuteSecFormatter {
+    @SuppressLint("SimpleDateFormat")
+    val formatTime = SimpleDateFormat("h:mm:ss")
 
     fun formatTime(date: Date): String = formatTime.format(date)
 }

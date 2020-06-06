@@ -1,5 +1,6 @@
 package org.coepi.android.ui.debug.logs
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
@@ -16,12 +17,14 @@ import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.log.CachingLog
 import org.coepi.android.system.log.LogLevel
 import org.coepi.android.system.log.LogLevel.D
+import org.coepi.android.system.log.LogLevel.E
+import org.coepi.android.system.log.LogLevel.I
 import org.coepi.android.system.log.LogLevel.V
+import org.coepi.android.system.log.LogLevel.W
 import org.coepi.android.system.log.LogMessage
-import org.coepi.android.ui.common.UINotificationData
 import org.coepi.android.ui.common.UINotificationData.Success
 import org.coepi.android.ui.common.UINotifier
-import org.coepi.android.ui.notifications.NotificationsShower
+import org.coepi.android.ui.formatters.DateFormatters.hourMinuteSecFormatter
 
 class LogsViewModel(
     logger: CachingLog,
@@ -45,7 +48,9 @@ class LogsViewModel(
         logs.filter { entry -> entry.level >= logLevel }
     }
 
-    val logs: LiveData<List<LogMessage>> = logsObservable.toLiveData()
+    val logs: LiveData<List<LogMessageViewData>> = logsObservable
+        .map { logMessages -> logMessages.map { it.toViewData() }}
+        .toLiveData()
 
     private val disposables = CompositeDisposable()
 
@@ -70,7 +75,8 @@ class LogsViewModel(
 
     private fun List<LogMessage>.toClipboardText(): String =
         joinToString("\n") { logMessage ->
-            logMessage.level.toString() + " " + logMessage.text
+            hourMinuteSecFormatter.formatTime(logMessage.time) + " " +
+                    logMessage.level.toString() + " " + logMessage.text
         }
 
     private fun EnvInfos.clipboardString(): String =
@@ -82,4 +88,22 @@ class LogsViewModel(
         super.onCleared()
         disposables.clear()
     }
+
+    private fun LogMessage.toViewData() = LogMessageViewData(
+        hourMinuteSecFormatter.formatTime(time),
+        text,
+        level.color(),
+        this
+    )
+
+    private fun LogLevel.color(): Int = when (this) {
+        V -> Color.BLACK
+        D -> Color.parseColor("#228C22")
+        I -> Color.BLUE
+        W -> Color.YELLOW
+        E -> Color.RED
+    }
 }
+
+data class LogMessageViewData(val time: String, val text: String, val textColor: Int,
+                              val message: LogMessage)
