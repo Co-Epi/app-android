@@ -29,6 +29,7 @@ import org.coepi.android.system.log.cachingLog
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
+import org.coepi.android.ui.alertsinfo.AlertsInfoViewModel
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.common.UINotifierImpl
 import org.coepi.android.ui.debug.DebugBleObservable
@@ -85,6 +86,7 @@ val viewModelModule = module {
     viewModel { FeverHighestTemperatureViewModel(get(), get()) }
     viewModel { FeverTemperatureSpotViewModel(get(), get()) }
     viewModel { FeverTemperatureSpotInputViewModel(get(), get()) }
+    viewModel { AlertsInfoViewModel(get(), get()) }
 }
 
 val systemModule = module {

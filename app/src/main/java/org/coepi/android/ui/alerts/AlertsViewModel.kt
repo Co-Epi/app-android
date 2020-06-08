@@ -27,6 +27,7 @@ import org.coepi.android.system.rx.OperationState.Success
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
+import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsInfo
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
 import org.coepi.android.ui.formatters.DateFormatters
 import org.coepi.android.ui.navigation.NavigationCommand.Back
@@ -64,6 +65,10 @@ class AlertsViewModel(
 
     fun onBack() {
         navigation.navigate(Back)
+    }
+
+    fun onAlertsInfoButtonClick() {
+        navigation.navigate(ToDirections(actionGlobalAlertsInfo()))
     }
 
     /**
