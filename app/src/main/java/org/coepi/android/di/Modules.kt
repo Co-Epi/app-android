@@ -95,7 +95,7 @@ val systemModule = module {
     single { BlePreconditions(get(), get(), get()) }
     single { BleEnabler() }
     single { Resources(androidApplication()) }
-    single<BleManager> { BleManagerImpl(androidApplication(), get()) }
+    single<BleManager> { BleManagerImpl(androidApplication(), get(), get()) }
 //    single<BleManager> { BleSimulator() }  // Disable BleManagerImpl and enable this to use BLE simulator
     single { NotReferencedDependenciesActivator(get(), get(), get(), get()) }
     single { ContactsFetchManager(get()) }

@@ -26,6 +26,7 @@ import org.coepi.android.tcn.Tcn
 import org.coepi.android.domain.TcnGenerator
 import org.coepi.android.system.log.LogTag.BLE
 import org.coepi.android.system.log.log
+import org.coepi.android.ui.debug.DebugBleObservable
 import org.tcncoalition.tcnclient.bluetooth.BluetoothStateListener
 import org.tcncoalition.tcnclient.bluetooth.TcnBluetoothService
 import org.tcncoalition.tcnclient.bluetooth.TcnBluetoothService.LocalBinder
@@ -40,7 +41,8 @@ interface BleManager {
 
 class BleManagerImpl(
     private val app: Application,
-    private val tcnGenerator: TcnGenerator
+    private val tcnGenerator: TcnGenerator,
+    private val debugBleObservable: DebugBleObservable
 ): BleManager, BluetoothStateListener {
 
     override val observedTcns: PublishSubject<Tcn> = create()
@@ -51,7 +53,9 @@ class BleManagerImpl(
 
     inner class BluetoothServiceCallback : TcnBluetoothServiceCallback {
         override fun generateTcn(): ByteArray =
-            tcnGenerator.generateTcn().bytes
+            tcnGenerator.generateTcn().bytes.also {
+                debugBleObservable.setMyTcn(Tcn(it))
+            }
 
         override fun onTcnFound(tcn: ByteArray, estimatedDistance: Double?) {
             observedTcns.onNext(Tcn(tcn))
