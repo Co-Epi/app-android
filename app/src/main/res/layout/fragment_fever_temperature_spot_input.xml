@@ -23,7 +23,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_fever_title"
-            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white"
+            app:navigationContentDescription="@string/accessibility_back_button"></androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:id="@+id/headline"

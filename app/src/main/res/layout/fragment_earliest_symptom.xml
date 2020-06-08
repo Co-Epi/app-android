@@ -21,7 +21,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_earliest_symptom_title"
-            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white"
+            app:navigationContentDescription="@string/accessibility_back_button"></androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:id="@+id/headline"
@@ -51,6 +52,7 @@
             android:gravity="center_vertical"
             android:text="@string/symptom_report_earliest_symptom_days"
             android:textSize="56sp"
+            android:labelFor="@id/earliest_symptom"
             app:layout_constraintStart_toEndOf="@id/earliest_symptom"
             app:layout_constraintTop_toTopOf="@id/earliest_symptom" />
 
