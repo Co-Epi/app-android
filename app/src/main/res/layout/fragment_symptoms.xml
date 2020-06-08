@@ -23,7 +23,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/label_fragment_symptoms"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/white"
+            app:navigationContentDescription="@string/accessibility_back_button"/>
 
         <TextView
             android:id="@+id/headline"

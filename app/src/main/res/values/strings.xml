@@ -198,5 +198,8 @@
     <string name="symptom_report_earliest_symptom_days">@string/days</string>
     <string name="symptom_report_earliest_symptom_unknown">@string/unknown</string>
 
+    <!-- Accessibility -->
+    <string name="accessibility_back_button">Back Button</string>
+
     <string name="bullet_point">\u2022 </string>
 </resources>
