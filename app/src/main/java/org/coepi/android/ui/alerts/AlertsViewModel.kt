@@ -41,10 +41,9 @@ class AlertsViewModel(
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
-        .sorted()
         .map { reports ->
-            reports.map {
-                it.toViewData(reports)
+            reports.sortedByDescending { it }.map { alert ->
+                alert.toViewData(reports.sortedByDescending { it })
             }
         }
         .observeOn(mainThread())

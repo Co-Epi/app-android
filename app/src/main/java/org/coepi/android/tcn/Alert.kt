@@ -10,4 +10,16 @@ data class Alert(
     var id: String,
     var report: PublicReport,
     var contactTime: UnixTime
-) : Parcelable
+) : Parcelable, Comparable<Alert> {
+    override fun compareTo(other: Alert): Int {
+        return when {
+            this.contactTime.toDate().before(other.contactTime.toDate()) -> {
+                -1
+            }
+            this.contactTime.toDate().after(other.contactTime.toDate()) -> {
+                1
+            }
+            else -> 0
+        };
+    }
+}
