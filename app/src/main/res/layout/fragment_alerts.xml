@@ -80,24 +80,18 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <Button
+            style="@style/StandardButton"
             android:id="@+id/exposure_alert_info_button"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ripple_symptom_button"
-            android:buttonTint="@color/colorPrimary"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:paddingRight="5dp"
-            android:paddingBottom="10dp"
             android:text="@string/alerts_info_button"
             android:textAllCaps="false"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/text_size_30"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/alerts_info_button">
