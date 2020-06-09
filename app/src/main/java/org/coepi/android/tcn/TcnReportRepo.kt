@@ -5,7 +5,6 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.coepi.android.api.NativeApi
 import org.coepi.android.api.TcnApi
 import org.coepi.android.api.publicreport.PublicReportMapper
 import org.coepi.android.api.publicreport.shouldBeSent
@@ -59,14 +58,6 @@ class TcnReportRepoImpl(
     override fun submitReport(inputs: SymptomInputs): Result<Unit, Throwable> {
         val publicReport = publicReportMapper.toPublicReport(inputs, now())
 
-        val n = NativeApi()
-
-        val gr = n.getReports("getReports")
-        log.i("Native Api getReports: $gr.")
-
-        val pr = n.postReport("postReport")
-        log.i("Native Api postReport: $pr.")
-
         if (!publicReport.shouldBeSent()) {
             log.i("Public report: $publicReport doesn't contain infos relevant to other " +
                     "users. Not sending.")
@@ -84,7 +75,7 @@ class TcnReportRepoImpl(
                 log.e("Error posting report: ${it.message}")
             }
 
-        // TODO put in Result extension
+            // TODO put in Result extension
         }.doIfSuccess {
             sendState.onNext(OperationState.Success(Unit))
         }.doIfError {
