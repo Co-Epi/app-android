@@ -15,6 +15,7 @@ import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_DESCRIPTION
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_TYPE
 import org.coepi.android.domain.symptomflow.SymptomStep.EARLIEST_SYMPTOM
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_DAYS
+import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_HIGHEST_TEMPERATURE
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_TEMPERATURE_SPOT
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_TEMPERATURE_TAKEN_TODAY
 import org.coepi.android.extensions.add
@@ -97,7 +98,7 @@ private fun SymptomId.toInitialSteps(): List<SymptomStep> =
     when (this) {
         COUGH -> listOf(COUGH_TYPE, COUGH_DAYS, COUGH_DESCRIPTION)
         BREATHLESSNESS -> listOf(BREATHLESSNESS_DESCRIPTION)
-        FEVER -> listOf(FEVER_DAYS, FEVER_TEMPERATURE_TAKEN_TODAY, FEVER_TEMPERATURE_SPOT)
+        FEVER -> listOf(FEVER_DAYS, FEVER_TEMPERATURE_TAKEN_TODAY, FEVER_HIGHEST_TEMPERATURE, FEVER_TEMPERATURE_SPOT)
         MUSCLE_ACHES -> listOf()
         LOSS_SMELL_OR_TASTE -> listOf()
         DIARRHEA -> listOf()

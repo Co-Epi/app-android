@@ -25,13 +25,11 @@ class FeverTakenTodayViewModel (
     // TODO toggle? Does it make sense to let user clear selection?
 
     fun onClickYes() {
-        symptomFlowManager.addUniqueStepAfterCurrent(FEVER_HIGHEST_TEMPERATURE)
         symptomFlowManager.setFeverTakenTemperatureToday(Some(true))
         symptomFlowManager.navigateForward()
     }
 
     fun onClickNo() {
-        symptomFlowManager.removeIfPresent(FEVER_HIGHEST_TEMPERATURE)
         symptomFlowManager.setFeverTakenTemperatureToday(Some(false))
         symptomFlowManager.navigateForward()
     }
