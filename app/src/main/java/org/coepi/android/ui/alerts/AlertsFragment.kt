@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import org.coepi.android.databinding.FragmentAlertsBinding.inflate
 import org.coepi.android.extensions.observeWith
+import org.coepi.android.ui.common.SwipeToDeleteCallback
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertsFragment : Fragment() {
@@ -25,7 +28,7 @@ class AlertsFragment : Fragment() {
 
         val alertsAdapter = AlertsAdapter(onAlertClick = {
             viewModel.onAlertClick(it)
-        })
+        }, alertsRepo = viewModel.alertsRepo)
 
         recyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)
@@ -35,6 +38,17 @@ class AlertsFragment : Fragment() {
         swipeRefresh.setOnRefreshListener {
             viewModel.onSwipeToRefresh()
             swipeRefresh.isRefreshing = false
+        }
+
+        context?.let {
+            val swipeHandler = object : SwipeToDeleteCallback(it) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val adapter = recyclerView.adapter as AlertsAdapter
+                    adapter.removeAt(viewHolder.adapterPosition)
+                }
+            }
+            val itemTouchHelper = ItemTouchHelper(swipeHandler)
+            itemTouchHelper.attachToRecyclerView(recyclerView)
         }
 
         viewModel.alerts.observeWith(viewLifecycleOwner) {

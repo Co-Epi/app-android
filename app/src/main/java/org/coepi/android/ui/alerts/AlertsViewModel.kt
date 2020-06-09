@@ -27,6 +27,7 @@ import org.coepi.android.system.rx.OperationState.Success
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
+import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsInfo
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
 import org.coepi.android.ui.formatters.DateFormatters
 import org.coepi.android.ui.navigation.NavigationCommand.Back
@@ -34,15 +35,15 @@ import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
 
 class AlertsViewModel(
-    private val alertsRepo: AlertsRepo,
+    val alertsRepo: AlertsRepo,
     private val resources: Resources,
     private val navigation: RootNavigation
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
         .map { reports ->
-            reports.map {
-                it.toViewData(reports)
+            reports.sortedByDescending { it }.map { alert ->
+                alert.toViewData(reports.sortedByDescending { it })
             }
         }
         .observeOn(mainThread())
@@ -63,6 +64,10 @@ class AlertsViewModel(
 
     fun onBack() {
         navigation.navigate(Back)
+    }
+
+    fun onAlertsInfoButtonClick() {
+        navigation.navigate(ToDirections(actionGlobalAlertsInfo()))
     }
 
     /**

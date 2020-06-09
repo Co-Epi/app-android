@@ -68,6 +68,17 @@
         app:popExitAnim="@android:anim/fade_out" />
 
     <fragment
+        android:id="@+id/alert_info_fragment"
+        android:name="org.coepi.android.ui.alertsinfo.AlertsInfoFragment"
+        android:label="@string/label_fragment_alerts_info"
+        tools:layout="@layout/fragment_home"></fragment>
+    <action
+        android:id="@+id/action_global_alerts_info"
+        app:destination="@id/alert_info_fragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
+
+    <fragment
         android:id="@+id/symptomsFragment"
         android:name="org.coepi.android.ui.symptoms.SymptomsFragment"
         android:label="@string/label_fragment_symptoms"
