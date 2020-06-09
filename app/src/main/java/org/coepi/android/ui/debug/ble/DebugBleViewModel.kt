@@ -12,13 +12,10 @@ import org.coepi.android.ui.debug.ble.DebugBleItemViewData.Item
 class DebugBleViewModel(debugBleObservable: DebugBleObservable) : ViewModel() {
 
     val items: LiveData<List<DebugBleItemViewData>> = combineLatest(
-        debugBleObservable.myKey.asSequence().map { it.distinct() },
         debugBleObservable.myTcn.asSequence().map { it.distinct() },
         debugBleObservable.observedTcns.asSequence().map { it.distinct() }
 
-    ).map { (keys, myTcns, observedTcns) ->
-        listOf(Header("My key")) +
-        keys.map { Item(it.key) } +
+    ).map { (myTcns, observedTcns) ->
         listOf(Header("My TCN")) +
         myTcns.map { Item(it.toHex()) } +
         listOf(Header("Discovered")) +

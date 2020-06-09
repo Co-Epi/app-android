@@ -6,14 +6,17 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
 import org.coepi.android.R.drawable.ic_alert
 import org.coepi.android.R.string
+import org.coepi.android.R.string.alerts_details_reported_on
 import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
-import org.coepi.android.ui.extensions.toBreathlessnessUIString
+import org.coepi.android.tcn.Alert
+import org.coepi.android.ui.extensions.breathlessnessUIString
 import org.coepi.android.ui.extensions.toUIString
-import org.coepi.android.ui.formatters.DateFormatters
+import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
+import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
 
@@ -23,35 +26,32 @@ class AlertsDetailsViewModel(
     private val navigation: RootNavigation
 ) : ViewModel() {
 
-    val title: LiveData<String> = just(toMonthAndDay(args.report.contactTime))
+    val title: LiveData<String> = just(toMonthAndDay(args.alert.contactTime))
         .toLiveData()
 
-    val exposureTime: LiveData<String> = just(toHourMinute(args.report.contactTime))
+    val exposureTime: LiveData<String> = just(toHourMinute(args.alert.contactTime))
         .toLiveData()
 
-    //TODO Show when the symptoms were reported. Maybe the earliestSymptom Date?
-    val reportedTime: LiveData<String> = just(" ").toLiveData()
+    val reportedTime: LiveData<String> =
+        just(args.alert.reportedOnString())
+        .toLiveData()
 
-    val symptomList = symptomList(args.report.report)
+    val symptomList = symptomList(args.alert.report)
 
     @SuppressLint("DefaultLocale")
     private fun symptomList(report: PublicReport): String =
         report.toUIString(resources)
 
-    private fun SymptomId.toViewData(): AlertDetailsSymptomViewData =
-        // TODO map to localized names
-        AlertDetailsSymptomViewData(ic_alert, name, this)
-
     private fun toMonthAndDay(time: UnixTime): String =
-        DateFormatters.monthDayFormatter.formatMonthDay(time.toDate())
+        monthDayFormatter.formatMonthDay(time.toDate())
 
     private fun toHourMinute(time: UnixTime): String =
-        DateFormatters.hourMinuteFormatter.formatTime(time.toDate())
+        hourMinuteFormatter.formatTime(time.toDate())
 
-    fun PublicReport.toUIString(resources: Resources) : String =
+    private fun PublicReport.toUIString(resources: Resources): String =
         listOfNotNull(
             coughSeverity.toUIString(resources),
-            toBreathlessnessUIString(resources),
+            breathlessnessUIString(resources),
             feverSeverity.toUIString(resources)
         ).joinToString("\n") { "${resources.getString(string.bullet_point)} $it" }
 
@@ -59,6 +59,10 @@ class AlertsDetailsViewModel(
         navigation.navigate(Back)
     }
 
+    private fun Alert.reportedOnString() = report.reportTime.toDate().let { date ->
+        resources.getString(alerts_details_reported_on,
+            monthDayFormatter.formatMonthDay(date),
+            hourMinuteFormatter.formatTime(date)
+        )
+    }
 }
-
-

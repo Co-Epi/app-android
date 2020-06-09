@@ -15,6 +15,9 @@ import org.coepi.android.common.Result.Success
 import org.coepi.android.common.doIfError
 import org.coepi.android.common.doIfSuccess
 import org.coepi.android.common.flatMap
+import org.coepi.android.domain.UnixTime
+import org.coepi.android.domain.UnixTime.Companion
+import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.domain.symptomflow.SymptomInputs
 import org.coepi.android.extensions.retrofit.executeSafe
 import org.coepi.android.system.log.log
@@ -54,6 +57,7 @@ class TcnReportRepoImpl(
     }
 
     override fun submitReport(inputs: SymptomInputs): Result<Unit, Throwable> {
+        val publicReport = publicReportMapper.toPublicReport(inputs, now())
 
         val n = NativeApi()
 
@@ -63,7 +67,6 @@ class TcnReportRepoImpl(
         val pr = n.postReport("postReport")
         log.i("Native Api postReport: $pr.")
 
-        val publicReport = publicReportMapper.toPublicReport(inputs)
         if (!publicReport.shouldBeSent()) {
             log.i("Public report: $publicReport doesn't contain infos relevant to other " +
                     "users. Not sending.")

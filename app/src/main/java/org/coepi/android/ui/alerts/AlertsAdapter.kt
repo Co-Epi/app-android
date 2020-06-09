@@ -19,7 +19,8 @@ class AlertsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            item: AlertViewData, onAlertClick: (AlertViewData) -> Unit
+            item: AlertViewData,
+            onAlertClick: (AlertViewData) -> Unit
         ): Unit = binding.run {
             this.item = item
             root.setOnClickListener {

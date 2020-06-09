@@ -6,7 +6,7 @@ import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
 import org.coepi.android.api.publicreport.FeverSeverity
 import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.api.publicreport.PublicReport
-import org.coepi.android.domain.UnixTime
+import org.coepi.android.domain.UnixTime.Companion.fromValue
 import org.coepi.android.domain.symptomflow.UserInput.None
 import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.junit.Test
@@ -23,13 +23,14 @@ class MemoMapperTests {
     fun maps_no_symptoms() {
         val mapper: MemoMapper = MemoMapperImpl()
         val report = PublicReport(
+            reportTime = fromValue(1589209754L),
             earliestSymptomTime = None,
             feverSeverity = FeverSeverity.NONE,
             breathlessness = false,
             coughSeverity = CoughSeverity.NONE
         )
 
-        val memo: Memo = mapper.toMemo(report, UnixTime.fromValue(1589209754L))
+        val memo: Memo = mapper.toMemo(report)
         val mappedReport = mapper.toReport(memo)
 
         Truth.assertThat(mappedReport).isEqualTo(report)
@@ -44,13 +45,14 @@ class MemoMapperTests {
         val mapper: MemoMapper = MemoMapperImpl()
 
         val report = PublicReport(
-            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
+            reportTime = fromValue(1589209754L),
+            earliestSymptomTime = Some(fromValue(1589209754L)),
             feverSeverity = SERIOUS,
             breathlessness = true,
             coughSeverity = EXISTING
         )
 
-        val memo: Memo = mapper.toMemo(report, UnixTime.fromValue(1589209754L))
+        val memo: Memo = mapper.toMemo(report)
         val mappedReport = mapper.toReport(memo)
         Truth.assertThat(mappedReport).isEqualTo(report)
     }

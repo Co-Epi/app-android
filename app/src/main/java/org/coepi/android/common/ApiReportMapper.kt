@@ -14,7 +14,7 @@ import org.tcncoalition.tcnclient.crypto.MemoType
 
 interface ApiReportMapper {
     fun toApiReport(report: PublicReport): String
-    fun fromRawAlert(report: RawAlert): Alert?
+    fun fromRawAlert(alert: RawAlert): Alert?
 }
 
 @ExperimentalUnsignedTypes
@@ -27,16 +27,16 @@ class ApiSymptomsMapperImpl(
     override fun toApiReport(report: PublicReport): String =
         tcnKeys.createReport(
             // TODO modify TCN lib to use unsigned bytes?
-            memoMapper.toMemo(report, now()).bytes.asByteArray(),
+            memoMapper.toMemo(report).bytes.asByteArray(),
             MemoType.CoEpiV1
         ).toByteArray().toBase64String()
 
-    override fun fromRawAlert(report: RawAlert): Alert? =
-        report.memoStr.base64ToByteArray()?.toUByteArray()?.let { memoBytes ->
+    override fun fromRawAlert(alert: RawAlert): Alert? =
+        alert.memoStr.base64ToByteArray()?.toUByteArray()?.let { memoBytes ->
             Alert(
-                id = report.id,
+                id = alert.id,
                 report = memoMapper.toReport(Memo(memoBytes)),
-                contactTime = report.contactTime
+                contactTime = alert.contactTime
             )
         }
 }

@@ -2,6 +2,7 @@ package org.coepi.android.api.publicreport
 
 import org.coepi.android.api.publicreport.FeverSeverity.MILD
 import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
+import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
 import org.coepi.android.domain.symptomflow.SymptomInputs
@@ -14,13 +15,14 @@ import org.coepi.android.domain.symptomflow.UserInput.Some
 
 @ExperimentalUnsignedTypes
 interface PublicReportMapper {
-    fun toPublicReport(inputs: SymptomInputs): PublicReport
+    fun toPublicReport(inputs: SymptomInputs, reportTime: UnixTime): PublicReport
 }
 
 @ExperimentalUnsignedTypes
 class PublicReportMapperImpl : PublicReportMapper {
 
-    override fun toPublicReport(inputs: SymptomInputs): PublicReport = PublicReport(
+    override fun toPublicReport(inputs: SymptomInputs, reportTime: UnixTime): PublicReport = PublicReport(
+        reportTime = reportTime,
         earliestSymptomTime = inputs.earliestSymptom.time,
         feverSeverity = inputs.fever.toSeverity(),
         coughSeverity = inputs.cough.toSeverity(inputs.ids.contains(COUGH)),

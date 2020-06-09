@@ -11,6 +11,7 @@ import org.coepi.android.system.log.LogLevel.I
 import org.coepi.android.system.log.LogLevel.V
 import org.coepi.android.system.log.LogLevel.W
 import org.coepi.android.util.LimitedSizeQueue
+import java.util.Date
 
 class CachingLog : Log {
     val logs = createDefault<LimitedSizeQueue<LogMessage>>(
@@ -56,7 +57,7 @@ class CachingLog : Log {
         (tag?.let { "$it - " } ?: "") + message
 }
 
-data class LogMessage(val level: LogLevel, val text: String)
+data class LogMessage(val level: LogLevel, val text: String, val time: Date = Date())
 
 enum class LogLevel(val text: String) {
     V("Verbose"),
