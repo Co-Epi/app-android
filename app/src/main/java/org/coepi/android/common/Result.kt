@@ -6,6 +6,15 @@ import org.coepi.android.common.Result.Success
 sealed class Result<out T, out E> {
     data class Success<out T>(val success: T) : Result<T, Nothing>()
     data class Failure<out E>(val error: E) : Result<Nothing, E>()
+
+    companion object {
+        inline fun <T> with(f: () -> T): Result<T, Throwable> =
+            try {
+                Success(f())
+            } catch (t: Throwable) {
+                Failure(t)
+            }
+    }
 }
 
 fun <T, E> Result<T, E>.fallback(value: T): T = when (this) {

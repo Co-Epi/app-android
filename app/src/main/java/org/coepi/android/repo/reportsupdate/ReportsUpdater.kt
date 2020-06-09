@@ -145,9 +145,11 @@ class ReportsUpdaterImpl(
             SignedReportsChunk(
                 interval,
                 reportStrings.mapNotNull { reportString ->
-                    toSignedReport(reportString).also {
-                        if (it == null) {
-                            log.e("Failed to convert report string: $it to report")
+                    when (val result = toSignedReport(reportString)) {
+                        is Success -> result.success
+                        is Failure -> {
+                            log.e("Error: ${result.error} processing report: $reportString")
+                            null
                         }
                     }
                 }
@@ -225,8 +227,14 @@ class ReportsUpdaterImpl(
         updateState.onNext(NotStarted)
     }
 
-    private fun toSignedReport(reportString: String): SignedReport? =
-        reportString.base64ToByteArray()?.let { SignedReport.fromByteArray(it) }
+    private fun toSignedReport(reportString: String): Result<SignedReport, Throwable> =
+        reportString.base64ToByteArray().let { decoded ->
+            if (decoded != null) {
+                Result.with { SignedReport.fromByteArray(decoded) }
+            } else {
+                Failure(Throwable("Couldn't decode report string: $reportString"))
+            }
+        }
 
     private fun retrieveLastCompletedInterval(): ReportsInterval? =
         preferences.getObject(LAST_COMPLETED_REPORTS_INTERVAL, ReportsInterval::class.java)
