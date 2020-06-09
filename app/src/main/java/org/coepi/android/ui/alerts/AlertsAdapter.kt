@@ -40,9 +40,7 @@ class AlertsAdapter(
 
     fun removeAt(position: Int) {
         alertsRepo.removeAlert(getItem(position).report)
-        alertsRepo.updateReports()
         notifyItemRemoved(position)
-        notifyDataSetChanged()
     }
 }
 
