@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
+import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_HIGHEST_TEMPERATURE
 import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toIsInProgress
 import org.coepi.android.extensions.rx.toLiveData
