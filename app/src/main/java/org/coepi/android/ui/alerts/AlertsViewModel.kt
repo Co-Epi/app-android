@@ -41,10 +41,10 @@ class AlertsViewModel(
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
-        .map { reports ->
-            reports.sortedByDescending { it }.map { alert ->
-                alert.toViewData(reports.sortedByDescending { it })
-            }
+        .map { alerts ->
+            alerts
+                .sortedWith(compareByDescending { it.contactTime.value })
+                .map { alert -> alert.toViewData(alerts) }
         }
         .observeOn(mainThread())
         .toLiveData()
@@ -87,6 +87,7 @@ class AlertsViewModel(
             report = this
         )
 
+    // TODO (low prio) date header should be a separate cell
     private fun Alert.showMonthHeader(alerts: List<Alert>): Boolean {
         val currentIndex = alerts.indexOf(this)
         val currentItemDate =
