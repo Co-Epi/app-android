@@ -50,9 +50,9 @@
 
         <Button
             android:id="@+id/unknown"
-            style="@style/ButtonUnselected"
+            style="@style/small_button_unselected"
             android:layout_width="131dp"
-            android:layout_height="31dp"
+            android:layout_height="26dp"
             android:layout_marginTop="24dp"
             android:onClick="@{() -> vm.onClickUnknown()}"
             android:text="@string/symptom_report_fever_temperature_spot_input_unknown"
@@ -61,9 +61,8 @@
 
         <Button
             android:id="@+id/submit"
-            style="@style/Button"
+            style="@style/small_button_selected"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
             android:onClick="@{() -> vm.onClickSubmit()}"
             android:text="@string/symptom_report_fever_temperature_spot_input_submit"
             app:layout_constraintEnd_toEndOf="@id/measured_location"
