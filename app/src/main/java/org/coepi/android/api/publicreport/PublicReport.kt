@@ -7,6 +7,7 @@ import org.coepi.android.domain.symptomflow.UserInput
 
 @Parcelize
 data class PublicReport(
+    val reportTime: UnixTime,
     val earliestSymptomTime: UserInput<UnixTime>,
     val feverSeverity: FeverSeverity,
     val coughSeverity: CoughSeverity,

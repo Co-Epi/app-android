@@ -35,7 +35,7 @@
 
     <!-- Symptoms -->
     <string name="symptoms_headline">What symptoms do you have today?</string>
-    <string name="symptoms_caption">Select all that apply</string>
+    <string name="symptoms_caption">Select one option</string>
     <string name="symptoms_select_one">Select one option</string>
     <string name="symptoms_skip_button">Skip</string>
     <string name="symptoms_submit_button">@string/submit</string>
@@ -121,8 +121,8 @@
     <string name="alerts_report_breathlessness">Breathlessness</string>
 
     <!-- Alert details -->
-    <!-- TODO clarify whether this is needed -->
-    <string name="alerts_details_title">Details</string>
+    <string name="alerts_details_title">Exposure alert</string>
+    <string name="alerts_details_reported_on">Reported on %s at %s</string>
 
     <!-- Infection contact notifications -->
     <string name="infection_notification_title">Exposure</string>
@@ -156,7 +156,7 @@
 
     <!-- Symptom Report - Cough Status -->
     <string name="symptom_report_cough_status_headline">Today my cough has:</string>
-    <string name="symptom_report_cough_status_option_better_worse_day">Felt better and worse throughout the day</string>
+    <string name="symptom_report_cough_status_option_better_worse_day">Felt worse and better throughout the day</string>
     <string name="symptom_report_cough_status_option_worse_outside">Felt worse when I am outside</string>
     <string name="symptom_report_cough_status_option_same_or_steadily_worse">Stayed the same or felt steadily worse</string>
 
@@ -205,6 +205,9 @@
     <string name="symptom_report_earliest_symptom_headline">How many days ago did the symptoms begin?</string>
     <string name="symptom_report_earliest_symptom_days">@string/days</string>
     <string name="symptom_report_earliest_symptom_unknown">@string/unknown</string>
+
+    <!-- Accessibility -->
+    <string name="accessibility_back_button">Back Button</string>
 
     <string name="bullet_point">\u2022 </string>
 </resources>

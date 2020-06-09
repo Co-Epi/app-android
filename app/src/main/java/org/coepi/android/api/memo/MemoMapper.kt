@@ -12,7 +12,7 @@ import org.coepi.android.domain.UnixTime
 
 @ExperimentalUnsignedTypes
 interface MemoMapper {
-    fun toMemo(report: PublicReport, time: UnixTime): Memo
+    fun toMemo(report: PublicReport): Memo
     fun toReport(memo: Memo): PublicReport
 }
 
@@ -39,12 +39,12 @@ class MemoMapperImpl: MemoMapper {
     private val coughSeverityMapper = CoughSeverityMapper()
     private val feverSeverityMapper = FeverSeverityMapper()
 
-    override fun toMemo(report: PublicReport, time: UnixTime): Memo {
+    override fun toMemo(report: PublicReport): Memo {
         val memoVersion: UShort = 1.toUShort()
 
         val bits: List<BitList> = listOf(
             versionMapper.toBits(memoVersion),
-            timeMapper.toBits(time),
+            timeMapper.toBits(report.reportTime),
             timeUserInputMapper.toBits(report.earliestSymptomTime),
             coughSeverityMapper.toBits(report.coughSeverity),
             feverSeverityMapper.toBits(report.feverSeverity),
@@ -67,7 +67,6 @@ class MemoMapperImpl: MemoMapper {
         // Version for now not handled
         val versionResult = extract(bitArray, versionMapper, next).value { next += it }
 
-        // TODO handle report time?
         val timeResult = extract(bitArray, timeMapper, next).value { next += it }
 
         val earliestSymptomTime = extract(bitArray, timeUserInputMapper, next).value { next += it }
@@ -76,6 +75,7 @@ class MemoMapperImpl: MemoMapper {
         val breathlessness = extract(bitArray, booleanMapper, next).value { next += it }
 
         return PublicReport(
+            reportTime = timeResult,
             earliestSymptomTime = earliestSymptomTime,
             feverSeverity = feverSeverity,
             coughSeverity = coughSeverity,

@@ -129,7 +129,9 @@
         tools:layout="@layout/fragment_cough_duration" />
     <action
         android:id="@+id/action_global_coughDurationFragment"
-        app:destination="@id/coughDurationFragment" />
+        app:destination="@id/coughDurationFragment"
+        app:enterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
     <fragment
         android:id="@+id/coughStatusFragment"
         android:name="org.coepi.android.ui.symptoms.cough.CoughStatusFragment"

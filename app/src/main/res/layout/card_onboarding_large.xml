@@ -57,7 +57,7 @@
 
             <Button
                 android:id="@+id/onboarding_card_large_join_button"
-                style="@style/ButtonUnselected"
+                style="@style/StandardButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
@@ -70,7 +70,7 @@
 
             <Button
                 android:id="@+id/onboarding_card_large_faq_button"
-                style="@style/ButtonUnselected"
+                style="@style/StandardButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"

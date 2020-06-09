@@ -35,26 +35,27 @@
             android:layout_marginTop="@dimen/default_margin"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.title}"
-            tools:text="Headline"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_headline"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            tools:text="Headline" />
 
         <TextView
             android:id="@+id/exposure_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.exposureTime}"
-            tools:text="Exposure Time"
             android:textColor="@color/textDefault"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline" />
+            app:layout_constraintTop_toBottomOf="@id/headline"
+            tools:text="Exposure Time" />
 
         <TextView
             android:id="@+id/symptomsTag"
@@ -63,8 +64,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/margin_40"
-            android:layout_marginTop="10dp"
             android:text="@string/tab_symptoms"
             android:textColor="@color/textDefault"
             android:textSize="@dimen/text_size_30"
@@ -80,25 +81,26 @@
             android:layout_marginStart="@dimen/margin_40"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.reportedTime}"
-            tools:text="Reported Time"
             android:textColor="@color/textDefault"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/symptomsTag" />
+            app:layout_constraintTop_toBottomOf="@id/symptomsTag"
+            tools:text="Reported Time" />
 
         <TextView
             android:id="@+id/symptomList"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.symptomList}"
-            android:textSize="@dimen/text_size_30"
             android:textColor="@color/textDefault"
-            tools:text="Symptoms"
+            android:textSize="@dimen/text_size_30"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/reported_time" />
+            app:layout_constraintTop_toBottomOf="@id/reported_time"
+            tools:text="Symptoms" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
