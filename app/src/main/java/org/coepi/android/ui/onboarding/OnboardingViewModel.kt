@@ -40,6 +40,7 @@ class OnboardingViewModel(
 
     private val currentCardIndex: BehaviorSubject<Int> = BehaviorSubject.createDefault(0)
     private val nextCardTrigger: PublishSubject<Unit> = PublishSubject.create()
+    private val backCardTrigger: PublishSubject<Unit> = PublishSubject.create()
     private val openLinkSubject: PublishSubject<Uri> = PublishSubject.create()
 
     val recyclerViewScrollPosition: LiveData<Int> = currentCardIndex.toLiveData()
@@ -73,6 +74,10 @@ class OnboardingViewModel(
         disposables += nextCardTrigger.withLatestFrom(currentCardIndex).subscribe { (_, index) ->
             currentCardIndex.onNext(index + 1)
         }
+
+        disposables += backCardTrigger.withLatestFrom(currentCardIndex).subscribe { (_, index) ->
+            currentCardIndex.onNext(index - 1)
+        }
     }
 
     private fun onCloseClick() {
@@ -93,5 +98,9 @@ class OnboardingViewModel(
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
+    }
+
+    fun onBack() {
+        backCardTrigger.onNext(Unit)
     }
 }
