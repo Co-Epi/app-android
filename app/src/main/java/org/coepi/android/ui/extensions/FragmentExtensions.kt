@@ -10,6 +10,7 @@ fun Fragment.onBack(consume: Boolean = false, callback: () -> Unit) {
             override fun handleOnBackPressed() {
                 callback()
                 if (!consume) {
+                    // Emulate default back button behavior
                     findNavController().navigateUp()
                 }
             }

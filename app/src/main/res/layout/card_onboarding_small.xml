@@ -61,12 +61,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_40"
-                android:layout_marginTop="@dimen/margin_40"
+                android:layout_marginBottom="@dimen/margin_40"
                 android:text="@string/onboarding_data_usage_link_label"
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/onboarding_card_small_content" />
+                app:layout_constraintBottom_toTopOf="@id/card_progress_icons_wrapper" />
 
             <LinearLayout
                 android:id="@+id/card_progress_icons_wrapper"
@@ -76,8 +76,7 @@
                 android:layout_marginBottom="@dimen/margin_40"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/data_usage_link_label"
-                app:layout_constraintTop_toBottomOf="@id/data_usage_link_label">
+                app:layout_constraintStart_toStartOf="@id/data_usage_link_label">
 
                 <ImageView
                     android:id="@+id/progress_icon_1"
