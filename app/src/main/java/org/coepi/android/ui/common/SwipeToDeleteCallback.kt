@@ -1,16 +1,17 @@
 package org.coepi.android.ui.common
 
-import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.Callback
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import org.coepi.android.ui.alerts.AlertsAdapter
 
 
-abstract class SwipeToDeleteCallback(context: Context) :
+abstract class SwipeToDeleteCallback(adapter: AlertsAdapter) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
@@ -22,7 +23,8 @@ abstract class SwipeToDeleteCallback(context: Context) :
          * if (viewHolder?.itemViewType == YourAdapter.SOME_TYPE) return 0
          * if (viewHolder?.adapterPosition == 0) return 0
          */
-        if (viewHolder.adapterPosition == 10) return 0
+
+        if (viewHolder.adapterPosition == 10 || viewHolder.itemViewType == 0) return 0
         return super.getMovementFlags(recyclerView, viewHolder)
     }
 
