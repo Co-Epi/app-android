@@ -1,5 +1,6 @@
 package org.coepi.android.di
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
@@ -30,6 +31,8 @@ import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
 import org.coepi.android.ui.alertsinfo.AlertsInfoViewModel
+import org.coepi.android.ui.common.ActivityFinisher
+import org.coepi.android.ui.common.ActivityFinisherImpl
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.common.UINotifierImpl
 import org.coepi.android.ui.debug.DebugBleObservable
@@ -71,7 +74,7 @@ val viewModelModule = module {
     viewModel { AlertsViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { LocationViewModel() }
-    viewModel { OnboardingViewModel(get(), get(), get()) }
+    viewModel { OnboardingViewModel(get(), get(), get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
@@ -116,6 +119,7 @@ val uiModule = module {
     single { NotificationChannelsCreator(androidApplication()) }
     single { AppNotificationChannels(get(), get()) }
     single { NotificationsShower(get()) }
+    single<ActivityFinisher> { ActivityFinisherImpl() }
 }
 
 @ExperimentalUnsignedTypes

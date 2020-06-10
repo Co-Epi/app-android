@@ -8,7 +8,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.R.string.link_faq
 import org.coepi.android.R.string.link_privacy
 import org.coepi.android.R.string.onboarding_card_content_1
@@ -23,6 +25,7 @@ import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.PreferencesKey.SEEN_ONBOARDING
 import org.coepi.android.system.Resources
+import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingCardViewData.LargeCard
@@ -35,13 +38,14 @@ import org.coepi.android.ui.onboarding.OnboardingClickEvent.PrivacyLinkClicked
 class OnboardingViewModel(
     private val rootNav: RootNavigation,
     private val preferences: Preferences,
-    private val resources: Resources
+    private val resources: Resources,
+    private val activityFinisher: ActivityFinisher
 ) : ViewModel() {
 
-    private val currentCardIndex: BehaviorSubject<Int> = BehaviorSubject.createDefault(0)
-    private val nextCardTrigger: PublishSubject<Unit> = PublishSubject.create()
-    private val backCardTrigger: PublishSubject<Unit> = PublishSubject.create()
-    private val openLinkSubject: PublishSubject<Uri> = PublishSubject.create()
+    private val currentCardIndex: BehaviorSubject<Int> = createDefault(0)
+    private val nextCardTrigger: PublishSubject<Unit> = create()
+    private val backCardTrigger: PublishSubject<Unit> = create()
+    private val openLinkSubject: PublishSubject<Uri> = create()
 
     val recyclerViewScrollPosition: LiveData<Int> = currentCardIndex.toLiveData()
     val openLink: LiveData<Uri> = openLinkSubject.toLiveData()
@@ -76,7 +80,13 @@ class OnboardingViewModel(
         }
 
         disposables += backCardTrigger.withLatestFrom(currentCardIndex).subscribe { (_, index) ->
-            currentCardIndex.onNext(index - 1)
+            val newIndex = index - 1
+            if (newIndex < 0) {
+                // Case where user presses back and they are on the first onboarding tab
+                activityFinisher.finish()
+            } else {
+                currentCardIndex.onNext(newIndex)
+            }
         }
     }
 

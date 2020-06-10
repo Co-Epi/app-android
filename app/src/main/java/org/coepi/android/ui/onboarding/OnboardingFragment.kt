@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.coepi.android.databinding.FragmentOnboardingBinding.inflate
 import org.coepi.android.extensions.observeWith
+import org.coepi.android.ui.extensions.onBack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingFragment : Fragment() {
@@ -37,23 +37,10 @@ class OnboardingFragment : Fragment() {
             startActivity(Intent(ACTION_VIEW, uri))
         }
 
-        lifecycleOwner?.let {
-            activity?.onBackPressedDispatcher?.addCallback(
-                it,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        viewModel.onBack()
-                    }
-                })
-        }
+        onBack(consume = true) { viewModel.onBack() }
 
         viewModel.recyclerViewScrollPosition.observeWith(viewLifecycleOwner) { position ->
-            if (position < 0) {
-                // Case where user presses back and they are on the first onboarding tab
-                activity?.finish()
-            } else {
-                onboardingInfoRecycler.scrollToPosition(position)
-            }
+            onboardingInfoRecycler.scrollToPosition(position)
         }
     }.root
 }
