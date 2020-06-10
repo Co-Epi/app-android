@@ -86,7 +86,8 @@ class AlertsViewModel(
         )
 
     private fun List<Alert>.toCellViewData(): List<AlertCellViewData> =
-        groupBy { monthDayFormatter.formatMonthDay(it.contactTime.toDate()) }
+        sortedWith(compareByDescending { it.contactTime.value })
+            .groupBy { monthDayFormatter.formatMonthDay(it.contactTime.toDate()) }
             .flatMap { entry ->
                 listOf(Header(entry.key)) + entry.value.map { alert ->
                     Item(alert.toViewData())
