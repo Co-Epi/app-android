@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_line_height"
-                    android:text="@string/home_contact_alerts_card_title"
+                    android:text="@{item.newAlertsTitle}"
                     android:textColor="@color/red"
                     android:textSize="@dimen/text_size_30"
                     app:isVisible="@{item.newAlerts}"
