@@ -1,6 +1,5 @@
 package org.coepi.android.di
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
@@ -13,8 +12,6 @@ import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
-import org.coepi.android.tcn.TcnModule
-import org.coepi.android.tcn.apiModule
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
@@ -27,6 +24,8 @@ import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
 import org.coepi.android.system.log.cachingLog
+import org.coepi.android.tcn.TcnModule
+import org.coepi.android.tcn.apiModule
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
@@ -71,7 +70,7 @@ val viewModelModule = module {
     viewModel { SymptomsViewModel(get(), get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ThanksViewModel(get()) }
-    viewModel { AlertsViewModel(get(), get(), get()) }
+    viewModel { AlertsViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get(), get(), get()) }
@@ -82,7 +81,7 @@ val viewModelModule = module {
     viewModel { CoughTypeViewModel(get(), get()) }
     viewModel { CoughDurationViewModel(get(), get()) }
     viewModel { CoughStatusViewModel(get(), get(), get()) }
-    viewModel { EarliestSymptomViewModel(get(), get())}
+    viewModel { EarliestSymptomViewModel(get(), get()) }
     viewModel { BreathlessViewModel(get(), get(), get()) }
     viewModel { FeverDurationViewModel(get(), get()) }
     viewModel { FeverTakenTodayViewModel(get(), get()) }

@@ -28,7 +28,9 @@ class AlertsFragment : Fragment() {
 
         val alertsAdapter = AlertsAdapter(onAlertClick = {
             viewModel.onAlertClick(it)
-        }, alertsRepo = viewModel.alertsRepo)
+        }, onAlertDismissed = { viewModel.onAlertDismissed() },
+            alertsRepo = viewModel.alertsRepo
+        )
 
         recyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)

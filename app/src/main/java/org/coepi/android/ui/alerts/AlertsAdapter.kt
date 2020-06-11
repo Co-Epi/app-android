@@ -15,6 +15,7 @@ import org.coepi.android.ui.alerts.AlertCellViewData.Item
 
 class AlertsAdapter(
     private val onAlertClick: (AlertViewData) -> Unit,
+    private val onAlertDismissed: () -> Unit,
     private val alertsRepo: AlertsRepo
 ) : ListAdapter<AlertCellViewData, RecyclerView.ViewHolder>(AlertsDiffCallback()) {
 
@@ -40,7 +41,10 @@ class AlertsAdapter(
     fun removeAt(position: Int) {
         when (val item = getItem(position)) {
             is Header -> log.e("Trying to remove directly a header. Ignoring.")
-            is Item -> alertsRepo.removeAlert(item.viewData.alert)
+            is Item -> {
+                alertsRepo.removeAlert(item.viewData.alert)
+                onAlertDismissed()
+            }
         }
     }
 
