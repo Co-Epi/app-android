@@ -34,3 +34,4 @@ enum class CoughSeverity {
 
 fun PublicReport.shouldBeSent() =
     feverSeverity != FeverSeverity.NONE || coughSeverity != CoughSeverity.NONE || breathlessness
+            || muscleAches || lossSmellOrTaste || diarrhea || runnyNose || other
