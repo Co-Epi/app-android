@@ -5,6 +5,11 @@ import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
+import org.coepi.android.domain.symptomflow.SymptomId.DIARRHEA
+import org.coepi.android.domain.symptomflow.SymptomId.LOSS_SMELL_OR_TASTE
+import org.coepi.android.domain.symptomflow.SymptomId.MUSCLE_ACHES
+import org.coepi.android.domain.symptomflow.SymptomId.OTHER
+import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
 import org.coepi.android.domain.symptomflow.SymptomInputs
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Type.DRY
@@ -26,7 +31,12 @@ class PublicReportMapperImpl : PublicReportMapper {
         earliestSymptomTime = inputs.earliestSymptom.time,
         feverSeverity = inputs.fever.toSeverity(),
         coughSeverity = inputs.cough.toSeverity(inputs.ids.contains(COUGH)),
-        breathlessness = inputs.ids.contains(BREATHLESSNESS)
+        breathlessness = inputs.ids.contains(BREATHLESSNESS),
+        muscleAches = inputs.ids.contains(MUSCLE_ACHES),
+        lossSmellOrTaste = inputs.ids.contains(LOSS_SMELL_OR_TASTE),
+        diarrhea = inputs.ids.contains(DIARRHEA),
+        runnyNose = inputs.ids.contains(RUNNY_NOSE),
+        other = inputs.ids.contains(OTHER)
     )
 
     private fun Fever.toSeverity(): FeverSeverity = when(highestTemperature) {

@@ -52,7 +52,7 @@ class AlertsFragment : Fragment() {
         }
 
         viewModel.alerts.observeWith(viewLifecycleOwner) {
-            alertsAdapter.submitList(it)
+            alertsAdapter.submitList(viewModel.testAlertData())
         }
     }.root
 }

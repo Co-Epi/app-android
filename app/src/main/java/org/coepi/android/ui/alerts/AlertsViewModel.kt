@@ -17,6 +17,11 @@ import org.coepi.android.api.publicreport.CoughSeverity.WET
 import org.coepi.android.api.publicreport.FeverSeverity
 import org.coepi.android.api.publicreport.FeverSeverity.MILD
 import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
+import org.coepi.android.api.publicreport.PublicReport
+import org.coepi.android.domain.UnixTime
+import org.coepi.android.domain.symptomflow.SymptomInputs.LossSmellOrTaste
+import org.coepi.android.domain.symptomflow.SymptomInputs.MuscleAches
+import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -78,7 +83,12 @@ class AlertsViewModel(
             exposureType = listOfNotNull(
                 report.coughSeverity.toUIString(),
                 toBreathlessnessString(report.breathlessness),
-                report.feverSeverity.toUIString()
+                report.feverSeverity.toUIString(),
+                toMuscleAcheString(report.muscleAches),
+                toLossSmellOrTasteString(report.lossSmellOrTaste),
+                toDiarreaString(report.diarrhea),
+                toRunnyNoseString(report.runnyNose),
+                toOtherString(report.other)
             ).joinToString("\n"),
             contactTime = hourMinuteFormatter.formatTime(contactTime.toDate()),
             contactTimeMonth = monthDayFormatter.formatMonthDay(contactTime.toDate()),
@@ -96,6 +106,21 @@ class AlertsViewModel(
 
     private fun toBreathlessnessString(breathless: Boolean): String? =
         if (breathless) resources.getString(alerts_report_breathlessness) else null
+
+    private fun toMuscleAcheString(muscleAches: Boolean) : String? =
+        if(muscleAches) "Muscle Aches" else null
+
+    private fun toLossSmellOrTasteString(lossSmellOrTaste: Boolean) : String? =
+        if(lossSmellOrTaste) "Loss of Smell or Taste" else null
+
+    private fun toDiarreaString(diarrhea: Boolean) : String? =
+        if(diarrhea) "Diarrhea" else null
+
+    private fun toRunnyNoseString(runnyNose: Boolean) : String? =
+        if(runnyNose) "Runny Nose" else null
+
+    private fun toOtherString(other: Boolean) : String? =
+        if(other) "Other" else null
 
     private fun FeverSeverity.toUIString(): String? =
         when (this) {
@@ -119,4 +144,53 @@ class AlertsViewModel(
             is Progress -> "Updating..."
             is Failure -> "Error updating: ${operationState.t}"
         }
+
+    fun genTestData(): List<Alert> {
+        val report1 = PublicReport(
+            reportTime = UnixTime.fromValue(1589209754L),
+            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
+            feverSeverity = SERIOUS,
+            breathlessness = true,
+            coughSeverity = EXISTING,
+            muscleAches = true,
+            lossSmellOrTaste = true,
+            diarrhea = true,
+            runnyNose = true,
+            other = true
+        )
+        val report2 = PublicReport(
+            reportTime = UnixTime.fromValue(1589209754L),
+            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
+            feverSeverity = SERIOUS,
+            breathlessness = true,
+            coughSeverity = EXISTING,
+            muscleAches = true,
+            lossSmellOrTaste = true,
+            diarrhea = true,
+            runnyNose = true,
+            other = true
+        )
+        val report3 = PublicReport(
+            reportTime = UnixTime.fromValue(1589209754L),
+            earliestSymptomTime = Some(UnixTime.fromValue(1589209754L)),
+            feverSeverity = SERIOUS,
+            breathlessness = true,
+            coughSeverity = EXISTING,
+            muscleAches = true,
+            lossSmellOrTaste = true,
+            diarrhea = true,
+            runnyNose = true,
+            other = true
+        )
+        return listOf(
+
+            Alert("id1", report1, UnixTime.fromValue(1589209754L)),
+            Alert("id2", report2, UnixTime.fromValue(1589209754L)),
+            Alert("id3", report3, UnixTime.fromValue(1589209754L))
+        )
+    }
+
+    fun testAlertData() : List<AlertCellViewData> {
+        return genTestData().toCellViewData()
+    }
 }

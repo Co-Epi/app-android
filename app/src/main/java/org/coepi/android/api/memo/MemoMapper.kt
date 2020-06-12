@@ -73,13 +73,23 @@ class MemoMapperImpl: MemoMapper {
         val coughSeverity = extract(bitArray, coughSeverityMapper, next).value { next += it }
         val feverSeverity = extract(bitArray, feverSeverityMapper, next).value { next += it }
         val breathlessness = extract(bitArray, booleanMapper, next).value { next += it }
+        val muscleAches = extract(bitArray, booleanMapper, next).value { next += it }
+        val lossSmellOrTaste = extract(bitArray, booleanMapper, next).value { next += it }
+        val diarrhea = extract(bitArray, booleanMapper, next).value { next += it }
+        val runnyNose = extract(bitArray, booleanMapper, next).value { next += it }
+        val other = extract(bitArray, booleanMapper, next).value { next += it }
 
         return PublicReport(
             reportTime = timeResult,
             earliestSymptomTime = earliestSymptomTime,
             feverSeverity = feverSeverity,
             coughSeverity = coughSeverity,
-            breathlessness = breathlessness
+            breathlessness = breathlessness,
+            muscleAches = muscleAches,
+            lossSmellOrTaste = lossSmellOrTaste,
+            diarrhea = diarrhea,
+            runnyNose = runnyNose,
+            other = other
         )
     }
 

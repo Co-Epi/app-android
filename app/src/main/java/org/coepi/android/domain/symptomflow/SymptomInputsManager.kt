@@ -4,9 +4,11 @@ import org.coepi.android.domain.model.Temperature
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
 import org.coepi.android.domain.symptomflow.SymptomId.FEVER
+import org.coepi.android.domain.symptomflow.SymptomId.MUSCLE_ACHES
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
 import org.coepi.android.domain.symptomflow.SymptomInputs.Fever
+import org.coepi.android.domain.symptomflow.SymptomInputs.MuscleAches
 import org.coepi.android.extensions.toUnixTime
 import org.coepi.android.system.log.log
 import org.threeten.bp.Instant
@@ -27,6 +29,7 @@ interface SymptomInputsProps {
     fun setFeverTakenTemperatureSpot(spot: UserInput<Fever.TemperatureSpot>)
     fun setFeverHighestTemperatureTaken(temp: UserInput<Temperature>)
     fun setEarliestSymptomStartedDaysAgo(days: UserInput<Int>)
+    fun setMuscleAches(present: UserInput<Boolean>)
 }
 
 interface SymptomInputsManager : SymptomInputsInitalizer, SymptomInputsProps {
@@ -48,6 +51,7 @@ class SymptomInputsManagerImpl : SymptomInputsManager {
                 COUGH -> acc.copy(cough = Cough())
                 BREATHLESSNESS -> acc.copy(breathlessness = Breathlessness())
                 FEVER -> acc.copy(fever = Fever())
+                MUSCLE_ACHES -> acc.copy(muscleAches = MuscleAches())
                 else -> {
                     log.i("TODO handle inputs: $e")
                     acc
@@ -95,12 +99,18 @@ class SymptomInputsManagerImpl : SymptomInputsManager {
         inputs = inputs.copy(fever = inputs.fever.copy(highestTemperature = temp))
     }
 
+    override fun setMuscleAches(present: UserInput<Boolean>) {
+        if (!inputs.ids.contains(MUSCLE_ACHES)) error("Fever not set")
+        inputs = inputs.copy(muscleAches = inputs.muscleAches.copy(present = present))
+    }
+
     override fun setEarliestSymptomStartedDaysAgo(days: UserInput<Int>) {
         inputs = inputs.copy(earliestSymptom = inputs.earliestSymptom.copy(time = days.map {
             // TODO unit tests for days <-> timestamp
             Instant.now().minus(it.toLong(), DAYS).toUnixTime()
         }))
     }
+
 
     override fun clear() {
         inputs = SymptomInputs()
