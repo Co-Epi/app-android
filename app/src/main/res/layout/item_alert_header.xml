@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewData"
+            type="org.coepi.android.ui.alerts.AlertCellViewData.Header" />
+    </data>
+
+    <TextView
+        android:id="@+id/month_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:text="@{viewData.text}"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_size_40"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/symptoms_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="March 5" />
+</layout>

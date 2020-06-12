@@ -22,11 +22,12 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity
 import org.coepi.android.R.drawable.ic_launcher_foreground
-import org.coepi.android.tcn.Tcn
 import org.coepi.android.domain.TcnGenerator
 import org.coepi.android.system.log.LogTag.BLE
 import org.coepi.android.system.log.log
+import org.coepi.android.tcn.Tcn
 import org.coepi.android.ui.debug.DebugBleObservable
+import org.coepi.android.util.LimitedSizeQueue
 import org.tcncoalition.tcnclient.bluetooth.BluetoothStateListener
 import org.tcncoalition.tcnclient.bluetooth.TcnBluetoothService
 import org.tcncoalition.tcnclient.bluetooth.TcnBluetoothService.LocalBinder
@@ -52,13 +53,21 @@ class BleManagerImpl(
     private var service: TcnBluetoothService? = null
 
     inner class BluetoothServiceCallback : TcnBluetoothServiceCallback {
+
+        private val latestTcns = LimitedSizeQueue<ByteArray>(500)
+
         override fun generateTcn(): ByteArray =
             tcnGenerator.generateTcn().bytes.also {
                 debugBleObservable.setMyTcn(Tcn(it))
             }
 
         override fun onTcnFound(tcn: ByteArray, estimatedDistance: Double?) {
-            observedTcns.onNext(Tcn(tcn))
+            // Temporary guard to filter repeated TCNs,
+            // since we don't do anything meaningful with them in v0.3, and this overloads db/logs
+            if (!latestTcns.contains(tcn)) {
+                observedTcns.onNext(Tcn(tcn))
+                latestTcns.add(tcn)
+            }
         }
     }
 
@@ -84,7 +93,7 @@ class BleManagerImpl(
         )
 
         return NotificationCompat.Builder(app, CHANNEL_ID)
-            .setContentTitle("CoEpi contact tracing service is running")
+            .setContentTitle("CoEpi is running")
             .setSmallIcon(ic_launcher_foreground)
             .setContentIntent(pendingIntent)
             .setCategory(CATEGORY_SERVICE)

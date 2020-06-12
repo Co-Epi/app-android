@@ -94,8 +94,7 @@
         <Button
             android:id="@+id/onboarding_card_small_next_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Button"
+            style="@style/small_button_selected"
             android:text="@string/onboarding_next_button_label"
             app:layout_constraintTop_toTopOf="@id/card_progress_icons_wrapper"
             app:layout_constraintBottom_toBottomOf="@id/card_progress_icons_wrapper"

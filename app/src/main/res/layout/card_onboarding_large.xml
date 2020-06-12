@@ -57,7 +57,7 @@
 
             <Button
                 android:id="@+id/onboarding_card_large_join_button"
-                style="@style/ButtonUnselected"
+                style="@style/StandardButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
@@ -70,7 +70,7 @@
 
             <Button
                 android:id="@+id/onboarding_card_large_faq_button"
-                style="@style/ButtonUnselected"
+                style="@style/StandardButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
@@ -87,12 +87,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_40"
-                android:layout_marginTop="@dimen/default_line_height"
+                android:layout_marginBottom="@dimen/margin_40"
                 android:text="@string/onboarding_data_usage_link_label"
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/onboarding_card_large_faq_button" />
+                app:layout_constraintBottom_toTopOf="@id/card_progress_icons_wrapper" />
 
 
             <LinearLayout
@@ -103,8 +103,7 @@
                 android:layout_marginBottom="@dimen/margin_40"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/data_usage_link_label"
-                app:layout_constraintTop_toBottomOf="@id/data_usage_link_label">
+                app:layout_constraintStart_toStartOf="@id/data_usage_link_label">
 
                 <ImageView
                     android:id="@+id/progress_icon_1"

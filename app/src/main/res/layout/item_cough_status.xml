@@ -16,17 +16,10 @@
         android:orientation="horizontal">
 
         <CheckBox
+            style="@style/large_button"
             android:id="@+id/checkbox"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:background="@drawable/ripple_symptom_button"
-            android:button="@null"
-            android:buttonTint="@color/colorPrimary"
-            android:clickable="false"
             android:text="@{item.name}"
-            android:textColor="@color/item_symptom_text"
-            android:textSize="@dimen/text_size_30"
             android:paddingBottom="5dp"
             tools:text="test" />
 

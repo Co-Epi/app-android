@@ -29,6 +29,7 @@
     <string name="label_fragment_onboarding">Onboarding</string>
     <string name="label_fragment_alerts">Alerts</string>
     <string name="label_fragment_alerts_details">Alerts details</string>
+    <string name="label_fragment_alerts_info">Exposure alerts</string>
     <string name="label_fragment_symptoms">Symptom Report</string>
     <string name="label_fragment_api">API</string>
 
@@ -104,6 +105,13 @@
     <string name="alerts_headline">Exposure Alerts</string>
     <string name="alerts_learn_more">Click each alert to learn more</string>
     <string name="alerts_info_button">What are exposure alerts?</string>
+    <string name="alerts_info_description_text"><b>Exposure alerts</b> indicate that you have been in close proximity (e.g. within several feet) to someone with symptoms also using a compatible app.</string>
+    <string name="alerts_info_headline">How does CoEpi work?</string>
+    <string name="alerts_info_copei_description">CoEpi generates exposure alerts if your device has flagged another tracing app user who may have been infectious during your contact.</string>
+    <string name="alerts_info_copei_symptom_report">Based on the symptom report in the exposure alert, you can:</string>
+    <string name="alerts_info_copei_symptom_list"><b>&#8226; Monitor</b> yourself for symptoms in the days following the potential exposure\n\n
+<b>&#8226; Self-isolate</b> within your household to reduce the risk of transmitting to others\n\n
+<b>&#8226; Talk with a healthcare provider</b> about your exposure</string>
 
     <string name="alerts_report_fever_mild">Mild fever</string>
     <string name="alerts_report_fever_serious">Serious fever</string>

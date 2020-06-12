@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.coepi.android.databinding.FragmentOnboardingBinding.inflate
 import org.coepi.android.extensions.observeWith
+import org.coepi.android.ui.extensions.onBack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingFragment : Fragment() {
@@ -35,6 +36,8 @@ class OnboardingFragment : Fragment() {
         viewModel.openLink.observeWith(viewLifecycleOwner) { uri ->
             startActivity(Intent(ACTION_VIEW, uri))
         }
+
+        onBack(consume = true) { viewModel.onBack() }
 
         viewModel.recyclerViewScrollPosition.observeWith(viewLifecycleOwner) { position ->
             onboardingInfoRecycler.scrollToPosition(position)

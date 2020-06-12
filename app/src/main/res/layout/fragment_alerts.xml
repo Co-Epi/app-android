@@ -98,6 +98,7 @@
             android:textAllCaps="false"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_size_30"
+            android:onClick="@{() -> vm.onAlertsInfoButtonClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/alerts_info_button">

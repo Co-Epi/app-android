@@ -55,6 +55,7 @@
 
     <style name="StandardButton" parent="ButtonUnselected">
         <item name="android:layout_margin">50dp</item>
+        <item name="android:layout_height">@dimen/medium_button_height</item>
     </style>
 
     <style name="card_view_title" parent="Text.Headline">
@@ -110,6 +111,26 @@
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:layout_height">109dp</item>
     </style>
+
+    <style name="large_button">
+        <item name="android:layout_height">@dimen/large_button_height</item>
+        <item name="android:textColor">@color/item_symptom_text</item>
+        <item name="android:textSize">@dimen/text_size_30</item>
+        <item name="android:buttonTint">@color/colorPrimary</item>
+        <item name="android:gravity">center</item>
+        <item name ="android:background">@drawable/ripple_symptom_button</item>
+        <item name="android:button">@null</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="small_button_selected" parent="Button">
+        <item name="android:layout_height">@dimen/small_button_height</item>
+    </style>
+
+    <style name="small_button_unselected" parent="ButtonUnselected">
+        <item name="android:layout_height">@dimen/small_button_height</item>
+    </style>
+
 
     <!-- No custom style for now -->
     <style name="screen_progress_indicator" />

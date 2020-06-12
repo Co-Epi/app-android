@@ -26,25 +26,25 @@ import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationState.Success
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.Alert
+import org.coepi.android.ui.alerts.AlertCellViewData.Header
+import org.coepi.android.ui.alerts.AlertCellViewData.Item
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
+import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsInfo
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
-import org.coepi.android.ui.formatters.DateFormatters
+import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
+import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
 
 class AlertsViewModel(
-    private val alertsRepo: AlertsRepo,
+    val alertsRepo: AlertsRepo,
     private val resources: Resources,
     private val navigation: RootNavigation
 ) : ViewModel() {
 
-    val alerts: LiveData<List<AlertViewData>> = alertsRepo.alerts
-        .map { reports ->
-            reports.map {
-                it.toViewData(reports)
-            }
-        }
+    val alerts: LiveData<List<AlertCellViewData>> = alertsRepo.alerts
+        .map { it.toCellViewData() }
         .observeOn(mainThread())
         .toLiveData()
 
@@ -54,7 +54,7 @@ class AlertsViewModel(
         .toLiveData()
 
     fun onAlertClick(alert: AlertViewData) {
-        navigation.navigate(ToDirections(actionGlobalAlertsDetails(Args(alert.report))))
+        navigation.navigate(ToDirections(actionGlobalAlertsDetails(Args(alert.alert))))
     }
 
     fun onSwipeToRefresh() {
@@ -65,41 +65,34 @@ class AlertsViewModel(
         navigation.navigate(Back)
     }
 
+    fun onAlertsInfoButtonClick() {
+        navigation.navigate(ToDirections(actionGlobalAlertsInfo()))
+    }
+
     /**
      * This function parses [Alert] objects received from the [AlertsRepo] into readable strings that get displayed
      * in the recycler view item_alert views bound by the [AlertsAdapter]
      */
-    private fun Alert.toViewData(alerts: List<Alert>): AlertViewData =
+    private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
             exposureType = listOfNotNull(
                 report.coughSeverity.toUIString(),
                 toBreathlessnessString(report.breathlessness),
                 report.feverSeverity.toUIString()
             ).joinToString("\n"),
-            contactTime = DateFormatters.hourMinuteFormatter.formatTime(contactTime.toDate()),
-            contactTimeMonth = DateFormatters.monthDayFormatter.formatMonthDay(contactTime.toDate()),
-            showMonthHeader = showMonthHeader(alerts),
-            report = this
+            contactTime = hourMinuteFormatter.formatTime(contactTime.toDate()),
+            contactTimeMonth = monthDayFormatter.formatMonthDay(contactTime.toDate()),
+            alert = this
         )
 
-    private fun Alert.showMonthHeader(alerts: List<Alert>): Boolean {
-        val currentIndex = alerts.indexOf(this)
-        val currentItemDate =
-            DateFormatters.monthDayFormatter.formatMonthDay(this.contactTime.toDate())
-        var previousItem: Alert? = null
-        var monthHeaderVisible = true
-
-        if (currentIndex > 0) {
-            previousItem = alerts[currentIndex - 1]
-        }
-
-        previousItem?.let {
-            monthHeaderVisible =
-                currentItemDate != DateFormatters.monthDayFormatter.formatMonthDay(previousItem.contactTime.toDate())
-        }
-
-        return monthHeaderVisible
-    }
+    private fun List<Alert>.toCellViewData(): List<AlertCellViewData> =
+        sortedWith(compareByDescending { it.contactTime.value })
+            .groupBy { monthDayFormatter.formatMonthDay(it.contactTime.toDate()) }
+            .flatMap { entry ->
+                listOf(Header(entry.key)) + entry.value.map { alert ->
+                    Item(alert.toViewData())
+                }
+            }
 
     private fun toBreathlessnessString(breathless: Boolean): String? =
         if (breathless) resources.getString(alerts_report_breathlessness) else null

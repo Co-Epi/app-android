@@ -12,4 +12,8 @@
     <dimen name="onboarding_card_text_horizontal_margins">34dp</dimen>
     <dimen name="onboarding_card_data_link_label_margin_top">136dp</dimen>
 
+    <dimen name="small_button_height">26dp</dimen>
+    <dimen name="medium_button_height">34dp</dimen>
+    <dimen name="large_button_height">54dp</dimen>
+
 </resources>

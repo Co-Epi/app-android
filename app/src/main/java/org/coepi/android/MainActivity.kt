@@ -15,6 +15,7 @@ import org.coepi.android.R.style.AppTheme
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.tcn.BleInitializer
 import org.coepi.android.system.intent.IntentForwarder
+import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.navigation.Navigator
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val nonReferencedDependenciesActivator: NotReferencedDependenciesActivator by inject()
     private val intentForwarder: IntentForwarder by inject()
     private val uiNotifier: UINotifier by inject()
+    private val activityFinisher: ActivityFinisher by inject()
 
     private val disposables = CompositeDisposable()
 
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
 
         observeRootNavigation()
         observeUINotifier()
+        observeActivityFinisher()
+
         onboardingShower.showIfNeeded()
 
         intentForwarder.onActivityCreated(intent)
@@ -69,6 +73,12 @@ class MainActivity : AppCompatActivity() {
     private fun observeUINotifier() {
         disposables += uiNotifier.notifications.subscribe {
             UINotification().show(it, this)
+        }
+    }
+
+    private fun observeActivityFinisher() {
+        disposables += activityFinisher.observable.subscribe {
+            finish()
         }
     }
 

@@ -10,6 +10,7 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.common.Result
 import org.coepi.android.common.doIfError
 import org.coepi.android.common.doIfSuccess
+import org.coepi.android.extensions.add
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.TcnReportRepo
@@ -93,6 +94,14 @@ class SymptomFlowManager(
     fun onBack() {
         val symptomFlow = symptomFlow ?: error("Symptom flow not set")
         symptomFlow.previous()
+    }
+
+    fun removeIfPresent(step: SymptomStep) {
+        symptomFlow?.removeIfPresent(step)
+    }
+
+    fun addUniqueStepAfterCurrent(step: SymptomStep) {
+        symptomFlow?.addUniqueStepAfterCurrent(step)
     }
 
     private fun clear() {
