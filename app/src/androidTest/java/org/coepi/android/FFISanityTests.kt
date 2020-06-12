@@ -19,14 +19,30 @@ import org.junit.Assert.*
 class FFISanityTests {
     @Test
     fun testSendReceiveString() {
-
         val n = NativeApi()
-
-        val gr = n.getReports("getReports")
-        //val pr = n.postReport("postReport")
-
+        val gr = n.testSendReceiveString("getReports")
         assertEquals(
             "Hello getReports",
+            gr
+        )
+    }
+
+    @Test
+    fun testbootstrap_core() {
+        val n = NativeApi()
+        val gr = n.bootstrapCore("getReports2")
+        assertEquals(
+            "Hello getReports2",
+            gr
+        )
+    }
+
+    @Test
+    fun testpostReport() {
+        val n = NativeApi()
+        val gr = n.postReport("getReports2")
+        assertEquals(
+            "Hello getReports2",
             gr
         )
     }
