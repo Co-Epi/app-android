@@ -11,8 +11,12 @@ import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
+import org.coepi.android.domain.symptomflow.SymptomInputs.Diarrhea
 import org.coepi.android.domain.symptomflow.SymptomInputs.Fever
+import org.coepi.android.domain.symptomflow.SymptomInputs.LossSmellOrTaste
 import org.coepi.android.domain.symptomflow.SymptomInputs.MuscleAches
+import org.coepi.android.domain.symptomflow.SymptomInputs.Other
+import org.coepi.android.domain.symptomflow.SymptomInputs.RunnyNose
 import org.coepi.android.extensions.toUnixTime
 import org.coepi.android.system.log.log
 import org.threeten.bp.Instant
@@ -60,6 +64,10 @@ class SymptomInputsManagerImpl : SymptomInputsManager {
                 BREATHLESSNESS -> acc.copy(breathlessness = Breathlessness())
                 FEVER -> acc.copy(fever = Fever())
                 MUSCLE_ACHES -> acc.copy(muscleAches = MuscleAches())
+                LOSS_SMELL_OR_TASTE -> acc.copy(lossSmellOrTaste = LossSmellOrTaste())
+                DIARRHEA -> acc.copy(diarrhea = Diarrhea())
+                RUNNY_NOSE -> acc.copy(runnyNose = RunnyNose())
+                OTHER -> acc.copy(other = Other())
                 else -> {
                     log.i("TODO handle inputs: $e")
                     acc
