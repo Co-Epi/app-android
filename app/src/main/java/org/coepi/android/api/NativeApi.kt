@@ -1,17 +1,38 @@
 package org.coepi.android.api
 
+data class FFIParameterStruct(
+    val myInt: Int,
+    val myStr: String,
+    val myNested: FFINestedParameterStruct
+)
+
+data class FFINestedParameterStruct(
+    val myU8: Int
+)
+
+// TODO specific for logging
+open class Callback {
+    open fun log(foo: String) {
+        println("callback called with: $foo")
+    }
+}
+
+open class MyCallback {
+    open fun call(par: Int) {
+        println("MyCallback called with: $par")
+    }
+}
+
 class NativeApi {
 
-    init
-    {
+    init {
         System.loadLibrary("coepi_core")
     }
 
-    external fun testSendReceiveString(pattern: String): String
+    // TODO remove
+    external fun postReport(c_report: String, callback: Callback): String
 
     external fun bootstrapCore(db_path: String): String
-
-    // external fun callCallback(void (*callback)(Int, Boolean, String)): Int
 
     external fun clearSymptoms(): String
 
@@ -19,19 +40,7 @@ class NativeApi {
 
     external fun generateTcn(): String
 
-    // external fun passAndReturnStruct(const FFIParameterStruct *par): FFIReturnStruct
-
-    // external fun passStruct(const FFIParameterStruct *par): Int
-
-    external fun postReport(c_report: String): String
-
     external fun recordTcn(c_tcn: String): String
-
-    // external fun registerCallback(void (*callback)(Int, Boolean, String)): Int
-
-    // external fun registerLogCallback(void (*log_callback)(CoreLogMessage)): Int
-
-    // external fun returnStruct(): FFIReturnStruct
 
     external fun setBreathlessnessCause(c_cause: String): String
 
@@ -55,8 +64,21 @@ class NativeApi {
 
     external fun submitSymptoms(): String
 
-    external fun triggerCallback(my_str: String): Int
-
     external fun triggerLoggingMacros(): Int
 
+    // Tests ////////////////////////////////////////////////////////////////////////
+
+    external fun sendReceiveString(string: String): String
+
+    external fun passStruct(my_struct: FFIParameterStruct, callback: Callback): Int
+
+    external fun returnStruct(callback: Callback): FFIParameterStruct
+
+    external fun callCallback(callback: Callback): Int
+
+    external fun registerCallback(callback: MyCallback): Int
+
+    external fun triggerCallback(par: Int): Int
+
+    /////////////////////////////////////////////////////////////////////////////////
 }
