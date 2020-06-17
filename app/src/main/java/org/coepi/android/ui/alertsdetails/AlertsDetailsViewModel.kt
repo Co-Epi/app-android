@@ -4,17 +4,14 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
-import org.coepi.android.R.drawable.ic_alert
 import org.coepi.android.R.string
 import org.coepi.android.R.string.alerts_details_reported_on
 import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.domain.UnixTime
-import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
 import org.coepi.android.tcn.Alert
-import org.coepi.android.ui.extensions.breathlessnessUIString
-import org.coepi.android.ui.extensions.toUIString
+import org.coepi.android.ui.extensions.symptomUIStrings
 import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
 import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
@@ -49,11 +46,7 @@ class AlertsDetailsViewModel(
         hourMinuteFormatter.formatTime(time.toDate())
 
     private fun PublicReport.toUIString(resources: Resources): String =
-        listOfNotNull(
-            coughSeverity.toUIString(resources),
-            breathlessnessUIString(resources),
-            feverSeverity.toUIString(resources)
-        ).joinToString("\n") { "${resources.getString(string.bullet_point)} $it" }
+        symptomUIStrings(resources).joinToString("\n") { "${resources.getString(string.bullet_point)} $it" }
 
     fun onBack() {
         navigation.navigate(Back)

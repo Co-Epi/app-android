@@ -6,16 +6,14 @@ import io.reactivex.subjects.PublishSubject.create
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.coepi.android.api.TcnApi
+import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.api.publicreport.PublicReportMapper
-import org.coepi.android.api.publicreport.shouldBeSent
 import org.coepi.android.common.ApiReportMapper
 import org.coepi.android.common.Result
 import org.coepi.android.common.Result.Success
 import org.coepi.android.common.doIfError
 import org.coepi.android.common.doIfSuccess
 import org.coepi.android.common.flatMap
-import org.coepi.android.domain.UnixTime
-import org.coepi.android.domain.UnixTime.Companion
 import org.coepi.android.domain.UnixTime.Companion.now
 import org.coepi.android.domain.symptomflow.SymptomInputs
 import org.coepi.android.extensions.retrofit.executeSafe
@@ -57,16 +55,18 @@ class TcnReportRepoImpl(
 
     override fun submitReport(inputs: SymptomInputs): Result<Unit, Throwable> {
         val publicReport = publicReportMapper.toPublicReport(inputs, now())
-
-        if (!publicReport.shouldBeSent()) {
-            log.i("Public report: $publicReport doesn't contain infos relevant to other " +
-                    "users. Not sending.")
-            return Success(Unit)
+        return if (publicReport != null) {
+            sendReport(publicReport)
+        } else {
+            log.d("Nothing to send.")
+            Success(Unit)
         }
+    }
 
+    private fun sendReport(report: PublicReport): Result<Unit, Throwable> {
         sendState.onNext(Progress)
 
-        return apiReportMapper.toApiReport(publicReport).let { apiReport ->
+        return apiReportMapper.toApiReport(report).let { apiReport ->
             // NOTE: Needs to be sent as text/plain to not add quotes
             val requestBody = apiReport.toRequestBody("text/plain".toMediaType())
             api.postReport(requestBody).executeSafe().flatMap {

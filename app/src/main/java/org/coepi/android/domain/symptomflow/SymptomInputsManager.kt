@@ -3,7 +3,12 @@ package org.coepi.android.domain.symptomflow
 import org.coepi.android.domain.model.Temperature
 import org.coepi.android.domain.symptomflow.SymptomId.BREATHLESSNESS
 import org.coepi.android.domain.symptomflow.SymptomId.COUGH
+import org.coepi.android.domain.symptomflow.SymptomId.DIARRHEA
 import org.coepi.android.domain.symptomflow.SymptomId.FEVER
+import org.coepi.android.domain.symptomflow.SymptomId.LOSS_SMELL_OR_TASTE
+import org.coepi.android.domain.symptomflow.SymptomId.MUSCLE_ACHES
+import org.coepi.android.domain.symptomflow.SymptomId.OTHER
+import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
 import org.coepi.android.domain.symptomflow.SymptomInputs.Fever

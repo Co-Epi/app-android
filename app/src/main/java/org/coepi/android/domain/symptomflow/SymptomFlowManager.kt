@@ -10,7 +10,6 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.common.Result
 import org.coepi.android.common.doIfError
 import org.coepi.android.common.doIfSuccess
-import org.coepi.android.extensions.add
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.TcnReportRepo

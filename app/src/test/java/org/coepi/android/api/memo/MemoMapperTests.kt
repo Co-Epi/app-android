@@ -27,7 +27,12 @@ class MemoMapperTests {
             earliestSymptomTime = None,
             feverSeverity = FeverSeverity.NONE,
             breathlessness = false,
-            coughSeverity = CoughSeverity.NONE
+            coughSeverity = CoughSeverity.NONE,
+            muscleAches = false,
+            lossSmellOrTaste = false,
+            diarrhea = false,
+            runnyNose = false,
+            other = false
         )
 
         val memo: Memo = mapper.toMemo(report)
@@ -49,7 +54,12 @@ class MemoMapperTests {
             earliestSymptomTime = Some(fromValue(1589209754L)),
             feverSeverity = SERIOUS,
             breathlessness = true,
-            coughSeverity = EXISTING
+            coughSeverity = EXISTING,
+            muscleAches = true,
+            lossSmellOrTaste = false,
+            diarrhea = true,
+            runnyNose = false,
+            other = true
         )
 
         val memo: Memo = mapper.toMemo(report)

@@ -33,19 +33,13 @@ import org.junit.Test
 class PublicReportMapperTests {
 
     @Test
-    fun generates_public_report_no_inputs() {
+    fun no_inputs_generate_no_report() {
         val inputs = SymptomInputs(setOf(NONE))
 
         val reportMapper: PublicReportMapper = PublicReportMapperImpl()
         val report = reportMapper.toPublicReport(inputs, UnixTime.fromValue(0))
 
-        Truth.assertThat(report).isEqualTo(PublicReport(
-            reportTime = UnixTime.fromValue(0),
-            earliestSymptomTime = None,
-            feverSeverity = FeverSeverity.NONE,
-            coughSeverity = CoughSeverity.NONE,
-            breathlessness = false
-        ))
+        Truth.assertThat(report).isNull()
     }
 
     @Test
@@ -77,14 +71,21 @@ class PublicReportMapperTests {
         val report = reportMapper.toPublicReport(inputs,
             UnixTime.fromValue(1589209700L))
 
-        val memo: Memo = mapper.toMemo(report)
+        Truth.assertThat(report).isNotNull() // Precondition
+        val memo: Memo = mapper.toMemo(report!!)
+
         val mappedReport = mapper.toReport(memo)
         Truth.assertThat(report).isEqualTo(PublicReport(
             reportTime = UnixTime.fromValue(1589209700L),
             earliestSymptomTime = Some(UnixTime.fromValue(1589202354L)),
             feverSeverity = FeverSeverity.MILD,
             coughSeverity = CoughSeverity.DRY,
-            breathlessness = true
+            breathlessness = true,
+            muscleAches = false,
+            lossSmellOrTaste = false,
+            diarrhea = false,
+            runnyNose = false,
+            other = true
         ))
     }
 

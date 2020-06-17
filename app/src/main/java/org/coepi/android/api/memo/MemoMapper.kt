@@ -48,7 +48,12 @@ class MemoMapperImpl: MemoMapper {
             timeUserInputMapper.toBits(report.earliestSymptomTime),
             coughSeverityMapper.toBits(report.coughSeverity),
             feverSeverityMapper.toBits(report.feverSeverity),
-            booleanMapper.toBits(report.breathlessness)
+            booleanMapper.toBits(report.breathlessness),
+            booleanMapper.toBits(report.muscleAches),
+            booleanMapper.toBits(report.lossSmellOrTaste),
+            booleanMapper.toBits(report.diarrhea),
+            booleanMapper.toBits(report.runnyNose),
+            booleanMapper.toBits(report.other)
         )
 
         return bits.fold(BitList(emptyList())) { acc, e ->
@@ -73,13 +78,23 @@ class MemoMapperImpl: MemoMapper {
         val coughSeverity = extract(bitArray, coughSeverityMapper, next).value { next += it }
         val feverSeverity = extract(bitArray, feverSeverityMapper, next).value { next += it }
         val breathlessness = extract(bitArray, booleanMapper, next).value { next += it }
+        val muscleAches = extract(bitArray, booleanMapper, next).value { next += it }
+        val lossSmellOrTaste = extract(bitArray, booleanMapper, next).value { next += it }
+        val diarrhea = extract(bitArray, booleanMapper, next).value { next += it }
+        val runnyNose = extract(bitArray, booleanMapper, next).value { next += it }
+        val other = extract(bitArray, booleanMapper, next).value { next += it }
 
         return PublicReport(
             reportTime = timeResult,
             earliestSymptomTime = earliestSymptomTime,
             feverSeverity = feverSeverity,
             coughSeverity = coughSeverity,
-            breathlessness = breathlessness
+            breathlessness = breathlessness,
+            muscleAches = muscleAches,
+            lossSmellOrTaste = lossSmellOrTaste,
+            diarrhea = diarrhea,
+            runnyNose = runnyNose,
+            other = other
         )
     }
 

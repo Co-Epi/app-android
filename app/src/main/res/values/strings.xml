@@ -119,6 +119,11 @@
     <string name="alerts_report_cough_wet">Wet cough</string>
     <string name="alerts_report_cough_dry">Dry cough</string>
     <string name="alerts_report_breathlessness">Breathlessness</string>
+    <string name="alerts_report_muscle_aches">Muscle aches</string>
+    <string name="alerts_report_loss_smell_or_taste">Loss of smell or taste</string>
+    <string name="alerts_report_diarrhea">Diarrhea</string>
+    <string name="alerts_report_runny_nose">Runny nose</string>
+    <string name="alerts_report_other">Other symptoms</string>
 
     <!-- Alert details -->
     <string name="alerts_details_title">Exposure alert</string>

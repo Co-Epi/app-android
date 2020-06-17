@@ -11,7 +11,12 @@ data class PublicReport(
     val earliestSymptomTime: UserInput<UnixTime>,
     val feverSeverity: FeverSeverity,
     val coughSeverity: CoughSeverity,
-    val breathlessness: Boolean
+    val breathlessness: Boolean,
+    val muscleAches: Boolean,
+    val lossSmellOrTaste: Boolean,
+    val diarrhea: Boolean,
+    val runnyNose: Boolean,
+    val other: Boolean
 ): Parcelable
 
 enum class FeverSeverity {
@@ -21,6 +26,3 @@ enum class FeverSeverity {
 enum class CoughSeverity {
     NONE, EXISTING, WET, DRY
 }
-
-fun PublicReport.shouldBeSent() =
-    feverSeverity != FeverSeverity.NONE || coughSeverity != CoughSeverity.NONE || breathlessness
