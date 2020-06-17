@@ -4,6 +4,8 @@ import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.BLUETOOTH
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.Q
@@ -31,7 +33,13 @@ class OnboardingPermissionsChecker {
         if (hasAllPermissions) {
             observable.onNext(true)
         } else {
-            requestPermissions(activity, permissions, requestCode)
+            AlertDialog.Builder(activity).setTitle("CoEpi would like to use Bluetooth")
+                .setMessage("Activating Bluetooth will enable CoEpi to detect interactions from " +
+                        "nearby devices running compatible apps")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, which ->
+                    requestPermissions(activity, permissions, requestCode)
+                    dialog.dismiss()})
+                .show()
         }
     }
 
