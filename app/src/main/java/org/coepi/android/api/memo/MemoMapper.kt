@@ -48,7 +48,12 @@ class MemoMapperImpl: MemoMapper {
             timeUserInputMapper.toBits(report.earliestSymptomTime),
             coughSeverityMapper.toBits(report.coughSeverity),
             feverSeverityMapper.toBits(report.feverSeverity),
-            booleanMapper.toBits(report.breathlessness)
+            booleanMapper.toBits(report.breathlessness),
+            booleanMapper.toBits(report.muscleAches),
+            booleanMapper.toBits(report.lossSmellOrTaste),
+            booleanMapper.toBits(report.diarrhea),
+            booleanMapper.toBits(report.runnyNose),
+            booleanMapper.toBits(report.other)
         )
 
         return bits.fold(BitList(emptyList())) { acc, e ->

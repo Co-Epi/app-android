@@ -40,12 +40,9 @@ class PublicReportAndMemoMapperTests {
 
         val reportMapper: PublicReportMapper = PublicReportMapperImpl()
         val report = reportMapper.toPublicReport(inputs,
-            UnixTime.fromValue(1589209754L))
+            UnixTime.fromValue(0))
 
-        val memo: Memo = mapper.toMemo(report)
-        val mappedReport = mapper.toReport(memo)
-
-        Truth.assertThat(mappedReport).isEqualTo(report)
+        Truth.assertThat(report).isNull()
     }
 
     /**
@@ -78,7 +75,9 @@ class PublicReportAndMemoMapperTests {
         val report = reportMapper.toPublicReport(inputs,
             UnixTime.fromValue(1589209754L))
 
-        val memo: Memo = mapper.toMemo(report)
+        Truth.assertThat(report).isNotNull() // Precondition
+        val memo: Memo = mapper.toMemo(report!!)
+
         val mappedReport = mapper.toReport(memo)
         Truth.assertThat(mappedReport).isEqualTo(report)
     }

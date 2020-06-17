@@ -1,27 +1,8 @@
 package org.coepi.android.ui.alerts
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import org.coepi.android.R.string.alerts_report_breathlessness
-import org.coepi.android.R.string.alerts_report_cough
-import org.coepi.android.R.string.alerts_report_cough_dry
-import org.coepi.android.R.string.alerts_report_cough_wet
-import org.coepi.android.R.string.alerts_report_fever_mild
-import org.coepi.android.R.string.alerts_report_fever_serious
-import org.coepi.android.api.publicreport.CoughSeverity
-import org.coepi.android.api.publicreport.CoughSeverity.DRY
-import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
-import org.coepi.android.api.publicreport.CoughSeverity.WET
-import org.coepi.android.api.publicreport.FeverSeverity
-import org.coepi.android.api.publicreport.FeverSeverity.MILD
-import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
-import org.coepi.android.api.publicreport.PublicReport
-import org.coepi.android.domain.UnixTime
-import org.coepi.android.domain.symptomflow.SymptomInputs.LossSmellOrTaste
-import org.coepi.android.domain.symptomflow.SymptomInputs.MuscleAches
-import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -36,6 +17,7 @@ import org.coepi.android.ui.alerts.AlertCellViewData.Item
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsInfo
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
+import org.coepi.android.ui.extensions.symptomUIStrings
 import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
 import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
@@ -80,16 +62,7 @@ class AlertsViewModel(
      */
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
-            exposureType = listOfNotNull(
-                report.coughSeverity.toUIString(),
-                toBreathlessnessString(report.breathlessness),
-                report.feverSeverity.toUIString(),
-                toMuscleAcheString(report.muscleAches),
-                toLossSmellOrTasteString(report.lossSmellOrTaste),
-                toDiarreaString(report.diarrhea),
-                toRunnyNoseString(report.runnyNose),
-                toOtherString(report.other)
-            ).joinToString("\n"),
+            exposureType = report.symptomUIStrings(resources).joinToString("\n"),
             contactTime = hourMinuteFormatter.formatTime(contactTime.toDate()),
             contactTimeMonth = monthDayFormatter.formatMonthDay(contactTime.toDate()),
             alert = this
@@ -103,40 +76,6 @@ class AlertsViewModel(
                     Item(alert.toViewData())
                 }
             }
-
-    private fun toBreathlessnessString(breathless: Boolean): String? =
-        if (breathless) resources.getString(alerts_report_breathlessness) else null
-
-    private fun toMuscleAcheString(muscleAches: Boolean) : String? =
-        if(muscleAches) "Muscle Aches" else null
-
-    private fun toLossSmellOrTasteString(lossSmellOrTaste: Boolean) : String? =
-        if(lossSmellOrTaste) "Loss of Smell or Taste" else null
-
-    private fun toDiarreaString(diarrhea: Boolean) : String? =
-        if(diarrhea) "Diarrhea" else null
-
-    private fun toRunnyNoseString(runnyNose: Boolean) : String? =
-        if(runnyNose) "Runny Nose" else null
-
-    private fun toOtherString(other: Boolean) : String? =
-        if(other) "Other" else null
-
-    private fun FeverSeverity.toUIString(): String? =
-        when (this) {
-            FeverSeverity.NONE -> null
-            MILD -> resources.getString(alerts_report_fever_mild)
-            SERIOUS -> resources.getString(alerts_report_fever_serious)
-        }
-
-    @SuppressLint("DefaultLocale")
-    private fun CoughSeverity.toUIString(): String? =
-        when (this) {
-            CoughSeverity.NONE -> null
-            EXISTING -> resources.getString(alerts_report_cough)
-            WET -> resources.getString(alerts_report_cough_wet)
-            DRY -> resources.getString(alerts_report_cough_dry)
-        }
 
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
         when (operationState) {

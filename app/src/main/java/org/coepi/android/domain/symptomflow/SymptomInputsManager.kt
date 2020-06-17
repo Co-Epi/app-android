@@ -11,12 +11,7 @@ import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
 import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
 import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
-import org.coepi.android.domain.symptomflow.SymptomInputs.Diarrhea
 import org.coepi.android.domain.symptomflow.SymptomInputs.Fever
-import org.coepi.android.domain.symptomflow.SymptomInputs.LossSmellOrTaste
-import org.coepi.android.domain.symptomflow.SymptomInputs.MuscleAches
-import org.coepi.android.domain.symptomflow.SymptomInputs.Other
-import org.coepi.android.domain.symptomflow.SymptomInputs.RunnyNose
 import org.coepi.android.extensions.toUnixTime
 import org.coepi.android.system.log.log
 import org.threeten.bp.Instant
@@ -37,11 +32,6 @@ interface SymptomInputsProps {
     fun setFeverTakenTemperatureSpot(spot: UserInput<Fever.TemperatureSpot>)
     fun setFeverHighestTemperatureTaken(temp: UserInput<Temperature>)
     fun setEarliestSymptomStartedDaysAgo(days: UserInput<Int>)
-    fun setMuscleAches(present: UserInput<Boolean>)
-    fun setLossSmellOrTaste(present: UserInput<Boolean>)
-    fun setDiarrhea(present: UserInput<Boolean>)
-    fun setRunnyNose(present: UserInput<Boolean>)
-    fun setOther(present: UserInput<Boolean>)
 }
 
 interface SymptomInputsManager : SymptomInputsInitalizer, SymptomInputsProps {
@@ -63,11 +53,6 @@ class SymptomInputsManagerImpl : SymptomInputsManager {
                 COUGH -> acc.copy(cough = Cough())
                 BREATHLESSNESS -> acc.copy(breathlessness = Breathlessness())
                 FEVER -> acc.copy(fever = Fever())
-                MUSCLE_ACHES -> acc.copy(muscleAches = MuscleAches())
-                LOSS_SMELL_OR_TASTE -> acc.copy(lossSmellOrTaste = LossSmellOrTaste())
-                DIARRHEA -> acc.copy(diarrhea = Diarrhea())
-                RUNNY_NOSE -> acc.copy(runnyNose = RunnyNose())
-                OTHER -> acc.copy(other = Other())
                 else -> {
                     log.i("TODO handle inputs: $e")
                     acc
@@ -113,31 +98,6 @@ class SymptomInputsManagerImpl : SymptomInputsManager {
     override fun setFeverHighestTemperatureTaken(temp: UserInput<Temperature>) {
         if (!inputs.ids.contains(FEVER)) error("Fever not set")
         inputs = inputs.copy(fever = inputs.fever.copy(highestTemperature = temp))
-    }
-
-    override fun setMuscleAches(present: UserInput<Boolean>) {
-        if (!inputs.ids.contains(MUSCLE_ACHES)) error("Muscle Aches not Set")
-        inputs = inputs.copy(muscleAches = inputs.muscleAches.copy(present = present))
-    }
-
-    override fun setDiarrhea(present: UserInput<Boolean>) {
-        if (!inputs.ids.contains(DIARRHEA)) error("Diarrhea not Set")
-        inputs = inputs.copy(diarrhea = inputs.diarrhea.copy(present = present))
-    }
-
-    override fun setLossSmellOrTaste(present: UserInput<Boolean>) {
-        if (!inputs.ids.contains(LOSS_SMELL_OR_TASTE)) error("Loss of Smell or Taste not Set")
-        inputs = inputs.copy(lossSmellOrTaste = inputs.lossSmellOrTaste.copy(present = present))
-    }
-
-    override fun setRunnyNose(present: UserInput<Boolean>) {
-        if (!inputs.ids.contains(RUNNY_NOSE)) error("Runny Nose not Set")
-        inputs = inputs.copy(runnyNose = inputs.runnyNose.copy(present = present))
-    }
-
-    override fun setOther(present: UserInput<Boolean>) {
-        if (!inputs.ids.contains(OTHER)) error("Other not Set")
-        inputs = inputs.copy(other = inputs.other.copy(present = present))
     }
 
     override fun setEarliestSymptomStartedDaysAgo(days: UserInput<Int>) {

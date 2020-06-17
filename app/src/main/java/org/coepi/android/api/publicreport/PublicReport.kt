@@ -3,11 +3,6 @@ package org.coepi.android.api.publicreport
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import org.coepi.android.domain.UnixTime
-import org.coepi.android.domain.symptomflow.SymptomInputs.Diarrhea
-import org.coepi.android.domain.symptomflow.SymptomInputs.LossSmellOrTaste
-import org.coepi.android.domain.symptomflow.SymptomInputs.MuscleAches
-import org.coepi.android.domain.symptomflow.SymptomInputs.Other
-import org.coepi.android.domain.symptomflow.SymptomInputs.RunnyNose
 import org.coepi.android.domain.symptomflow.UserInput
 
 @Parcelize
@@ -31,7 +26,3 @@ enum class FeverSeverity {
 enum class CoughSeverity {
     NONE, EXISTING, WET, DRY
 }
-
-fun PublicReport.shouldBeSent() =
-    feverSeverity != FeverSeverity.NONE || coughSeverity != CoughSeverity.NONE || breathlessness
-            || muscleAches || lossSmellOrTaste || diarrhea || runnyNose || other

@@ -18,11 +18,6 @@ data class SymptomInputs(
     val cough: Cough = Cough(),
     val breathlessness: Breathlessness = Breathlessness(),
     val fever: Fever = Fever(),
-    val muscleAches: MuscleAches = MuscleAches(),
-    val lossSmellOrTaste: LossSmellOrTaste = LossSmellOrTaste(),
-    val diarrhea: Diarrhea = Diarrhea(),
-    val runnyNose: RunnyNose = RunnyNose(),
-    val other: Other = Other(),
     val earliestSymptom: EarliestSymptom = EarliestSymptom()
 ) : Parcelable {
 
@@ -76,31 +71,6 @@ data class SymptomInputs(
     @Parcelize
     data class EarliestSymptom(
         val time: UserInput<UnixTime> = None
-    ) : Parcelable
-
-    @Parcelize
-    data class MuscleAches(
-        val present : UserInput<Boolean> = None
-    ) : Parcelable
-
-    @Parcelize
-    data class LossSmellOrTaste(
-        val present : UserInput<Boolean> = None
-    ) : Parcelable
-
-    @Parcelize
-    data class Diarrhea(
-        val present : UserInput<Boolean> = None
-    ) : Parcelable
-
-    @Parcelize
-    data class RunnyNose(
-        val present : UserInput<Boolean> = None
-    ) : Parcelable
-
-    @Parcelize
-    data class Other(
-        val present : UserInput<Boolean> = None
     ) : Parcelable
 }
 
