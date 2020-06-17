@@ -1,8 +1,6 @@
 package org.coepi.android.ui.alerts
 
 import android.annotation.SuppressLint
-import android.app.NotificationManager
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
@@ -38,13 +36,13 @@ import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
-import org.coepi.android.ui.notifications.LocalNotificationChannelId
+import org.coepi.android.ui.notifications.NotificationsShower
 
 class AlertsViewModel(
-    val alertsRepo: AlertsRepo,
+    private val alertsRepo: AlertsRepo,
     private val resources: Resources,
     private val navigation: RootNavigation,
-    private val context: Context
+    private val notification: NotificationsShower
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertCellViewData>> = alertsRepo.alerts
@@ -61,10 +59,9 @@ class AlertsViewModel(
         navigation.navigate(ToDirections(actionGlobalAlertsDetails(Args(alert.alert))))
     }
 
-    fun onAlertDismissed() {
-        val notificationManager: NotificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(LocalNotificationChannelId.INFECTION_REPORTS_CHANNEL.ordinal)
+    fun onAlertDismissed(alert: Alert) {
+        alertsRepo.removeAlert(alert)
+        notification.cancelNotification()
     }
 
     fun onSwipeToRefresh() {

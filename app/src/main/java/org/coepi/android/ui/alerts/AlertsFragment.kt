@@ -26,10 +26,13 @@ class AlertsFragment : Fragment() {
 
         toolbar.setNavigationOnClickListener { viewModel.onBack() }
 
-        val alertsAdapter = AlertsAdapter(onAlertClick = {
-            viewModel.onAlertClick(it)
-        }, onAlertDismissed = { viewModel.onAlertDismissed() },
-            alertsRepo = viewModel.alertsRepo
+        val alertsAdapter = AlertsAdapter(
+            onAlertClick = {
+                viewModel.onAlertClick(it)
+            },
+            onAlertDismissed = {
+                viewModel.onAlertDismissed(it)
+            }
         )
 
         recyclerView.run {

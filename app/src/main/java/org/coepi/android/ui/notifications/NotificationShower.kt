@@ -1,14 +1,11 @@
 package org.coepi.android.ui.notifications
 
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
-import android.os.Bundle
-import android.os.Parcelable
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
@@ -35,12 +32,19 @@ class NotificationsShower(
         }
     }
 
-    private fun pendingIntent(args: NotificationIntentArgs): PendingIntent = PendingIntent.getActivity(
-        context, 0, Intent(context, MainActivity::class.java).apply {
-            flags = FLAG_ACTIVITY_SINGLE_TOP
-            putExtra(args.key.toString(), args.value)
-        }, FLAG_UPDATE_CURRENT
-    )
+    fun cancelNotification() {
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(LocalNotificationChannelId.INFECTION_REPORTS_CHANNEL.ordinal)
+    }
+
+    private fun pendingIntent(args: NotificationIntentArgs): PendingIntent =
+        PendingIntent.getActivity(
+            context, 0, Intent(context, MainActivity::class.java).apply {
+                flags = FLAG_ACTIVITY_SINGLE_TOP
+                putExtra(args.key.toString(), args.value)
+            }, FLAG_UPDATE_CURRENT
+        )
 
     private fun notificationBuilder(config: NotificationConfig): Builder =
         Builder(context, channelId)
