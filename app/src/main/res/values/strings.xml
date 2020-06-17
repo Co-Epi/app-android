@@ -8,6 +8,7 @@
     <string name="submit">Submit</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">Ok</string>
     <string name="link_privacy">https://www.coepi.org/privacy/</string>
     <string name="link_faq">https://www.coepi.org/faq/</string>
 
@@ -94,6 +95,8 @@
     <string name="onboarding_next_button_label">NEXT</string>
     <string name="onboarding_join_button_label">Get started</string>
     <string name="onboarding_faq_button_label">Frequently Asked Questions</string>
+    <string name="bluetooth_info_title">CoEpi would like to use Bluetooth</string>
+    <string name="bluetooth_info_message">Activating Bluetooth will enable CoEpi to detect interactions from nearby devices running compatible apps</string>
 
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>

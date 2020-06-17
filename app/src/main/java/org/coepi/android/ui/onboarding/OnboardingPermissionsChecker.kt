@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat.requestPermissions
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity.RequestCodes
+import org.coepi.android.R
 import org.coepi.android.system.log.log
 
 class OnboardingPermissionsChecker {
@@ -33,10 +34,9 @@ class OnboardingPermissionsChecker {
         if (hasAllPermissions) {
             observable.onNext(true)
         } else {
-            AlertDialog.Builder(activity).setTitle("CoEpi would like to use Bluetooth")
-                .setMessage("Activating Bluetooth will enable CoEpi to detect interactions from " +
-                        "nearby devices running compatible apps")
-                .setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, which ->
+            AlertDialog.Builder(activity).setTitle(R.string.bluetooth_info_title)
+                .setMessage(R.string.bluetooth_info_message)
+                .setPositiveButton(R.string.ok, DialogInterface.OnClickListener { dialog, which ->
                     requestPermissions(activity, permissions, requestCode)
                     dialog.dismiss()})
                 .show()
