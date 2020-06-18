@@ -63,9 +63,9 @@ class NativeApi {
 
     external fun sendReceiveString(string: String): String
 
-    external fun passStruct(my_struct: FFIParameterStruct, callback: Callback): Int
+    external fun passStruct(my_struct: FFIParameterStruct): Int
 
-    external fun returnStruct(callback: Callback): FFIParameterStruct
+    external fun returnStruct(): FFIParameterStruct
 
     external fun callCallback(callback: Callback): Int
 

@@ -37,14 +37,14 @@ class FFISanityTests {
             "hi from Android",
             FFINestedParameterStruct(250)
         )
-        val value = n.passStruct(myStruct, Callback())
+        val value = n.passStruct(myStruct)
         assertEquals(value, 1)
     }
 
     @Test
     fun testReturnStruct() {
         val n = NativeApi()
-        val value = n.returnStruct(Callback())
+        val value = n.returnStruct()
         assertEquals(
             value,
             FFIParameterStruct(
