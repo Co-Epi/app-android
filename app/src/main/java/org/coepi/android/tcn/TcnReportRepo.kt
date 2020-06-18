@@ -75,7 +75,7 @@ class TcnReportRepoImpl(
                 log.e("Error posting report: ${it.message}")
             }
 
-        // TODO put in Result extension
+            // TODO put in Result extension
         }.doIfSuccess {
             sendState.onNext(OperationState.Success(Unit))
         }.doIfError {
