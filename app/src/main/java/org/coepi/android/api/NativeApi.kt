@@ -22,9 +22,6 @@ class NativeApi {
         System.loadLibrary("coepi_core")
     }
 
-    // TODO remove
-    external fun postReport(c_report: String, callback: Callback): String
-
     external fun bootstrapCore(db_path: String): String
 
     external fun clearSymptoms(): String
