@@ -8,7 +8,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.coepi.android.api.Callback
 import org.coepi.android.api.FFINestedParameterStruct
 import org.coepi.android.api.FFIParameterStruct
-import org.coepi.android.api.MyCallback
 import org.coepi.android.api.NativeApi
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -36,7 +35,6 @@ class FFISanityTests {
         val myStruct = FFIParameterStruct(
             123,
             "hi from Android",
-            // TODO UByte
             FFINestedParameterStruct(250)
         )
         val value = n.passStruct(myStruct, Callback())
@@ -62,9 +60,8 @@ class FFISanityTests {
         val n = NativeApi()
         val result = suspendCancellableCoroutine<String> { continuation ->
             n.callCallback(object : Callback() {
-                override fun log(foo: String) {
-                    continuation.resume(foo, onCancellation = {
-                    })
+                override fun call(string: String) {
+                    continuation.resume(string, onCancellation = {})
                 }
             })
         }
@@ -74,15 +71,14 @@ class FFISanityTests {
     @Test
     fun testRegisterCallback() = runBlocking {
         val n = NativeApi()
-        val result = suspendCancellableCoroutine<Int> { continuation ->
-            n.registerCallback(object : MyCallback() {
-                override fun call(par: Int) {
-                    continuation.resume(par, onCancellation = {})
+        val result = suspendCancellableCoroutine<String> { continuation ->
+            n.registerCallback(object : Callback() {
+                override fun call(string: String) {
+                    continuation.resume(string, onCancellation = {})
                 }
             })
-            n.triggerCallback(111)
+            n.triggerCallback("hello")
         }
-        assertEquals(111, result)
+        assertEquals("hello world!", result)
     }
 }
-

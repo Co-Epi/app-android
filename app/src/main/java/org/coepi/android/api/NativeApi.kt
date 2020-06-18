@@ -10,16 +10,9 @@ data class FFINestedParameterStruct(
     val myU8: Int
 )
 
-// TODO specific for logging
 open class Callback {
-    open fun log(foo: String) {
-        println("callback called with: $foo")
-    }
-}
-
-open class MyCallback {
-    open fun call(par: Int) {
-        println("MyCallback called with: $par")
+    open fun call(string: String) {
+        println("callback called with: $string")
     }
 }
 
@@ -76,9 +69,9 @@ class NativeApi {
 
     external fun callCallback(callback: Callback): Int
 
-    external fun registerCallback(callback: MyCallback): Int
+    external fun registerCallback(callback: Callback): Int
 
-    external fun triggerCallback(par: Int): Int
+    external fun triggerCallback(string: String): Int
 
     /////////////////////////////////////////////////////////////////////////////////
 }
