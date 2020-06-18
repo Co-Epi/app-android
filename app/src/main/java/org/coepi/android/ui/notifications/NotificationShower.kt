@@ -24,11 +24,10 @@ class NotificationsShower(
     private val context: Context
 ) {
     private val channelId: String = "infection_contact_report"
-    private val notificationId: Int = 0
 
     fun showNotification(config: NotificationConfig) {
         with(NotificationManagerCompat.from(context)) {
-            notify(notificationId, notificationBuilder(config).build())
+            notify(config.notificationId, notificationBuilder(config).build())
         }
     }
 

@@ -34,8 +34,8 @@ import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.VoidOperationState
-import org.coepi.android.tcn.TcnDao
 import org.coepi.android.tcn.RawAlert
+import org.coepi.android.tcn.TcnDao
 import org.coepi.android.tcn.TcnReportDao
 import org.tcncoalition.tcnclient.crypto.SignedReport
 import java.lang.System.currentTimeMillis
@@ -79,11 +79,11 @@ class ReportsUpdaterImpl(
         val reports: List<MatchedReport> = retrieveAndMatchNewReports().successOrNull() ?: return
         val insertedCount = storeReports(reports)
         if (insertedCount > 0) {
-            newAlertsNotificationShower.showNotification(insertedCount)
+            newAlertsNotificationShower.showNotification(insertedCount, (0..1000000).random())
         }
     }
 
-    fun retrieveAndMatchNewReports(): Result<List<MatchedReport>, Throwable> {
+    private fun retrieveAndMatchNewReports(): Result<List<MatchedReport>, Throwable> {
         val now: UnixTime = now()
         return matchingReports(
             startInterval = determineStartInterval(now),
@@ -117,7 +117,8 @@ class ReportsUpdaterImpl(
                 when (it) {
                     is Success -> it.success
                     is Failure -> return@matchingReports Failure(
-                        Throwable("Error fetching reports: ${it.error}"))
+                        Throwable("Error fetching reports: ${it.error}")
+                    )
                 }
             }
             .let { Success(it) }
@@ -127,13 +128,18 @@ class ReportsUpdaterImpl(
      * start is before until.
      * This implies that if an interval starts exactly at until, it will not be included.
      */
-    fun generateIntervalsSequence(from: ReportsInterval, until: UnixTime): Sequence<ReportsInterval> =
+    fun generateIntervalsSequence(
+        from: ReportsInterval,
+        until: UnixTime
+    ): Sequence<ReportsInterval> =
         generateSequence(from) { it.next() }
             .takeWhile { it.startsBefore(until) }
 
     fun retrieveReports(interval: ReportsInterval): Result<SignedReportsChunk, Throwable> {
-        val reportsStringsResult: Result<List<String>, Throwable> = api.getReports(interval.number,
-            interval.length)
+        val reportsStringsResult: Result<List<String>, Throwable> = api.getReports(
+            interval.number,
+            interval.length
+        )
             .executeSafe()
             .flatMap { it.toResult() }
 
@@ -199,13 +205,15 @@ class ReportsUpdaterImpl(
      * @return count of inserted reports. This can differ from reports count, if reports
      * are already in the db.
      */
-    fun storeReports(reports: List<MatchedReport>): Int {
+    private fun storeReports(reports: List<MatchedReport>): Int {
         val insertedCount: Int = reports.map {
-            reportsDao.insert(RawAlert(
-                id = it.report.signature.toByteArray().toHex(),
-                memoStr = it.report.report.memoData.toBase64String(),
-                contactTime = it.contactTime
-            ))
+            reportsDao.insert(
+                RawAlert(
+                    id = it.report.signature.toByteArray().toHex(),
+                    memoStr = it.report.report.memoData.toBase64String(),
+                    contactTime = it.contactTime
+                )
+            )
         }.filter { it }.size
 
         if (insertedCount >= 0) {
