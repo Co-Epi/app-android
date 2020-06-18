@@ -35,7 +35,7 @@ class NotificationsShower(
     fun cancelNotification() {
         val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(LocalNotificationChannelId.INFECTION_REPORTS_CHANNEL.ordinal)
+        notificationManager.cancel(notificationId)
     }
 
     private fun pendingIntent(args: NotificationIntentArgs): PendingIntent =
