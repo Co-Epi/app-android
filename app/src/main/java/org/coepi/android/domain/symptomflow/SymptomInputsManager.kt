@@ -53,10 +53,9 @@ class SymptomInputsManagerImpl : SymptomInputsManager {
                 COUGH -> acc.copy(cough = Cough())
                 BREATHLESSNESS -> acc.copy(breathlessness = Breathlessness())
                 FEVER -> acc.copy(fever = Fever())
-                else -> {
-                    log.i("TODO handle inputs: $e")
+                else ->
+                    // Nothing to do: the other symptoms don't have inputs.
                     acc
-                }
             }
         }
 
