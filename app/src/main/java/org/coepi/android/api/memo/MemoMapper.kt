@@ -53,7 +53,8 @@ class MemoMapperImpl: MemoMapper {
             booleanMapper.toBits(report.lossSmellOrTaste),
             booleanMapper.toBits(report.diarrhea),
             booleanMapper.toBits(report.runnyNose),
-            booleanMapper.toBits(report.other)
+            booleanMapper.toBits(report.other),
+            booleanMapper.toBits(report.noSymptoms)
         )
 
         return bits.fold(BitList(emptyList())) { acc, e ->
@@ -83,6 +84,7 @@ class MemoMapperImpl: MemoMapper {
         val diarrhea = extract(bitArray, booleanMapper, next).value { next += it }
         val runnyNose = extract(bitArray, booleanMapper, next).value { next += it }
         val other = extract(bitArray, booleanMapper, next).value { next += it }
+        val noSymptoms = extract(bitArray, booleanMapper, next).value { next += it }
 
         return PublicReport(
             reportTime = timeResult,
@@ -94,7 +96,8 @@ class MemoMapperImpl: MemoMapper {
             lossSmellOrTaste = lossSmellOrTaste,
             diarrhea = diarrhea,
             runnyNose = runnyNose,
-            other = other
+            other = other,
+            noSymptoms = noSymptoms
         )
     }
 

@@ -20,7 +20,7 @@ class MemoMapperTests {
      * Public report has NONE or equivalent inputs.
      */
     @Test
-    fun maps_no_symptoms() {
+    fun maps_nothing_set() {
         val mapper: MemoMapper = MemoMapperImpl()
         val report = PublicReport(
             reportTime = fromValue(1589209754L),
@@ -32,7 +32,8 @@ class MemoMapperTests {
             lossSmellOrTaste = false,
             diarrhea = false,
             runnyNose = false,
-            other = false
+            other = false,
+            noSymptoms = false
         )
 
         val memo: Memo = mapper.toMemo(report)
@@ -59,7 +60,8 @@ class MemoMapperTests {
             lossSmellOrTaste = false,
             diarrhea = true,
             runnyNose = false,
-            other = true
+            other = true,
+            noSymptoms = false
         )
 
         val memo: Memo = mapper.toMemo(report)
