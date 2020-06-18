@@ -16,7 +16,8 @@ data class PublicReport(
     val lossSmellOrTaste: Boolean,
     val diarrhea: Boolean,
     val runnyNose: Boolean,
-    val other: Boolean
+    val other: Boolean,
+    val noSymptoms: Boolean // https://github.com/Co-Epi/app-ios/issues/268#issuecomment-645583717
 ): Parcelable
 
 enum class FeverSeverity {

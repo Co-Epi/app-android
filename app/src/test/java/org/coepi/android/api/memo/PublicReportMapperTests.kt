@@ -32,14 +32,27 @@ import org.junit.Test
 @ExperimentalUnsignedTypes
 class PublicReportMapperTests {
 
+//    https://github.com/Co-Epi/app-ios/issues/268#issuecomment-645583717
     @Test
-    fun no_inputs_generate_no_report() {
+    fun no_inputs_generates_a_report() {
         val inputs = SymptomInputs(setOf(NONE))
 
         val reportMapper: PublicReportMapper = PublicReportMapperImpl()
         val report = reportMapper.toPublicReport(inputs, UnixTime.fromValue(0))
 
-        Truth.assertThat(report).isNull()
+        Truth.assertThat(report).isEqualTo(PublicReport(
+            reportTime = UnixTime.fromValue(0),
+            earliestSymptomTime = None,
+            feverSeverity = FeverSeverity.NONE,
+            coughSeverity = CoughSeverity.NONE,
+            breathlessness = false,
+            muscleAches = false,
+            lossSmellOrTaste = false,
+            diarrhea = false,
+            runnyNose = false,
+            other = false,
+            noSymptoms = true
+        ))
     }
 
     @Test
@@ -85,7 +98,8 @@ class PublicReportMapperTests {
             lossSmellOrTaste = false,
             diarrhea = false,
             runnyNose = false,
-            other = true
+            other = true,
+            noSymptoms = true
         ))
     }
 

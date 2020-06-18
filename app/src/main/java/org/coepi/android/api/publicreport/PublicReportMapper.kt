@@ -8,6 +8,7 @@ import org.coepi.android.domain.symptomflow.SymptomId.COUGH
 import org.coepi.android.domain.symptomflow.SymptomId.DIARRHEA
 import org.coepi.android.domain.symptomflow.SymptomId.LOSS_SMELL_OR_TASTE
 import org.coepi.android.domain.symptomflow.SymptomId.MUSCLE_ACHES
+import org.coepi.android.domain.symptomflow.SymptomId.NONE
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
 import org.coepi.android.domain.symptomflow.SymptomInputs
@@ -29,6 +30,7 @@ class PublicReportMapperImpl : PublicReportMapper {
 
     override fun toPublicReport(inputs: SymptomInputs, reportTime: UnixTime): PublicReport? {
         val earliestSymptomTime = inputs.earliestSymptom.time
+        val hasNoSymptoms = inputs.ids.contains(NONE)
         val feverSeverity = inputs.fever.toSeverity()
         val coughSeverity = inputs.cough.toSeverity(inputs.ids.contains(COUGH))
         val breathlessness = inputs.ids.contains(BREATHLESSNESS)
@@ -38,26 +40,22 @@ class PublicReportMapperImpl : PublicReportMapper {
         val runnyNose = inputs.ids.contains(RUNNY_NOSE)
         val other = inputs.ids.contains(OTHER)
 
-        return if (feverSeverity != FeverSeverity.NONE
-                || coughSeverity != CoughSeverity.NONE
-                || breathlessness
-                || muscleAches
-                || lossSmellOrTaste
-                || diarrhea
-                || runnyNose
-                || other)
-        {
+        return if (feverSeverity != FeverSeverity.NONE || coughSeverity != CoughSeverity.NONE
+            || hasNoSymptoms || breathlessness || muscleAches || lossSmellOrTaste || diarrhea
+            || runnyNose || other
+        ) {
             PublicReport(
                 reportTime = reportTime,
                 earliestSymptomTime = inputs.earliestSymptom.time,
-                feverSeverity = inputs.fever.toSeverity(),
-                coughSeverity = inputs.cough.toSeverity(inputs.ids.contains(COUGH)),
-                breathlessness = inputs.ids.contains(BREATHLESSNESS),
-                muscleAches = inputs.ids.contains(MUSCLE_ACHES),
-                lossSmellOrTaste = inputs.ids.contains(LOSS_SMELL_OR_TASTE),
-                diarrhea = inputs.ids.contains(DIARRHEA),
-                runnyNose = inputs.ids.contains(RUNNY_NOSE),
-                other = inputs.ids.contains(OTHER)
+                feverSeverity = feverSeverity,
+                coughSeverity = coughSeverity,
+                breathlessness = breathlessness,
+                muscleAches = muscleAches,
+                lossSmellOrTaste = lossSmellOrTaste,
+                diarrhea = diarrhea,
+                runnyNose = runnyNose,
+                other = other,
+                noSymptoms = hasNoSymptoms
             )
         } else {
             log.i("Inputs: $inputs don't contain infos relevant to other users. Public " +

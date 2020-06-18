@@ -35,14 +35,25 @@ class PublicReportAndMemoMapperTests {
      */
     @Test
     fun maps_no_symptoms() {
-        val mapper: MemoMapper = MemoMapperImpl()
         val inputs = SymptomInputs(setOf(NONE))
 
         val reportMapper: PublicReportMapper = PublicReportMapperImpl()
         val report = reportMapper.toPublicReport(inputs,
             UnixTime.fromValue(0))
 
-        Truth.assertThat(report).isNull()
+        Truth.assertThat(report).isEqualTo(PublicReport(
+            reportTime = UnixTime.fromValue(0),
+            earliestSymptomTime = None,
+            feverSeverity = FeverSeverity.NONE,
+            coughSeverity = CoughSeverity.NONE,
+            breathlessness = false,
+            muscleAches = false,
+            lossSmellOrTaste = false,
+            diarrhea = false,
+            runnyNose = false,
+            other = false,
+            noSymptoms = true
+        ))
     }
 
     /**
