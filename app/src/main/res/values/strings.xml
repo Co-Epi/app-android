@@ -95,9 +95,9 @@
     <string name="onboarding_next_button_label">NEXT</string>
     <string name="onboarding_join_button_label">Get started</string>
     <string name="onboarding_faq_button_label">Frequently Asked Questions</string>
-    <string name="bluetooth_info_title">CoEpi would like to use Bluetooth</string>
-    <string name="bluetooth_info_message">Activating Bluetooth will enable CoEpi to detect interactions from nearby devices running compatible apps</string>
-
+    <string name="bluetooth_info_title">CoEpi would like to use Location and Bluetooth</string>
+    <string name="bluetooth_info_message">Activating Location and Bluetooth will enable CoEpi to detect interactions from nearby devices running compatible apps</string>
+    <string name="dont_allow">Don\'t Allow</string>
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
     <plurals name="alerts_new_notifications_count">

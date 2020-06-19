@@ -34,12 +34,7 @@ class OnboardingPermissionsChecker {
         if (hasAllPermissions) {
             observable.onNext(true)
         } else {
-            AlertDialog.Builder(activity).setTitle(R.string.bluetooth_info_title)
-                .setMessage(R.string.bluetooth_info_message)
-                .setPositiveButton(R.string.ok, DialogInterface.OnClickListener { dialog, which ->
-                    requestPermissions(activity, permissions, requestCode)
-                    dialog.dismiss()})
-                .show()
+            requestPermissions(activity, permissions, requestCode)
         }
     }
 
