@@ -1,20 +1,8 @@
 package org.coepi.android.api
 
-data class FFIParameterStruct(
-    val myInt: Int,
-    val myStr: String,
-    val myNested: FFINestedParameterStruct
-)
+import org.coepi.android.system.log.LogTag.CORE
+import org.coepi.android.system.log.log
 
-data class FFINestedParameterStruct(
-    val myU8: Int
-)
-
-open class Callback {
-    open fun call(string: String) {
-        println("callback called with: $string")
-    }
-}
 
 class NativeApi {
 
@@ -22,7 +10,9 @@ class NativeApi {
         System.loadLibrary("coepi_core")
     }
 
-    external fun bootstrapCore(db_path: String): String
+    external fun bootstrapCore(
+        dbPath: String, level: String, coepiOnly: Boolean, logCallback: JniLogCallback
+    ): JniVoidResult
 
     external fun clearSymptoms(): String
 
@@ -83,6 +73,36 @@ class NativeApi {
     /////////////////////////////////////////////////////////////////////////////////
 }
 
+data class FFIParameterStruct(
+    val myInt: Int,
+    val myStr: String,
+    val myNested: FFINestedParameterStruct
+)
+
+data class FFINestedParameterStruct(
+    val myU8: Int
+)
+
+open class Callback {
+    open fun call(string: String) {
+        println("callback called with: $string")
+    }
+}
+
+open class JniLogCallback {
+    open fun log(level: Int, message: String) {
+        when (level) {
+            0 -> log.v(message, CORE)
+            1 -> log.d(message, CORE)
+            2 -> log.i(message, CORE)
+            3 -> log.w(message, CORE)
+            4 -> log.e(message, CORE)
+            else -> log.i("$message [annexed logger error: log level not recognized: " +
+                    "$level]", CORE)
+        }
+    }
+}
+
 data class JniVoidResult(
     val status: Int,
     val message: String
@@ -139,4 +159,3 @@ data class JniPublicReport(
     val other: Boolean,
     val noSymptoms: Boolean
 )
-
