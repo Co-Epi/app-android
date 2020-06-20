@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.coepi.android.api.JniAlert
 import org.coepi.android.api.JniAlertsArrayResult
+import org.coepi.android.api.JniLogCallback
 import org.coepi.android.api.JniOneAlertResult
 import org.coepi.android.api.JniPublicReport
 import org.coepi.android.api.JniVoidResult
@@ -24,7 +25,10 @@ class JNIInterfaceTests {
     @Test
     fun testBootstrap() {
         val n = NativeApi()
-        val value = n.testBootstrapCore("foo/bar", "info", true)
+        val value = n.bootstrapCore(
+            "foo/bar", "info", true,
+            JniLogCallback()
+        )
         assertEquals(JniVoidResult(1, ""), value)
     }
 

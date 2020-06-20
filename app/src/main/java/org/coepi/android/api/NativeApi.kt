@@ -64,8 +64,6 @@ class NativeApi {
 
     // Domain
 
-    external fun testBootstrapCore(dbPath: String, level: String, coepiOnly: Boolean): JniVoidResult
-
     external fun testReturnAnAlert(): JniOneAlertResult
 
     external fun testReturnMultipleAlerts(): JniAlertsArrayResult
