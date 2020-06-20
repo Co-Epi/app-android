@@ -30,9 +30,9 @@ class NativeApi {
 
     external fun setCoughType(c_cough_type: String): String
 
-    external fun setEarliestSymptomStartedDaysAgo(c_is_set:UByte, c_days: UInt): String
+    external fun setEarliestSymptomStartedDaysAgo(c_is_set: UByte, c_days: UInt): String
 
-    external fun setFeverDays(c_is_set:UByte, c_days: UInt): String
+    external fun setFeverDays(c_is_set: UByte, c_days: UInt): String
 
     external fun setFeverHighestTemperatureTaken(c_is_set: UByte, c_temp: Float): String
 
