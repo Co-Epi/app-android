@@ -1,2 +1,3 @@
+include ':coepi_core'
 rootProject.name='CoEpi'
 include ':app'

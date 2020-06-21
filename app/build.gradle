@@ -104,4 +104,6 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
+
+    implementation project(":coepi_core")
 }
