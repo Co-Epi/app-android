@@ -14,37 +14,35 @@ class NativeApi {
         dbPath: String, level: String, coepiOnly: Boolean, logCallback: JniLogCallback
     ): JniVoidResult
 
-    external fun clearSymptoms(): String
+    external fun clearSymptoms(): JniVoidResult
 
-    external fun fetchNewReports(): String
+    external fun fetchNewReports(): JniAlertsArrayResult
 
     external fun generateTcn(): String
 
-    external fun recordTcn(c_tcn: String): String
+    external fun recordTcn(tcn: String): JniVoidResult
 
-    external fun setBreathlessnessCause(c_cause: String): String
+    external fun setBreathlessnessCause(cause: String): JniVoidResult
 
-    external fun setCoughDays(c_is_set: UByte, c_days: UInt): String
+    external fun setCoughDays(isSet: Int, days: Int): JniVoidResult
 
-    external fun setCoughStatus(c_status: String): String
+    external fun setCoughStatus(status: String): JniVoidResult
 
-    external fun setCoughType(c_cough_type: String): String
+    external fun setCoughType(coughType: String): JniVoidResult
 
-    external fun setEarliestSymptomStartedDaysAgo(c_is_set: UByte, c_days: UInt): String
+    external fun setEarliestSymptomStartedDaysAgo(isSet: Int, days: Int): JniVoidResult
 
-    external fun setFeverDays(c_is_set: UByte, c_days: UInt): String
+    external fun setFeverDays(isSet: Int, days: Int): JniVoidResult
 
-    external fun setFeverHighestTemperatureTaken(c_is_set: UByte, c_temp: Float): String
+    external fun setFeverHighestTemperatureTaken(isSet: Int, temp: Float): JniVoidResult
 
-    external fun setFeverTakenTemperatureSpot(c_cause: String): String
+    external fun setFeverTakenTemperatureSpot(spot: String): JniVoidResult
 
-    external fun setFeverTakenTemperatureToday(c_is_set: UByte, c_taken: UByte): String
+    external fun setFeverTakenTemperatureToday(isSet: Int, value: Int): JniVoidResult
 
-    external fun setSymptomIds(c_ids: String): String
+    external fun setSymptomIds(ids: String): JniVoidResult
 
-    external fun submitSymptoms(): String
-
-    external fun triggerLoggingMacros(): Int
+    external fun submitSymptoms(): JniVoidResult
 
     // Tests ////////////////////////////////////////////////////////////////////////
 
