@@ -61,7 +61,17 @@ class AlertsViewModel(
 
     fun onAlertDismissed(alert: Alert) {
         alertsRepo.removeAlert(alert)
-        notification.cancelNotification()
+    }
+
+    /**
+     * Clears all active system notifications when user enters Exposures Alerts screen
+     */
+    fun onClearNotifications() {
+        notification.getSystemNotificationList()?.let {
+            if (it.isNotEmpty()) {
+                notification.cancelAllNotifications()
+            }
+        }
     }
 
     fun onSwipeToRefresh() {

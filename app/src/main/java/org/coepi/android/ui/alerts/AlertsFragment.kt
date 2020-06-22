@@ -35,6 +35,10 @@ class AlertsFragment : Fragment() {
             }
         )
 
+        // clear system notifications if any are present
+        // TODO: will need to clear by unique notification ids
+        viewModel.onClearNotifications()
+
         recyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)
             adapter = alertsAdapter

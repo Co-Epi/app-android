@@ -6,6 +6,7 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
+import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
@@ -31,10 +32,26 @@ class NotificationsShower(
         }
     }
 
-    fun cancelNotification() {
+    /**
+     * TODO: need a way to cancel specific system notifications using the unique notificationId that's
+     * apart of the [NotificationConfig]
+     */
+    fun cancelNotification(notificationId: Int) {
         val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(notificationId)
+    }
+
+    fun cancelAllNotifications() {
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancelAll()
+    }
+
+    fun getSystemNotificationList(): Array<out StatusBarNotification>? {
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        return notificationManager.activeNotifications
     }
 
     private fun pendingIntent(args: NotificationIntentArgs): PendingIntent =

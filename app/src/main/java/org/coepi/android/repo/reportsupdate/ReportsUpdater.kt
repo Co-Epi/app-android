@@ -79,6 +79,8 @@ class ReportsUpdaterImpl(
         val reports: List<MatchedReport> = retrieveAndMatchNewReports().successOrNull() ?: return
         val insertedCount = storeReports(reports)
         if (insertedCount > 0) {
+            // TODO: figure out what we want these unique notifications ids to be - maybe associate
+            //  them with alert ids
             newAlertsNotificationShower.showNotification(insertedCount, (0..1000000).random())
         }
     }
