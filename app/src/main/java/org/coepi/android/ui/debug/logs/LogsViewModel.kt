@@ -100,7 +100,7 @@ class LogsViewModel(
         V -> Color.BLACK
         D -> Color.parseColor("#228C22")
         I -> Color.BLUE
-        W -> Color.YELLOW
+        W -> Color.parseColor("#FFA500") 
         E -> Color.RED
     }
 }
