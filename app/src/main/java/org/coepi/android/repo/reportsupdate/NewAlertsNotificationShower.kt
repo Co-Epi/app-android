@@ -30,7 +30,8 @@ class NewAlertsNotificationShowerImpl(
     }
 
     override fun cancelNotification(notificationId: Int) {
-        TODO("Not yet implemented")
+        log.d("Canceling notification $notificationId")
+        notificationsShower.cancelNotification(notificationId)
     }
 
     private fun notificationConfiguration(newAlertsCount: Int, noticationId: Int): NotificationConfig =
