@@ -1,5 +1,6 @@
 package org.coepi.android
 
+import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.coepi.android.api.JniAlert
@@ -10,6 +11,7 @@ import org.coepi.android.api.JniPublicReport
 import org.coepi.android.api.JniVoidResult
 import org.coepi.android.api.NativeApi
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -22,14 +24,23 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class JNIInterfaceTests {
 
+    private lateinit var instrumentationContext: Context
+
+    @Before
+    fun setup() {
+        instrumentationContext = androidx.test.core.app.ApplicationProvider.getApplicationContext()
+    }
+
     @Test
     fun testBootstrap() {
+        val dbPath = instrumentationContext.getDatabasePath("remove")
+            // we need to pass the db directory (without file name)
+            .absolutePath.removeSuffix("/remove")
+
         val n = NativeApi()
-        val value = n.bootstrapCore(
-            "foo/bar", "info", true,
-            JniLogCallback()
-        )
-        assertEquals(JniVoidResult(1, ""), value)
+        val result = n.bootstrapCore(dbPath, "debug", true, JniLogCallback())
+
+        assertEquals(JniVoidResult(1, ""), result)
     }
 
     @Test
