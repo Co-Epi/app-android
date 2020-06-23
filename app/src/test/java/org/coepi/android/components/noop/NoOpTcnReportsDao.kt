@@ -6,7 +6,7 @@ import org.coepi.android.tcn.RawAlert
 import org.coepi.android.tcn.TcnReportDao
 
 class NoOpTcnReportsDao: TcnReportDao {
-    override val rawAlerts: Observable<List<RawAlert>> =
+    override val alerts: Observable<List<RawAlert>> =
         Observable.just(emptyList())
     override fun all(): List<RawAlert> = emptyList()
     override fun insert(alert: RawAlert): Boolean = false

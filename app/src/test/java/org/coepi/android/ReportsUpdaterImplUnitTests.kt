@@ -16,7 +16,7 @@ import org.coepi.android.domain.TcnMatcherImpl
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.extensions.base64ToByteArray
 import org.coepi.android.repo.reportsupdate.ReportsInterval
-import org.coepi.android.repo.reportsupdate.ReportsUpdaterImpl
+import org.coepi.android.repo.reportsupdate.AlertsUpdaterImpl
 import org.coepi.android.tcn.ReceivedTcn
 import org.coepi.android.tcn.Tcn
 import org.junit.Test
@@ -33,7 +33,7 @@ class ReportsUpdaterImplUnitTests {
             "LbSUvv320gtY2qTZbumxno7KJ/BDWnHuHcUH0fNv144p+K1xbPt+YQuxFHzFfo71HoegSspNJLaAz93InuQHHQEAAQAACFJtVjJaWEk9iXj1FGy+r4cmNrS84AzHzx5wS0FZJXzXFFfvqwAogt6qjIe7+6CIJ8mrFrCen3nAVrQo3Bd1jsGe6UjybRUlAA=="
         )
 
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             NoOpTcnMatcher(),
             TcnApiReturningReports(apiReportStrings), NoOptTcnDao(),
             NoOpTcnReportsDao(), NoOpPreferences(), NoOpNewAlertsNotificationShower()
@@ -61,7 +61,7 @@ class ReportsUpdaterImplUnitTests {
             toSignedReport(it)!!
         }
 
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             TcnMatcherImpl(), NoOpTcnApi(),
             TcnDaoReturningAll(
                 // We have a TCN stored belonging to the first report
@@ -79,7 +79,7 @@ class ReportsUpdaterImplUnitTests {
 
     @Test
     fun start_interval_contains_time_if_no_last_interval_stored() {
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             NoOpTcnMatcher(), NoOpTcnApi(), NoOptTcnDao(), NoOpTcnReportsDao(),
             PreferencesReturningObject(null), NoOpNewAlertsNotificationShower()
         )
@@ -92,7 +92,7 @@ class ReportsUpdaterImplUnitTests {
     fun start_interval_uses_interval_after_stored() {
         val storedInterval = ReportsInterval(1, 10)
 
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             NoOpTcnMatcher(), NoOpTcnApi(), NoOptTcnDao(), NoOpTcnReportsDao(),
             PreferencesReturningObject(
                 storedInterval
@@ -105,7 +105,7 @@ class ReportsUpdaterImplUnitTests {
 
     @Test
     fun interval_sequence_is_empty_if_starts_same_time_as_until() {
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             NoOpTcnMatcher(), NoOpTcnApi(), NoOptTcnDao(), NoOpTcnReportsDao(), NoOpPreferences(),
             NoOpNewAlertsNotificationShower()
         )
@@ -120,7 +120,7 @@ class ReportsUpdaterImplUnitTests {
 
     @Test
     fun interval_sequence_is_empty_if_starts_starts_before_until() {
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             NoOpTcnMatcher(), NoOpTcnApi(), NoOptTcnDao(), NoOpTcnReportsDao(), NoOpPreferences(),
             NoOpNewAlertsNotificationShower()
         )
@@ -135,7 +135,7 @@ class ReportsUpdaterImplUnitTests {
 
     @Test
     fun interval_sequence_has_one_element_with_until() {
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             NoOpTcnMatcher(), NoOpTcnApi(), NoOptTcnDao(), NoOpTcnReportsDao(), NoOpPreferences(),
             NoOpNewAlertsNotificationShower()
         )
@@ -149,7 +149,7 @@ class ReportsUpdaterImplUnitTests {
 
     @Test
     fun interval_sequence_has_two_intervals_including_until() {
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             NoOpTcnMatcher(), NoOpTcnApi(), NoOptTcnDao(), NoOpTcnReportsDao(), NoOpPreferences(),
             NoOpNewAlertsNotificationShower()
         )
@@ -165,7 +165,7 @@ class ReportsUpdaterImplUnitTests {
 
     @Test
     fun interval_sequence_has_multiple_intervals_including_until() {
-        val reportsUpdater = ReportsUpdaterImpl(
+        val reportsUpdater = AlertsUpdaterImpl(
             NoOpTcnMatcher(), NoOpTcnApi(), NoOptTcnDao(), NoOpTcnReportsDao(), NoOpPreferences(),
             NoOpNewAlertsNotificationShower()
         )
