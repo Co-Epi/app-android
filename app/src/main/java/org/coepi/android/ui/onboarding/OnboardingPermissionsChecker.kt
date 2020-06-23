@@ -12,13 +12,11 @@ import android.os.Build.VERSION_CODES.Q
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
-import androidx.core.content.ContextCompat
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity.RequestCodes
 import org.coepi.android.R
 import org.coepi.android.system.log.log
-import java.util.jar.Manifest
 
 class OnboardingPermissionsChecker {
 

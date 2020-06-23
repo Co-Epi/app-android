@@ -1,7 +1,5 @@
 package org.coepi.android
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -24,8 +22,6 @@ import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.koin.android.ext.android.inject
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import org.coepi.android.system.log.log
 
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
