@@ -3,7 +3,7 @@ package org.coepi.android.cross
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
-import org.coepi.android.api.ObservedTcnsRecorder
+import org.coepi.android.core.ObservedTcnsRecorder
 import org.coepi.android.ble.BleManager
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.debug.DebugBleObservable

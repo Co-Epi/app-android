@@ -1,4 +1,4 @@
-package org.coepi.android.api
+package org.coepi.android.core
 
 import org.coepi.android.common.Result
 import org.coepi.android.common.Result.Failure
@@ -14,7 +14,7 @@ interface AlertsFetcher {
     fun fetchNewAlerts(): Result<List<Alert>, Throwable>
 }
 
-class AlertsFetcherImpl(private val api: NativeApi) : AlertsFetcher {
+class AlertsFetcherImpl(private val api: NativeCore) : AlertsFetcher {
 
     override fun fetchNewAlerts(): Result<List<Alert>, Throwable> {
         val result = api.fetchNewReports()

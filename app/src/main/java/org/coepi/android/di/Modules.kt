@@ -6,16 +6,16 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.coepi.android.NotReferencedDependenciesActivator
-import org.coepi.android.api.AlertsFetcher
-import org.coepi.android.api.AlertsFetcherImpl
-import org.coepi.android.api.NativeApi
-import org.coepi.android.api.ObservedTcnsRecorder
-import org.coepi.android.api.ObservedTcnsRecorderImpl
-import org.coepi.android.api.SymptomInputsManagerImpl
-import org.coepi.android.api.SymptomsInputManager
-import org.coepi.android.api.TcnGenerator
-import org.coepi.android.api.TcnGeneratorImpl
-import org.coepi.android.api.bootstrap
+import org.coepi.android.core.AlertsFetcher
+import org.coepi.android.core.AlertsFetcherImpl
+import org.coepi.android.core.NativeCore
+import org.coepi.android.core.ObservedTcnsRecorder
+import org.coepi.android.core.ObservedTcnsRecorderImpl
+import org.coepi.android.core.SymptomInputsManagerImpl
+import org.coepi.android.core.SymptomsInputManager
+import org.coepi.android.core.TcnGenerator
+import org.coepi.android.core.TcnGeneratorImpl
+import org.coepi.android.core.bootstrap
 import org.coepi.android.ble.BleEnabler
 import org.coepi.android.ble.BleManager
 import org.coepi.android.ble.BleManagerImpl
@@ -74,7 +74,6 @@ import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import org.tcncoalition.tcnclient.receiver.ChangeOwnTcnReceiver
 
 val viewModelModule = module {
     viewModel { SymptomsViewModel(get(), get(), get()) }
@@ -132,7 +131,7 @@ val uiModule = module {
 }
 
 val coreModule = module {
-    single { NativeApi().apply { bootstrap(androidApplication()) } }
+    single { NativeCore().apply { bootstrap(androidApplication()) } }
     single<AlertsFetcher> { AlertsFetcherImpl(get()) }
     single<SymptomsInputManager> { SymptomInputsManagerImpl(get(), get()) }
     single<ObservedTcnsRecorder> { ObservedTcnsRecorderImpl(get()) }

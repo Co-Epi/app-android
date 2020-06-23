@@ -7,7 +7,7 @@ import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import org.coepi.android.api.AlertsFetcher
+import org.coepi.android.core.AlertsFetcher
 import org.coepi.android.common.Result.Failure
 import org.coepi.android.common.Result.Success
 import org.coepi.android.tcn.Alert

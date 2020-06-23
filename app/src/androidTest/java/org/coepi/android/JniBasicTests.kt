@@ -5,10 +5,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.test.runBlockingTest
-import org.coepi.android.api.Callback
-import org.coepi.android.api.FFINestedParameterStruct
-import org.coepi.android.api.FFIParameterStruct
-import org.coepi.android.api.NativeApi
+import org.coepi.android.core.Callback
+import org.coepi.android.core.FFINestedParameterStruct
+import org.coepi.android.core.FFIParameterStruct
+import org.coepi.android.core.NativeCore
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,14 +24,14 @@ class JniBasicTests {
 
     @Test
     fun testSendReceiveString() {
-        val n = NativeApi()
+        val n = NativeCore()
         val value = n.sendReceiveString("world")
         assertEquals("Hello world!", value)
     }
 
     @Test
     fun testSendStruct() {
-        val n = NativeApi()
+        val n = NativeCore()
         val myStruct = FFIParameterStruct(
             123,
             "hi from Android",
@@ -43,7 +43,7 @@ class JniBasicTests {
 
     @Test
     fun testReturnStruct() {
-        val n = NativeApi()
+        val n = NativeCore()
         val value = n.returnStruct()
         assertEquals(
             value,
@@ -57,7 +57,7 @@ class JniBasicTests {
     @ExperimentalCoroutinesApi
     @Test
     fun testCallCallback() = runBlockingTest {
-        val n = NativeApi()
+        val n = NativeCore()
         val result = suspendCancellableCoroutine<String> { continuation ->
             n.callCallback(object : Callback() {
                 override fun call(string: String) {
@@ -70,7 +70,7 @@ class JniBasicTests {
 
     @Test
     fun testRegisterCallback() = runBlocking {
-        val n = NativeApi()
+        val n = NativeCore()
         val result = suspendCancellableCoroutine<String> { continuation ->
             n.registerCallback(object : Callback() {
                 override fun call(string: String) {

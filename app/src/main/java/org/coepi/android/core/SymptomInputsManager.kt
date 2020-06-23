@@ -1,4 +1,4 @@
-package org.coepi.android.api
+package org.coepi.android.core
 
 import com.google.gson.Gson
 import org.coepi.android.common.Result
@@ -54,7 +54,7 @@ interface SymptomsInputManager {
     fun clearSymptoms(): Result<Unit, Throwable>
 }
 
-class SymptomInputsManagerImpl(private val api: NativeApi, private val gson: Gson) : SymptomsInputManager {
+class SymptomInputsManagerImpl(private val api: NativeCore, private val gson: Gson) : SymptomsInputManager {
 
     override fun setSymptoms(inputs: Set<SymptomId>): Result<Unit, Throwable> {
         val jniIdentifiers = inputs.map { it.toJniIdentifier() }

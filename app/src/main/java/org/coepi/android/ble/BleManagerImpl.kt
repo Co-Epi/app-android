@@ -22,12 +22,12 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity
 import org.coepi.android.R.drawable.ic_launcher_foreground
-import org.coepi.android.api.TcnGenerator
+import org.coepi.android.core.TcnGenerator
 import org.coepi.android.system.log.LogTag.BLE
 import org.coepi.android.system.log.log
 import org.coepi.android.tcn.Tcn
+import org.coepi.android.ui.common.LimitedSizeQueue
 import org.coepi.android.ui.debug.DebugBleObservable
-import org.coepi.android.util.LimitedSizeQueue
 import org.tcncoalition.tcnclient.bluetooth.BluetoothStateListener
 import org.tcncoalition.tcnclient.bluetooth.TcnBluetoothService
 import org.tcncoalition.tcnclient.bluetooth.TcnBluetoothService.LocalBinder

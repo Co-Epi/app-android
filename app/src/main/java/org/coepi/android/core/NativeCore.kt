@@ -1,4 +1,4 @@
-package org.coepi.android.api
+package org.coepi.android.core
 
 import android.content.Context
 import org.coepi.android.common.Result
@@ -7,7 +7,7 @@ import org.coepi.android.common.Result.Success
 import org.coepi.android.system.log.LogTag.CORE
 import org.coepi.android.system.log.log
 
-class NativeApi {
+class NativeCore {
 
     init {
         System.loadLibrary("coepi_core")
@@ -171,7 +171,7 @@ private fun statusDescription(status: Int, message: String): String =
     "Status: $status Message: $message"
 
 fun bootstrap(applicationContext: Context) {
-    val nativeApi = NativeApi()
+    val nativeApi = NativeCore()
 
     // getDatabasePath requires a db name, but we use need the directory
     // (to initialize multiple databases), so adding and removing a suffix.

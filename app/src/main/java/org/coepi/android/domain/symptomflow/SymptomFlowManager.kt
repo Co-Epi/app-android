@@ -7,7 +7,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
-import org.coepi.android.api.SymptomsInputManager
+import org.coepi.android.core.SymptomsInputManager
 import org.coepi.android.common.Result
 import org.coepi.android.common.expect
 import org.coepi.android.domain.model.Temperature
