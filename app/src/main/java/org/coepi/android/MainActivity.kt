@@ -95,25 +95,6 @@ class MainActivity : AppCompatActivity() {
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         blePreconditions.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //Not Granted
-        if(grantResults[1] != PERMISSION_GRANTED) {
-            shouldShowRequestPermissionRationale(permissions[1])
-        }
-    }
-
-    override fun shouldShowRequestPermissionRationale(permission: String): Boolean {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.bluetooth_info_title)
-            .setMessage(R.string.bluetooth_info_message)
-            .setPositiveButton(R.string.ok, DialogInterface.OnClickListener
-            { dialog, which ->
-                blePreconditions.onActivityCreated(this)
-            })
-            .setNegativeButton(R.string.dont_allow, DialogInterface.OnClickListener
-            { dialog, which ->
-                dialog.dismiss()})
-            .show()
-        return super.shouldShowRequestPermissionRationale(permission)
     }
 
     override fun onDestroy() {

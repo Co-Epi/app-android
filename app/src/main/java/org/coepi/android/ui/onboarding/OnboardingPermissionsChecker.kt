@@ -11,11 +11,14 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.Q
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.content.ContextCompat
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity.RequestCodes
 import org.coepi.android.R
 import org.coepi.android.system.log.log
+import java.util.jar.Manifest
 
 class OnboardingPermissionsChecker {
 
@@ -31,11 +34,24 @@ class OnboardingPermissionsChecker {
         val hasAllPermissions = permissions.all {
             checkSelfPermission(activity, it) == PERMISSION_GRANTED
         }
-        if (hasAllPermissions) {
-            observable.onNext(true)
-        } else {
-            requestPermissions(activity, permissions, requestCode)
+        when {
+            hasAllPermissions -> observable.onNext(true)
+            shouldShowRequestPermissionRationale(activity, ACCESS_COARSE_LOCATION) ->
+                AlertDialog.Builder(activity)
+                    .setTitle(R.string.bluetooth_info_title)
+                    .setMessage(R.string.bluetooth_info_message)
+                    .setPositiveButton(R.string.ok, DialogInterface.OnClickListener
+                        { _, _ ->
+                            requestPermissions(activity, permissions, requestCode)
+                        })
+                    .setNegativeButton(R.string.dont_allow, DialogInterface.OnClickListener
+                    { dialog, _ ->
+                        dialog.dismiss()
+                    })
+                    .show()
+            else -> requestPermissions(activity, permissions, requestCode)
         }
+
     }
 
     fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
