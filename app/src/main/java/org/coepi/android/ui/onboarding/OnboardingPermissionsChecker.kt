@@ -49,7 +49,6 @@ class OnboardingPermissionsChecker {
                     .show()
             else -> requestPermissions(activity, permissions, requestCode)
         }
-
     }
 
     fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
