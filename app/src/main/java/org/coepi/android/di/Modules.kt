@@ -8,11 +8,13 @@ import com.google.gson.GsonBuilder
 import org.coepi.android.NotReferencedDependenciesActivator
 import org.coepi.android.api.AlertsFetcher
 import org.coepi.android.api.AlertsFetcherImpl
-import org.coepi.android.api.JniLogCallback
-import org.coepi.android.api.JniVoidResult
 import org.coepi.android.api.NativeApi
+import org.coepi.android.api.ObservedTcnsRecorder
+import org.coepi.android.api.ObservedTcnsRecorderImpl
 import org.coepi.android.api.SymptomInputsManagerImpl
 import org.coepi.android.api.SymptomsInputManager
+import org.coepi.android.api.TcnGenerator
+import org.coepi.android.api.TcnGeneratorImpl
 import org.coepi.android.api.bootstrap
 import org.coepi.android.ble.BleEnabler
 import org.coepi.android.ble.BleManager
@@ -20,7 +22,6 @@ import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
-import org.coepi.android.tcn.TcnModule
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
@@ -33,6 +34,7 @@ import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
 import org.coepi.android.system.log.cachingLog
+import org.coepi.android.tcn.TcnModule
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
@@ -72,6 +74,7 @@ import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import org.tcncoalition.tcnclient.receiver.ChangeOwnTcnReceiver
 
 val viewModelModule = module {
     viewModel { SymptomsViewModel(get(), get(), get()) }
@@ -132,6 +135,8 @@ val coreModule = module {
     single { NativeApi().apply { bootstrap(androidApplication()) } }
     single<AlertsFetcher> { AlertsFetcherImpl(get()) }
     single<SymptomsInputManager> { SymptomInputsManagerImpl(get(), get()) }
+    single<ObservedTcnsRecorder> { ObservedTcnsRecorderImpl(get()) }
+    single<TcnGenerator> { TcnGeneratorImpl(get()) }
 }
 
 @ExperimentalUnsignedTypes

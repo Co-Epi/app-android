@@ -22,7 +22,7 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity
 import org.coepi.android.R.drawable.ic_launcher_foreground
-import org.coepi.android.domain.TcnGenerator
+import org.coepi.android.api.TcnGenerator
 import org.coepi.android.system.log.LogTag.BLE
 import org.coepi.android.system.log.log
 import org.coepi.android.tcn.Tcn

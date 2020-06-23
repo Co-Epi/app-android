@@ -6,8 +6,6 @@ import org.coepi.android.common.Result.Failure
 import org.coepi.android.common.Result.Success
 import org.coepi.android.system.log.LogTag.CORE
 import org.coepi.android.system.log.log
-import org.koin.android.ext.koin.androidApplication
-
 
 class NativeApi {
 
@@ -172,7 +170,7 @@ fun JniVoidResult.statusDescription(): String =
 private fun statusDescription(status: Int, message: String): String =
     "Status: $status Message: $message"
 
-fun NativeApi.bootstrap(applicationContext: Context) {
+fun bootstrap(applicationContext: Context) {
     val nativeApi = NativeApi()
 
     // getDatabasePath requires a db name, but we use need the directory
