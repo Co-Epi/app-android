@@ -8,6 +8,9 @@ apply plugin: 'realm-android'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
+    // Added NDK version to fix build issue in Android Gradle Plugin
+    // See https://github.com/Co-Epi/app-android/pull/261 for more details
+    ndkVersion "21.3.6528147"
 
     defaultConfig {
         applicationId "org.coepi.android"
