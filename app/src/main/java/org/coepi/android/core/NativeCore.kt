@@ -1,10 +1,13 @@
-package org.coepi.android.api
+package org.coepi.android.core
 
+import android.content.Context
+import org.coepi.android.common.Result
+import org.coepi.android.common.Result.Failure
+import org.coepi.android.common.Result.Success
 import org.coepi.android.system.log.LogTag.CORE
 import org.coepi.android.system.log.log
 
-
-class NativeApi {
+class NativeCore {
 
     init {
         System.loadLibrary("coepi_core")
@@ -38,7 +41,7 @@ class NativeApi {
 
     external fun setFeverTakenTemperatureSpot(spot: String): JniVoidResult
 
-    external fun setFeverTakenTemperatureToday(isSet: Int, value: Int): JniVoidResult
+    external fun setFeverTakenTemperatureToday(isSet: Int, taken: Int): JniVoidResult
 
     external fun setSymptomIds(ids: String): JniVoidResult
 
@@ -155,3 +158,29 @@ data class JniPublicReport(
     val other: Boolean,
     val noSymptoms: Boolean
 )
+
+fun JniVoidResult.asResult(): Result<Unit, Throwable> = when (status) {
+    1 -> Success(Unit)
+    else -> Failure(Throwable(statusDescription()))
+}
+
+fun JniVoidResult.statusDescription(): String =
+    statusDescription(status, message)
+
+private fun statusDescription(status: Int, message: String): String =
+    "Status: $status Message: $message"
+
+fun bootstrap(applicationContext: Context) {
+    val nativeApi = NativeCore()
+
+    // getDatabasePath requires a db name, but we use need the directory
+    // (to initialize multiple databases), so adding and removing a suffix.
+    val dbPath = applicationContext.getDatabasePath("remove")
+        .absolutePath.removeSuffix("/remove")
+
+    val result = nativeApi.bootstrapCore(dbPath, "debug", true,
+        JniLogCallback())
+    if (result.status != 1) {
+        error("Couldn't bootstrap core: status: ${result.status}, message: ${result.message}")
+    }
+}

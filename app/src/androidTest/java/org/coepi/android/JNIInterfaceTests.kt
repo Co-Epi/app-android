@@ -3,13 +3,13 @@ package org.coepi.android
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.coepi.android.api.JniAlert
-import org.coepi.android.api.JniAlertsArrayResult
-import org.coepi.android.api.JniLogCallback
-import org.coepi.android.api.JniOneAlertResult
-import org.coepi.android.api.JniPublicReport
-import org.coepi.android.api.JniVoidResult
-import org.coepi.android.api.NativeApi
+import org.coepi.android.core.JniAlert
+import org.coepi.android.core.JniAlertsArrayResult
+import org.coepi.android.core.JniLogCallback
+import org.coepi.android.core.JniOneAlertResult
+import org.coepi.android.core.JniPublicReport
+import org.coepi.android.core.JniVoidResult
+import org.coepi.android.core.NativeCore
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -37,7 +37,7 @@ class JNIInterfaceTests {
             // we need to pass the db directory (without file name)
             .absolutePath.removeSuffix("/remove")
 
-        val n = NativeApi()
+        val n = NativeCore()
         val result = n.bootstrapCore(dbPath, "debug", true, JniLogCallback())
 
         assertEquals(JniVoidResult(1, ""), result)
@@ -45,7 +45,7 @@ class JNIInterfaceTests {
 
     @Test
     fun testFetchAReport() {
-        val n = NativeApi()
+        val n = NativeCore()
         val value = n.testReturnAnAlert()
         assertEquals(
             JniOneAlertResult(
@@ -71,7 +71,7 @@ class JNIInterfaceTests {
 
     @Test
     fun testFetchNewReports() {
-        val n = NativeApi()
+        val n = NativeCore()
         val value = n.testReturnMultipleAlerts()
         assertEquals(
             JniAlertsArrayResult(

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
 import org.coepi.android.R.string
 import org.coepi.android.R.string.alerts_details_reported_on
-import org.coepi.android.api.publicreport.PublicReport
 import org.coepi.android.domain.UnixTime
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
@@ -33,11 +32,12 @@ class AlertsDetailsViewModel(
         just(args.alert.reportedOnString())
         .toLiveData()
 
-    val symptomList = symptomList(args.alert.report)
+    val symptomList = symptomList(args.alert)
 
     @SuppressLint("DefaultLocale")
-    private fun symptomList(report: PublicReport): String =
-        report.toUIString(resources)
+    private fun symptomList(alert: Alert): String = alert
+        .symptomUIStrings(resources)
+        .joinToString("\n") { symptom -> "${resources.getString(string.bullet_point)} $symptom" }
 
     private fun toMonthAndDay(time: UnixTime): String =
         monthDayFormatter.formatMonthDay(time.toDate())
@@ -45,14 +45,11 @@ class AlertsDetailsViewModel(
     private fun toHourMinute(time: UnixTime): String =
         hourMinuteFormatter.formatTime(time.toDate())
 
-    private fun PublicReport.toUIString(resources: Resources): String =
-        symptomUIStrings(resources).joinToString("\n") { "${resources.getString(string.bullet_point)} $it" }
-
     fun onBack() {
         navigation.navigate(Back)
     }
 
-    private fun Alert.reportedOnString() = report.reportTime.toDate().let { date ->
+    private fun Alert.reportedOnString() = reportTime.toDate().let { date ->
         resources.getString(alerts_details_reported_on,
             monthDayFormatter.formatMonthDay(date),
             hourMinuteFormatter.formatTime(date)

@@ -1,20 +1,27 @@
 package org.coepi.android.di
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.coepi.android.NotReferencedDependenciesActivator
+import org.coepi.android.core.AlertsFetcher
+import org.coepi.android.core.AlertsFetcherImpl
+import org.coepi.android.core.NativeCore
+import org.coepi.android.core.ObservedTcnsRecorder
+import org.coepi.android.core.ObservedTcnsRecorderImpl
+import org.coepi.android.core.SymptomInputsManagerImpl
+import org.coepi.android.core.SymptomsInputManager
+import org.coepi.android.core.TcnGenerator
+import org.coepi.android.core.TcnGeneratorImpl
+import org.coepi.android.core.bootstrap
 import org.coepi.android.ble.BleEnabler
 import org.coepi.android.ble.BleManager
 import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
-import org.coepi.android.tcn.TcnModule
-import org.coepi.android.tcn.apiModule
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
@@ -27,6 +34,7 @@ import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
 import org.coepi.android.system.log.cachingLog
+import org.coepi.android.tcn.TcnModule
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
@@ -68,7 +76,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { SymptomsViewModel(get(), get(), get(), get()) }
+    viewModel { SymptomsViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ThanksViewModel(get()) }
     viewModel { AlertsViewModel(get(), get(), get()) }
@@ -122,12 +130,20 @@ val uiModule = module {
     single<ActivityFinisher> { ActivityFinisherImpl() }
 }
 
+val coreModule = module {
+    single { NativeCore().apply { bootstrap(androidApplication()) } }
+    single<AlertsFetcher> { AlertsFetcherImpl(get()) }
+    single<SymptomsInputManager> { SymptomInputsManagerImpl(get(), get()) }
+    single<ObservedTcnsRecorder> { ObservedTcnsRecorderImpl(get()) }
+    single<TcnGenerator> { TcnGeneratorImpl(get()) }
+}
+
 @ExperimentalUnsignedTypes
 val appModule = listOf(
+    coreModule,
     repoModule,
     viewModelModule,
     systemModule,
-    apiModule,
     TcnModule,
     uiModule
 )

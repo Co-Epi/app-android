@@ -75,9 +75,7 @@ dependencies {
 
     implementation "com.github.quickpermissions:quickpermissions-kotlin:0.4.0"
 
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     
     def appCenterSdkVersion = '3.1.0'

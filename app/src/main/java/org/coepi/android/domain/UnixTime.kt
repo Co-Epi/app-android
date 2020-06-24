@@ -2,13 +2,16 @@ package org.coepi.android.domain
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import org.coepi.android.ui.formatters.DateFormatters
 import org.threeten.bp.Instant
 import java.io.Serializable
 import java.util.Date
 
 @Parcelize
 class UnixTime private constructor(val value: Long) : Parcelable, Serializable {
+
+    init {
+        if (value < 0) error("Invalid unix time: $value")
+    }
 
     companion object {
         fun fromValue(value: Long): UnixTime = UnixTime(value)
