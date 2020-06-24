@@ -1,6 +1,9 @@
 package org.coepi.android
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -91,6 +94,20 @@ class MainActivity : AppCompatActivity() {
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         blePreconditions.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(grantResults[1] == PERMISSION_DENIED && shouldShowRequestPermissionRationale(permissions[1])) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.bluetooth_info_title)
+                .setMessage(R.string.bluetooth_info_message)
+                .setPositiveButton(R.string.ok, DialogInterface.OnClickListener
+                { dialog, _ -> ActivityCompat.requestPermissions(this, permissions, requestCode)
+                    //dialog.dismiss()
+                })
+                .setNegativeButton(R.string.dont_allow, DialogInterface.OnClickListener
+                { dialog, _ ->
+                    dialog.dismiss()
+                })
+                .show()
+        }
     }
 
     override fun onDestroy() {
