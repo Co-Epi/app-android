@@ -38,6 +38,9 @@ interface SymptomFlowManager {
 
     fun startFlow(symptomIds: List<SymptomId>): Boolean
 
+    fun removeIfPresent(step: SymptomStep)
+    fun addUniqueStepAfterCurrent(step: SymptomStep)
+
     fun navigateForward()
     fun onBack()
 }
@@ -124,11 +127,11 @@ class SymptomFlowManagerImpl(
         submitSymptomsState.onNext(OperationState.NotStarted)
     }
 
-    fun removeIfPresent(step: SymptomStep) {
+    override fun removeIfPresent(step: SymptomStep) {
         symptomFlow?.removeIfPresent(step)
     }
 
-    fun addUniqueStepAfterCurrent(step: SymptomStep) {
+    override fun addUniqueStepAfterCurrent(step: SymptomStep) {
         symptomFlow?.addUniqueStepAfterCurrent(step)
     }
 
