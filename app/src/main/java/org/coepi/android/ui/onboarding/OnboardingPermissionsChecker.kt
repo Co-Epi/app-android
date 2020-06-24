@@ -34,7 +34,7 @@ class OnboardingPermissionsChecker {
         }
         when {
             hasAllPermissions -> observable.onNext(true)
-            shouldShowRequestPermissionRationale(activity, ACCESS_COARSE_LOCATION) ->
+            shouldShowRequestPermissionRationale(activity, BLUETOOTH) ->
                 AlertDialog.Builder(activity)
                     .setTitle(R.string.bluetooth_info_title)
                     .setMessage(R.string.bluetooth_info_message)
