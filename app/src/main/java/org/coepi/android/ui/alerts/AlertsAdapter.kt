@@ -40,9 +40,7 @@ class AlertsAdapter(
     fun removeAt(position: Int) {
         when (val item = getItem(position)) {
             is Header -> log.e("Trying to remove directly a header. Ignoring.")
-            is Item -> {
-                onAlertDismissed(item.viewData.alert)
-            }
+            is Item -> onAlertDismissed(item.viewData.alert)
         }
     }
 

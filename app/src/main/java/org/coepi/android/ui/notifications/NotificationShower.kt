@@ -6,7 +6,6 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
-import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
@@ -48,10 +47,10 @@ class NotificationsShower(
         notificationManager.cancelAll()
     }
 
-    fun getSystemNotificationList(): Array<out StatusBarNotification>? {
+    fun isShowingNotifications(): Boolean {
         val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        return notificationManager.activeNotifications
+        return notificationManager.activeNotifications.isNotEmpty()
     }
 
     private fun pendingIntent(args: NotificationIntentArgs): PendingIntent =

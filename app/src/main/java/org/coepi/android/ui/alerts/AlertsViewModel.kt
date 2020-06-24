@@ -63,14 +63,9 @@ class AlertsViewModel(
         alertsRepo.removeAlert(alert)
     }
 
-    /**
-     * Clears all active system notifications when user enters Exposures Alerts screen
-     */
-    fun onClearNotifications() {
-        notification.getSystemNotificationList()?.let {
-            if (it.isNotEmpty()) {
-                notification.cancelAllNotifications()
-            }
+    fun onUiReady() {
+        if (notification.isShowingNotifications()) {
+            notification.cancelAllNotifications()
         }
     }
 
