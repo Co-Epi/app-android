@@ -39,9 +39,9 @@ class OnboardingPermissionsChecker {
                     .setTitle(R.string.bluetooth_info_title)
                     .setMessage(R.string.bluetooth_info_message)
                     .setPositiveButton(R.string.ok, DialogInterface.OnClickListener
-                        { _, _ ->
-                            requestPermissions(activity, permissions, requestCode)
-                        })
+                    { _, _ ->
+                        requestPermissions(activity, permissions, requestCode)
+                    })
                     .setNegativeButton(R.string.dont_allow, DialogInterface.OnClickListener
                     { dialog, _ ->
                         dialog.dismiss()
@@ -51,8 +51,10 @@ class OnboardingPermissionsChecker {
         }
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                   grantResults: IntArray) {
+    fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
 
         if (requestCode != this.requestCode) return
 

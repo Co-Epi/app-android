@@ -58,7 +58,12 @@ class MainActivity : AppCompatActivity() {
 
         blePreconditions.onActivityCreated(this)
 
-        AppCenter.start(application, "0bb1bf95-3b14-48a6-a769-db1ff1df0307", Analytics::class.java, Crashes::class.java)
+        AppCenter.start(
+            application,
+            "0bb1bf95-3b14-48a6-a769-db1ff1df0307",
+            Analytics::class.java,
+            Crashes::class.java
+        )
         bleInitializer.start()
     }
 
@@ -91,16 +96,19 @@ class MainActivity : AppCompatActivity() {
         blePreconditions.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         blePreconditions.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(grantResults[1] == PERMISSION_DENIED && shouldShowRequestPermissionRationale(permissions[1])) {
+        if (grantResults[1] == PERMISSION_DENIED && shouldShowRequestPermissionRationale(permissions[1])) {
             AlertDialog.Builder(this)
                 .setTitle(R.string.bluetooth_info_title)
                 .setMessage(R.string.bluetooth_info_message)
                 .setPositiveButton(R.string.ok, DialogInterface.OnClickListener
-                { dialog, _ -> ActivityCompat.requestPermissions(this, permissions, requestCode)
+                { dialog, _ ->
+                    ActivityCompat.requestPermissions(this, permissions, requestCode)
                     //dialog.dismiss()
                 })
                 .setNegativeButton(R.string.dont_allow, DialogInterface.OnClickListener
