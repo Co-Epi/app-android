@@ -22,7 +22,7 @@ class ContactsFetchManager(context: Context) {
             .setRequiredNetworkType(CONNECTED)
             .build()
 
-        return Builder(ContactsFetchWorker::class.java, 15, MINUTES)
+        return Builder(ContactsFetchWorker::class.java, 15L, MINUTES)
 //            .setInitialDelay(1, SECONDS) // If using BLE simulator, ensure it can store keys first
             .setConstraints(constraints)
             .build()

@@ -2,6 +2,7 @@ package org.coepi.android.common
 
 import org.coepi.android.common.Result.Failure
 import org.coepi.android.common.Result.Success
+import org.coepi.android.system.log.log
 
 sealed class Result<out T, out E> {
     data class Success<out T>(val success: T) : Result<T, Nothing>()
@@ -59,3 +60,20 @@ fun <T, E> Result<T, E>.isFailure(): Boolean =
 
 fun <T: Any, E: Any> List<Result<T, E>>.group(): Pair<List<T>, List<E>> =
    Pair(mapNotNull { it.successOrNull() }, mapNotNull { it.failureOrNull() } )
+
+fun <T, E> Result<T, E>.logError() {
+    when (this) {
+        is Success -> {}
+        is Failure -> log.e("Failure: $error")
+    }
+}
+
+fun <T, E> Result<T, E>.expect(): T =
+    when (this) {
+        is Success -> success
+        is Failure -> {
+            // Logging before of a crash can be useful with a persistent log
+            log.e("Failure: $error")
+            error(error.toString())
+        }
+    }

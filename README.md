@@ -2,6 +2,10 @@
 
 This is the repository for the Android implementation of CoEpi. See [CoEpi.org/vision](https://www.coepi.org/vision) for background, and see the rest of our CoEpi repositories [here](https://github.com/Co-Epi). 
 
+## :warning: Temporary required setup:
+https://github.com/Co-Epi/app-backend-rust/wiki/Building-library-for-Android
+This will likely be needed only for a couple of days while we figure out a better solution. Thanks!
+
 ## Build Status
 Beta branch: [![Build status](https://build.appcenter.ms/v0.1/apps/b313d675-577e-4bc4-b2db-d63532fbe872/branches/beta/badge)](https://appcenter.ms/users/danamlewis/apps/CoEpi-Android/build/branches/beta)
 

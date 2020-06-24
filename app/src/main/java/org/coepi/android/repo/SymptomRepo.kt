@@ -22,14 +22,12 @@ import org.coepi.android.domain.symptomflow.SymptomId.NONE
 import org.coepi.android.domain.symptomflow.SymptomId.OTHER
 import org.coepi.android.domain.symptomflow.SymptomId.RUNNY_NOSE
 import org.coepi.android.system.Resources
-import org.coepi.android.tcn.TcnReportRepo
 
 interface SymptomRepo {
     fun symptoms(): Single<List<Symptom>>
 }
 
 class SymptomRepoImpl(
-    reportRepo: TcnReportRepo,
     private val resources: Resources
 ) : SymptomRepo {
 

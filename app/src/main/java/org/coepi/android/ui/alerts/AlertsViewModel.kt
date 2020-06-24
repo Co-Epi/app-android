@@ -45,7 +45,7 @@ class AlertsViewModel(
     }
 
     fun onSwipeToRefresh() {
-        alertsRepo.updateReports()
+        alertsRepo.requestUpdateReports()
     }
 
     fun onBack() {
@@ -62,7 +62,7 @@ class AlertsViewModel(
      */
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
-            exposureType = report.symptomUIStrings(resources).joinToString("\n"),
+            exposureType = symptomUIStrings(resources).joinToString("\n"),
             contactTime = hourMinuteFormatter.formatTime(contactTime.toDate()),
             contactTimeMonth = monthDayFormatter.formatMonthDay(contactTime.toDate()),
             alert = this

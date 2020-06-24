@@ -18,7 +18,7 @@ class FeverDurationViewModel(
     private val symptomFlowManager: SymptomFlowManager
 ) : ViewModel() {
 
-    val isInProgress: LiveData<Boolean> = symptomFlowManager.sendReportState
+    val isInProgress: LiveData<Boolean> = symptomFlowManager.submitSymptomsState
         .toIsInProgress()
         .observeOn(mainThread())
         .toLiveData()

@@ -10,12 +10,13 @@ import org.coepi.android.system.log.LogLevel.E
 import org.coepi.android.system.log.LogLevel.I
 import org.coepi.android.system.log.LogLevel.V
 import org.coepi.android.system.log.LogLevel.W
-import org.coepi.android.util.LimitedSizeQueue
+import org.coepi.android.ui.common.LimitedSizeQueue
 import java.util.Date
 
 class CachingLog : Log {
     val logs = createDefault<LimitedSizeQueue<LogMessage>>(
-        LimitedSizeQueue(1000))
+        LimitedSizeQueue(1000)
+    )
 
     private val addLogTrigger: PublishSubject<LogMessage> = PublishSubject.create()
     private val disposables = CompositeDisposable()
