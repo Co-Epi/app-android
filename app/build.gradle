@@ -50,18 +50,27 @@ ext {
     koin_version = "2.1.0"
     work_version = "2.3.4"
     core_version = "0.1.18"
+
+    binaries_target_dir = "$rootDir/coreBinariesCache/"
+    binaries_zip_name = "coreBinaries${core_version}.zip"
+    binaries_zip_path = "$binaries_target_dir/$binaries_zip_name"
 }
 
-task downloadCoreBinaries(type: Download) {
-    def targetDir = buildDir
-    def url = "https://github.com/co-epi/app-backend-rust/releases/download/$core_version/jniLibs.zip"
+task prepareDownloadBinaries() {
+    def directory = file(binaries_target_dir)
+    if (!directory.exists()) {
+        directory.mkdir()
+    }
 
-    println("Core binaries for version $core_version not downloaded yet. Downloading...")
+    // TODO delete zips that don't match this version
+}
 
-    src url
-    dest targetDir
-    overwrite true
-    println("Finished downloading core binaries")
+task downloadCoreBinaries(dependsOn: prepareDownloadBinaries, type: Download) {
+    src "https://github.com/co-epi/app-backend-rust/releases/download/$core_version/jniLibs.zip"
+    dest binaries_zip_path
+    overwrite false
+
+    doLast { println("Finished downloading core binaries") }
 }
 
 // TODO: doesn't work as expected
@@ -88,15 +97,15 @@ task downloadCoreBinaries(type: Download) {
 task installCoreBinaries(dependsOn: downloadCoreBinaries, type: Copy) {
     def targetDirectory = "$rootDir/app/src/main"
 
-    println("Unzipping core binaries to: $targetDirectory")
+    doFirst { println("Unzipping core binaries to: $targetDirectory") }
 
-    def zipFile = file("$buildDir/jniLibs.zip")
+    def zipFile = file(binaries_zip_path)
     def outputDir = file(targetDirectory)
 
     from zipTree(zipFile)
     into outputDir
 
-    println("Finished unzipping core binaries")
+    doLast { println("Finished unzipping core binaries") }
 }
 
 // NOTE: Comment this once the binaries are downloaded, otherwise it will download them on each build!
