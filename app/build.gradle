@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
+apply plugin: "de.undercouch.download"
 
 android {
     compileSdkVersion 29
@@ -48,7 +49,68 @@ android {
 ext {
     koin_version = "2.1.0"
     work_version = "2.3.4"
+    core_version = "0.1.18"
+
+    binaries_target_dir = "$rootDir/coreBinariesCache/"
+    binaries_zip_name = "coreBinaries${core_version}.zip"
+    binaries_zip_path = "$binaries_target_dir/$binaries_zip_name"
 }
+
+task prepareDownloadBinaries() {
+    def directory = file(binaries_target_dir)
+    if (!directory.exists()) {
+        directory.mkdir()
+    }
+
+    // TODO delete zips that don't match this version
+}
+
+task downloadCoreBinaries(dependsOn: prepareDownloadBinaries, type: Download) {
+    src "https://github.com/co-epi/app-backend-rust/releases/download/$core_version/jniLibs.zip"
+    dest binaries_zip_path
+    overwrite false
+
+    doLast { println("Finished downloading core binaries") }
+}
+
+// TODO: doesn't work as expected
+// TODO: the actual implementation would have to check for the specific version.
+// TODO probably the easiest is to create a file somewhere with downloaded version number.
+//task downloadCoreBinariesIfNotExists(dependsOn: downloadCoreBinaries) {
+////task downloadCoreBinariesIfNotExists() {
+//    def fileName = "jniLibs.zip"
+//    def targetDir = buildDir
+//
+//    def filePath = "$targetDir/$fileName"
+//    // For now downloading in buildDir. TODO dedicated directory
+//
+//    println("Checking if binaries zip exists: $filePath")
+//
+//    if (file(filePath).exists()) {
+//        println("Core binaries for version $core_version already downloaded: $filePath")
+//
+//    } else {
+//        downloadCoreBinaries
+//    }
+//}
+
+task installCoreBinaries(dependsOn: downloadCoreBinaries, type: Copy) {
+    def targetDirectory = "$rootDir/app/src/main"
+
+    doFirst { println("Unzipping core binaries to: $targetDirectory") }
+
+    def zipFile = file(binaries_zip_path)
+    def outputDir = file(targetDirectory)
+
+    from zipTree(zipFile)
+    into outputDir
+
+    doLast { println("Finished unzipping core binaries") }
+}
+
+// NOTE: Comment this once the binaries are downloaded, otherwise it will download them on each build!
+// And of course uncomment when core version was updated, to download the new binaries.
+preBuild.dependsOn installCoreBinaries
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -105,4 +167,5 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
+    implementation "com.github.Co-Epi:app-backend-rust:$core_version"
 }

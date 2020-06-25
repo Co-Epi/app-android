@@ -85,3 +85,8 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# Core binaries
+coreBinariesCache
+app/src/main/jniLibs
+

@@ -6,16 +6,6 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.coepi.android.NotReferencedDependenciesActivator
-import org.coepi.android.core.AlertsFetcher
-import org.coepi.android.core.AlertsFetcherImpl
-import org.coepi.android.core.NativeCore
-import org.coepi.android.core.ObservedTcnsRecorder
-import org.coepi.android.core.ObservedTcnsRecorderImpl
-import org.coepi.android.core.SymptomInputsManagerImpl
-import org.coepi.android.core.SymptomsInputManager
-import org.coepi.android.core.TcnGenerator
-import org.coepi.android.core.TcnGeneratorImpl
-import org.coepi.android.core.bootstrap
 import org.coepi.android.ble.BleEnabler
 import org.coepi.android.ble.BleManager
 import org.coepi.android.ble.BleManagerImpl
@@ -71,6 +61,16 @@ import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputViewModel
 import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotViewModel
 import org.coepi.android.ui.thanks.ThanksViewModel
 import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
+import org.coepi.core.jni.JniApi
+import org.coepi.core.services.AlertsFetcher
+import org.coepi.core.services.AlertsFetcherImpl
+import org.coepi.core.services.CoreBootstrapperImpl
+import org.coepi.core.services.ObservedTcnsRecorder
+import org.coepi.core.services.ObservedTcnsRecorderImpl
+import org.coepi.core.services.SymptomInputsManagerImpl
+import org.coepi.core.services.SymptomsInputManager
+import org.coepi.core.services.TcnGenerator
+import org.coepi.core.services.TcnGeneratorImpl
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -131,7 +131,7 @@ val uiModule = module {
 }
 
 val coreModule = module {
-    single { NativeCore().apply { bootstrap(androidApplication()) } }
+    single { JniApi().apply { CoreBootstrapperImpl(this).bootstrap(androidApplication()) } }
     single<AlertsFetcher> { AlertsFetcherImpl(get()) }
     single<SymptomsInputManager> { SymptomInputsManagerImpl(get(), get()) }
     single<ObservedTcnsRecorder> { ObservedTcnsRecorderImpl(get()) }

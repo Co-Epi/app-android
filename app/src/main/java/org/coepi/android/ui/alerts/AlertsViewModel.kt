@@ -11,7 +11,6 @@ import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationState.Success
 import org.coepi.android.system.rx.VoidOperationState
-import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertCellViewData.Header
 import org.coepi.android.ui.alerts.AlertCellViewData.Item
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
@@ -23,6 +22,7 @@ import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.core.domain.model.Alert
 
 class AlertsViewModel(
     val alertsRepo: AlertsRepo,
