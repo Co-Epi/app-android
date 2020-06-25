@@ -107,9 +107,8 @@ class MainActivity : AppCompatActivity() {
                 .setTitle(R.string.bluetooth_info_title)
                 .setMessage(R.string.bluetooth_info_message)
                 .setPositiveButton(R.string.ok, DialogInterface.OnClickListener
-                { dialog, _ ->
+                { _, _ ->
                     ActivityCompat.requestPermissions(this, permissions, requestCode)
-                    //dialog.dismiss()
                 })
                 .setNegativeButton(R.string.dont_allow, DialogInterface.OnClickListener
                 { dialog, _ ->
