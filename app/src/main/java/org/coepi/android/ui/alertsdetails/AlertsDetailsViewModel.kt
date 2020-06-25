@@ -4,21 +4,17 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
-import org.coepi.android.R.drawable.ic_alert
 import org.coepi.android.R.string
 import org.coepi.android.R.string.alerts_details_reported_on
-import org.coepi.android.api.publicreport.PublicReport
-import org.coepi.android.domain.UnixTime
-import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
-import org.coepi.android.tcn.Alert
-import org.coepi.android.ui.extensions.breathlessnessUIString
-import org.coepi.android.ui.extensions.toUIString
+import org.coepi.android.ui.extensions.symptomUIStrings
 import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
 import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.core.domain.model.Alert
+import org.coepi.core.domain.model.UnixTime
 
 class AlertsDetailsViewModel(
     args: AlertsDetailsFragment.Args,
@@ -36,11 +32,12 @@ class AlertsDetailsViewModel(
         just(args.alert.reportedOnString())
         .toLiveData()
 
-    val symptomList = symptomList(args.alert.report)
+    val symptomList = symptomList(args.alert)
 
     @SuppressLint("DefaultLocale")
-    private fun symptomList(report: PublicReport): String =
-        report.toUIString(resources)
+    private fun symptomList(alert: Alert): String = alert
+        .symptomUIStrings(resources)
+        .joinToString("\n") { symptom -> "${resources.getString(string.bullet_point)} $symptom" }
 
     private fun toMonthAndDay(time: UnixTime): String =
         monthDayFormatter.formatMonthDay(time.toDate())
@@ -48,19 +45,13 @@ class AlertsDetailsViewModel(
     private fun toHourMinute(time: UnixTime): String =
         hourMinuteFormatter.formatTime(time.toDate())
 
-    private fun PublicReport.toUIString(resources: Resources): String =
-        listOfNotNull(
-            coughSeverity.toUIString(resources),
-            breathlessnessUIString(resources),
-            feverSeverity.toUIString(resources)
-        ).joinToString("\n") { "${resources.getString(string.bullet_point)} $it" }
-
     fun onBack() {
         navigation.navigate(Back)
     }
 
-    private fun Alert.reportedOnString() = report.reportTime.toDate().let { date ->
-        resources.getString(alerts_details_reported_on,
+    private fun Alert.reportedOnString() = reportTime.toDate().let { date ->
+        resources.getString(
+            alerts_details_reported_on,
             monthDayFormatter.formatMonthDay(date),
             hourMinuteFormatter.formatTime(date)
         )

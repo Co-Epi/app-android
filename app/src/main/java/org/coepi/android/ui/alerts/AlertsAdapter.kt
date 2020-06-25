@@ -9,7 +9,7 @@ import org.coepi.android.databinding.ItemAlertBinding
 import org.coepi.android.databinding.ItemAlertBinding.inflate
 import org.coepi.android.databinding.ItemAlertHeaderBinding
 import org.coepi.android.system.log.log
-import org.coepi.android.tcn.Alert
+import org.coepi.core.domain.model.Alert
 import org.coepi.android.ui.alerts.AlertCellViewData.Header
 import org.coepi.android.ui.alerts.AlertCellViewData.Item
 

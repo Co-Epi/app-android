@@ -6,7 +6,6 @@ import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE
 import android.content.Intent
 import io.reactivex.subjects.PublishSubject
-import org.coepi.android.MainActivity
 import org.coepi.android.MainActivity.RequestCodes
 import org.coepi.android.system.log.log
 

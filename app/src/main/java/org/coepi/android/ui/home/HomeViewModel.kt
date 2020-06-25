@@ -17,7 +17,6 @@ import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
-import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlerts
 import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalDebug
 import org.coepi.android.ui.home.HomeCardId.SEE_ALERTS
@@ -26,6 +25,7 @@ import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.symptoms.SymptomsFragmentDirections.Companion.actionGlobalSymptomsFragment
+import org.coepi.core.domain.model.Alert
 
 enum class HomeCardId {
     SYMPTOM_REPORTING, SEE_ALERTS

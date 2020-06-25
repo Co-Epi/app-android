@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.parcel.Parcelize
 import org.coepi.android.databinding.FragmentAlertsDetailsBinding.inflate
-import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragmentArgs.Companion.fromBundle
+import org.coepi.core.domain.model.Alert
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
