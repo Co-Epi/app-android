@@ -67,7 +67,9 @@ class AlertRepoImpl(
     private fun onFetchedAlertsSuccess(alerts: List<Alert>) {
         val insertedCount = storeAlerts(alerts)
         if (insertedCount > 0) {
-            newAlertsNotificationShower.showNotification(insertedCount)
+            // TODO: figure out what we want these unique notifications ids to be - maybe associate
+            //  them with alert ids
+            newAlertsNotificationShower.showNotification(insertedCount, (0..1000000).random())
         }
     }
 

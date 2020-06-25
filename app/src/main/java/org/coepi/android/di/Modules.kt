@@ -79,7 +79,7 @@ val viewModelModule = module {
     viewModel { SymptomsViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ThanksViewModel(get()) }
-    viewModel { AlertsViewModel(get(), get(), get()) }
+    viewModel { AlertsViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get(), get(), get()) }

@@ -14,7 +14,8 @@ import org.coepi.android.ui.notifications.NotificationPriority.HIGH
 import org.coepi.android.ui.notifications.NotificationsShower
 
 interface NewAlertsNotificationShower {
-    fun showNotification(newAlertsCount: Int)
+    fun showNotification(newAlertsCount: Int, notificationId: Int)
+    fun cancelNotification(notificationId: Int)
 }
 
 class NewAlertsNotificationShowerImpl(
@@ -23,14 +24,20 @@ class NewAlertsNotificationShowerImpl(
     private val resources: Resources
 ) : NewAlertsNotificationShower {
 
-    override fun showNotification(newAlertsCount: Int) {
+    override fun showNotification(newAlertsCount: Int, notificationId: Int) {
         log.d("Showing notification...")
-        notificationsShower.showNotification(notificationConfiguration(newAlertsCount))
+        notificationsShower.showNotification(notificationConfiguration(newAlertsCount, notificationId))
     }
 
-    private fun notificationConfiguration(newAlertsCount: Int): NotificationConfig =
+    override fun cancelNotification(notificationId: Int) {
+        log.d("Canceling notification $notificationId")
+        notificationsShower.cancelNotification(notificationId)
+    }
+
+    private fun notificationConfiguration(newAlertsCount: Int, noticationId: Int): NotificationConfig =
         NotificationConfig(
             drawable.ic_launcher_foreground,
+            noticationId,
             resources.getString(string.infection_notification_title),
             resources.getQuantityString(plurals.alerts_new_notifications_count, newAlertsCount),
             HIGH,

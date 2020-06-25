@@ -22,12 +22,14 @@ import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.notifications.NotificationsShower
 import org.coepi.core.domain.model.Alert
 
 class AlertsViewModel(
-    val alertsRepo: AlertsRepo,
+    private val alertsRepo: AlertsRepo,
     private val resources: Resources,
-    private val navigation: RootNavigation
+    private val navigation: RootNavigation,
+    private val notification: NotificationsShower
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertCellViewData>> = alertsRepo.alerts
@@ -54,6 +56,16 @@ class AlertsViewModel(
 
     fun onAlertsInfoButtonClick() {
         navigation.navigate(ToDirections(actionGlobalAlertsInfo()))
+    }
+
+    fun onAlertDismissed(alert: Alert) {
+        alertsRepo.removeAlert(alert)
+    }
+
+    fun onUiReady() {
+        if (notification.isShowingNotifications()) {
+            notification.cancelAllNotifications()
+        }
     }
 
     /**
