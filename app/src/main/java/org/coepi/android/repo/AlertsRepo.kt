@@ -7,10 +7,8 @@ import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import org.coepi.android.core.AlertsFetcher
-import org.coepi.android.common.Result.Failure
-import org.coepi.android.common.Result.Success
-import org.coepi.android.tcn.Alert
+import org.coepi.core.domain.common.Result.Failure
+import org.coepi.core.domain.common.Result.Success
 import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShower
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.OperationState
@@ -18,6 +16,8 @@ import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.tcn.AlertsDao
+import org.coepi.core.domain.model.Alert
+import org.coepi.core.services.AlertsFetcher
 
 interface AlertsRepo {
     val alerts: Observable<List<Alert>>

@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable.just
 import org.coepi.android.R.string
 import org.coepi.android.R.string.alerts_details_reported_on
-import org.coepi.android.domain.UnixTime
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
-import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.extensions.symptomUIStrings
 import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
 import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.core.domain.model.Alert
+import org.coepi.core.domain.model.UnixTime
 
 class AlertsDetailsViewModel(
     args: AlertsDetailsFragment.Args,
@@ -50,7 +50,8 @@ class AlertsDetailsViewModel(
     }
 
     private fun Alert.reportedOnString() = reportTime.toDate().let { date ->
-        resources.getString(alerts_details_reported_on,
+        resources.getString(
+            alerts_details_reported_on,
             monthDayFormatter.formatMonthDay(date),
             hourMinuteFormatter.formatTime(date)
         )

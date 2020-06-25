@@ -13,13 +13,13 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
-import org.coepi.android.domain.symptomflow.SymptomId
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.core.domain.model.SymptomId
 
 class SymptomsViewModel(
     symptomRepo: SymptomRepo,

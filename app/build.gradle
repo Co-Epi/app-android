@@ -105,4 +105,5 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
+    implementation 'com.github.Co-Epi:app-backend-rust:0.1.18'
 }

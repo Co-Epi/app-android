@@ -2,7 +2,7 @@ package org.coepi.android.domain.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import org.coepi.android.domain.symptomflow.SymptomId
+import org.coepi.core.domain.model.SymptomId
 
 @Parcelize
 data class Symptom(

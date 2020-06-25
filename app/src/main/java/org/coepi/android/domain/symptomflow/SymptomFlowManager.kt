@@ -7,13 +7,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
-import org.coepi.android.core.SymptomsInputManager
-import org.coepi.android.common.Result
-import org.coepi.android.common.expect
-import org.coepi.android.domain.model.Temperature
-import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
-import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
-import org.coepi.android.domain.symptomflow.SymptomInputs.Fever
+import org.coepi.android.extensions.expect
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.VoidOperationState
@@ -22,6 +16,14 @@ import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalThanksFragment
+import org.coepi.core.domain.model.SymptomInputs.Breathlessness
+import org.coepi.core.domain.model.SymptomInputs.Cough
+import org.coepi.core.domain.model.SymptomInputs.Fever
+import org.coepi.core.domain.model.Temperature
+import org.coepi.core.domain.model.UserInput
+import org.coepi.core.domain.common.Result
+import org.coepi.core.domain.model.SymptomId
+import org.coepi.core.services.SymptomsInputManager
 
 interface SymptomFlowManager {
     val submitSymptomsState: Observable<VoidOperationState>

@@ -3,7 +3,7 @@ package org.coepi.android.ble
 import io.reactivex.Observable
 import org.coepi.android.extensions.hexToByteArray
 import org.coepi.android.system.log.log
-import org.coepi.android.tcn.Tcn
+import org.coepi.core.domain.model.Tcn
 
 class BleSimulator : BleManager {
 
