@@ -87,8 +87,6 @@ task installCoreBinaries(dependsOn: downloadCoreBinaries, type: Copy) {
     doLast { println("Finished unzipping core binaries") }
 }
 
-// NOTE: Comment this once the binaries are downloaded, otherwise it will download them on each build!
-// And of course uncomment when core version was updated, to download the new binaries.
 preBuild.dependsOn installCoreBinaries
 
 dependencies {
