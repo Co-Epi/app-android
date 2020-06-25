@@ -73,27 +73,6 @@ task downloadCoreBinaries(dependsOn: prepareDownloadBinaries, type: Download) {
     doLast { println("Finished downloading core binaries") }
 }
 
-// TODO: doesn't work as expected
-// TODO: the actual implementation would have to check for the specific version.
-// TODO probably the easiest is to create a file somewhere with downloaded version number.
-//task downloadCoreBinariesIfNotExists(dependsOn: downloadCoreBinaries) {
-////task downloadCoreBinariesIfNotExists() {
-//    def fileName = "jniLibs.zip"
-//    def targetDir = buildDir
-//
-//    def filePath = "$targetDir/$fileName"
-//    // For now downloading in buildDir. TODO dedicated directory
-//
-//    println("Checking if binaries zip exists: $filePath")
-//
-//    if (file(filePath).exists()) {
-//        println("Core binaries for version $core_version already downloaded: $filePath")
-//
-//    } else {
-//        downloadCoreBinaries
-//    }
-//}
-
 task installCoreBinaries(dependsOn: downloadCoreBinaries, type: Copy) {
     def targetDirectory = "$rootDir/app/src/main"
 
