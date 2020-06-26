@@ -2,7 +2,6 @@ package org.coepi.android.ble
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Intent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables.combineLatest
 import io.reactivex.rxkotlin.plusAssign
@@ -24,13 +23,15 @@ class BlePreconditions(
         startPermissionsChecker.checkForPermissions(activity)
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        bleEnabler.onActivityResult(requestCode, resultCode, data)
+    fun onActivityResult(requestCode: Int, resultCode: Int) {
+        bleEnabler.onActivityResult(requestCode, resultCode)
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                   grantResults: IntArray) {
-        startPermissionsChecker.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    fun onRequestPermissionsResult(
+        requestCode: Int,
+        grantResults: IntArray
+    ) {
+        startPermissionsChecker.onRequestPermissionsResult(requestCode, grantResults)
     }
 
     @SuppressLint("CheckResult")

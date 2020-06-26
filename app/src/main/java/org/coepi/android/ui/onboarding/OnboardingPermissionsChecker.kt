@@ -35,8 +35,10 @@ class OnboardingPermissionsChecker {
         }
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                   grantResults: IntArray) {
+    fun onRequestPermissionsResult(
+        requestCode: Int,
+        grantResults: IntArray
+    ) {
 
         if (requestCode != this.requestCode) return
 
