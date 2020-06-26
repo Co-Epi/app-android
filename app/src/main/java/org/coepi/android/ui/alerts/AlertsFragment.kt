@@ -26,9 +26,18 @@ class AlertsFragment : Fragment() {
 
         toolbar.setNavigationOnClickListener { viewModel.onBack() }
 
-        val alertsAdapter = AlertsAdapter(onAlertClick = {
-            viewModel.onAlertClick(it)
-        }, alertsRepo = viewModel.alertsRepo)
+        val alertsAdapter = AlertsAdapter(
+            onAlertClick = {
+                viewModel.onAlertClick(it)
+            },
+            onAlertDismissed = {
+                viewModel.onAlertDismissed(it)
+            }
+        )
+
+        // clear system notifications if any are present
+        // TODO: will need to clear by unique notification ids
+        viewModel.onUiReady()
 
         recyclerView.run {
             layoutManager = LinearLayoutManager(inflater.context, VERTICAL, false)

@@ -6,6 +6,7 @@ import org.coepi.android.system.intent.IntentKey
 
 data class NotificationConfig(
     @DrawableRes val smallIcon: Int,
+    val notificationId: Int,
     val title: String,
     val text: String,
     val priority: NotificationPriority,

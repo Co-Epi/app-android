@@ -3,27 +3,27 @@ package org.coepi.android.ui.symptoms.cough
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import org.coepi.android.R.string.symptom_report_cough_status_option_better_worse_day
 import org.coepi.android.R.string.symptom_report_cough_status_option_same_or_steadily_worse
 import org.coepi.android.R.string.symptom_report_cough_status_option_worse_outside
-import org.coepi.android.common.Optional
-import org.coepi.android.common.Optional.None
-import org.coepi.android.common.toNullable
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
-import org.coepi.android.domain.symptomflow.SymptomInputs.Cough
-import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Status.BETTER_AND_WORSE_THROUGH_DAY
-import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Status.SAME_OR_STEADILY_WORSE
-import org.coepi.android.domain.symptomflow.SymptomInputs.Cough.Status.WORSE_WHEN_OUTSIDE
-import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toIsInProgress
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.core.domain.common.Optional
+import org.coepi.core.domain.common.Optional.None
+import org.coepi.core.domain.common.toNullable
+import org.coepi.core.domain.model.SymptomInputs.Cough
+import org.coepi.core.domain.model.SymptomInputs.Cough.Status
+import org.coepi.core.domain.model.SymptomInputs.Cough.Status.BETTER_AND_WORSE_THROUGH_DAY
+import org.coepi.core.domain.model.SymptomInputs.Cough.Status.SAME_OR_STEADILY_WORSE
+import org.coepi.core.domain.model.SymptomInputs.Cough.Status.WORSE_WHEN_OUTSIDE
+import org.coepi.core.domain.model.UserInput.Some
 
 class CoughStatusViewModel (
     private val navigation: RootNavigation,
@@ -36,7 +36,7 @@ class CoughStatusViewModel (
         .observeOn(mainThread())
         .toLiveData()
 
-    private val selectedStatus: BehaviorSubject<Optional<Cough.Status>> = createDefault(None)
+    private val selectedStatus: BehaviorSubject<Optional<Status>> = createDefault(None)
 
     private val coughStatuses : List<Cough.Status> = listOf(
         BETTER_AND_WORSE_THROUGH_DAY, SAME_OR_STEADILY_WORSE, WORSE_WHEN_OUTSIDE

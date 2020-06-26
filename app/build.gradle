@@ -4,22 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
+apply plugin: "de.undercouch.download"
 
 configurations {
     detekt
-}
-
-task detekt(type: JavaExec) {
-    main = "io.gitlab.arturbosch.detekt.cli.Main"
-    classpath = configurations.detekt
-    def config = "$rootDir/tools/detekt.yml"
-    def input = "$projectDir/src/main/java"
-    def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    def params = ['-c', config,
-                  '-i', input,
-                  '-f', filters]
-    println("PARAMS = $params") //to make sure the path is right
-    args(params)
 }
 
 android {
@@ -65,7 +53,58 @@ android {
 ext {
     koin_version = "2.1.0"
     work_version = "2.3.4"
+    core_version = "0.1.19"
+
+    binaries_target_dir = "$rootDir/coreBinariesCache/"
+    binaries_zip_name = "coreBinaries${core_version}.zip"
+    binaries_zip_path = "$binaries_target_dir/$binaries_zip_name"
 }
+
+task prepareDownloadBinaries() {
+    def directory = file(binaries_target_dir)
+    if (!directory.exists()) {
+        directory.mkdir()
+    }
+
+    // TODO delete zips that don't match this version
+}
+
+task downloadCoreBinaries(dependsOn: prepareDownloadBinaries, type: Download) {
+    src "https://github.com/co-epi/app-backend-rust/releases/download/$core_version/jniLibs.zip"
+    dest binaries_zip_path
+    overwrite false
+
+    doLast { println("Finished downloading core binaries") }
+}
+
+task installCoreBinaries(dependsOn: downloadCoreBinaries, type: Copy) {
+    def targetDirectory = "$rootDir/app/src/main"
+
+    doFirst { println("Unzipping core binaries to: $targetDirectory") }
+
+    def zipFile = file(binaries_zip_path)
+    def outputDir = file(targetDirectory)
+
+    from zipTree(zipFile)
+    into outputDir
+
+    doLast { println("Finished unzipping core binaries") }
+}
+
+task detekt(type: JavaExec) {
+    main = "io.gitlab.arturbosch.detekt.cli.Main"
+    classpath = configurations.detekt
+    def config = "$rootDir/tools/detekt.yml"
+    def input = "$projectDir/src/main/java"
+    def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    def params = ['-c', config,
+                  '-i', input,
+                  '-f', filters]
+    println("PARAMS = $params") //to make sure the path is right
+    args(params)
+}
+
+preBuild.dependsOn installCoreBinaries
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -122,8 +161,6 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
-
+    implementation "com.github.Co-Epi:app-backend-rust:$core_version"
     detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.RC8'
 }
-// TODO: uncomment this whenever we want to fail builds when linter fails
-// project.tasks.check.dependsOn 'detekt'

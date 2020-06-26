@@ -12,14 +12,14 @@ import org.coepi.android.R.string.alerts_report_no_symptoms
 import org.coepi.android.R.string.alerts_report_other
 import org.coepi.android.R.string.alerts_report_runny_nose
 import org.coepi.android.system.Resources
-import org.coepi.android.tcn.Alert
-import org.coepi.android.tcn.CoughSeverity
-import org.coepi.android.tcn.CoughSeverity.DRY
-import org.coepi.android.tcn.CoughSeverity.EXISTING
-import org.coepi.android.tcn.CoughSeverity.WET
-import org.coepi.android.tcn.FeverSeverity
-import org.coepi.android.tcn.FeverSeverity.MILD
-import org.coepi.android.tcn.FeverSeverity.SERIOUS
+import org.coepi.core.domain.model.Alert
+import org.coepi.core.domain.model.CoughSeverity
+import org.coepi.core.domain.model.CoughSeverity.DRY
+import org.coepi.core.domain.model.CoughSeverity.EXISTING
+import org.coepi.core.domain.model.CoughSeverity.WET
+import org.coepi.core.domain.model.FeverSeverity
+import org.coepi.core.domain.model.FeverSeverity.MILD
+import org.coepi.core.domain.model.FeverSeverity.SERIOUS
 
 fun Alert.symptomUIStrings(resources: Resources): List<String> =
     listOfNotNull(
