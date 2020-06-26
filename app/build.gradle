@@ -97,8 +97,10 @@ task detekt(type: JavaExec) {
     def config = "$rootDir/tools/detekt.yml"
     def input = "$projectDir/src/main/java"
     def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    def output = "$projectDir/build/reports/detekt/results"
     def params = ['-c', config,
                   '-i', input,
+                  '-o', output,
                   '-f', filters]
     println("PARAMS = $params") //to make sure the path is right
     args(params)
