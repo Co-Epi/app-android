@@ -7,7 +7,6 @@ import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughDurat
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughStatusFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalCoughTypeFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalBreathlessFragment
-import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalDebug
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalEarliestSymptomFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverHighestTemperatureFragment
 import org.coepi.android.NavGraphRootDirections.Companion.actionGlobalFeverTemperatureSpotFragment

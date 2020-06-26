@@ -5,13 +5,10 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.Callback
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import org.coepi.android.ui.alerts.AlertsAdapter
 
-
-abstract class SwipeToDeleteCallback(adapter: AlertsAdapter) :
+abstract class SwipeToDeleteCallback:
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }

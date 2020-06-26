@@ -48,7 +48,8 @@ class LogsFragment: Fragment() {
         var firstOnItemSelectedCall = true
         spinLevel.onItemSelected {
             val selected = spinLevel.selectedItem.toString()
-            val logLevel = LogLevel.valueOf("${selected[0]}") // FIXME using the first letter to get enum value is a hack
+            // FIXME using the first letter to get enum value is a hack
+            val logLevel = LogLevel.valueOf("${selected[0]}")
             if (!firstOnItemSelectedCall) {
                 viewModel.onLogLevelSelected(logLevel)
             }

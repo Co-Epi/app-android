@@ -97,7 +97,7 @@ val viewModelModule = module {
     viewModel { FeverHighestTemperatureViewModel(get(), get()) }
     viewModel { FeverTemperatureSpotViewModel(get(), get()) }
     viewModel { FeverTemperatureSpotInputViewModel(get(), get()) }
-    viewModel { AlertsInfoViewModel(get(), get()) }
+    viewModel { AlertsInfoViewModel(get()) }
 }
 
 val systemModule = module {

@@ -50,7 +50,7 @@ class AlertsFragment : Fragment() {
         }
 
         context?.let {
-            val swipeHandler = object : SwipeToDeleteCallback(alertsAdapter) {
+            val swipeHandler = object : SwipeToDeleteCallback() {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val adapter = recyclerView.adapter as AlertsAdapter
                     adapter.removeAt(viewHolder.adapterPosition)

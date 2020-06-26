@@ -13,7 +13,6 @@ import org.coepi.android.system.rx.OperationState.Failure
 import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationState.Success
-import org.coepi.android.system.rx.VoidOperationState
 
 fun <T> Observable<T>.toLiveData(): LiveData<T> =
     fromPublisher(observeOn(mainThread()).toFlowable(BUFFER))
@@ -35,7 +34,10 @@ fun <T, U> Observable<OperationState<T>>.mapSuccess(f: (T) -> U): Observable<Ope
         state.map(f)
     }
 
-fun <T, U> Observable<OperationState<T>>.flatMapSuccess(f: (T) -> Observable<OperationState<U>>): Observable<OperationState<U>> =
+fun <T, U> Observable<OperationState<T>>.flatMapSuccess(
+    f: (T) ->
+    Observable<OperationState<U>>
+): Observable<OperationState<U>> =
     flatMap { state: OperationState<T> ->
         when (state) {
             is NotStarted -> just(NotStarted)
@@ -55,7 +57,7 @@ fun <T> Observable<OperationState<T>>.success(): Observable<T> =
 
 fun <T> Observable<OperationState<T>>.toIsInProgress(): Observable<Boolean> =
     map { it is Progress }
-    .onErrorReturnItem(false)
+        .onErrorReturnItem(false)
 
 fun <T> Observable<T>.asSequence(): Observable<List<T>> =
     scan(emptyList(), { acc, element -> acc + listOf(element) })

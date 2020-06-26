@@ -1,8 +1,6 @@
 package org.coepi.android.ui.navigation
 
 import androidx.navigation.NavDirections
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigator
 import java.io.Serializable
 
 sealed class NavigationCommand : Serializable {
