@@ -25,12 +25,12 @@ test-pattern: # Configure exclusions for test sources
     - 'InstanceOfCheckForException'
 
 build:
-  maxIssues: 0
+  maxIssues: 25
   weights:
-    # complexity: 2
-    # LongParameterList: 1
-    # style: 1
-    # comments: 1
+  # complexity: 2
+  # LongParameterList: 1
+  # style: 1
+  # comments: 1
 
 processors:
   active: true
@@ -78,7 +78,7 @@ complexity:
     threshold: 10
     includeStaticDeclarations: false
   ComplexMethod:
-    active: true
+    active: false
     threshold: 15
     ignoreSingleWhenExpression: true
     ignoreSimpleWhenEntries: true
@@ -181,22 +181,22 @@ exceptions:
   TooGenericExceptionCaught:
     active: false
     exceptionNames:
-     - ArrayIndexOutOfBoundsException
-     - Error
-     - Exception
-     - IllegalMonitorStateException
-     - NullPointerException
-     - IndexOutOfBoundsException
-     - RuntimeException
-     - Throwable
+      - ArrayIndexOutOfBoundsException
+      - Error
+      - Exception
+      - IllegalMonitorStateException
+      - NullPointerException
+      - IndexOutOfBoundsException
+      - RuntimeException
+      - Throwable
     allowedExceptionNameRegex: "^(_|(ignore|expected).*)"
   TooGenericExceptionThrown:
-    active: true
+    active: false
     exceptionNames:
-     - Error
-     - Exception
-     - Throwable
-     - RuntimeException
+      - Error
+      - Exception
+      - Throwable
+      - RuntimeException
 
 formatting:
   active: true
@@ -211,7 +211,7 @@ formatting:
   Filename:
     active: true
   FinalNewline:
-    active: true
+    active: false
     autoCorrect: true
   ImportOrdering:
     active: false
@@ -326,7 +326,7 @@ naming:
     excludeClassPattern: '$^'
     ignoreOverriddenFunctions: true
   MatchingDeclarationName:
-    active: true
+    active: false
   MemberNameEqualsClassName:
     active: false
     ignoreOverriddenFunction: true
@@ -339,7 +339,7 @@ naming:
     active: true
     packagePattern: '^[a-z]+(\.[a-z][A-Za-z0-9]*)*$'
   TopLevelPropertyNaming:
-    active: true
+    active: false
     constantPattern: '[A-Z][_A-Z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '(_)?[A-Za-z][A-Za-z0-9]*'
@@ -432,7 +432,7 @@ style:
     active: false
     maxJumpCount: 1
   MagicNumber:
-    active: true
+    active: false
     ignoreNumbers: '-1,0,1,2'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
@@ -456,7 +456,7 @@ style:
   NestedClassesVisibility:
     active: false
   NewLineAtEndOfFile:
-    active: true
+    active: false
   NoTabs:
     active: true
   OptionalAbstractKeyword:
