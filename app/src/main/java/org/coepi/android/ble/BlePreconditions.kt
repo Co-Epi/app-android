@@ -7,6 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables.combineLatest
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
+import org.coepi.android.system.log.LogTag.PERM
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker
 
@@ -21,7 +22,7 @@ class BlePreconditions(
         observeResults()
 
         showEnableBleAfterPermissions(activity)
-        startPermissionsChecker.checkForPermissions(activity)
+        startPermissionsChecker.requestPermissionsIfNeeded(activity)
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -29,8 +30,9 @@ class BlePreconditions(
     }
 
     fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                   grantResults: IntArray) {
-        startPermissionsChecker.onRequestPermissionsResult(requestCode, permissions, grantResults)
+                                   grantResults: IntArray, activity: Activity) {
+        startPermissionsChecker.onRequestPermissionsResult(requestCode, permissions, grantResults,
+            activity)
     }
 
     @SuppressLint("CheckResult")
@@ -46,7 +48,8 @@ class BlePreconditions(
                 if (permissionsGranted && bleEnabled) {
                     blePreconditionsNotifier.notifyBleEnabled()
                 } else {
-                    log.i("BLE preconditions not met. Permissions: $permissionsGranted, ble enabled: $bleEnabled")
+                    log.i("BLE preconditions not met. Permissions: $permissionsGranted, " +
+                            "ble enabled: $bleEnabled", PERM)
                     // TODO handle?
                 }
             }

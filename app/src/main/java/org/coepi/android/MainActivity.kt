@@ -1,12 +1,8 @@
 package org.coepi.android
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.navigation.findNavController
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
@@ -17,8 +13,8 @@ import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.R.style.AppTheme
 import org.coepi.android.ble.BlePreconditions
-import org.coepi.android.tcn.BleInitializer
 import org.coepi.android.system.intent.IntentForwarder
+import org.coepi.android.tcn.BleInitializer
 import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
@@ -101,21 +97,7 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        blePreconditions.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults[1] == PERMISSION_DENIED && shouldShowRequestPermissionRationale(permissions[1])) {
-            AlertDialog.Builder(this)
-                .setTitle(R.string.bluetooth_info_title)
-                .setMessage(R.string.bluetooth_info_message)
-                .setPositiveButton(R.string.ok, DialogInterface.OnClickListener
-                { _, _ ->
-                    ActivityCompat.requestPermissions(this, permissions, requestCode)
-                })
-                .setNegativeButton(R.string.dont_allow, DialogInterface.OnClickListener
-                { dialog, _ ->
-                    dialog.dismiss()
-                })
-                .show()
-        }
+        blePreconditions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onDestroy() {
