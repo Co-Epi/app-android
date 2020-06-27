@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker.Result.success
 import androidx.work.WorkerParameters
-import org.coepi.android.repo.reportsupdate.ReportsUpdater
+import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.log.LogTag.TCN_MATCHING
 import org.coepi.android.system.log.log
 import org.koin.core.KoinComponent
@@ -15,11 +15,11 @@ class ContactsFetchWorker(
     workerParams: WorkerParameters
 ) : CoroutineWorker(appContext, workerParams), KoinComponent {
 
-    private val alertsUpdater: ReportsUpdater by inject()
+    private val alertsRepo: AlertsRepo by inject()
 
     override suspend fun doWork(): Result {
         log.d("Contacts fetch worker started.", TCN_MATCHING)
-        alertsUpdater.requestUpdateReports()
+        alertsRepo.requestUpdateReports()
         log.d("Contacts fetch worker finished.", TCN_MATCHING)
         return success()
     }

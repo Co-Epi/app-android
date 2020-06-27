@@ -1,6 +1,6 @@
 package org.coepi.android.ui.alerts
 
-import org.coepi.android.tcn.Alert
+import org.coepi.core.domain.model.Alert
 
 sealed class AlertCellViewData {
     data class Header(val text: String) : AlertCellViewData()

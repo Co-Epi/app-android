@@ -24,7 +24,8 @@
          see https://github.com/Co-Epi/app-android/pull/59#issuecomment-611193577 -->
         <activity android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

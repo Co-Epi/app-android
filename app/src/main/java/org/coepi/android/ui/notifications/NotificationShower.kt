@@ -1,14 +1,11 @@
 package org.coepi.android.ui.notifications
 
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
-import android.os.Bundle
-import android.os.Parcelable
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
@@ -27,20 +24,42 @@ class NotificationsShower(
     private val context: Context
 ) {
     private val channelId: String = "infection_contact_report"
-    private val notificationId: Int = 0
 
     fun showNotification(config: NotificationConfig) {
         with(NotificationManagerCompat.from(context)) {
-            notify(notificationId, notificationBuilder(config).build())
+            notify(config.notificationId, notificationBuilder(config).build())
         }
     }
 
-    private fun pendingIntent(args: NotificationIntentArgs): PendingIntent = PendingIntent.getActivity(
-        context, 0, Intent(context, MainActivity::class.java).apply {
-            flags = FLAG_ACTIVITY_SINGLE_TOP
-            putExtra(args.key.toString(), args.value)
-        }, FLAG_UPDATE_CURRENT
-    )
+    /**
+     * TODO: need a way to cancel specific system notifications using the unique notificationId that's
+     * apart of the [NotificationConfig]
+     */
+    fun cancelNotification(notificationId: Int) {
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(notificationId)
+    }
+
+    fun cancelAllNotifications() {
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancelAll()
+    }
+
+    fun isShowingNotifications(): Boolean {
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        return notificationManager.activeNotifications.isNotEmpty()
+    }
+
+    private fun pendingIntent(args: NotificationIntentArgs): PendingIntent =
+        PendingIntent.getActivity(
+            context, 0, Intent(context, MainActivity::class.java).apply {
+                flags = FLAG_ACTIVITY_SINGLE_TOP
+                putExtra(args.key.toString(), args.value)
+            }, FLAG_UPDATE_CURRENT
+        )
 
     private fun notificationBuilder(config: NotificationConfig): Builder =
         Builder(context, channelId)

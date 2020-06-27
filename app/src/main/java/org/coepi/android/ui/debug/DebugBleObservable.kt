@@ -3,7 +3,7 @@ package org.coepi.android.ui.debug
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.create
-import org.coepi.android.tcn.Tcn
+import org.coepi.core.domain.model.Tcn
 
 interface DebugBleObservable {
     val myTcn: Observable<Tcn>

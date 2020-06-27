@@ -1,6 +1,5 @@
 package org.coepi.android.di
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
@@ -13,8 +12,6 @@ import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
-import org.coepi.android.tcn.TcnModule
-import org.coepi.android.tcn.apiModule
 import org.coepi.android.repo.repoModule
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
@@ -27,6 +24,8 @@ import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
 import org.coepi.android.system.log.cachingLog
+import org.coepi.android.system.log.log
+import org.coepi.android.tcn.TcnModule
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
@@ -63,15 +62,26 @@ import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputViewModel
 import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotViewModel
 import org.coepi.android.ui.thanks.ThanksViewModel
 import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
+import org.coepi.core.jni.JniApi
+import org.coepi.core.services.AlertsFetcher
+import org.coepi.core.services.AlertsFetcherImpl
+import org.coepi.core.services.CoreBootstrapperImpl
+import org.coepi.core.services.CoreLogger
+import org.coepi.core.services.ObservedTcnsRecorder
+import org.coepi.core.services.ObservedTcnsRecorderImpl
+import org.coepi.core.services.SymptomInputsManagerImpl
+import org.coepi.core.services.SymptomsInputManager
+import org.coepi.core.services.TcnGenerator
+import org.coepi.core.services.TcnGeneratorImpl
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { SymptomsViewModel(get(), get(), get(), get()) }
+    viewModel { SymptomsViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ThanksViewModel(get()) }
-    viewModel { AlertsViewModel(get(), get(), get()) }
+    viewModel { AlertsViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get(), get(), get()) }
@@ -122,12 +132,30 @@ val uiModule = module {
     single<ActivityFinisher> { ActivityFinisherImpl() }
 }
 
+val coreModule = module {
+    single { JniApi().apply { CoreBootstrapperImpl(this).bootstrap(androidApplication(), object: CoreLogger {
+        override fun log(level: Int, message: String) {
+            when (level) {
+                0 -> log.v(message)
+                1 -> log.d(message)
+                2 -> log.i(message)
+                3 -> log.w(message)
+                4 -> log.e(message)
+            }
+        }
+    }) } }
+    single<AlertsFetcher> { AlertsFetcherImpl(get()) }
+    single<SymptomsInputManager> { SymptomInputsManagerImpl(get(), get()) }
+    single<ObservedTcnsRecorder> { ObservedTcnsRecorderImpl(get()) }
+    single<TcnGenerator> { TcnGeneratorImpl(get()) }
+}
+
 @ExperimentalUnsignedTypes
 val appModule = listOf(
+    coreModule,
     repoModule,
     viewModelModule,
     systemModule,
-    apiModule,
     TcnModule,
     uiModule
 )

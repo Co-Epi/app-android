@@ -3,7 +3,6 @@ package org.coepi.android.ui.symptoms
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
@@ -14,27 +13,19 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.domain.model.Symptom
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
-import org.coepi.android.domain.symptomflow.SymptomId
-import org.coepi.android.extensions.rx.toIsInProgress
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.extensions.toggle
 import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.system.log.log
-import org.coepi.android.tcn.TcnReportRepo
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.core.domain.model.SymptomId
 
 class SymptomsViewModel(
     symptomRepo: SymptomRepo,
     private val navigation: RootNavigation,
-    private val symptomFlowManager: SymptomFlowManager,
-    reportRepo: TcnReportRepo
+    private val symptomFlowManager: SymptomFlowManager
 ) : ViewModel() {
-
-    val isInProgress: LiveData<Boolean> = reportRepo.sendState
-        .toIsInProgress()
-        .observeOn(mainThread())
-        .toLiveData()
 
     private val selectedSymptomIds: BehaviorSubject<Set<SymptomId>> =
         createDefault(emptySet())

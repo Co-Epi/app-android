@@ -1,22 +1,8 @@
 package org.coepi.android.ui.alerts
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import org.coepi.android.R.string.alerts_report_breathlessness
-import org.coepi.android.R.string.alerts_report_cough
-import org.coepi.android.R.string.alerts_report_cough_dry
-import org.coepi.android.R.string.alerts_report_cough_wet
-import org.coepi.android.R.string.alerts_report_fever_mild
-import org.coepi.android.R.string.alerts_report_fever_serious
-import org.coepi.android.api.publicreport.CoughSeverity
-import org.coepi.android.api.publicreport.CoughSeverity.DRY
-import org.coepi.android.api.publicreport.CoughSeverity.EXISTING
-import org.coepi.android.api.publicreport.CoughSeverity.WET
-import org.coepi.android.api.publicreport.FeverSeverity
-import org.coepi.android.api.publicreport.FeverSeverity.MILD
-import org.coepi.android.api.publicreport.FeverSeverity.SERIOUS
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -25,22 +11,25 @@ import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationState.Success
 import org.coepi.android.system.rx.VoidOperationState
-import org.coepi.android.tcn.Alert
 import org.coepi.android.ui.alerts.AlertCellViewData.Header
 import org.coepi.android.ui.alerts.AlertCellViewData.Item
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsInfo
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
+import org.coepi.android.ui.extensions.symptomUIStrings
 import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
 import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.notifications.NotificationsShower
+import org.coepi.core.domain.model.Alert
 
 class AlertsViewModel(
-    val alertsRepo: AlertsRepo,
+    private val alertsRepo: AlertsRepo,
     private val resources: Resources,
-    private val navigation: RootNavigation
+    private val navigation: RootNavigation,
+    private val notification: NotificationsShower
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertCellViewData>> = alertsRepo.alerts
@@ -58,7 +47,7 @@ class AlertsViewModel(
     }
 
     fun onSwipeToRefresh() {
-        alertsRepo.updateReports()
+        alertsRepo.requestUpdateReports()
     }
 
     fun onBack() {
@@ -69,17 +58,23 @@ class AlertsViewModel(
         navigation.navigate(ToDirections(actionGlobalAlertsInfo()))
     }
 
+    fun onAlertDismissed(alert: Alert) {
+        alertsRepo.removeAlert(alert)
+    }
+
+    fun onUiReady() {
+        if (notification.isShowingNotifications()) {
+            notification.cancelAllNotifications()
+        }
+    }
+
     /**
      * This function parses [Alert] objects received from the [AlertsRepo] into readable strings that get displayed
      * in the recycler view item_alert views bound by the [AlertsAdapter]
      */
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
-            exposureType = listOfNotNull(
-                report.coughSeverity.toUIString(),
-                toBreathlessnessString(report.breathlessness),
-                report.feverSeverity.toUIString()
-            ).joinToString("\n"),
+            exposureType = symptomUIStrings(resources).joinToString("\n"),
             contactTime = hourMinuteFormatter.formatTime(contactTime.toDate()),
             contactTimeMonth = monthDayFormatter.formatMonthDay(contactTime.toDate()),
             alert = this
@@ -93,25 +88,6 @@ class AlertsViewModel(
                     Item(alert.toViewData())
                 }
             }
-
-    private fun toBreathlessnessString(breathless: Boolean): String? =
-        if (breathless) resources.getString(alerts_report_breathlessness) else null
-
-    private fun FeverSeverity.toUIString(): String? =
-        when (this) {
-            FeverSeverity.NONE -> null
-            MILD -> resources.getString(alerts_report_fever_mild)
-            SERIOUS -> resources.getString(alerts_report_fever_serious)
-        }
-
-    @SuppressLint("DefaultLocale")
-    private fun CoughSeverity.toUIString(): String? =
-        when (this) {
-            CoughSeverity.NONE -> null
-            EXISTING -> resources.getString(alerts_report_cough)
-            WET -> resources.getString(alerts_report_cough_wet)
-            DRY -> resources.getString(alerts_report_cough_dry)
-        }
 
     private fun toUpdateStatusText(operationState: VoidOperationState): String =
         when (operationState) {

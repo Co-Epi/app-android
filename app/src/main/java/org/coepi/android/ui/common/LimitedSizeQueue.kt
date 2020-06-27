@@ -1,4 +1,4 @@
-package org.coepi.android.util
+package org.coepi.android.ui.common
 
 class LimitedSizeQueue<T>(private val maxSize: Int) : ArrayList<T>() {
 

@@ -1,6 +1,5 @@
 package org.coepi.android.ui.symptoms.breathless
 
-
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -19,22 +18,22 @@ import org.coepi.android.R.string.symptom_report_breathlessness_cause_option_gro
 import org.coepi.android.R.string.symptom_report_breathlessness_cause_option_hurry_or_hill
 import org.coepi.android.R.string.symptom_report_breathlessness_cause_option_leaving_house_or_dressing
 import org.coepi.android.R.string.symptom_report_breathlessness_cause_option_walking_yards_or_mins_on_ground
-import org.coepi.android.common.Optional
-import org.coepi.android.common.Optional.None
-import org.coepi.android.common.toNullable
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
-import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness
-import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.EXERCISE
-import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.GROUND_OWN_PACE
-import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.HURRY_OR_HILL
-import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.LEAVING_HOUSE_OR_DRESSING
-import org.coepi.android.domain.symptomflow.SymptomInputs.Breathlessness.Cause.WALKING_YARDS_OR_MINS_ON_GROUND
-import org.coepi.android.domain.symptomflow.UserInput.Some
 import org.coepi.android.extensions.rx.toIsInProgress
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.core.domain.common.Optional
+import org.coepi.core.domain.common.Optional.None
+import org.coepi.core.domain.common.toNullable
+import org.coepi.core.domain.model.SymptomInputs.Breathlessness
+import org.coepi.core.domain.model.SymptomInputs.Breathlessness.Cause.EXERCISE
+import org.coepi.core.domain.model.SymptomInputs.Breathlessness.Cause.GROUND_OWN_PACE
+import org.coepi.core.domain.model.SymptomInputs.Breathlessness.Cause.HURRY_OR_HILL
+import org.coepi.core.domain.model.SymptomInputs.Breathlessness.Cause.LEAVING_HOUSE_OR_DRESSING
+import org.coepi.core.domain.model.SymptomInputs.Breathlessness.Cause.WALKING_YARDS_OR_MINS_ON_GROUND
+import org.coepi.core.domain.model.UserInput.Some
 
 class BreathlessViewModel(
     private val navigation: RootNavigation,
@@ -42,7 +41,7 @@ class BreathlessViewModel(
     private val symptomFlowManager: SymptomFlowManager
 ) : ViewModel() {
 
-    val isInProgress: LiveData<Boolean> = symptomFlowManager.sendReportState
+    val isInProgress: LiveData<Boolean> = symptomFlowManager.submitSymptomsState
         .toIsInProgress()
         .observeOn(mainThread())
         .toLiveData()
