@@ -9,39 +9,50 @@ import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.Q
+import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.MainActivity.RequestCodes
+import org.coepi.android.R.string.bg_permission_info_message
+import org.coepi.android.R.string.bg_permission_info_title
 import org.coepi.android.R.string.bluetooth_info_message
 import org.coepi.android.R.string.bluetooth_info_title
 import org.coepi.android.R.string.dont_allow
 import org.coepi.android.R.string.ok
 import org.coepi.android.system.log.LogTag.PERM
 import org.coepi.android.system.log.log
+import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker.RationaleType.BASIC
+import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker.RationaleType.BG
 
 class OnboardingPermissionsChecker {
     val observable: PublishSubject<Boolean> = create()
 
     private val requestCode = RequestCodes.onboardingPermissions
 
-    private val permissions: Array<String> = arrayOf(BLUETOOTH, ACCESS_COARSE_LOCATION) +
+    private val basicPermissions: Array<String> = arrayOf(BLUETOOTH, ACCESS_COARSE_LOCATION)
+    private val bgPermissions: Array<String> =
         if (SDK_INT >= Q) arrayOf(ACCESS_BACKGROUND_LOCATION) else emptyArray()
 
-    fun requestPermissionsIfNeeded(activity: Activity): Unit {
-        when {
+    private val permissions: Array<String> = basicPermissions + bgPermissions
+
+    fun requestPermissionsIfNeeded(activity: Activity) {
+        if (hasAllPermissions(activity)) {
             // User already granted permissions
-            hasAllPermissions(activity) -> observable.onNext(true)
-
-            // User denied without choosing "never ask again". This will always be true after
-            // the first request, since it doesn't have "never ask again".
-            shouldShowRationale(activity) -> showRationale(activity)
-
-            // User has not been asked yet or denied checking "never ask again": let the system handle it
-            // it will show a dialog or call directly onRequestPermissionsResult with the result.
-            else -> requestPermissions(activity, permissions, requestCode)
+            observable.onNext(true)
+        } else {
+            val rationaleType = rationaleType(activity)
+            if (rationaleType != null) {
+                // User denied without choosing "never ask again". This will always be true after
+                // the first request, since it doesn't have "never ask again".
+                showRationale(activity, rationaleType.dialogContents())
+            } else {
+                // User has not been asked yet or denied checking "never ask again": let the system handle it
+                // it will show a dialog or call directly onRequestPermissionsResult with the result.
+                requestPermissions(activity, permissions, requestCode)
+            }
         }
     }
 
@@ -58,28 +69,46 @@ class OnboardingPermissionsChecker {
     }
 
     private fun handlePermissionsDenied(activity: Activity) {
-        if (shouldShowRationale(activity)) {
-            log.d("Permissions were denied but we can ask again. Showing rationale.", PERM)
-            showRationale(activity)
+        val rationaleType = rationaleType(activity)
+        if (rationaleType != null) {
+            showRationale(activity, rationaleType.dialogContents())
         } else {
-            log.i("User denied required permissions and selected don't ask again.", PERM)
             // NOTE: UX not specified
-            observable.onNext(false)
+            log.i("User denied required permissions and selected don't ask again.", PERM)
         }
     }
 
-    private fun shouldShowRationale(activity: Activity): Boolean = permissions.any {
-        shouldShowRequestPermissionRationale(activity, it)
-    }
+    // returns null if no rationale
+    private fun rationaleType(activity: Activity): RationaleType? =
+        when {
+            // User selected "deny"
+            basicPermissions.any { shouldShowRequestPermissionRationale(activity, it) } -> BASIC.also {
+                log.d("Permissions were denied but we can ask again. Showing rationale.",
+                    PERM)
+            }
+
+            // User selected "only while app is in foreground" (Android Q+)
+            bgPermissions.any { shouldShowRequestPermissionRationale(activity, it) } -> BG.also {
+                log.d("Running in background was denied but we can ask again. " +
+                        "Showing rationale.", PERM)
+            }
+
+            // No rationale:
+            // Denied with "don't ask again" OR
+            // asking before permissions have been requested the first time OR
+            // device policy doesn't allow permissions
+            else -> null
+        }
 
     private fun hasAllPermissions(activity: Activity): Boolean =  permissions.all {
         checkSelfPermission(activity, it) == PERMISSION_GRANTED
     }
 
-    private fun showRationale(activity: Activity) {
+    private fun showRationale(activity: Activity, contents: RationaleDialogContents) {
+
         AlertDialog.Builder(activity)
-            .setTitle(bluetooth_info_title)
-            .setMessage(bluetooth_info_message)
+            .setTitle(contents.title)
+            .setMessage(contents.message)
             .setPositiveButton(ok) { dialog, _ ->
                 // After explaining, request again if they accept
                 dialog.dismiss()
@@ -92,4 +121,16 @@ class OnboardingPermissionsChecker {
             }
             .show()
     }
+
+    private fun RationaleType.dialogContents(): RationaleDialogContents = when (this) {
+        BASIC -> RationaleDialogContents(bluetooth_info_title, bluetooth_info_message)
+        BG -> RationaleDialogContents(bg_permission_info_title, bg_permission_info_message)
+    }
+
+    private enum class RationaleType { BASIC, BG }
+
+    private data class RationaleDialogContents(
+        @StringRes val title: Int,
+        @StringRes val message: Int
+    )
 }
