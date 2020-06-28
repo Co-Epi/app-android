@@ -48,6 +48,7 @@ class AlertRepoImpl(
             .observeOn(Schedulers.io())
             .withLatestFrom(updateReportsState)
             .filter { (_, state) -> state !is Progress }
+            .doOnNext { updateReportsState.onNext(Progress) }
             .subscribe {
                 updateAlerts()
             }
@@ -71,6 +72,7 @@ class AlertRepoImpl(
             //  them with alert ids
             newAlertsNotificationShower.showNotification(insertedCount, (0..1000000).random())
         }
+        updateReportsState.onNext(OperationState.Success(Unit))
     }
 
     /**
