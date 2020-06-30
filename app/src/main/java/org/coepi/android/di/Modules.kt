@@ -51,11 +51,9 @@ import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
 import org.coepi.android.ui.symptoms.breathless.BreathlessViewModel
-import org.coepi.android.ui.symptoms.cough.CoughDurationViewModel
 import org.coepi.android.ui.symptoms.cough.CoughStatusViewModel
 import org.coepi.android.ui.symptoms.cough.CoughTypeViewModel
 import org.coepi.android.ui.symptoms.earliestsymptom.EarliestSymptomViewModel
-import org.coepi.android.ui.symptoms.fever.FeverDurationViewModel
 import org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureViewModel
 import org.coepi.android.ui.symptoms.fever.FeverTakenTodayViewModel
 import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputViewModel
@@ -90,11 +88,9 @@ val viewModelModule = module {
     viewModel { DebugBleViewModel(get()) }
     viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args, get(), get()) }
     viewModel { CoughTypeViewModel(get(), get()) }
-    viewModel { CoughDurationViewModel(get(), get()) }
     viewModel { CoughStatusViewModel(get(), get(), get()) }
     viewModel { EarliestSymptomViewModel(get(), get())}
     viewModel { BreathlessViewModel(get(), get(), get()) }
-    viewModel { FeverDurationViewModel(get(), get()) }
     viewModel { FeverTakenTodayViewModel(get(), get()) }
     viewModel { FeverHighestTemperatureViewModel(get(), get()) }
     viewModel { FeverTemperatureSpotViewModel(get(), get()) }
