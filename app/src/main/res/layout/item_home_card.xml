@@ -75,6 +75,7 @@
             android:src="@drawable/ic_alert_circle"
             android:translationX="-12dp"
             android:translationY="-12dp"
+            android:visibility="gone"
             app:isVisible="@{item.newAlerts}"
             tools:ignore="ContentDescription" />
 
