@@ -112,6 +112,7 @@ class BleManagerImpl(
                 "Foreground Service Channel",
                 IMPORTANCE_DEFAULT
             )
+            serviceChannel.setShowBadge(false)
             val manager: NotificationManager? = ContextCompat.getSystemService(
                 app, NotificationManager::class.java
             )
