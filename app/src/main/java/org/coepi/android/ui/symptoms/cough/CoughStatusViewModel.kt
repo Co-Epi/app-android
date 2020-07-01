@@ -19,7 +19,6 @@ import org.coepi.core.domain.common.Optional
 import org.coepi.core.domain.common.Optional.None
 import org.coepi.core.domain.common.toNullable
 import org.coepi.core.domain.model.SymptomInputs.Cough
-import org.coepi.core.domain.model.SymptomInputs.Cough.Status
 import org.coepi.core.domain.model.SymptomInputs.Cough.Status.BETTER_AND_WORSE_THROUGH_DAY
 import org.coepi.core.domain.model.SymptomInputs.Cough.Status.SAME_OR_STEADILY_WORSE
 import org.coepi.core.domain.model.SymptomInputs.Cough.Status.WORSE_WHEN_OUTSIDE
@@ -36,10 +35,10 @@ class CoughStatusViewModel (
         .observeOn(mainThread())
         .toLiveData()
 
-    private val selectedStatus: BehaviorSubject<Optional<Status>> = createDefault(None)
+    private val selectedStatus: BehaviorSubject<Optional<Cough.Status>> = createDefault(None)
 
     private val coughStatuses : List<Cough.Status> = listOf(
-        BETTER_AND_WORSE_THROUGH_DAY, SAME_OR_STEADILY_WORSE, WORSE_WHEN_OUTSIDE
+        BETTER_AND_WORSE_THROUGH_DAY, WORSE_WHEN_OUTSIDE, SAME_OR_STEADILY_WORSE
     )
 
     private val statusesObservable: Observable<List<CoughStatusViewData>> = selectedStatus

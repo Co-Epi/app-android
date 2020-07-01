@@ -44,8 +44,8 @@
 
     <!-- Thank you -->
     <string name="thanks_message">Thank you for logging your symptoms! We will alert if you have any relevant exposures to review.</string>
-    <string name="thanks_log_button">Update your symptom report</string>
-    <string name="thanks_exposures_button">View exposure alerts</string>
+    <string name="thanks_log_button">Log more symptoms</string>
+    <string name="thanks_exposures_button">View exposures</string>
     <string name="thanks_home_button">Return to home screen</string>
 
     <!-- Onboarding -->
@@ -87,8 +87,8 @@
         exposure to individuals with contagious illnesses. </b>
     </string>
 
-    <string name="onboarding_card_content_4">
-        "Help prevent the spread of contagious illnesses. <b> Together, we can make a difference. </b>
+    <string name="onboarding_card_content_4">Help prevent the spread of contagious illnesses. <b>
+        Together, we can make a difference.</b>
     </string>
 
     <string name="onboarding_data_usage_link_label"><u>How will my data be used?</u></string>
@@ -122,7 +122,7 @@
     <string name="alerts_report_cough">Cough</string>
     <string name="alerts_report_cough_wet">Wet cough</string>
     <string name="alerts_report_cough_dry">Dry cough</string>
-    <string name="alerts_report_breathlessness">Breathlessness</string>
+    <string name="alerts_report_breathlessness">Shortness of breath</string>
     <string name="alerts_report_muscle_aches">Muscle aches</string>
     <string name="alerts_report_loss_smell_or_taste">Loss of smell or taste</string>
     <string name="alerts_report_diarrhea">Diarrhea</string>
@@ -143,7 +143,7 @@
     <!-- Symptom Report Titles -->
     <string name="symptom_report_title_no_symptoms">I don\'t have any symptoms today</string>
     <string name="symptom_report_title_cough">Cough</string>
-    <string name="symptom_report_title_breathless">Breathless</string>
+    <string name="symptom_report_title_breathless">Shortness of breath</string>
     <string name="symptom_report_title_fever">Fever</string>
     <string name="symptom_report_title_muscle_aches">Muscle aches</string>
     <string name="symptom_report_title_loss_smell">Loss of smell or taste</string>
@@ -171,13 +171,13 @@
     <string name="symptom_report_cough_status_option_same_or_steadily_worse">Stayed the same or felt steadily worse</string>
 
     <!-- Symptom Report - Breathlessness Cause -->
-    <string name="symptom_report_breathlessness_cause_title">Follow up: Breathlessness</string>
-    <string name="symptom_report_breathlessness_cause_headline">I feel breathless when:</string>
-    <string name="symptom_report_breathlessness_cause_option_leaving_house_or_dressing">I am too breathless to leave the house or I am breathless when dressing</string>
+    <string name="symptom_report_breathlessness_cause_title">Follow up: Shortness of breath</string>
+    <string name="symptom_report_breathlessness_cause_headline">I feel short of breath when:</string>
+    <string name="symptom_report_breathlessness_cause_option_leaving_house_or_dressing">I am too short of breath to leave the house or I am short of breath when dressing</string>
     <string name="symptom_report_breathlessness_cause_option_walking_yards_or_mins_on_ground">I stop for breath after walking about 100 yards or after a few minutes on level ground</string>
     <string name="symptom_report_breathlessness_cause_option_ground_own_pace">On level ground, I have to stop for breath when walking at my own pace</string>
     <string name="symptom_report_breathlessness_cause_option_hurry_or_hill">I get short of breath when hurrying on level ground or walking up a slight hill</string>
-    <string name="symptom_report_breathlessness_cause_option_exercise">I only get breathless with strenuous exercise</string>
+    <string name="symptom_report_breathlessness_cause_option_exercise">I only get short of breath with strenuous exercise</string>
 
     <!-- Symptom Report - Fever -->
     <string name="symptom_report_fever_title">Follow up: Fever</string>
