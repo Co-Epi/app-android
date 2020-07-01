@@ -36,7 +36,7 @@
 
     <!-- Symptoms -->
     <string name="symptoms_headline">What symptoms do you have today?</string>
-    <string name="symptoms_caption">Select one option</string>
+    <string name="symptoms_caption">Select all that apply</string>
     <string name="symptoms_select_one">Select one option</string>
     <string name="symptoms_skip_button">Skip</string>
     <string name="symptoms_submit_button">@string/submit</string>
@@ -149,7 +149,7 @@
     <string name="symptom_report_title_loss_smell">Loss of smell or taste</string>
     <string name="symptom_report_title_diarrhea">Diarrhea</string>
     <string name="symptom_report_title_runny_nose">Runny nose</string>
-    <string name="symptom_report_title_other">I have symptoms that are not on the list</string>
+    <string name="symptom_report_title_other">Other</string>
 
     <!-- Symptom Report - Cough Type -->
     <string name="symptom_report_cough_title">Follow up: Cough</string>
