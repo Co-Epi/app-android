@@ -133,6 +133,11 @@
     <!-- Alert details -->
     <string name="alerts_details_title">Exposure alert</string>
     <string name="alerts_details_reported_on">Reported on %s at %s</string>
+    <string name="alerts_details_duration_hours_minutes">%d hours and %d minutes exposure</string>
+    <string name="alerts_details_duration_minutes">%d minutes exposure</string>
+    <string name="alerts_details_duration_seconds">%d seconds exposure</string>
+    <string name="alerts_details_distance_avg">Approx. %1$s %2$s away from you</string>
+    <string name="alerts_details_distance_unit_feet">Feet</string>
 
     <!-- Infection contact notifications -->
     <string name="infection_notification_title">Exposure</string>

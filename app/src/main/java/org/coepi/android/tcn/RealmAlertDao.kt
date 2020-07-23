@@ -7,6 +7,8 @@ import io.realm.kotlin.where
 import org.coepi.android.repo.RealmProvider
 import org.coepi.android.system.log.log
 import org.coepi.core.domain.model.Alert
+import org.coepi.core.domain.model.LengthMeasurement
+import org.coepi.core.domain.model.LengthMeasurement.Meters
 import org.coepi.core.domain.model.UnixTime
 import org.coepi.core.domain.model.UserInput.None
 import org.coepi.core.domain.model.UserInput.Some
@@ -42,10 +44,10 @@ class RealmAlertDao(private val realmProvider: RealmProvider) : AlertsDao {
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmAlert>(alert.id)
 
-            realmObj.contactStart = alert.contactStart.value
-            realmObj.contactEnd = alert.contactEnd.value
-            realmObj.minDistance = alert.minDistance
-            realmObj.avgDistance = alert.avgDistance
+            realmObj.start = alert.contactStart.value
+            realmObj.end = alert.contactEnd.value
+            realmObj.minDistance = alert.minDistance.toMeters().value
+            realmObj.avgDistance = alert.avgDistance.toMeters().value
 
             realmObj.reportTime = alert.reportTime.value
             realmObj.earliestSymptomTime = when (val earliestSymptomTime = alert.earliestSymptomTime) {
@@ -97,10 +99,10 @@ class RealmAlertDao(private val realmProvider: RealmProvider) : AlertsDao {
         Alert(
             id = id,
 
-            contactStart = UnixTime.fromValue(contactStart),
-            contactEnd = UnixTime.fromValue(contactEnd),
-            minDistance = minDistance,
-            avgDistance = avgDistance,
+            contactStart = UnixTime.fromValue(start),
+            contactEnd = UnixTime.fromValue(end),
+            minDistance = Meters(minDistance),
+            avgDistance = Meters(avgDistance),
 
             reportTime = UnixTime.fromValue(reportTime),
             earliestSymptomTime = earliestSymptomTime?.let { Some(UnixTime.fromValue(it)) }

@@ -6,8 +6,8 @@ import io.realm.annotations.PrimaryKey
 open class RealmAlert(
     @PrimaryKey var id: String = "",
 
-    var contactStart: Long = -1,
-    var contactEnd: Long = -1,
+    var start: Long = -1,
+    var end: Long = -1,
     var minDistance: Float = -1f,
     var avgDistance: Float = -1f,
 
