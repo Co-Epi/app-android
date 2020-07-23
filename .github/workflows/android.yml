@@ -26,7 +26,6 @@ jobs:
   #        with:
   #          name: unit-tests-results
   #          path: app/build/reports/tests/testDebugUnitTest/index.html
-  build:
 
   detekt:
     name: Run Gradle Detekt
