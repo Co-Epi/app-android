@@ -4,9 +4,9 @@
     <dimen name="text_size_headline">@dimen/text_size_50</dimen>
 
     <dimen name="text_size_10">12sp</dimen>
-    <dimen name="text_size_20">14sp</dimen>
-    <dimen name="text_size_30">16sp</dimen>
+    <dimen name="text_size_20">13sp</dimen>
+    <dimen name="text_size_30">17sp</dimen>
     <dimen name="text_size_40">18sp</dimen>
-    <dimen name="text_size_50">26sp</dimen>
+    <dimen name="text_size_50">28sp</dimen>
     <dimen name="text_size_100">72sp</dimen>
 </resources>

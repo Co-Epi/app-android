@@ -24,7 +24,6 @@ import org.coepi.android.MainActivity
 import org.coepi.android.R.drawable.ic_launcher_foreground
 import org.coepi.android.system.log.LogTag.BLE
 import org.coepi.android.system.log.log
-import org.coepi.android.ui.common.LimitedSizeQueue
 import org.coepi.android.ui.debug.DebugBleObservable
 import org.coepi.core.domain.model.Tcn
 import org.coepi.core.services.TcnGenerator
@@ -34,11 +33,13 @@ import org.tcncoalition.tcnclient.bluetooth.TcnBluetoothService.LocalBinder
 import org.tcncoalition.tcnclient.bluetooth.TcnBluetoothServiceCallback
 
 interface BleManager {
-    val observedTcns: Observable<Tcn>
+    val observedTcns: Observable<RecordedTcn>
 
     fun startService()
     fun stopService()
 }
+
+data class RecordedTcn(val tcn: Tcn, val distance: Double)
 
 class BleManagerImpl(
     private val app: Application,
@@ -46,16 +47,13 @@ class BleManagerImpl(
     private val debugBleObservable: DebugBleObservable
 ): BleManager, BluetoothStateListener {
 
-    override val observedTcns: PublishSubject<Tcn> = create()
+    override val observedTcns: PublishSubject<RecordedTcn> = create()
 
     private val intent get() = Intent(app, TcnBluetoothService::class.java)
 
     private var service: TcnBluetoothService? = null
 
     inner class BluetoothServiceCallback : TcnBluetoothServiceCallback {
-
-        private val latestTcns = LimitedSizeQueue<ByteArray>(500)
-
         override fun generateTcn(): ByteArray =
             tcnGenerator.generateTcn().bytes.also {
                 debugBleObservable.setMyTcn(Tcn(it))
@@ -64,9 +62,11 @@ class BleManagerImpl(
         override fun onTcnFound(tcn: ByteArray, estimatedDistance: Double?) {
             // Temporary guard to filter repeated TCNs,
             // since we don't do anything meaningful with them in v0.3, and this overloads db/logs
-            if (!latestTcns.contains(tcn)) {
-                observedTcns.onNext(Tcn(tcn))
-                latestTcns.add(tcn)
+            if (estimatedDistance != null) {
+                observedTcns.onNext(RecordedTcn(Tcn(tcn), estimatedDistance))
+            } else {
+                // TODO when does this happen? How to handle?
+                log.w("TCN without distance: ${Tcn(tcn)}. Ignoring.")
             }
         }
     }
