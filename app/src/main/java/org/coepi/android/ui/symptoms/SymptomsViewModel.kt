@@ -100,7 +100,8 @@ class SymptomsViewModel(
         when {
             !wasChecked -> this // We can't run in conflicts when unchecking, so return set unchanged
             selectedId == SymptomId.NONE -> setOf(selectedId) // Selected NONE: deselect everything else
-            contains(SymptomId.NONE) -> minus(SymptomId.NONE) // Selected something other than NONE and NONE is selected: deselect NONE
+            // Selected something other than NONE and NONE is selected: deselect NONE
+            contains(SymptomId.NONE) -> minus(SymptomId.NONE)
             else -> this
         }
 }

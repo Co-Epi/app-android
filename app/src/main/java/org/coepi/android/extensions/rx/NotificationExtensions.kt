@@ -11,6 +11,6 @@ fun <T>Notification<T>.toOperationState(): OperationState<T>? =
                 OperationState.Success(value)
             } ?: Failure(IllegalStateException("Value is null"))
         isOnError ->
-            Failure((error ?: Throwable("Unknown error")))
+            Failure(error ?: Throwable("Unknown error"))
         else -> null
     }

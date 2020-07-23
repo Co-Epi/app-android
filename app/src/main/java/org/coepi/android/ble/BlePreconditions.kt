@@ -1,6 +1,5 @@
 package org.coepi.android.ble
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import io.reactivex.disposables.CompositeDisposable
@@ -25,7 +24,6 @@ class BlePreconditions(
         observeBleEnabled()
         showEnableBleAfterPermissions(activity)
         startPermissionsChecker.requestPermissionsIfNeeded(activity)
-
     }
 
     fun onActivityDestroy(activity: Activity) {

@@ -6,6 +6,10 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 apply plugin: "de.undercouch.download"
 
+configurations {
+    detekt
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
@@ -87,6 +91,21 @@ task installCoreBinaries(dependsOn: downloadCoreBinaries, type: Copy) {
     doLast { println("Finished unzipping core binaries") }
 }
 
+task detekt(type: JavaExec) {
+    main = "io.gitlab.arturbosch.detekt.cli.Main"
+    classpath = configurations.detekt
+    def config = "$rootDir/tools/detekt.yml"
+    def input = "$projectDir/src/main/java"
+    def filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    def output = "$projectDir/build/reports/detekt/results"
+    def params = ['-c', config,
+                  '-i', input,
+                  '-o', output,
+                  '-f', filters]
+    println("PARAMS = $params") //to make sure the path is right
+    args(params)
+}
+
 preBuild.dependsOn installCoreBinaries
 
 dependencies {
@@ -145,4 +164,5 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
     implementation "com.github.Co-Epi:app-backend-rust:$core_version"
+    detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.RC8'
 }
