@@ -22,10 +22,19 @@ class AlertsDetailsViewModel(
     private val navigation: RootNavigation
 ) : ViewModel() {
 
-    val title: LiveData<String> = just(toMonthAndDay(args.alert.contactTime))
+    val title: LiveData<String> = just(toMonthAndDay(args.alert.contactStart))
         .toLiveData()
 
-    val exposureTime: LiveData<String> = just(toHourMinute(args.alert.contactTime))
+    val exposureTime: LiveData<String> = just(toHourMinute(args.alert.contactStart))
+        .toLiveData()
+
+    val contactDuration: LiveData<String> = just("Duration: ${args.alert.contactDuration}s")
+        .toLiveData()
+
+    val minDistance: LiveData<String> = just("Min distance: ${args.alert.minDistance}m")
+        .toLiveData()
+
+    val avgDistance: LiveData<String> = just("Avg distance: ${args.alert.avgDistance}m")
         .toLiveData()
 
     val reportedTime: LiveData<String> =
@@ -57,3 +66,6 @@ class AlertsDetailsViewModel(
         )
     }
 }
+
+val Alert.contactDuration: Long get() =
+    contactEnd.value - contactStart.value

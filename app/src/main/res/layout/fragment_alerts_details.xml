@@ -58,6 +58,48 @@
             tools:text="Exposure Time" />
 
         <TextView
+            android:id="@+id/contact_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@{vm.contactDuration}"
+            android:textColor="@color/textDefault"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exposure_time"
+            tools:text="Contact duration" />
+
+        <TextView
+            android:id="@+id/min_distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@{vm.minDistance}"
+            android:textColor="@color/textDefault"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contact_duration"
+            tools:text="Contact duration" />
+
+        <TextView
+            android:id="@+id/avg_distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@{vm.avgDistance}"
+            android:textColor="@color/textDefault"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/min_distance"
+            tools:text="Contact duration" />
+
+        <TextView
             android:id="@+id/symptomsTag"
             android:name="androidx.navigation.fragment.NavHostFragment"
             style="@style/Text.Headline"
@@ -72,7 +114,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/exposure_time" />
+            app:layout_constraintTop_toBottomOf="@id/avg_distance" />
 
         <TextView
             android:id="@+id/reported_time"
