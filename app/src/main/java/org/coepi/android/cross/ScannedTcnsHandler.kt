@@ -19,10 +19,8 @@ class ScannedTcnsHandler(
         disposables += bleManager.observedTcns
             .subscribeBy(onNext = { tcn ->
                 log.d("Observed TCN: $tcn")
-                observedTcnsRecorder.recordTcn(tcn).also {
-                    log.v("Inserted observed TCN: $tcn")
-                }
-                debugBleObservable.setObservedTcn(tcn)
+                observedTcnsRecorder.recordTcn(tcn.tcn, tcn.distance.toFloat())
+                debugBleObservable.setObservedTcn(tcn.tcn)
             }, onError = {
                 log.e("Error scanning: $it")
             })

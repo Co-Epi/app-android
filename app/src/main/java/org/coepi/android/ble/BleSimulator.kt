@@ -8,8 +8,8 @@ import org.coepi.core.domain.model.Tcn
 class BleSimulator : BleManager {
 
     // Emits all the TCNs at once and terminates
-    override val observedTcns: Observable<Tcn> = Observable.fromIterable(listOf(
-        Tcn("2485a64b57addcaea3ed1b538d07dbce".hexToByteArray())
+    override val observedTcns: Observable<RecordedTcn> = Observable.fromIterable(listOf(
+        RecordedTcn(Tcn("2485a64b57addcaea3ed1b538d07dbce".hexToByteArray()), 0.0)
     ))
 
     init {

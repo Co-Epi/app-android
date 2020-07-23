@@ -2,17 +2,19 @@ package org.coepi.android.tcn
 
 import io.reactivex.subjects.BehaviorSubject
 import io.realm.RealmResults
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import org.coepi.android.repo.RealmProvider
 import org.coepi.android.system.log.log
 import org.coepi.core.domain.model.Alert
-import org.coepi.core.domain.model.toInt
-import io.realm.kotlin.createObject
+import org.coepi.core.domain.model.LengthMeasurement
+import org.coepi.core.domain.model.LengthMeasurement.Meters
 import org.coepi.core.domain.model.UnixTime
 import org.coepi.core.domain.model.UserInput.None
 import org.coepi.core.domain.model.UserInput.Some
 import org.coepi.core.domain.model.toCoughSeverity
 import org.coepi.core.domain.model.toFeverSeverity
+import org.coepi.core.domain.model.toInt
 
 class RealmAlertDao(private val realmProvider: RealmProvider) : AlertsDao {
     private val realm get() = realmProvider.realm
@@ -42,12 +44,17 @@ class RealmAlertDao(private val realmProvider: RealmProvider) : AlertsDao {
         realm.executeTransaction {
             val realmObj = realm.createObject<RealmAlert>(alert.id)
 
-            realmObj.contactTime = alert.contactTime.value
+            realmObj.start = alert.contactStart.value
+            realmObj.end = alert.contactEnd.value
+            realmObj.minDistance = alert.minDistance.toMeters().value
+            realmObj.avgDistance = alert.avgDistance.toMeters().value
+
             realmObj.reportTime = alert.reportTime.value
             realmObj.earliestSymptomTime = when (val earliestSymptomTime = alert.earliestSymptomTime) {
                 is Some -> earliestSymptomTime.value.value
                 is None -> null
             }
+
             realmObj.feverSeverity = alert.feverSeverity.toInt()
             realmObj.coughSeverity = alert.coughSeverity.toInt()
             realmObj.breathlessness = alert.breathlessness
@@ -91,9 +98,16 @@ class RealmAlertDao(private val realmProvider: RealmProvider) : AlertsDao {
     private fun RealmAlert.toAlert(): Alert =
         Alert(
             id = id,
+
+            contactStart = UnixTime.fromValue(start),
+            contactEnd = UnixTime.fromValue(end),
+            minDistance = Meters(minDistance),
+            avgDistance = Meters(avgDistance),
+
             reportTime = UnixTime.fromValue(reportTime),
             earliestSymptomTime = earliestSymptomTime?.let { Some(UnixTime.fromValue(it)) }
                 ?: None,
+
             feverSeverity = toFeverSeverity(feverSeverity),
             coughSeverity = toCoughSeverity(coughSeverity),
             breathlessness = breathlessness,
@@ -102,7 +116,6 @@ class RealmAlertDao(private val realmProvider: RealmProvider) : AlertsDao {
             diarrhea = diarrhea,
             runnyNose = runnyNose,
             other = other,
-            noSymptoms = noSymptoms,
-            contactTime = UnixTime.fromValue(contactTime)
+            noSymptoms = noSymptoms
         )
 }

@@ -24,6 +24,7 @@ import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
 import org.coepi.android.system.log.cachingLog
+import org.coepi.android.system.log.log
 import org.coepi.android.tcn.TcnModule
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
@@ -50,14 +51,11 @@ import org.coepi.android.ui.onboarding.OnboardingViewModel
 import org.coepi.android.ui.settings.SettingsViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
 import org.coepi.android.ui.symptoms.breathless.BreathlessViewModel
-import org.coepi.android.ui.symptoms.cough.CoughDurationViewModel
 import org.coepi.android.ui.symptoms.cough.CoughStatusViewModel
 import org.coepi.android.ui.symptoms.cough.CoughTypeViewModel
 import org.coepi.android.ui.symptoms.earliestsymptom.EarliestSymptomViewModel
-import org.coepi.android.ui.symptoms.fever.FeverDurationViewModel
 import org.coepi.android.ui.symptoms.fever.FeverHighestTemperatureViewModel
 import org.coepi.android.ui.symptoms.fever.FeverTakenTodayViewModel
-import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotInputViewModel
 import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotViewModel
 import org.coepi.android.ui.thanks.ThanksViewModel
 import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
@@ -65,6 +63,7 @@ import org.coepi.core.jni.JniApi
 import org.coepi.core.services.AlertsFetcher
 import org.coepi.core.services.AlertsFetcherImpl
 import org.coepi.core.services.CoreBootstrapperImpl
+import org.coepi.core.services.CoreLogger
 import org.coepi.core.services.ObservedTcnsRecorder
 import org.coepi.core.services.ObservedTcnsRecorderImpl
 import org.coepi.core.services.SymptomInputsManagerImpl
@@ -88,15 +87,12 @@ val viewModelModule = module {
     viewModel { DebugBleViewModel(get()) }
     viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args, get(), get()) }
     viewModel { CoughTypeViewModel(get(), get()) }
-    viewModel { CoughDurationViewModel(get(), get()) }
     viewModel { CoughStatusViewModel(get(), get(), get()) }
     viewModel { EarliestSymptomViewModel(get(), get())}
     viewModel { BreathlessViewModel(get(), get(), get()) }
-    viewModel { FeverDurationViewModel(get(), get()) }
     viewModel { FeverTakenTodayViewModel(get(), get()) }
     viewModel { FeverHighestTemperatureViewModel(get(), get()) }
     viewModel { FeverTemperatureSpotViewModel(get(), get()) }
-    viewModel { FeverTemperatureSpotInputViewModel(get(), get()) }
     viewModel { AlertsInfoViewModel(get()) }
 }
 
@@ -131,7 +127,17 @@ val uiModule = module {
 }
 
 val coreModule = module {
-    single { JniApi().apply { CoreBootstrapperImpl(this).bootstrap(androidApplication()) } }
+    single { JniApi().apply { CoreBootstrapperImpl(this).bootstrap(androidApplication(), object: CoreLogger {
+        override fun log(level: Int, message: String) {
+            when (level) {
+                0 -> log.v(message)
+                1 -> log.d(message)
+                2 -> log.i(message)
+                3 -> log.w(message)
+                4 -> log.e(message)
+            }
+        }
+    }) } }
     single<AlertsFetcher> { AlertsFetcherImpl(get()) }
     single<SymptomsInputManager> { SymptomInputsManagerImpl(get(), get()) }
     single<ObservedTcnsRecorder> { ObservedTcnsRecorderImpl(get()) }

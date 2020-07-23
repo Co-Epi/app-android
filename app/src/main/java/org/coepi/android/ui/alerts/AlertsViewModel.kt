@@ -75,14 +75,14 @@ class AlertsViewModel(
     private fun Alert.toViewData(): AlertViewData =
         AlertViewData(
             exposureType = symptomUIStrings(resources).joinToString("\n"),
-            contactTime = hourMinuteFormatter.formatTime(contactTime.toDate()),
-            contactTimeMonth = monthDayFormatter.formatMonthDay(contactTime.toDate()),
+            contactTime = hourMinuteFormatter.formatTime(contactStart.toDate()),
+            contactTimeMonth = monthDayFormatter.formatMonthDay(contactStart.toDate()),
             alert = this
         )
 
     private fun List<Alert>.toCellViewData(): List<AlertCellViewData> =
-        sortedWith(compareByDescending { it.contactTime.value })
-            .groupBy { monthDayFormatter.formatMonthDay(it.contactTime.toDate()) }
+        sortedWith(compareByDescending { it.contactStart.value })
+            .groupBy { monthDayFormatter.formatMonthDay(it.contactStart.toDate()) }
             .flatMap { entry ->
                 listOf(Header(entry.key)) + entry.value.map { alert ->
                     Item(alert.toViewData())

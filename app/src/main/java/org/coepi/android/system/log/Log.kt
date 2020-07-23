@@ -12,7 +12,8 @@ enum class LogTag {
     NET,  // Networking
     DB, // DB
     TCN_MATCHING, // Worker updating reports
-    CORE
+    CORE,
+    PERM
 }
 
 interface Log {

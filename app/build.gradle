@@ -53,7 +53,7 @@ android {
 ext {
     koin_version = "2.1.0"
     work_version = "2.3.4"
-    core_version = "0.1.19"
+    core_version = "0.1.26"
 
     binaries_target_dir = "$rootDir/coreBinariesCache/"
     binaries_zip_name = "coreBinaries${core_version}.zip"
@@ -159,7 +159,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "com.google.android.material:material:1.1.0"
 
-    implementation 'com.github.TCNCoalition:tcn-client-android:0.0.5'
+    implementation 'com.github.TCNCoalition:tcn-client-android:0.0.7'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'

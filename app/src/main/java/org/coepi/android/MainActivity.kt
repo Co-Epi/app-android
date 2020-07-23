@@ -13,8 +13,8 @@ import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.R.style.AppTheme
 import org.coepi.android.ble.BlePreconditions
-import org.coepi.android.tcn.BleInitializer
 import org.coepi.android.system.intent.IntentForwarder
+import org.coepi.android.tcn.BleInitializer
 import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
@@ -54,7 +54,12 @@ class MainActivity : AppCompatActivity() {
 
         blePreconditions.onActivityCreated(this)
 
-        AppCenter.start(application, "0bb1bf95-3b14-48a6-a769-db1ff1df0307", Analytics::class.java, Crashes::class.java)
+        AppCenter.start(
+            application,
+            "1c70b9e6-0458-4205-8bc3-8df5c5d29a0c",
+            Analytics::class.java,
+            Crashes::class.java
+        )
         bleInitializer.start()
     }
 
@@ -84,17 +89,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        blePreconditions.onActivityResult(requestCode, resultCode)
+        blePreconditions.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        blePreconditions.onRequestPermissionsResult(requestCode, grantResults)
+        blePreconditions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        blePreconditions.onActivityDestroy(this)
         disposables.clear()
     }
 
