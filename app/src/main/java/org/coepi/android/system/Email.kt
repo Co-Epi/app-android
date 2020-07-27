@@ -18,7 +18,7 @@ class EmailImpl: Email {
     override fun send(activity: Activity, recipient: String, subject: String, message: String) {
         val intent = Intent(ACTION_SEND).apply {
             data = Uri.parse("mailto:")
-            type = "text/plain"
+            type = "message/rfc822"
             putExtra(EXTRA_EMAIL, arrayOf(recipient))
             putExtra(EXTRA_SUBJECT, subject)
             putExtra(EXTRA_TEXT, message)
