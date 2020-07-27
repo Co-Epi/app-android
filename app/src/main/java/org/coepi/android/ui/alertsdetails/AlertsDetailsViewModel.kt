@@ -3,11 +3,9 @@ package org.coepi.android.ui.alertsdetails
 import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.PublishSubject
 import org.coepi.android.R.string.alerts_details_distance_avg
@@ -21,7 +19,6 @@ import org.coepi.android.R.string.alerts_details_reported_on
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Email
 import org.coepi.android.system.Resources
-import org.coepi.android.system.log.LogMessage
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.extensions.ExposureDurationForUI
 import org.coepi.android.ui.extensions.ExposureDurationForUI.HoursMinutes
