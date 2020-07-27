@@ -7,6 +7,11 @@
         <item name="android:textViewStyle">@style/Text</item>
     </style>
 
+    <!-- Set fragment's toolbar menu buttons color -->
+    <style name="Toolbar" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
     <style name="Text" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/textDefault</item>
     </style>
