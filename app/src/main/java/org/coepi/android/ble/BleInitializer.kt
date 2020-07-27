@@ -3,8 +3,6 @@ package org.coepi.android.ble
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
-import org.coepi.android.ble.BleManager
-import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.system.log.log
 
 class BleInitializer(

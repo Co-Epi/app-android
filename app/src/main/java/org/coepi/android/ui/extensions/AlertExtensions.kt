@@ -24,7 +24,7 @@ sealed class ExposureDurationForUI {
 
 private fun secondsToHoursMinutes(seconds: Long): HourMinutes = HourMinutes(
     (seconds / secondsInHour).toInt(),
-    ((seconds % secondsInHour) / secondsInMinute).toInt()
+    (seconds % secondsInHour / secondsInMinute).toInt()
 )
 
 private data class HourMinutes(val hours: Int, val minutes: Int)

@@ -42,7 +42,7 @@ class BleEnabler {
         observable.onNext(false)
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun onActivityResult(requestCode: Int, resultCode: Int) {
         if (requestCode == requestCode) {
             when (resultCode) {
                 RESULT_OK -> observable.onNext(true)

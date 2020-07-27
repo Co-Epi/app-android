@@ -19,6 +19,8 @@ import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShower
 import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShowerImpl
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
+import org.coepi.android.system.Email
+import org.coepi.android.system.EmailImpl
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.EnvInfosImpl
 import org.coepi.android.system.Preferences
@@ -88,7 +90,8 @@ val viewModelModule = module {
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
-    viewModel { (args: AlertsDetailsFragment.Args) -> AlertsDetailsViewModel(args, get(), get()) }
+    viewModel { (args: AlertsDetailsFragment.Args) ->
+        AlertsDetailsViewModel(args, get(), get(), get(), get(), get()) }
     viewModel { CoughTypeViewModel(get(), get()) }
     viewModel { CoughStatusViewModel(get(), get(), get()) }
     viewModel { EarliestSymptomViewModel(get(), get())}
@@ -121,6 +124,7 @@ val systemModule = module {
     single<UINotifier> { UINotifierImpl() }
     single { provideGson() }
     single<NewAlertsNotificationShower> { NewAlertsNotificationShowerImpl(get(), get(), get()) }
+    single<Email> { EmailImpl() }
 }
 
 val uiModule = module {
