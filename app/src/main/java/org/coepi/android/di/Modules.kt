@@ -7,12 +7,16 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.coepi.android.NotReferencedDependenciesActivator
 import org.coepi.android.ble.BleEnabler
+import org.coepi.android.ble.BleInitializer
 import org.coepi.android.ble.BleManager
 import org.coepi.android.ble.BleManagerImpl
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
+import org.coepi.android.cross.ScannedTcnsHandler
 import org.coepi.android.repo.repoModule
+import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShower
+import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShowerImpl
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
 import org.coepi.android.system.EnvInfos
@@ -25,7 +29,6 @@ import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.system.log.log
-import org.coepi.android.tcn.TcnModule
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
@@ -60,7 +63,7 @@ import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotViewModel
 import org.coepi.android.ui.thanks.ThanksViewModel
 import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
 import org.coepi.core.jni.JniApi
-import org.coepi.core.services.AlertsFetcher
+import org.coepi.core.services.AlertsApi
 import org.coepi.core.services.AlertsFetcherImpl
 import org.coepi.core.services.CoreBootstrapperImpl
 import org.coepi.core.services.CoreLogger
@@ -103,6 +106,8 @@ val systemModule = module {
     single<BlePreconditionsNotifier> { BlePreconditionsNotifierImpl() }
     single { BlePreconditions(get(), get(), get()) }
     single { BleEnabler() }
+    single { BleInitializer(get(), get()) }
+    single { ScannedTcnsHandler(get(), get(), get()) }
     single { Resources(androidApplication()) }
     single<BleManager> { BleManagerImpl(androidApplication(), get(), get()) }
 //    single<BleManager> { BleSimulator() }  // Disable BleManagerImpl and enable this to use BLE simulator
@@ -115,6 +120,7 @@ val systemModule = module {
     single { InfectionsNotificationIntentHandler(get(), get()) }
     single<UINotifier> { UINotifierImpl() }
     single { provideGson() }
+    single<NewAlertsNotificationShower> { NewAlertsNotificationShowerImpl(get(), get(), get()) }
 }
 
 val uiModule = module {
@@ -138,7 +144,7 @@ val coreModule = module {
             }
         }
     }) } }
-    single<AlertsFetcher> { AlertsFetcherImpl(get()) }
+    single<AlertsApi> { AlertsFetcherImpl(get()) }
     single<SymptomsInputManager> { SymptomInputsManagerImpl(get(), get()) }
     single<ObservedTcnsRecorder> { ObservedTcnsRecorderImpl(get()) }
     single<TcnGenerator> { TcnGeneratorImpl(get()) }
@@ -150,7 +156,6 @@ val appModule = listOf(
     repoModule,
     viewModelModule,
     systemModule,
-    TcnModule,
     uiModule
 )
 

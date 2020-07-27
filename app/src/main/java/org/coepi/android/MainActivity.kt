@@ -14,7 +14,7 @@ import org.coepi.android.R.layout.activity_main
 import org.coepi.android.R.style.AppTheme
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.system.intent.IntentForwarder
-import org.coepi.android.tcn.BleInitializer
+import org.coepi.android.ble.BleInitializer
 import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
