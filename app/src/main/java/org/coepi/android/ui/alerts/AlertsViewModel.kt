@@ -6,11 +6,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
+import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.Failure
 import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
 import org.coepi.android.system.rx.OperationState.Success
-import org.coepi.android.system.rx.VoidOperationState
 import org.coepi.android.ui.alerts.AlertCellViewData.Header
 import org.coepi.android.ui.alerts.AlertCellViewData.Item
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
@@ -37,7 +37,7 @@ class AlertsViewModel(
         .observeOn(mainThread())
         .toLiveData()
 
-    val updateStatusText: LiveData<String> = alertsRepo.updateReportsState
+    val updateStatusText: LiveData<String> = alertsRepo.alertsState
         .map { toUpdateStatusText(it) }
         .observeOn(mainThread())
         .toLiveData()
@@ -89,7 +89,7 @@ class AlertsViewModel(
                 }
             }
 
-    private fun toUpdateStatusText(operationState: VoidOperationState): String =
+    private fun toUpdateStatusText(operationState: OperationState<List<Alert>>): String =
         when (operationState) {
             is NotStarted, is Success -> ""
             is Progress -> "Updating..."

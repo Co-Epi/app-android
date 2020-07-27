@@ -1,4 +1,4 @@
-package org.coepi.android.tcn
+package org.coepi.android.ble
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
