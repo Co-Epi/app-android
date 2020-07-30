@@ -33,7 +33,6 @@ import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.core.domain.model.Alert
 import org.coepi.core.domain.model.UnixTime
-import java.util.Date
 
 class AlertsDetailsViewModel(
     private val args: AlertsDetailsFragment.Args,
