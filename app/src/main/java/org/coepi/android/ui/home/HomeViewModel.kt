@@ -56,7 +56,7 @@ class HomeViewModel(
     )
 
     val homeCardObservable: LiveData<List<HomeCard>> = alertsRepo.alerts
-        .startWith(emptyList<List<Alert>>())
+        .startWith(emptyList<Alert>())
         .distinctUntilChanged()
         .map { alerts ->
             homeCardItems.map {
