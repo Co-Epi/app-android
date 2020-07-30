@@ -12,11 +12,7 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
-import org.coepi.android.system.rx.OperationState
-import org.coepi.android.system.rx.OperationState.Failure
-import org.coepi.android.system.rx.OperationState.NotStarted
-import org.coepi.android.system.rx.OperationState.Progress
-import org.coepi.android.system.rx.OperationState.Success
+import org.coepi.android.system.log.log
 import org.coepi.android.ui.alerts.AlertCellViewData.Header
 import org.coepi.android.ui.alerts.AlertCellViewData.Item
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
@@ -30,6 +26,8 @@ import org.coepi.android.ui.navigation.NavigationCommand.ToDirections
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.notifications.NotificationsShower
 import org.coepi.core.domain.model.Alert
+import org.coepi.core.domain.common.Result.Failure
+import org.coepi.core.domain.common.Result.Success
 
 class AlertsViewModel(
     private val alertsRepo: AlertsRepo,
@@ -43,22 +41,21 @@ class AlertsViewModel(
         .observeOn(mainThread())
         .toLiveData()
 
-    val updateStatusText: LiveData<String> = alertsRepo.alertsState
-        .map { toUpdateStatusText(it) }
-        .observeOn(mainThread())
-        .toLiveData()
-
     private val selectAlertTrigger: PublishSubject<Alert> = create()
 
     private val disposables = CompositeDisposable()
 
     init {
         disposables += selectAlertTrigger.withLatestFrom(alertsRepo.alerts)
-            .map { (alert, alerts) ->
-                Args(alert, linkedAlerts(alert, alerts))
-            }
-            .subscribeBy { args ->
-                navigation.navigate(ToDirections(actionGlobalAlertsDetails(args)))
+            .subscribeBy { (alert, alerts) ->
+                when (val res = alertsRepo.updateIsRead(alert, true)) {
+                    is Success ->
+                        log.i("Alert: ${alert.id} was marked as read.")
+                    is Failure ->
+                        log.e("Alert: ${alert.id} couldn't be marked as read: ${res.error}")
+                }
+                navigation.navigate(ToDirections(actionGlobalAlertsDetails(
+                    Args(alert, linkedAlerts(alert, alerts)))))
             }
     }
 
@@ -97,6 +94,7 @@ class AlertsViewModel(
             exposureType = symptomUIStrings(resources).joinToString("\n"),
             contactTime = hourMinuteFormatter.formatTime(contactStart.toDate()),
             contactTimeMonth = monthDayFormatter.formatMonthDay(contactStart.toDate()),
+            showUnreadDot = !isRead,
             alert = this
         )
 
@@ -108,13 +106,6 @@ class AlertsViewModel(
                     Item(alert.toViewData())
                 }
             }
-
-    private fun toUpdateStatusText(operationState: OperationState<List<Alert>>): String =
-        when (operationState) {
-            is NotStarted, is Success -> ""
-            is Progress -> "Updating..."
-            is Failure -> "Error updating: ${operationState.t}"
-        }
 
     private fun linkedAlerts(alert: Alert, alerts: List<Alert>): List<Alert> =
         alerts

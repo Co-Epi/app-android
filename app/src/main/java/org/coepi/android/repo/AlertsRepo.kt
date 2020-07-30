@@ -5,11 +5,13 @@ import io.reactivex.Observable.empty
 import io.reactivex.Observable.just
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShower
 import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.NotStarted
@@ -25,6 +27,7 @@ interface AlertsRepo {
     val alertsState: Observable<OperationState<List<Alert>>>
 
     fun removeAlert(alert: Alert): Result<Unit, Throwable>
+    fun updateIsRead(alert: Alert, isRead: Boolean): Result<Unit, Throwable>
 
     fun requestUpdateReports()
 }
@@ -45,9 +48,10 @@ class AlertRepoImpl(
             else -> empty()
         }}
 
-    private val deleteAlertTrigger: PublishSubject<Unit> = PublishSubject.create()
+    private val removeAlertTrigger: PublishSubject<Alert> = create()
+    private val updateIsReadTrigger: PublishSubject<AlertIsReadUpdatePars> = create()
 
-    private val reportsUpdateTrigger: PublishSubject<Unit> = PublishSubject.create()
+    private val reportsUpdateTrigger: PublishSubject<Unit> = create()
 
     init {
         disposables += reportsUpdateTrigger
@@ -59,10 +63,18 @@ class AlertRepoImpl(
                 updateAlerts()
             }
 
-        disposables += deleteAlertTrigger
+        disposables += removeAlertTrigger
             .withLatestFrom(alerts)
-            .subscribe {
-                updateAlerts()
+            .subscribeBy { (alert, alerts) ->
+                alertsState.onNext(OperationState.Success(alerts.minus(alert)))
+            }
+
+        disposables += updateIsReadTrigger
+            .withLatestFrom(alerts)
+            .subscribeBy { (pars, alerts) ->
+                alertsState.onNext(OperationState.Success(alerts
+                    .map { if (it == pars.alert) pars.alert.copy(isRead = pars.isRead) else it }
+                ))
             }
     }
 
@@ -93,18 +105,27 @@ class AlertRepoImpl(
             // Note that alternatively we could return from Rust the updated alerts (from the local database)
             // but we're animating and we probably would have to perform this in the background
             removeAlertLocally(alert)
-            else -> {}
+            is Failure -> {}
+        }
+        return result
+    }
+
+    override fun updateIsRead(alert: Alert, isRead: Boolean): Result<Unit, Throwable> {
+        val result = alertsApi.updateIsRead(alert.id, isRead)
+        when (result) {
+            is Success -> updateIsReadLocally(alert, isRead)
+            is Failure -> {}
         }
         return result
     }
 
     private fun removeAlertLocally(alert: Alert) {
-        deleteAlertTrigger.onNext(Unit)
-        when (val alertsState = alertsState.value) {
-            is OperationState.Success -> {
-                this.alertsState.onNext(OperationState.Success(alertsState.data.minus(alert)))
-            }
-            else -> {}
-        }
+        removeAlertTrigger.onNext(alert)
+    }
+
+    private fun updateIsReadLocally(alert: Alert, isRead: Boolean) {
+        updateIsReadTrigger.onNext(AlertIsReadUpdatePars(alert, isRead))
     }
 }
+
+private data class AlertIsReadUpdatePars(val alert: Alert, val isRead: Boolean)
