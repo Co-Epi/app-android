@@ -34,17 +34,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/alert_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_line_height"
-                    android:text="@{item.newAlertsTitle}"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/text_size_30"
-                    app:isVisible="@{item.newAlerts}"
-                    tools:text="2 new exposures detected" />
-
-                <TextView
                     android:id="@+id/card_title"
                     style="@style/card_view_title"
                     android:layout_width="wrap_content"
@@ -66,17 +55,21 @@
 
         </androidx.cardview.widget.CardView>
 
-        <ImageView
+        <TextView
             android:id="@+id/alert_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
+            android:background="@drawable/ic_alert_circle"
             android:elevation="15dp"
-            android:src="@drawable/ic_alert_circle"
+            android:gravity="center"
+            android:text="@{item.notificationText}"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
             android:translationX="-12dp"
             android:translationY="-12dp"
             android:visibility="gone"
-            app:isVisible="@{item.newAlerts}"
+            app:isVisible="@{item.hasNotification}"
             tools:ignore="ContentDescription" />
 
     </RelativeLayout>

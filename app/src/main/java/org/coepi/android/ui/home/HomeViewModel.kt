@@ -7,7 +7,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.subjects.PublishSubject
-import org.coepi.android.R.plurals
 import org.coepi.android.R.string.home_contact_alerts_card_description
 import org.coepi.android.R.string.home_contact_alerts_card_title
 import org.coepi.android.R.string.home_my_health_card_description
@@ -59,11 +58,15 @@ class HomeViewModel(
         .startWith(emptyList<Alert>())
         .distinctUntilChanged()
         .map { alerts ->
-            homeCardItems.map {
-                if (it.cardId == SEE_ALERTS) {
-                    it.copy(newAlerts = alerts.isNotEmpty(), newAlertsTitle = title(alerts.size))
+            homeCardItems.map { card ->
+                if (card.id == SEE_ALERTS) {
+                    val unReadAlertsCount = alerts.filter { !it.isRead }.size
+                    card.copy(
+                        hasNotification = unReadAlertsCount > 0,
+                        notificationText = "$unReadAlertsCount"
+                    )
                 } else {
-                    it
+                    card
                 }
             }
         }
@@ -74,16 +77,10 @@ class HomeViewModel(
         just(resources.getString(home_version, envInfos.appVersionString()))
             .toLiveData()
 
-    val title: LiveData<String> = alertsRepo.alerts
-        .map { title(it.size) }
-        .startWith(title(0))
-        .observeOn(mainThread())
-        .toLiveData()
-
     init {
         disposables += homeCardClickSubject
             .subscribe { homeCardItem ->
-                when (homeCardItem.cardId) {
+                when (homeCardItem.id) {
                     SYMPTOM_REPORTING -> rootNav.navigate(ToDestination(actionGlobalSymptomsFragment()))
                     SEE_ALERTS -> rootNav.navigate(ToDestination(actionGlobalAlerts()))
                 }
@@ -100,7 +97,4 @@ class HomeViewModel(
     }
 
     private fun EnvInfos.appVersionString() = "$appVersionName ($appVersionCode)"
-
-    private fun title(alertsSize: Int) =
-        resources.getQuantityString(plurals.home_new_exposure_alert, alertsSize)
 }
