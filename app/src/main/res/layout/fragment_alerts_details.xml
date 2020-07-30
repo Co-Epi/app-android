@@ -48,13 +48,12 @@
             android:id="@+id/exposure_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_40"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.viewData.reportTime}"
             android:textColor="@color/textDefault"
             android:textSize="@dimen/text_size_20"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
             app:layout_constraintTop_toBottomOf="@id/headline"
             tools:text="Exposure Time" />
 
@@ -62,15 +61,14 @@
             android:id="@+id/contact_duration"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_40"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.viewData.contactStart}"
             android:textColor="@color/textDefault"
             android:textSize="@dimen/text_size_30"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
             app:layout_constraintTop_toBottomOf="@id/exposure_time"
             tools:text="Contact duration" />
 
@@ -78,15 +76,14 @@
             android:id="@+id/min_distance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_40"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.viewData.avgDistance}"
             android:textColor="@color/textDefault"
             android:textSize="@dimen/text_size_30"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
             app:layout_constraintTop_toBottomOf="@id/contact_duration"
             tools:text="Avg distance" />
 
@@ -94,15 +91,14 @@
             android:id="@+id/avg_distance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_40"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.viewData.minDistance}"
             android:textColor="@color/textDefault"
             android:textSize="@dimen/text_size_30"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
             app:layout_constraintTop_toBottomOf="@id/min_distance"
             tools:text="Min distance" />
 
@@ -110,16 +106,43 @@
             android:id="@+id/symptomList"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_40"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/margin_40"
             android:text="@{vm.viewData.symptoms}"
             android:textColor="@color/textDefault"
             android:textSize="@dimen/text_size_30"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
             app:layout_constraintTop_toBottomOf="@id/avg_distance"
             tools:text="Symptoms" />
+
+        <TextView
+            android:id="@+id/linked_symptoms_header"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            style="@style/Text.Headline"
+            isVisible="@{vm.viewData.showOtherExposuresHeader}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/alerts_details_header_other_exposures"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_30"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
+            app:layout_constraintTop_toBottomOf="@id/symptomList"
+            tools:text="Other exposures with this person" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/linked_alerts_recycler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linked_symptoms_header" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

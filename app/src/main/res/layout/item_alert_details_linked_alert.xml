@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewData"
+            type="org.coepi.android.ui.alertsdetails.LinkedAlertViewData" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="20dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/margin_40"
+            android:src="@drawable/ic_breathless_ground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/headline"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            style="@style/Text.Headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@{viewData.date}"
+            android:textColor="@color/textDefault"
+            android:textSize="@dimen/text_size_20"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Headline" />
+
+        <TextView
+            android:id="@+id/exposure_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{viewData.contactStart}"
+            android:textColor="@color/textDefault"
+            android:textSize="@dimen/text_size_30"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
+            app:layout_constraintTop_toBottomOf="@id/headline"
+            tools:text="Exposure Time" />
+
+        <TextView
+            android:id="@+id/contact_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{viewData.contactDuration}"
+            android:textColor="@color/textDefault"
+            android:textSize="@dimen/text_size_30"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
+            app:layout_constraintTop_toBottomOf="@id/exposure_time"
+            tools:text="Contact duration" />
+
+        <TextView
+            android:id="@+id/symptomList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{viewData.symptoms}"
+            android:textColor="@color/textDefault"
+            android:textSize="@dimen/text_size_20"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
+            app:layout_constraintTop_toBottomOf="@id/contact_duration"
+            tools:text="[Symptom1\nsymptom2]" />
+
+        <View
+            isVisible="@{viewData.bottomLine}"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/symptomList" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
