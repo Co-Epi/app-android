@@ -8,17 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import kotlinx.android.parcel.Parcelize
 import org.coepi.android.R.id.alert_details_menu_delete
 import org.coepi.android.R.id.alert_details_menu_report
 import org.coepi.android.R.menu.alert_details
 import org.coepi.android.databinding.FragmentAlertsDetailsBinding.inflate
+import org.coepi.android.system.ScreenUnitsConverter
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragmentArgs.Companion.fromBundle
 import org.coepi.core.domain.model.Alert
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class AlertsDetailsFragment : Fragment() {
+    private val unitsConverter: ScreenUnitsConverter by inject()
+
     private val viewModel by viewModel<AlertsDetailsViewModel> {
         parametersOf(arguments?.let { fromBundle(it) }?.args)
     }
@@ -31,6 +37,12 @@ class AlertsDetailsFragment : Fragment() {
         activity?.let {
             toolbar.configure(it)
         }
+        linkedAlertsRecycler.apply {
+            layoutManager = LinearLayoutManager(context, VERTICAL, false)
+        }
+        val adapter = AlertsDetailsLinkedAlertsAdapter(unitsConverter)
+        linkedAlertsRecycler.adapter = adapter
+        adapter.submitList(viewModel.linkedAlertsViewData)
     }.root
 
     private fun Toolbar.configure(activity: Activity) {
@@ -47,5 +59,5 @@ class AlertsDetailsFragment : Fragment() {
     }
 
     @Parcelize
-    data class Args(val alert: Alert) : Parcelable
+    data class Args(val alert: Alert, val linkedAlerts: List<Alert>) : Parcelable
 }

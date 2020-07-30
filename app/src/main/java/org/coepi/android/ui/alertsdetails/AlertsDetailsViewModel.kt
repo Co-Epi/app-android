@@ -1,6 +1,5 @@
 package org.coepi.android.ui.alertsdetails
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
@@ -42,7 +41,12 @@ class AlertsDetailsViewModel(
     private val email: Email,
     private val nav: RootNavigation
 ) : ViewModel() {
-    val viewData: AlertDetailsViewData = args.alert.toViewData()
+    val viewData: AlertDetailsViewData = args.alert.toViewData(args.linkedAlerts.isNotEmpty())
+    val linkedAlertsViewData: List<LinkedAlertViewData> = args.linkedAlerts
+        .mapIndexed { index, alert -> alert.toLinkedAlertViewData(
+            image = LinkedAlertViewDataConnectionImage.from(index, args.linkedAlerts.size),
+            bottomLine = index < args.linkedAlerts.size - 1
+        )}
 
     private val deleteAlertTrigger: PublishSubject<Unit> = PublishSubject.create()
 
@@ -60,36 +64,63 @@ class AlertsDetailsViewModel(
         navigation.navigate(Back)
     }
 
-    private fun Alert.reportedOnString() = reportTime.toDate().let { date ->
+    private fun Alert.toViewData(showOtherExposuresHeader: Boolean): AlertDetailsViewData =
+        AlertDetailsViewData(
+            title = formattedStartDate(),
+            contactStart = formattedContactStart(),
+            contactDuration = formattedContactDuration(),
+            avgDistance = formatterdAvgDistance(),
+            minDistance = formattedMinDistance(), // Temporary, for testing
+            reportTime = formatReportTime(),
+            symptoms = formattedSymptoms(),
+            showOtherExposuresHeader = showOtherExposuresHeader,
+            alert = this
+        ).also {
+            log.d("Showing details for alert: $this")
+        }
+
+    private fun Alert.toLinkedAlertViewData(image: LinkedAlertViewDataConnectionImage,
+                                            bottomLine: Boolean): LinkedAlertViewData =
+        LinkedAlertViewData(
+            date = formattedStartDate(),
+            contactStart = formattedContactStart(),
+            contactDuration = formattedContactDuration(),
+            symptoms = formattedSymptoms(),
+            alert = this,
+            image = image,
+            bottomLine = bottomLine
+        )
+
+    private fun Alert.formattedStartDate(): String =
+        toMonthAndDay(contactStart)
+
+    private fun Alert.formattedContactStart(): String =
+        hourMinuteFormatter.formatTime(contactStart.toDate())
+
+    private fun Alert.formattedContactDuration(): String =
+        durationForUI.toLocalizedString()
+
+    private fun Alert.formattedSymptoms(): String = symptomUIStrings(resources)
+        .joinToString("\n")
+
+    private fun Alert.formatterdAvgDistance(): String =
+        resources.getString(
+            alerts_details_distance_avg,
+            oneDecimal.format(avgDistance.toFeet().value),
+            resources.getString(alerts_details_distance_unit_feet)
+        )
+
+    private fun Alert.formattedMinDistance(): String =
+        "[DEBUG] Min distance: ${oneDecimal.format(minDistance.toFeet().value)} " +
+                resources.getString(alerts_details_distance_unit_feet)
+
+    private fun Alert.formatReportTime(): String = reportTime.toDate().let { date ->
         resources.getString(
             alerts_details_reported_on,
             monthDayFormatter.formatMonthDay(date),
             hourMinuteFormatter.formatTime(date)
         )
     }
-
-    private fun Alert.toViewData(): AlertDetailsViewData = AlertDetailsViewData(
-        title = toMonthAndDay(contactStart),
-        contactStart = hourMinuteFormatter.formatTime(contactStart.toDate()),
-        contactDuration = durationForUI.toLocalizedString(),
-        avgDistance = resources.getString(
-            alerts_details_distance_avg,
-            oneDecimal.format(avgDistance.toFeet().value),
-            resources.getString(alerts_details_distance_unit_feet)
-        ),
-        minDistance = "[DEBUG] Min distance: ${oneDecimal.format(minDistance.toFeet().value)} " +
-                resources.getString(alerts_details_distance_unit_feet), // Temporary, for testing
-        reportTime = reportedOnString(),
-        symptoms = symptomList(this),
-        alert = this
-    ).also {
-        log.d("Showing details for alert: $this")
-    }
-
-    @SuppressLint("DefaultLocale")
-    private fun symptomList(alert: Alert): String = alert
-        .symptomUIStrings(resources)
-        .joinToString("\n")
 
     private fun toMonthAndDay(time: UnixTime): String =
         monthDayFormatter.formatMonthDay(time.toDate())

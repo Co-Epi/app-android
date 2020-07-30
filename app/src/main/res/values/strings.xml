@@ -142,6 +142,7 @@
     <string name="alerts_details_menu_report">Report a problem</string>
     <string name="alerts_details_report_email_subject">TODO</string>
     <string name="alerts_details_report_email_address">TODO@TODO.TODO</string>
+    <string name="alerts_details_header_other_exposures">Other exposures with this person</string>
 
     <!-- Infection contact notifications -->
     <string name="infection_notification_title">Exposure</string>

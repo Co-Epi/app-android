@@ -3,6 +3,12 @@ package org.coepi.android.ui.alerts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Resources
@@ -42,8 +48,22 @@ class AlertsViewModel(
         .observeOn(mainThread())
         .toLiveData()
 
+    private val selectAlertTrigger: PublishSubject<Alert> = create()
+
+    private val disposables = CompositeDisposable()
+
+    init {
+        disposables += selectAlertTrigger.withLatestFrom(alertsRepo.alerts)
+            .map { (alert, alerts) ->
+                Args(alert, linkedAlerts(alert, alerts))
+            }
+            .subscribeBy { args ->
+                navigation.navigate(ToDirections(actionGlobalAlertsDetails(args)))
+            }
+    }
+
     fun onAlertClick(alert: AlertViewData) {
-        navigation.navigate(ToDirections(actionGlobalAlertsDetails(Args(alert.alert))))
+        selectAlertTrigger.onNext(alert.alert)
     }
 
     fun onSwipeToRefresh() {
@@ -95,4 +115,9 @@ class AlertsViewModel(
             is Progress -> "Updating..."
             is Failure -> "Error updating: ${operationState.t}"
         }
+
+    private fun linkedAlerts(alert: Alert, alerts: List<Alert>): List<Alert> =
+        alerts
+            .filter { it.reportId == alert.reportId && it.id != alert.id }
+            .sortedByDescending { it.contactStart.value }
 }

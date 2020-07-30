@@ -26,6 +26,7 @@ import org.coepi.android.system.EnvInfosImpl
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.PreferencesImpl
 import org.coepi.android.system.Resources
+import org.coepi.android.system.ScreenUnitsConverter
 import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
@@ -125,6 +126,7 @@ val systemModule = module {
     single { provideGson() }
     single<NewAlertsNotificationShower> { NewAlertsNotificationShowerImpl(get(), get(), get()) }
     single<Email> { EmailImpl() }
+    single { ScreenUnitsConverter(androidApplication().resources.displayMetrics) }
 }
 
 val uiModule = module {

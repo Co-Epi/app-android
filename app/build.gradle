@@ -52,7 +52,7 @@ android {
 ext {
     koin_version = "2.1.0"
     work_version = "2.3.4"
-    core_version = "0.1.27"
+    core_version = "0.1.30"
 
     binaries_target_dir = "$rootDir/coreBinariesCache/"
     binaries_zip_name = "coreBinaries${core_version}.zip"
