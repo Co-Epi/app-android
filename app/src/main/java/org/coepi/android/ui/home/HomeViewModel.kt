@@ -59,11 +59,15 @@ class HomeViewModel(
         .startWith(emptyList<Alert>())
         .distinctUntilChanged()
         .map { alerts ->
-            homeCardItems.map {
-                if (it.cardId == SEE_ALERTS) {
-                    it.copy(newAlerts = alerts.isNotEmpty(), newAlertsTitle = title(alerts.size))
+            homeCardItems.map { card ->
+                if (card.cardId == SEE_ALERTS) {
+                    val unReadAlertsCount = alerts.filter { !it.isRead }.size
+                    card.copy(
+                        hasNotification = unReadAlertsCount > 0,
+                        notificationText = "$unReadAlertsCount"
+                    )
                 } else {
-                    it
+                    card
                 }
             }
         }
@@ -73,12 +77,6 @@ class HomeViewModel(
     val versionString: LiveData<String> =
         just(resources.getString(home_version, envInfos.appVersionString()))
             .toLiveData()
-
-    val title: LiveData<String> = alertsRepo.alerts
-        .map { title(it.size) }
-        .startWith(title(0))
-        .observeOn(mainThread())
-        .toLiveData()
 
     init {
         disposables += homeCardClickSubject
@@ -100,7 +98,4 @@ class HomeViewModel(
     }
 
     private fun EnvInfos.appVersionString() = "$appVersionName ($appVersionCode)"
-
-    private fun title(alertsSize: Int) =
-        resources.getQuantityString(plurals.home_new_exposure_alert, alertsSize)
 }

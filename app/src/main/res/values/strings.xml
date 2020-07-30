@@ -64,11 +64,7 @@
     <string name="home_contact_alerts_card_description">Review your potential exposures</string>
     <string name="home_version">Version: %s</string>
     <string name="home_privacy_link_text">How is my data being used?</string>
-    <plurals name="home_new_exposure_alert">
-        <item quantity="one">%s new exposure detected</item>
-        <item quantity="other">%s new exposures detected</item>
-    </plurals>
-    
+
     <!-- Onboarding -->
     <string name="onboarding_card_title_1">Log your interactions</string>
     <string name="onboarding_card_title_2">Monitor your health</string>
