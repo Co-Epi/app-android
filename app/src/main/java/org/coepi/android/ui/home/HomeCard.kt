@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class HomeCard(
-    val cardId: HomeCardId,
+    val id: HomeCardId,
     val title: String,
     val message: String,
     val hasNotification: Boolean = false,

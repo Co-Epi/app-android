@@ -7,7 +7,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.subjects.PublishSubject
-import org.coepi.android.R.plurals
 import org.coepi.android.R.string.home_contact_alerts_card_description
 import org.coepi.android.R.string.home_contact_alerts_card_title
 import org.coepi.android.R.string.home_my_health_card_description
@@ -60,7 +59,7 @@ class HomeViewModel(
         .distinctUntilChanged()
         .map { alerts ->
             homeCardItems.map { card ->
-                if (card.cardId == SEE_ALERTS) {
+                if (card.id == SEE_ALERTS) {
                     val unReadAlertsCount = alerts.filter { !it.isRead }.size
                     card.copy(
                         hasNotification = unReadAlertsCount > 0,
@@ -81,7 +80,7 @@ class HomeViewModel(
     init {
         disposables += homeCardClickSubject
             .subscribe { homeCardItem ->
-                when (homeCardItem.cardId) {
+                when (homeCardItem.id) {
                     SYMPTOM_REPORTING -> rootNav.navigate(ToDestination(actionGlobalSymptomsFragment()))
                     SEE_ALERTS -> rootNav.navigate(ToDestination(actionGlobalAlerts()))
                 }

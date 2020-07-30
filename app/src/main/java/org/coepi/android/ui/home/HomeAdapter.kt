@@ -36,7 +36,7 @@ class HomeAdapter(
 
 private class HomeItemDiffCallback : ItemCallback<HomeCard>() {
     override fun areItemsTheSame(oldItem: HomeCard, newItem: HomeCard): Boolean =
-        oldItem.cardId == newItem.cardId
+        oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: HomeCard, newItem: HomeCard): Boolean =
         oldItem == newItem
