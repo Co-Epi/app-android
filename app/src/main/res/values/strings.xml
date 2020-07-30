@@ -129,6 +129,7 @@
     <string name="alerts_report_runny_nose">Runny nose</string>
     <string name="alerts_report_other">Other symptoms</string>
     <string name="alerts_report_no_symptoms">No symptoms reported</string>
+    <string name="alerts_repeated_interaction">Repeated\ninteraction</string>
 
     <!-- Alert details -->
     <string name="alerts_details_title">Exposure alert</string>

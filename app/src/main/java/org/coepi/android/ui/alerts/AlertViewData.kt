@@ -12,5 +12,6 @@ data class AlertViewData(
     val contactTime: String,
     val contactTimeMonth: String,
     val showUnreadDot: Boolean,
+    val showRepeatedInteraction: Boolean,
     val alert: Alert
 )

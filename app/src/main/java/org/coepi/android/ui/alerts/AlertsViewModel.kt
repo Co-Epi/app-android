@@ -37,7 +37,7 @@ class AlertsViewModel(
 ) : ViewModel() {
 
     val alerts: LiveData<List<AlertCellViewData>> = alertsRepo.alerts
-        .map { it.toCellViewData() }
+        .map { it.toCellViewData(it) }
         .observeOn(mainThread())
         .toLiveData()
 
@@ -54,8 +54,13 @@ class AlertsViewModel(
                     is Failure ->
                         log.e("Alert: ${alert.id} couldn't be marked as read: ${res.error}")
                 }
-                navigation.navigate(ToDirections(actionGlobalAlertsDetails(
-                    Args(alert, linkedAlerts(alert, alerts)))))
+                navigation.navigate(
+                    ToDirections(
+                        actionGlobalAlertsDetails(
+                            Args(alert, linkedAlerts(alert, alerts))
+                        )
+                    )
+                )
             }
     }
 
@@ -89,26 +94,33 @@ class AlertsViewModel(
      * This function parses [Alert] objects received from the [AlertsRepo] into readable strings that get displayed
      * in the recycler view item_alert views bound by the [AlertsAdapter]
      */
-    private fun Alert.toViewData(): AlertViewData =
+    private fun Alert.toViewData(allAlerts: List<Alert>): AlertViewData =
         AlertViewData(
-            exposureType = symptomUIStrings(resources).joinToString("\n"),
+            exposureType = symptomUIStrings(resources).joinToString(", "),
             contactTime = hourMinuteFormatter.formatTime(contactStart.toDate()),
             contactTimeMonth = monthDayFormatter.formatMonthDay(contactStart.toDate()),
             showUnreadDot = !isRead,
+            showRepeatedInteraction = hasLinkedAlerts(this, allAlerts),
             alert = this
         )
 
-    private fun List<Alert>.toCellViewData(): List<AlertCellViewData> =
+    private fun List<Alert>.toCellViewData(allAlerts: List<Alert>): List<AlertCellViewData> =
         sortedWith(compareByDescending { it.contactStart.value })
             .groupBy { monthDayFormatter.formatMonthDay(it.contactStart.toDate()) }
             .flatMap { entry ->
                 listOf(Header(entry.key)) + entry.value.map { alert ->
-                    Item(alert.toViewData())
+                    Item(alert.toViewData(allAlerts))
                 }
             }
+
+    private fun hasLinkedAlerts(alert: Alert, alerts: List<Alert>): Boolean =
+        alerts.any { linkedAlertsPredicate(alert)(it) }
 
     private fun linkedAlerts(alert: Alert, alerts: List<Alert>): List<Alert> =
         alerts
             .filter { it.reportId == alert.reportId && it.id != alert.id }
             .sortedByDescending { it.contactStart.value }
+
+    private fun linkedAlertsPredicate(alert: Alert): (Alert) -> Boolean =
+        { it.reportId == alert.reportId && it.id != alert.id }
 }
