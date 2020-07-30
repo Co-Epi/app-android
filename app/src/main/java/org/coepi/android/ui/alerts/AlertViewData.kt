@@ -11,5 +11,6 @@ data class AlertViewData(
     val exposureType: String,
     val contactTime: String,
     val contactTimeMonth: String,
+    val showUnreadDot: Boolean,
     val alert: Alert
 )

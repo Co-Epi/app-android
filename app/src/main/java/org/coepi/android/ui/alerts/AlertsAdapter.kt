@@ -77,8 +77,6 @@ private class AlertsDiffCallback : ItemCallback<AlertCellViewData>() {
             else -> false
         }
 
-    override fun areContentsTheSame(
-        oldItem: AlertCellViewData,
-        newItem: AlertCellViewData
-    ): Boolean = oldItem == newItem
+    override fun areContentsTheSame(oldItem: AlertCellViewData, newItem: AlertCellViewData)
+            : Boolean = oldItem == newItem
 }
