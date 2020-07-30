@@ -86,8 +86,8 @@ class LinkedAlertsPathView @JvmOverloads constructor(
 interface LinkedAlertsPathDrawer {
     fun draw(canvas: Canvas, width: Int, height: Int)
     fun rect(width: Int, lineWidth: Int, top: Int, height: Int): Rect =
-        Rect((width / 2) - (lineWidth / 2), top,
-            (width / 2) - (lineWidth / 2) + lineWidth, height)
+        Rect(width / 2 - lineWidth / 2, top,
+            width / 2 - lineWidth / 2 + lineWidth, height)
 }
 
 class TopPathDrawer(private val paint: Paint, private val lineWidth: Int,

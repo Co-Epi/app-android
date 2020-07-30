@@ -1,6 +1,5 @@
 package org.coepi.android.ui.alertsdetails
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
