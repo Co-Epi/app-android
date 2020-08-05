@@ -32,6 +32,8 @@ import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
 import org.coepi.android.system.log.cachingLog
 import org.coepi.android.system.log.log
+import org.coepi.android.system.rx.ObservablePreferences
+import org.coepi.android.system.rx.ObservablePreferencesImpl
 import org.coepi.android.ui.alerts.AlertsViewModel
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment
 import org.coepi.android.ui.alertsdetails.AlertsDetailsViewModel
@@ -106,6 +108,7 @@ val viewModelModule = module {
 val systemModule = module {
     single { getSharedPrefs(androidApplication()) }
     single<Preferences> { PreferencesImpl(get(), get()) }
+    single<ObservablePreferences> { ObservablePreferencesImpl(get()) }
     single { OnboardingPermissionsChecker() }
     single<BlePreconditionsNotifier> { BlePreconditionsNotifierImpl() }
     single { BlePreconditions(get(), get(), get()) }

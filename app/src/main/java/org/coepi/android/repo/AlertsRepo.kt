@@ -16,11 +16,11 @@ import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShower
 import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
+import org.coepi.core.domain.common.Result
 import org.coepi.core.domain.common.Result.Failure
 import org.coepi.core.domain.common.Result.Success
 import org.coepi.core.domain.model.Alert
 import org.coepi.core.services.AlertsApi
-import org.coepi.core.domain.common.Result
 
 interface AlertsRepo {
     val alerts: Observable<List<Alert>>
@@ -36,7 +36,6 @@ class AlertRepoImpl(
     private val alertsApi: AlertsApi,
     private val newAlertsNotificationShower: NewAlertsNotificationShower
 ): AlertsRepo {
-
     private val disposables = CompositeDisposable()
 
     override val alertsState: BehaviorSubject<OperationState<List<Alert>>> =
