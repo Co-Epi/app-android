@@ -14,7 +14,19 @@ import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
 import org.coepi.android.cross.ScannedTcnsHandler
-import org.coepi.android.repo.repoModule
+import org.coepi.android.domain.model.LengthMeasurement
+import org.coepi.android.domain.model.LengthMeasurementUnit.FEET
+import org.coepi.android.domain.symptomflow.SymptomFlowManager
+import org.coepi.android.domain.symptomflow.SymptomFlowManagerImpl
+import org.coepi.android.domain.symptomflow.SymptomRouter
+import org.coepi.android.domain.symptomflow.SymptomRouterImpl
+import org.coepi.android.repo.AlertFilterSettings
+import org.coepi.android.repo.AlertRepoImpl
+import org.coepi.android.repo.AlertsRepo
+import org.coepi.android.repo.ObservableAlertFilters
+import org.coepi.android.repo.ObservableAlertFiltersImpl
+import org.coepi.android.repo.SymptomRepo
+import org.coepi.android.repo.SymptomRepoImpl
 import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShower
 import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShowerImpl
 import org.coepi.android.system.Clipboard
@@ -23,10 +35,14 @@ import org.coepi.android.system.Email
 import org.coepi.android.system.EmailImpl
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.EnvInfosImpl
+import org.coepi.android.system.LocaleProvider
+import org.coepi.android.system.LocaleProviderImpl
 import org.coepi.android.system.Preferences
 import org.coepi.android.system.PreferencesImpl
 import org.coepi.android.system.Resources
 import org.coepi.android.system.ScreenUnitsConverter
+import org.coepi.android.system.UnitSystemProvider
+import org.coepi.android.system.UnitSystemProviderImpl
 import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
@@ -47,6 +63,7 @@ import org.coepi.android.ui.debug.DebugBleObservableImpl
 import org.coepi.android.ui.debug.DebugViewModel
 import org.coepi.android.ui.debug.ble.DebugBleViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
+import org.coepi.android.ui.formatters.MeasurementFormatter
 import org.coepi.android.ui.home.HomeViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
@@ -56,7 +73,7 @@ import org.coepi.android.ui.notifications.NotificationsShower
 import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
-import org.coepi.android.ui.settings.SettingsViewModel
+import org.coepi.android.ui.settings.UserSettingsViewModel
 import org.coepi.android.ui.symptoms.SymptomsViewModel
 import org.coepi.android.ui.symptoms.breathless.BreathlessViewModel
 import org.coepi.android.ui.symptoms.cough.CoughStatusViewModel
@@ -82,12 +99,18 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+val alertFilterSettings = AlertFilterSettings(
+    durationSecondsLargerThan = 300,
+    distanceShorterThan = LengthMeasurement(10f, FEET)
+)
+
 val viewModelModule = module {
     viewModel { SymptomsViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ThanksViewModel(get()) }
     viewModel { AlertsViewModel(get(), get(), get(), get()) }
-    viewModel { SettingsViewModel() }
+    viewModel { UserSettingsViewModel(get(), get(), get(), get(), get(), get(),
+        alertFilterSettings) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get(), get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
@@ -130,6 +153,9 @@ val systemModule = module {
     single<NewAlertsNotificationShower> { NewAlertsNotificationShowerImpl(get(), get(), get()) }
     single<Email> { EmailImpl() }
     single { ScreenUnitsConverter(androidApplication().resources.displayMetrics) }
+    single<LocaleProvider> { LocaleProviderImpl(androidApplication()) }
+    single<UnitSystemProvider> { UnitSystemProviderImpl(get()) }
+    single { MeasurementFormatter(get()) }
 }
 
 val uiModule = module {
@@ -157,6 +183,16 @@ val coreModule = module {
     single<SymptomsInputManager> { SymptomInputsManagerImpl(get(), get()) }
     single<ObservedTcnsRecorder> { ObservedTcnsRecorderImpl(get()) }
     single<TcnGenerator> { TcnGeneratorImpl(get()) }
+}
+
+val repoModule = module {
+    single<SymptomRepo> { SymptomRepoImpl(get()) }
+    single<AlertsRepo> { AlertRepoImpl(get(), get()) }
+    single<SymptomFlowManager> { SymptomFlowManagerImpl(get(), get(), get(), get()) }
+    single<SymptomRouter> { SymptomRouterImpl() }
+    single<ObservableAlertFilters> {
+        ObservableAlertFiltersImpl(get(), alertFilterSettings)
+    }
 }
 
 @ExperimentalUnsignedTypes

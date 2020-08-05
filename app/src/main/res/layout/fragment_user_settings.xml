@@ -6,23 +6,32 @@
 
         <variable
             name="vm"
-            type="org.coepi.android.ui.settings.SettingsViewModel" />
+            type="org.coepi.android.ui.settings.UserSettingsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:title="@string/label_fragment_alerts"
+            app:titleTextColor="@android:color/white" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:gravity="center"
-            android:text="@{vm.text}"
+            android:fadingEdgeLength="100dp"
+            android:requiresFadingEdge="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

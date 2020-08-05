@@ -18,6 +18,7 @@ import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlerts
 import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalDebug
+import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalUserSettings
 import org.coepi.android.ui.home.HomeCardId.SEE_ALERTS
 import org.coepi.android.ui.home.HomeCardId.SYMPTOM_REPORTING
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
@@ -94,6 +95,10 @@ class HomeViewModel(
 
     fun onDebugClick() {
         rootNav.navigate(ToDirections(actionGlobalDebug()))
+    }
+
+    fun onSettingsClick() {
+        rootNav.navigate(ToDirections((actionGlobalUserSettings())))
     }
 
     private fun EnvInfos.appVersionString() = "$appVersionName ($appVersionCode)"

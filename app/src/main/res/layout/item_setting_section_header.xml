@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewData"
+            type="org.coepi.android.ui.settings.UserSettingViewData.SectionHeader" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/LightFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            style="@style/Text.Headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@{viewData.title}"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_headline"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Exposure alerts" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_40"
+            android:layout_marginEnd="@dimen/margin_40"
+            android:text="@{viewData.description}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            tools:text="What information do you want to see on reported exposures around you?" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

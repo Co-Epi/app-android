@@ -12,6 +12,10 @@
     <string name="link_privacy">https://www.coepi.org/privacy/</string>
     <string name="link_faq">https://www.coepi.org/faq/</string>
 
+    <!-- Units -->
+    <string name="unit_length_format_meters">%s meters</string>
+    <string name="unit_length_format_feet">%s feet</string>
+
     <!-- Tabs container -->
     <string name="tab_container_debug">Debug</string>
 
@@ -129,8 +133,8 @@
 
     <!-- Alert details -->
     <string name="alerts_details_title">Exposure alert</string>
-    <string name="alerts_details_reported_on">Reported on %s at %s</string>
-    <string name="alerts_details_duration_hours_minutes">%d hours and %d minutes exposure</string>
+    <string name="alerts_details_reported_on">Reported on %1$s at %2$s</string>
+    <string name="alerts_details_duration_hours_minutes">%1$d hours and %2$d minutes exposure</string>
     <string name="alerts_details_duration_minutes">%d minutes exposure</string>
     <string name="alerts_details_duration_seconds">%d seconds exposure</string>
     <string name="alerts_details_distance_avg">Approx. %1$s %2$s away from you</string>
@@ -222,6 +226,18 @@
     <string name="symptom_report_earliest_symptom_headline">How many days ago did the symptoms begin?</string>
     <string name="symptom_report_earliest_symptom_days">@string/days</string>
     <string name="symptom_report_earliest_symptom_unknown">@string/unknown</string>
+
+    <!-- User settings -->
+    <string name="user_settings_section_alerts_title">Exposure alerts</string>
+    <string name="user_settings_section_alerts_subtitle">What information do you want to see on reported exposures
+        around you?</string>
+    <string name="user_settings_item_show_all">Show me all reports,\nincluding \"I don\'t have any
+        symptoms\""</string>
+    <string name="user_settings_item_duration_longer_than">Only show alerts >%d min\nof interaction</string>
+    <string name="user_settings_item_distance_shorter_than">Only notify me for\ninteractions that
+        occured %s away</string>
+    <string name="user_settings_item_privacy_statement">Privacy statement</string>
+    <string name="user_settings_item_report_problem">Report problem</string>
 
     <!-- Accessibility -->
     <string name="accessibility_back_button">Back Button</string>
