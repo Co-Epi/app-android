@@ -11,6 +11,7 @@ import java.util.Locale
 
 interface LocaleProvider {
     val locale: Observable<Locale>
+    fun update()
 }
 
 class LocaleProviderImpl(
@@ -18,8 +19,10 @@ class LocaleProviderImpl(
 ): LocaleProvider {
     override val locale: BehaviorSubject<Locale> = createDefault(getPreferredLocale())
 
-    fun update() {
-        locale.onNext(getPreferredLocale())
+    override fun update() {
+        locale.onNext(getPreferredLocale().also {
+            log.i("Updating locale to: $it")
+        })
     }
 
     private fun getPreferredLocale(): Locale =

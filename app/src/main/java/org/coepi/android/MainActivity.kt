@@ -15,6 +15,7 @@ import org.coepi.android.R.style.AppTheme
 import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.ble.BleInitializer
+import org.coepi.android.system.LocaleProvider
 import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private val intentForwarder: IntentForwarder by inject()
     private val uiNotifier: UINotifier by inject()
     private val activityFinisher: ActivityFinisher by inject()
+    private val localeProvider: LocaleProvider by inject()
 
     private val disposables = CompositeDisposable()
 
@@ -61,6 +63,11 @@ class MainActivity : AppCompatActivity() {
             Crashes::class.java
         )
         bleInitializer.start()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        localeProvider.update()
     }
 
     override fun onNewIntent(intent: Intent?) {
