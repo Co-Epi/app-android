@@ -16,7 +16,6 @@ import org.coepi.android.system.log.log
 import org.coepi.android.ui.alerts.AlertCellViewData.Header
 import org.coepi.android.ui.alerts.AlertCellViewData.Item
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsDetails
-import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsInfo
 import org.coepi.android.ui.alertsdetails.AlertsDetailsFragment.Args
 import org.coepi.android.ui.extensions.symptomUIStrings
 import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
@@ -74,10 +73,6 @@ class AlertsViewModel(
 
     fun onBack() {
         navigation.navigate(Back)
-    }
-
-    fun onAlertsInfoButtonClick() {
-        navigation.navigate(ToDirections(actionGlobalAlertsInfo()))
     }
 
     fun onAlertDismissed(alert: Alert) {

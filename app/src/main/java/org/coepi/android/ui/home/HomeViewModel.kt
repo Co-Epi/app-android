@@ -9,6 +9,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.subjects.PublishSubject
 import org.coepi.android.R.string.home_contact_alerts_card_description
 import org.coepi.android.R.string.home_contact_alerts_card_title
+import org.coepi.android.R.string.home_how_does_it_work
 import org.coepi.android.R.string.home_my_health_card_description
 import org.coepi.android.R.string.home_my_health_card_title
 import org.coepi.android.R.string.home_version
@@ -17,8 +18,10 @@ import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
 import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlerts
+import org.coepi.android.ui.alerts.AlertsFragmentDirections.Companion.actionGlobalAlertsInfo
 import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalDebug
 import org.coepi.android.ui.debug.DebugFragmentDirections.Companion.actionGlobalUserSettings
+import org.coepi.android.ui.home.HomeCardId.LEARN_MORE
 import org.coepi.android.ui.home.HomeCardId.SEE_ALERTS
 import org.coepi.android.ui.home.HomeCardId.SYMPTOM_REPORTING
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
@@ -28,13 +31,13 @@ import org.coepi.android.ui.symptoms.SymptomsFragmentDirections.Companion.action
 import org.coepi.core.domain.model.Alert
 
 enum class HomeCardId {
-    SYMPTOM_REPORTING, SEE_ALERTS
+    SYMPTOM_REPORTING, SEE_ALERTS, LEARN_MORE
 }
 
 class HomeViewModel(
     private val rootNav: RootNavigation,
     envInfos: EnvInfos,
-    private val resources: Resources,
+    resources: Resources,
     alertsRepo: AlertsRepo
 ) : ViewModel() {
 
@@ -52,6 +55,12 @@ class HomeViewModel(
             SEE_ALERTS,
             resources.getString(home_contact_alerts_card_title),
             resources.getString(home_contact_alerts_card_description)
+        ),
+        HomeCard(
+            LEARN_MORE,
+            "",
+            resources.getString(home_how_does_it_work),
+            titleVisible = false
         )
     )
 
@@ -84,6 +93,7 @@ class HomeViewModel(
                 when (homeCardItem.id) {
                     SYMPTOM_REPORTING -> rootNav.navigate(ToDestination(actionGlobalSymptomsFragment()))
                     SEE_ALERTS -> rootNav.navigate(ToDestination(actionGlobalAlerts()))
+                    LEARN_MORE -> rootNav.navigate(ToDirections(actionGlobalAlertsInfo()))
                 }
             }
 

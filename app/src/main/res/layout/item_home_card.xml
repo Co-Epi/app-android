@@ -36,9 +36,10 @@
                 <TextView
                     android:id="@+id/card_title"
                     style="@style/card_view_title"
+                    isVisible="@{item.titleVisible}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_line_height"
+                    android:layout_marginTop="20dp"
                     android:text="@{item.title}"
                     tools:text="@string/home_my_health_card_title" />
 
@@ -47,8 +48,8 @@
                     style="@style/card_view_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_line_height"
-                    android:layout_marginBottom="@dimen/default_line_height"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="20dp"
                     android:text="@{item.message}"
                     tools:text="@string/home_my_health_card_description" />
             </LinearLayout>

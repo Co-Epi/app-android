@@ -16,6 +16,8 @@ import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.ble.BleInitializer
 import org.coepi.android.system.LocaleProvider
+import org.coepi.android.system.WebLaunchEventEmitter
+import org.coepi.android.system.WebLauncher
 import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
@@ -35,6 +37,9 @@ class MainActivity : AppCompatActivity() {
     private val activityFinisher: ActivityFinisher by inject()
     private val localeProvider: LocaleProvider by inject()
 
+    private val webLaunchEventEmitter: WebLaunchEventEmitter by inject()
+    private val webLauncher: WebLauncher by inject()
+
     private val disposables = CompositeDisposable()
 
     init {
@@ -49,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         observeRootNavigation()
         observeUINotifier()
         observeActivityFinisher()
+        observeWebLauncher()
 
         onboardingShower.showIfNeeded()
 
@@ -73,6 +79,12 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intentForwarder.onNewIntent(intent)
+    }
+
+    private fun observeWebLauncher() {
+        disposables += webLaunchEventEmitter.uri.subscribe {
+            webLauncher.show(this, it)
+        }
     }
 
     private fun observeRootNavigation() {

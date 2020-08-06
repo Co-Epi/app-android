@@ -17,7 +17,5 @@ class AlertsInfoFragment : Fragment() {
     ): View? = inflate(inflater, container, false).apply {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
-        toolbar.setNavigationOnClickListener { viewModel.onBack() }
     }.root
-    
 }

@@ -9,5 +9,6 @@ data class HomeCard(
     val title: String,
     val message: String,
     val hasNotification: Boolean = false,
-    val notificationText: String = ""
+    val notificationText: String = "",
+    val titleVisible: Boolean = true
 ) : Parcelable
