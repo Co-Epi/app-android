@@ -98,7 +98,7 @@ class HomeViewModel(
     }
 
     fun onSettingsClick() {
-        rootNav.navigate(ToDirections((actionGlobalUserSettings())))
+        rootNav.navigate(ToDirections(actionGlobalUserSettings()))
     }
 
     private fun EnvInfos.appVersionString() = "$appVersionName ($appVersionCode)"

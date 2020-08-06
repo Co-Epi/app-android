@@ -21,7 +21,6 @@ import org.coepi.android.system.Email
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
 import org.coepi.android.system.UnitSystemProvider
-import org.coepi.android.system.WebpageShower
 import org.coepi.android.system.rx.ObservablePreferences
 import org.coepi.android.ui.formatters.MeasurementFormatter
 import org.coepi.android.ui.settings.UserSettingClickId.APP_VERSION
@@ -119,7 +118,7 @@ class UserSettingsViewModel(
         Toggle(
             text = resources.getString(
                 user_settings_item_duration_longer_than,
-                (alertFilterSettings.durationSecondsLargerThan / 60)
+                alertFilterSettings.durationSecondsLargerThan / 60
             ),
             value = filterAlertsWithLongDuration,
             id = FILTER_ALERTS_WITH_LONG_DURATION,
