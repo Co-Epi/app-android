@@ -7,8 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.PublishSubject.create
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import org.coepi.android.R
 import org.coepi.android.R.string.privacy_link
 import org.coepi.android.R.string.user_settings_item_distance_shorter_than
 import org.coepi.android.R.string.user_settings_item_duration_longer_than
