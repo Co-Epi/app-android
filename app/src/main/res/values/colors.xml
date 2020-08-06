@@ -7,6 +7,7 @@
     <color name="colorBackgroundSecondary">#86FFEA</color>
     <color name="colorLink">#018786</color>
     <color name="grey">#C4C4C4</color>
+    <color name="grey_50">#88C4C4C4</color>
     <color name="white">#ffffff</color>
     <color name="ripple">#1f000000</color>
 

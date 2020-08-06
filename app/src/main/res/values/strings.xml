@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CoEpi</string>
-    <string name="privacy_link"><a href="https://www.coepi.org/privacy/">How is my data being used?</a></string>
+    <string name="privacy_link">https://www.coepi.org/privacy/</string>
 
     <!-- common -->
     <string name="days">days</string>
@@ -34,7 +34,7 @@
     <string name="label_fragment_onboarding">Onboarding</string>
     <string name="label_fragment_alerts">Alerts</string>
     <string name="label_fragment_alerts_details">Alerts details</string>
-    <string name="label_fragment_alerts_info">Exposure alerts</string>
+    <string name="label_fragment_alerts_info">How does CoEpi work?</string>
     <string name="label_fragment_symptoms">Symptom Report</string>
     <string name="label_fragment_api">API</string>
 
@@ -101,6 +101,7 @@
     <string name="bg_permission_info_title">Coepi needs background access</string>
     <string name="bg_permission_info_message">For contact tracing to be effective, the app needs to be active while you\'re not using it.</string>
     <string name="dont_allow">Don\'t Allow</string>
+
     <!-- Alerts -->
     <string name="alerts_button_acknowledge">Acknowledge</string>
     <plurals name="alerts_new_notifications_count">
@@ -110,15 +111,24 @@
     <string name="alerts_no_symptoms_reported">No symptoms reported</string>
     <string name="alerts_headline">Exposure Alerts</string>
     <string name="alerts_learn_more">Click each alert to learn more</string>
-    <string name="alerts_info_description_text"><b>Exposure alerts</b> indicate that you have been in close proximity (e.g. within several feet) to someone with symptoms also using a compatible app.</string>
-    <string name="alerts_info_title">How does CoEpi work?</string>
-    <string name="alerts_info_headline">How does CoEpi work?</string>
-    <string name="alerts_info_copei_description">CoEpi generates exposure alerts if your device has flagged another tracing app user who may have been infectious during your contact.</string>
-    <string name="alerts_info_copei_symptom_report">Based on the symptom report in the exposure alert, you can:</string>
-    <string name="alerts_info_copei_symptom_list"><b>&#8226; Monitor</b> yourself for symptoms in the days following the potential exposure\n\n
-<b>&#8226; Self-isolate</b> within your household to reduce the risk of transmitting to others\n\n
-<b>&#8226; Talk with a healthcare provider</b> about your exposure</string>
 
+    <!-- Alerts info -->
+    <string name="alerts_info_title">How does CoEpi work?</string>
+    <string name="alerts_info_back">Home</string>
+    <string name="alerts_info_how_does_it_work_text">CoEpi generates exposure alerts if your
+        device has detected another CoEpi user in close proximity and they have shared a relevant
+        symptom report.\n\n
+        Based on the symptom report in the exposure alert, you can:\n\n
+         <b>&#8226; Monitor</b> yourself for symptoms in the days following the potential exposure.\n\n
+         <b>&#8226; Self-isolate</b> within your household to reduce the risk of transmitting to others.\n\n
+         <b>&#8226; Talk with a healthcare provider</b> about your exposure.</string>
+    <string name="alerts_info_what_are_alerts_title">What is an exposure alert?</string>
+    <string name="alerts_info_what_are_alerts_text"><b>Exposure alerts</b> indicate that you have been
+        in close proximity (e.g. within several feet) to someone with symptoms also using a
+        compatible app.</string>
+    <string name="alerts_info_privacy_link">How is my data being used?</string>
+
+    <!-- Report -->
     <string name="alerts_report_fever">Fever</string>
     <string name="alerts_report_cough">Cough</string>
     <string name="alerts_report_cough_wet">Wet cough</string>

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import org.coepi.android.databinding.FragmentUserSettingsBinding.inflate
 import org.coepi.android.extensions.observeWith
-import org.coepi.android.system.WebpageShower
 import org.coepi.android.system.log.log
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,12 +34,6 @@ class UserSettingsFragment : Fragment() {
                 }()
             }
         )
-
-        viewModel.showWeb.observeWith(viewLifecycleOwner) { uri ->
-            activity?.let {
-                WebpageShower().show(it, uri)
-            }
-        }
 
         viewModel.settings.observeWith(viewLifecycleOwner) {
             adapter.submitList(it)

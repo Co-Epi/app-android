@@ -13,17 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/toolbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-            app:title="@string/label_fragment_alerts_info"
-            app:titleTextColor="@android:color/white" />
-
         <TextView
             android:id="@+id/headline"
             android:name="androidx.navigation.fragment.NavHostFragment"
@@ -34,7 +23,7 @@
             app:layout_constraintBottom_toTopOf="@+id/scrollview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
             android:id="@+id/scrollview"
@@ -59,39 +48,48 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
-                    android:text="@string/alerts_info_description_text" />
+                    android:text="@string/alerts_info_how_does_it_work_text"
+                    android:textSize="@dimen/text_size_20" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:text="@string/alerts_info_headline"
-                    android:textSize="@dimen/text_size_40"
+                    android:text="@string/alerts_info_what_are_alerts_title"
+                    android:textSize="@dimen/text_size_30"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:text="@string/alerts_info_copei_description" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:text="@string/alerts_info_copei_symptom_report" />
-
-                <TextView
-                    android:id="@+id/exposure_alert_symptom_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:text="@string/alerts_info_copei_symptom_list" />
+                    android:text="@string/alerts_info_what_are_alerts_text" />
 
             </LinearLayout>
-
         </ScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/exposure_alert_info_button"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ripple_symptom_button"
+            android:buttonTint="@color/colorPrimary"
+            android:gravity="center"
+            android:onClick="@{() -> vm.onClickPrivacyLink()}"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            android:text="@string/alerts_info_privacy_link"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

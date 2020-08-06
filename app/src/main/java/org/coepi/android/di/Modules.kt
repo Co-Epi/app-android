@@ -43,6 +43,10 @@ import org.coepi.android.system.Resources
 import org.coepi.android.system.ScreenUnitsConverter
 import org.coepi.android.system.UnitSystemProvider
 import org.coepi.android.system.UnitSystemProviderImpl
+import org.coepi.android.system.WebLaunchEventEmitter
+import org.coepi.android.system.WebLaunchEventEmitterImpl
+import org.coepi.android.system.WebLauncher
+import org.coepi.android.system.WebLauncherImpl
 import org.coepi.android.system.intent.InfectionsNotificationIntentHandler
 import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.system.intent.IntentForwarderImpl
@@ -110,7 +114,7 @@ val viewModelModule = module {
     viewModel { ThanksViewModel(get()) }
     viewModel { AlertsViewModel(get(), get(), get(), get()) }
     viewModel { UserSettingsViewModel(get(), get(), get(), get(), get(), get(),
-        alertFilterSettings) }
+        alertFilterSettings, get()) }
     viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get(), get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
@@ -125,7 +129,7 @@ val viewModelModule = module {
     viewModel { FeverTakenTodayViewModel(get(), get()) }
     viewModel { FeverHighestTemperatureViewModel(get(), get()) }
     viewModel { FeverTemperatureSpotViewModel(get(), get()) }
-    viewModel { AlertsInfoViewModel(get()) }
+    viewModel { AlertsInfoViewModel(get(), get()) }
 }
 
 val systemModule = module {
@@ -156,6 +160,8 @@ val systemModule = module {
     single<LocaleProvider> { LocaleProviderImpl(androidApplication()) }
     single<UnitSystemProvider> { UnitSystemProviderImpl(get()) }
     single { MeasurementFormatter(get()) }
+    single<WebLaunchEventEmitter> { WebLaunchEventEmitterImpl() }
+    single<WebLauncher> { WebLauncherImpl() }
 }
 
 val uiModule = module {
