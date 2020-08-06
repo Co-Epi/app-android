@@ -11,11 +11,11 @@ import android.net.Uri
 import org.coepi.android.system.log.log
 
 interface Email {
-    fun send(activity: Activity, recipient: String, subject: String, message: String = "")
+    fun open(activity: Activity, recipient: String, subject: String, message: String = "")
 }
 
 class EmailImpl: Email {
-    override fun send(activity: Activity, recipient: String, subject: String, message: String) {
+    override fun open(activity: Activity, recipient: String, subject: String, message: String) {
         val intent = Intent(ACTION_SEND).apply {
             data = Uri.parse("mailto:")
             type = "message/rfc822"

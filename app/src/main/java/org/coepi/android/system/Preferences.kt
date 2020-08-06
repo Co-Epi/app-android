@@ -5,7 +5,9 @@ import com.google.gson.Gson
 
 enum class PreferencesKey {
     SEEN_ONBOARDING,
-    LAST_COMPLETED_REPORTS_INTERVAL
+    FILTER_ALERTS_WITH_SYMPTOMS,
+    FILTER_ALERTS_WITH_LONG_DURATION,
+    FILTER_ALERTS_WITH_SHORT_DISTANCE
 }
 
 interface Preferences {

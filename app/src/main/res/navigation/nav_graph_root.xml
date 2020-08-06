@@ -176,4 +176,13 @@
     <action
         android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
+
+    <fragment
+        android:id="@+id/user_settings"
+        android:name="org.coepi.android.ui.settings.UserSettingsFragment"
+        tools:layout="@layout/fragment_user_settings" />
+    <action
+        android:id="@+id/action_global_user_settings"
+        app:destination="@id/user_settings" />
+
 </navigation>

@@ -20,8 +20,8 @@
 
     <fragment
         android:id="@+id/settings_fragment"
-        android:name="org.coepi.android.ui.settings.SettingsFragment"
+        android:name="org.coepi.android.ui.settings.UserSettingsFragment"
         android:label="@string/label_fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_user_settings" />
 
 </navigation>

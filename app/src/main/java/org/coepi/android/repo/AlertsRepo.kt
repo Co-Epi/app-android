@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Observable.empty
 import io.reactivex.Observable.just
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.withLatestFrom
@@ -16,11 +17,11 @@ import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShower
 import org.coepi.android.system.rx.OperationState
 import org.coepi.android.system.rx.OperationState.NotStarted
 import org.coepi.android.system.rx.OperationState.Progress
+import org.coepi.core.domain.common.Result
 import org.coepi.core.domain.common.Result.Failure
 import org.coepi.core.domain.common.Result.Success
 import org.coepi.core.domain.model.Alert
 import org.coepi.core.services.AlertsApi
-import org.coepi.core.domain.common.Result
 
 interface AlertsRepo {
     val alerts: Observable<List<Alert>>
@@ -34,19 +35,15 @@ interface AlertsRepo {
 
 class AlertRepoImpl(
     private val alertsApi: AlertsApi,
-    private val newAlertsNotificationShower: NewAlertsNotificationShower
+    private val newAlertsNotificationShower: NewAlertsNotificationShower,
+    private val alertFilters: ObservableAlertFilters
 ): AlertsRepo {
-
     private val disposables = CompositeDisposable()
 
     override val alertsState: BehaviorSubject<OperationState<List<Alert>>> =
         createDefault(NotStarted)
 
-    override val alerts: Observable<List<Alert>> = alertsState
-        .flatMap { when (it) {
-            is OperationState.Success -> just(it.data)
-            else -> empty()
-        }}
+    override val alerts: Observable<List<Alert>>
 
     private val removeAlertTrigger: PublishSubject<Alert> = create()
     private val updateIsReadTrigger: PublishSubject<AlertIsReadUpdatePars> = create()
@@ -62,6 +59,16 @@ class AlertRepoImpl(
             .subscribe {
                 updateAlerts()
             }
+
+        val alerts: Observable<List<Alert>> = alertsState.flatMap { state ->
+            when (state) {
+                is OperationState.Success -> just(state.data)
+                else -> empty()
+            }
+        }
+        this.alerts = Observables.combineLatest(alerts, alertFilters.filters) { alerts, filters ->
+            filters.apply(alerts)
+        }
 
         disposables += removeAlertTrigger
             .withLatestFrom(alerts)
