@@ -30,7 +30,7 @@
             style="@style/headline"
             android:layout_width="0dp"
             android:layout_height="109dp"
-            android:text="@string/alerts_info_button"
+            android:text="@string/alerts_info_title"
             app:layout_constraintBottom_toTopOf="@+id/scrollview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

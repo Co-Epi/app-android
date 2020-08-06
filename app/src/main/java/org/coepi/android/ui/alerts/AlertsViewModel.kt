@@ -76,10 +76,6 @@ class AlertsViewModel(
         navigation.navigate(Back)
     }
 
-    fun onAlertsInfoButtonClick() {
-        navigation.navigate(ToDirections(actionGlobalAlertsInfo()))
-    }
-
     fun onAlertDismissed(alert: Alert) {
         alertsRepo.removeAlert(alert)
     }

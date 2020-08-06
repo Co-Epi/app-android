@@ -68,6 +68,7 @@
     <string name="home_contact_alerts_card_description">Review your potential exposures</string>
     <string name="home_version">Version: %s</string>
     <string name="home_privacy_link_text">How is my data being used?</string>
+    <string name="home_how_does_it_work">How does CoEpi work?</string>
 
     <!-- Onboarding -->
     <string name="onboarding_card_title_1">Log your interactions</string>
@@ -109,8 +110,8 @@
     <string name="alerts_no_symptoms_reported">No symptoms reported</string>
     <string name="alerts_headline">Exposure Alerts</string>
     <string name="alerts_learn_more">Click each alert to learn more</string>
-    <string name="alerts_info_button">What are exposure alerts?</string>
     <string name="alerts_info_description_text"><b>Exposure alerts</b> indicate that you have been in close proximity (e.g. within several feet) to someone with symptoms also using a compatible app.</string>
+    <string name="alerts_info_title">How does CoEpi work?</string>
     <string name="alerts_info_headline">How does CoEpi work?</string>
     <string name="alerts_info_copei_description">CoEpi generates exposure alerts if your device has flagged another tracing app user who may have been infectious during your contact.</string>
     <string name="alerts_info_copei_symptom_report">Based on the symptom report in the exposure alert, you can:</string>
