@@ -1,26 +1,26 @@
 package org.coepi.android.system
 
 import io.reactivex.Observable
-import org.coepi.android.domain.model.LengthMeasurementUnit
-import org.coepi.android.domain.model.LengthMeasurementUnit.FEET
-import org.coepi.android.domain.model.LengthMeasurementUnit.METERS
+import org.coepi.core.domain.model.LengthtUnit
+import org.coepi.core.domain.model.LengthtUnit.FEET
+import org.coepi.core.domain.model.LengthtUnit.METERS
 import java.util.Locale
 
 // If we wanted this to be more generic, we'd have a component
 // for the unit system (metric/imperial) and another for the units.
 // For the time being we'll use only meter/feet so simplifying.
-interface UnitSystemProvider {
-    val measureUnit: Observable<LengthMeasurementUnit>
+interface UnitsProvider {
+    val lengthUnit: Observable<LengthtUnit>
 }
 
-class UnitSystemProviderImpl(
+class UnitsProviderImpl(
     localeProvider: LocaleProvider
-): UnitSystemProvider {
-    override val measureUnit: Observable<LengthMeasurementUnit> = localeProvider.locale.map {
-        deriveMeasureUnit(it)
+): UnitsProvider {
+    override val lengthUnit: Observable<LengthtUnit> = localeProvider.locale.map {
+        deriveLengthUnit(it)
     }
 
-    private fun deriveMeasureUnit(locale: Locale): LengthMeasurementUnit =
+    private fun deriveLengthUnit(locale: Locale): LengthtUnit =
         when (locale.country.toUpperCase(locale)) {
             "US", "LR", "MM" -> FEET
             else -> METERS

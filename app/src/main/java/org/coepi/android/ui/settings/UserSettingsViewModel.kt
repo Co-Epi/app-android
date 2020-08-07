@@ -15,16 +15,15 @@ import org.coepi.android.R.string.user_settings_item_report_problem
 import org.coepi.android.R.string.user_settings_item_show_all
 import org.coepi.android.R.string.user_settings_section_alerts_subtitle
 import org.coepi.android.R.string.user_settings_section_alerts_title
-import org.coepi.android.domain.model.LengthMeasurementUnit
 import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertFilterSettings
 import org.coepi.android.system.Email
 import org.coepi.android.system.EnvInfos
 import org.coepi.android.system.Resources
-import org.coepi.android.system.UnitSystemProvider
+import org.coepi.android.system.UnitsProvider
 import org.coepi.android.system.WebLaunchEventEmitter
 import org.coepi.android.system.rx.ObservablePreferences
-import org.coepi.android.ui.formatters.MeasurementFormatter
+import org.coepi.android.ui.formatters.LengthFormatter
 import org.coepi.android.ui.settings.UserSettingClickId.APP_VERSION
 import org.coepi.android.ui.settings.UserSettingClickId.PRIVACY_STATEMENT
 import org.coepi.android.ui.settings.UserSettingClickId.REPORT_PROBLEM
@@ -34,14 +33,15 @@ import org.coepi.android.ui.settings.UserSettingToggleId.FILTER_ALERTS_WITH_SYMP
 import org.coepi.android.ui.settings.UserSettingViewData.SectionHeader
 import org.coepi.android.ui.settings.UserSettingViewData.Text
 import org.coepi.android.ui.settings.UserSettingViewData.Toggle
+import org.coepi.core.domain.model.LengthtUnit
 
 class UserSettingsViewModel(
     private val preferences: ObservablePreferences,
     private val email: Email,
-    private val measurementFormatter: MeasurementFormatter,
+    private val measurementFormatter: LengthFormatter,
     private val resources: Resources,
     private val envInfos: EnvInfos,
-    unitsProvider: UnitSystemProvider,
+    unitsProvider: UnitsProvider,
     private val alertFilterSettings: AlertFilterSettings,
     private val webLaunchEventEmitter: WebLaunchEventEmitter
 ) : ViewModel() {
@@ -51,7 +51,7 @@ class UserSettingsViewModel(
             preferences.filterAlertsWithSymptoms,
             preferences.filterAlertsWithLongDuration,
             preferences.filterAlertsWithShortDistance,
-            unitsProvider.measureUnit,
+            unitsProvider.lengthUnit,
             { a, b, c, d -> BuildSettingsPars(a, b, c, d) }
         )
             .map { pars ->
@@ -106,7 +106,7 @@ class UserSettingsViewModel(
         filterAlertsWithShortDistance: Boolean,
         alertFilterSettings: AlertFilterSettings,
         appVersionString: String,
-        measurementUnit: LengthMeasurementUnit
+        lengthUnit: LengthtUnit
     ): List<UserSettingViewData> = listOf(
         SectionHeader(
             title = resources.getString(user_settings_section_alerts_title),
@@ -132,7 +132,7 @@ class UserSettingsViewModel(
                 user_settings_item_distance_shorter_than,
                 measurementFormatter.format(
                     alertFilterSettings.distanceShorterThan
-                        .to(measurementUnit)
+                        .convert(lengthUnit)
                 )
             ),
             value = filterAlertsWithShortDistance,
@@ -159,5 +159,5 @@ private data class BuildSettingsPars(
     val filterAlertsWithSymptoms: Boolean,
     val filterAlertsWithLongDuration: Boolean,
     val filterAlertsWithShortDistance: Boolean,
-    val measureUnit: LengthMeasurementUnit
+    val measureUnit: LengthtUnit
 )

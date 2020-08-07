@@ -7,4 +7,7 @@ object NumberFormatters {
     val oneDecimal: NumberFormat = DecimalFormat().apply {
         maximumFractionDigits = 1
     }
+    val twoDecimals: NumberFormat = DecimalFormat().apply {
+        maximumFractionDigits = 2
+    }
 }
