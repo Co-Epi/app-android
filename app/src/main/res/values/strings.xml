@@ -148,8 +148,7 @@
     <string name="alerts_details_duration_hours_minutes">%1$d hours and %2$d minutes exposure</string>
     <string name="alerts_details_duration_minutes">%d minutes exposure</string>
     <string name="alerts_details_duration_seconds">%d seconds exposure</string>
-    <string name="alerts_details_distance_avg">Approx. %1$s %2$s away from you</string>
-    <string name="alerts_details_distance_unit_feet">Feet</string>
+    <string name="alerts_details_distance_avg">Approx. %s away from you</string>
     <string name="alerts_details_menu_delete">Delete</string>
     <string name="alerts_details_menu_report">Report a problem</string>
     <string name="alerts_details_report_email_subject">TODO</string>

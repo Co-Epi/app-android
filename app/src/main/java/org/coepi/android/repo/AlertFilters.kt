@@ -2,12 +2,12 @@ package org.coepi.android.repo
 
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
-import org.coepi.android.domain.model.LengthMeasurement
-import org.coepi.android.domain.model.LengthMeasurementUnit.FEET
 import org.coepi.android.system.log.log
 import org.coepi.android.system.rx.ObservablePreferences
 import org.coepi.android.ui.extensions.durationSeconds
 import org.coepi.core.domain.model.Alert
+import org.coepi.core.domain.model.Length
+import org.coepi.core.domain.model.LengthtUnit.FEET
 
 interface ObservableAlertFilters {
     val filters: Observable<AlertFilters>
@@ -38,7 +38,7 @@ class ObservableAlertFiltersImpl(
 
 data class AlertFilterSettings(
     val durationSecondsLargerThan: Int,
-    val distanceShorterThan: LengthMeasurement
+    val distanceShorterThan: Length
 )
 
 data class AlertFilters(
@@ -63,7 +63,8 @@ fun AlertFilters.apply(alerts: List<Alert>): List<Alert> =
         apply(
             filter = withShortDistance,
             meetsCondition = {
-                alert.avgDistance.toFeet().value < settings.distanceShorterThan.to(FEET).value
+                alert.avgDistance.convert(FEET).value <
+                        settings.distanceShorterThan.convert(FEET).value
             }
         )
     }

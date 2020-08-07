@@ -14,8 +14,6 @@ import org.coepi.android.ble.BlePreconditions
 import org.coepi.android.ble.BlePreconditionsNotifier
 import org.coepi.android.ble.BlePreconditionsNotifierImpl
 import org.coepi.android.cross.ScannedTcnsHandler
-import org.coepi.android.domain.model.LengthMeasurement
-import org.coepi.android.domain.model.LengthMeasurementUnit.FEET
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
 import org.coepi.android.domain.symptomflow.SymptomFlowManagerImpl
 import org.coepi.android.domain.symptomflow.SymptomRouter
@@ -41,8 +39,8 @@ import org.coepi.android.system.Preferences
 import org.coepi.android.system.PreferencesImpl
 import org.coepi.android.system.Resources
 import org.coepi.android.system.ScreenUnitsConverter
-import org.coepi.android.system.UnitSystemProvider
-import org.coepi.android.system.UnitSystemProviderImpl
+import org.coepi.android.system.UnitsProvider
+import org.coepi.android.system.UnitsProviderImpl
 import org.coepi.android.system.WebLaunchEventEmitter
 import org.coepi.android.system.WebLaunchEventEmitterImpl
 import org.coepi.android.system.WebLauncher
@@ -67,7 +65,7 @@ import org.coepi.android.ui.debug.DebugBleObservableImpl
 import org.coepi.android.ui.debug.DebugViewModel
 import org.coepi.android.ui.debug.ble.DebugBleViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
-import org.coepi.android.ui.formatters.MeasurementFormatter
+import org.coepi.android.ui.formatters.LengthFormatter
 import org.coepi.android.ui.home.HomeViewModel
 import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
@@ -88,6 +86,8 @@ import org.coepi.android.ui.symptoms.fever.FeverTakenTodayViewModel
 import org.coepi.android.ui.symptoms.fever.FeverTemperatureSpotViewModel
 import org.coepi.android.ui.thanks.ThanksViewModel
 import org.coepi.android.worker.tcnfetcher.ContactsFetchManager
+import org.coepi.core.domain.model.Length
+import org.coepi.core.domain.model.LengthtUnit.FEET
 import org.coepi.core.jni.JniApi
 import org.coepi.core.services.AlertsApi
 import org.coepi.core.services.AlertsFetcherImpl
@@ -105,7 +105,7 @@ import org.koin.dsl.module
 
 val alertFilterSettings = AlertFilterSettings(
     durationSecondsLargerThan = 300,
-    distanceShorterThan = LengthMeasurement(10f, FEET)
+    distanceShorterThan = Length(10f, FEET)
 )
 
 val viewModelModule = module {
@@ -121,7 +121,7 @@ val viewModelModule = module {
     viewModel { DebugViewModel(get()) }
     viewModel { DebugBleViewModel(get()) }
     viewModel { (args: AlertsDetailsFragment.Args) ->
-        AlertsDetailsViewModel(args, get(), get(), get(), get(), get()) }
+        AlertsDetailsViewModel(args, get(), get(), get(), get(), get(), get(), get()) }
     viewModel { CoughTypeViewModel(get(), get()) }
     viewModel { CoughStatusViewModel(get(), get(), get()) }
     viewModel { EarliestSymptomViewModel(get(), get())}
@@ -158,8 +158,8 @@ val systemModule = module {
     single<Email> { EmailImpl() }
     single { ScreenUnitsConverter(androidApplication().resources.displayMetrics) }
     single<LocaleProvider> { LocaleProviderImpl(androidApplication()) }
-    single<UnitSystemProvider> { UnitSystemProviderImpl(get()) }
-    single { MeasurementFormatter(get()) }
+    single<UnitsProvider> { UnitsProviderImpl(get()) }
+    single { LengthFormatter(get()) }
     single<WebLaunchEventEmitter> { WebLaunchEventEmitterImpl() }
     single<WebLauncher> { WebLauncherImpl() }
 }

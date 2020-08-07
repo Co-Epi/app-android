@@ -1,6 +1,7 @@
 package org.coepi.android.ui.alertsdetails
 
 import android.app.Activity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
@@ -8,16 +9,17 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
 import io.reactivex.subjects.PublishSubject
 import org.coepi.android.R.string.alerts_details_distance_avg
-import org.coepi.android.R.string.alerts_details_distance_unit_feet
 import org.coepi.android.R.string.alerts_details_duration_hours_minutes
 import org.coepi.android.R.string.alerts_details_duration_minutes
 import org.coepi.android.R.string.alerts_details_duration_seconds
 import org.coepi.android.R.string.alerts_details_report_email_address
 import org.coepi.android.R.string.alerts_details_report_email_subject
 import org.coepi.android.R.string.alerts_details_reported_on
+import org.coepi.android.extensions.rx.toLiveData
 import org.coepi.android.repo.AlertsRepo
 import org.coepi.android.system.Email
 import org.coepi.android.system.Resources
+import org.coepi.android.system.UnitsProvider
 import org.coepi.android.system.log.log
 import org.coepi.android.ui.extensions.ExposureDurationForUI
 import org.coepi.android.ui.extensions.ExposureDurationForUI.HoursMinutes
@@ -27,11 +29,12 @@ import org.coepi.android.ui.extensions.durationForUI
 import org.coepi.android.ui.extensions.symptomUIStrings
 import org.coepi.android.ui.formatters.DateFormatters.hourMinuteFormatter
 import org.coepi.android.ui.formatters.DateFormatters.monthDayFormatter
-import org.coepi.android.ui.formatters.NumberFormatters.oneDecimal
+import org.coepi.android.ui.formatters.LengthFormatter
 import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.core.domain.model.Alert
 import org.coepi.core.domain.model.UnixTime
+import org.coepi.core.domain.model.LengthtUnit
 
 class AlertsDetailsViewModel(
     private val args: AlertsDetailsFragment.Args,
@@ -39,9 +42,14 @@ class AlertsDetailsViewModel(
     private val navigation: RootNavigation,
     private val alertsRepo: AlertsRepo,
     private val email: Email,
-    private val nav: RootNavigation
+    private val nav: RootNavigation,
+    unitsProvider: UnitsProvider,
+    private val lengthFormatter: LengthFormatter
 ) : ViewModel() {
-    val viewData: AlertDetailsViewData = args.alert.toViewData(args.linkedAlerts.isNotEmpty())
+    val viewData: LiveData<AlertDetailsViewData> = unitsProvider.lengthUnit
+        .map { args.alert.toViewData(it, args.linkedAlerts.isNotEmpty()) }
+        .toLiveData()
+
     val linkedAlertsViewData: List<LinkedAlertViewData> = args.linkedAlerts
         .mapIndexed { index, alert -> alert.toLinkedAlertViewData(
             image = LinkedAlertViewDataConnectionImage.from(index, args.linkedAlerts.size),
@@ -64,13 +72,14 @@ class AlertsDetailsViewModel(
         navigation.navigate(Back)
     }
 
-    private fun Alert.toViewData(showOtherExposuresHeader: Boolean): AlertDetailsViewData =
+    private fun Alert.toViewData(unit: LengthtUnit,
+                                 showOtherExposuresHeader: Boolean): AlertDetailsViewData =
         AlertDetailsViewData(
             title = formattedStartDate(),
             contactStart = formattedContactStart(),
             contactDuration = formattedContactDuration(),
-            avgDistance = formatterdAvgDistance(),
-            minDistance = formattedMinDistance(), // Temporary, for testing
+            avgDistance = formattedAvgDistance(unit),
+            minDistance = formattedMinDistance(unit), // Temporary, for testing
             reportTime = formatReportTime(),
             symptoms = formattedSymptoms(),
             showOtherExposuresHeader = showOtherExposuresHeader,
@@ -103,16 +112,14 @@ class AlertsDetailsViewModel(
     private fun Alert.formattedSymptoms(): String = symptomUIStrings(resources)
         .joinToString("\n")
 
-    private fun Alert.formatterdAvgDistance(): String =
+    private fun Alert.formattedAvgDistance(unit: LengthtUnit): String =
         resources.getString(
             alerts_details_distance_avg,
-            oneDecimal.format(avgDistance.toFeet().value),
-            resources.getString(alerts_details_distance_unit_feet)
+            lengthFormatter.format(avgDistance.convert(unit))
         )
 
-    private fun Alert.formattedMinDistance(): String =
-        "[DEBUG] Min distance: ${oneDecimal.format(minDistance.toFeet().value)} " +
-                resources.getString(alerts_details_distance_unit_feet)
+    private fun Alert.formattedMinDistance(unit: LengthtUnit): String =
+        "[DEBUG] Min distance: ${lengthFormatter.format(minDistance.convert(unit))}"
 
     private fun Alert.formatReportTime(): String = reportTime.toDate().let { date ->
         resources.getString(
