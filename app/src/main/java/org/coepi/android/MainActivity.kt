@@ -4,20 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.analytics.Analytics
-import com.microsoft.appcenter.crashes.Crashes
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.R.style.AppTheme
-import org.coepi.android.ble.BlePreconditions
-import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.ble.BleInitializer
+import org.coepi.android.ble.BlePreconditions
+import org.coepi.android.system.AppCenterInitializer
 import org.coepi.android.system.LocaleProvider
 import org.coepi.android.system.WebLaunchEventEmitter
 import org.coepi.android.system.WebLauncher
+import org.coepi.android.system.intent.IntentForwarder
 import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
@@ -36,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private val uiNotifier: UINotifier by inject()
     private val activityFinisher: ActivityFinisher by inject()
     private val localeProvider: LocaleProvider by inject()
+    private val appCenterInitializer: AppCenterInitializer by inject()
 
     private val webLaunchEventEmitter: WebLaunchEventEmitter by inject()
     private val webLauncher: WebLauncher by inject()
@@ -58,16 +57,11 @@ class MainActivity : AppCompatActivity() {
 
         onboardingShower.showIfNeeded()
 
+        // This can be generalized with activity events listeners
         intentForwarder.onActivityCreated(intent)
-
         blePreconditions.onActivityCreated(this)
+        appCenterInitializer.onActivityCreated()
 
-        AppCenter.start(
-            application,
-            "1c70b9e6-0458-4205-8bc3-8df5c5d29a0c",
-            Analytics::class.java,
-            Crashes::class.java
-        )
         bleInitializer.start()
     }
 
