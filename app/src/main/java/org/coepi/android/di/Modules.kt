@@ -27,6 +27,8 @@ import org.coepi.android.repo.SymptomRepo
 import org.coepi.android.repo.SymptomRepoImpl
 import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShower
 import org.coepi.android.repo.reportsupdate.NewAlertsNotificationShowerImpl
+import org.coepi.android.system.AppCenterInitializer
+import org.coepi.android.system.AppCenterInitializerImpl
 import org.coepi.android.system.Clipboard
 import org.coepi.android.system.ClipboardImpl
 import org.coepi.android.system.Email
@@ -162,6 +164,7 @@ val systemModule = module {
     single { LengthFormatter(get()) }
     single<WebLaunchEventEmitter> { WebLaunchEventEmitterImpl() }
     single<WebLauncher> { WebLauncherImpl() }
+    single<AppCenterInitializer> { AppCenterInitializerImpl(androidApplication()) }
 }
 
 val uiModule = module {
