@@ -11,6 +11,9 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.PublishSubject.create
+import org.coepi.android.R.drawable.ic_intro_1
+import org.coepi.android.R.drawable.ic_intro_2
+import org.coepi.android.R.drawable.ic_intro_3
 import org.coepi.android.R.string.link_faq
 import org.coepi.android.R.string.link_privacy
 import org.coepi.android.R.string.onboarding_card_content_1
@@ -54,17 +57,20 @@ class OnboardingViewModel(
         SmallCard(
             resources.getString(onboarding_card_title_1),
             resources.getString(onboarding_card_content_1),
-            0
+            0,
+            ic_intro_1
         ),
         SmallCard(
             resources.getString(onboarding_card_title_2),
             resources.getString(onboarding_card_content_2),
-            1
+            1,
+            ic_intro_2
         ),
         SmallCard(
             resources.getString(onboarding_card_title_3),
             resources.getString(onboarding_card_content_3),
-            2
+            2,
+            ic_intro_3
         ),
         LargeCard(
             resources.getString(onboarding_card_title_4),
