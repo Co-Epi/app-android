@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="org.coepi.android.ui.symptoms.earliestsymptom.EarliestSymptomViewModel" />
@@ -19,10 +21,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:navigationContentDescription="@string/accessibility_back_button"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_earliest_symptom_title"
-            app:titleTextColor="@android:color/white"
-            app:navigationContentDescription="@string/accessibility_back_button"></androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white"></androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:id="@+id/headline"
@@ -40,10 +42,17 @@
             android:layout_height="71dp"
             android:layout_marginStart="31dp"
             android:layout_marginTop="27dp"
+            android:background="@drawable/background_edittext"
+            android:gravity="center"
             android:inputType="number"
             android:maxLength="2"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textFontWeight="@integer/text_weight_light"
+            android:textSize="@dimen/text_size_70"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline" />
+            app:layout_constraintTop_toBottomOf="@id/headline"
+            tools:text="123" />
 
         <TextView
             android:id="@+id/days"
@@ -51,9 +60,10 @@
             android:layout_height="78dp"
             android:layout_marginStart="23dp"
             android:gravity="center_vertical"
-            android:text="@string/symptom_report_earliest_symptom_days"
-            android:textSize="56sp"
             android:labelFor="@id/earliest_symptom"
+            android:text="@string/symptom_report_earliest_symptom_days"
+            android:textFontWeight="@integer/text_weight_light"
+            android:textSize="@dimen/text_size_50"
             app:layout_constraintStart_toEndOf="@id/earliest_symptom"
             app:layout_constraintTop_toTopOf="@id/earliest_symptom" />
 
@@ -77,23 +87,18 @@
             app:layout_constraintTop_toTopOf="@id/unknown" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="46dp"
-            android:layout_marginTop="182dp"
+            style="@style/skip_button"
             android:onClick="@{() -> vm.onClickSkip()}"
-            android:text="Skip"
-            android:textSize="@dimen/text_size_40"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/earliest_symptom" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
-            layout="@layout/progress_bar_layout"
             isVisible="@{vm.isInProgress}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            layout="@layout/progress_bar_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,9 +6,9 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.BehaviorSubject.createDefault
-import org.coepi.android.R.string.symptom_report_cough_status_option_better_worse_day
-import org.coepi.android.R.string.symptom_report_cough_status_option_same_or_steadily_worse
-import org.coepi.android.R.string.symptom_report_cough_status_option_worse_outside
+import org.coepi.android.R.string.symptom_report_cough_status_option_better
+import org.coepi.android.R.string.symptom_report_cough_status_option_same
+import org.coepi.android.R.string.symptom_report_cough_status_option_worse
 import org.coepi.android.domain.symptomflow.SymptomFlowManager
 import org.coepi.android.extensions.rx.toIsInProgress
 import org.coepi.android.extensions.rx.toLiveData
@@ -64,10 +64,11 @@ class CoughStatusViewModel (
     private fun Cough.Status.toViewData(isChecked: Boolean): CoughStatusViewData =
         CoughStatusViewData(name(), isChecked, this)
 
+    // TODO change enum names in core: BETTER | WORSE | SAME
     private fun Cough.Status.name(): String = when (this) {
-        BETTER_AND_WORSE_THROUGH_DAY ->  symptom_report_cough_status_option_better_worse_day
-        WORSE_WHEN_OUTSIDE ->  symptom_report_cough_status_option_worse_outside
-        SAME_OR_STEADILY_WORSE ->  symptom_report_cough_status_option_same_or_steadily_worse
+        BETTER_AND_WORSE_THROUGH_DAY ->  symptom_report_cough_status_option_better
+        WORSE_WHEN_OUTSIDE ->  symptom_report_cough_status_option_worse
+        SAME_OR_STEADILY_WORSE ->  symptom_report_cough_status_option_same
     }.let { resources.getString(it) }
 
     fun onSelected(item: CoughStatusViewData) {

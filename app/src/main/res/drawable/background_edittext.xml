@@ -3,17 +3,16 @@
     <!-- Shadow. -->
     <item android:top="4dp">
         <shape>
-            <solid android:color="#33000000" />
-            <corners android:radius="99dp" />
+            <solid android:color="#66d6d6d6" />
+            <corners android:radius="5dp" />
         </shape>
     </item>
     <!-- Foreground. -->
     <item android:bottom="4dp">
-        <shape android:shape="oval">
-            <size android:height="146dp" android:width="146dp"/>
+        <shape>
             <solid android:color="@android:color/white" />
-            <corners android:radius="99dp" />
-            <stroke android:color="@color/colorAccent" android:width="1dp" />
+            <corners android:radius="5dp" />
+            <stroke android:color="@android:color/black" android:width="0.1dp" />
         </shape>
     </item>
 </layer-list>

@@ -38,11 +38,10 @@
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_40"
-            android:layout_marginEnd="@dimen/margin_40"
             android:text="@{viewData.description}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textFontWeight="@integer/text_weight_medium"
+            app:layout_constraintEnd_toEndOf="@id/title"
+            app:layout_constraintStart_toStartOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/title"
             tools:text="What information do you want to see on reported exposures around you?" />
     </androidx.constraintlayout.widget.ConstraintLayout>

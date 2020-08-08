@@ -27,8 +27,9 @@
         <TextView
             android:id="@+id/headline"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            style="@style/Text.Headline"
+            style="@style/headline"
             android:textStyle="bold"
+            android:height="64dp"
             android:textColor="@color/white"
             android:gravity="center_vertical"
             android:paddingStart="32dp"
@@ -52,7 +53,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline"
-            android:paddingTop="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp" />
 
@@ -68,20 +68,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/instruction"
             app:layout_constraintBottom_toTopOf="@id/skip"
-            android:background="@drawable/background_bar"/>
+            />
 
         <TextView
             android:id="@+id/skip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="30dp"
+            style="@style/skip_button"
             android:onClick="@{() -> vm.onClickSkip()}"
-            android:text="@string/symptoms_skip_button"
-            android:textSize="@dimen/text_size_40"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cause_recycler_view" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
             layout="@layout/progress_bar_layout"

@@ -21,10 +21,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:navigationContentDescription="@string/accessibility_back_button"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/label_fragment_symptoms"
-            app:titleTextColor="@android:color/white"
-            app:navigationContentDescription="@string/accessibility_back_button"/>
+            app:titleTextColor="@android:color/white" />
 
         <TextView
             android:id="@+id/headline"
@@ -47,33 +47,31 @@
             android:id="@+id/caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_40"
-            android:layout_marginEnd="@dimen/margin_40"
             android:text="@string/symptoms_caption"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/subtitle"
+            android:textFontWeight="@integer/text_weight_light"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
             app:layout_constraintTop_toBottomOf="@id/headline" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/products_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="50dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="50dp"
             android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toTopOf="@id/submit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
             app:layout_constraintTop_toBottomOf="@id/caption" />
 
         <Button
             android:id="@+id/submit"
-            style="@style/small_button_selected"
+            style="@style/submit_button"
             android:layout_width="wrap_content"
             android:layout_marginEnd="37dp"
             android:layout_marginBottom="40dp"
+            android:enabled="@{vm.submitButtonEnabled}"
             android:onClick="@{() -> vm.onSubmit()}"
             android:text="@string/symptoms_submit_button"
             app:layout_constraintBottom_toBottomOf="parent"

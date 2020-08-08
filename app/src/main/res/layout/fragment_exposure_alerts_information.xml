@@ -86,6 +86,7 @@
             android:text="@string/alerts_info_privacy_link"
             android:textAllCaps="false"
             android:textColor="@color/colorAccent"
+            android:textFontWeight="@integer/text_weight_semibold"
             android:textSize="@dimen/text_size_30"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

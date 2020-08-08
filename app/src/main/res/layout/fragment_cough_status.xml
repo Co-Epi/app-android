@@ -10,9 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/LightFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/LightFragment">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -20,35 +20,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:navigationContentDescription="@string/accessibility_back_button"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_cough_title"
-            app:titleTextColor="@android:color/white"
-            app:navigationContentDescription="@string/accessibility_back_button"></androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white" />
+
 
         <TextView
             android:id="@+id/headline"
             android:name="androidx.navigation.fragment.NavHostFragment"
             style="@style/headline"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:text="@string/symptom_report_cough_status_headline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-        <TextView
-            android:id="@+id/caption"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:text="@string/symptoms_select_one"
-            android:background="@color/colorPrimary"
-            android:paddingStart="32dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="32dp"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/status_recycler_view"
@@ -61,27 +47,21 @@
             app:layout_constraintBottom_toTopOf="@id/skip"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/caption" />
+            app:layout_constraintTop_toBottomOf="@id/headline" />
 
         <TextView
-            android:id="@+id/skip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="46dp"
-            android:layout_marginTop="18dp"
+            style="@style/skip_button"
             android:onClick="@{() -> vm.onClickSkip()}"
-            android:textSize="@dimen/text_size_40"
-            android:text="@string/symptoms_skip_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/status_recycler_view" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
-            layout="@layout/progress_bar_layout"
             isVisible="@{vm.isInProgress}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            layout="@layout/progress_bar_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

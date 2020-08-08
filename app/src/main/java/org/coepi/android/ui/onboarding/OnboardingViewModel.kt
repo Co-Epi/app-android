@@ -14,7 +14,6 @@ import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.R.drawable.ic_intro_1
 import org.coepi.android.R.drawable.ic_intro_2
 import org.coepi.android.R.drawable.ic_intro_3
-import org.coepi.android.R.string.link_faq
 import org.coepi.android.R.string.link_privacy
 import org.coepi.android.R.string.onboarding_card_content_1
 import org.coepi.android.R.string.onboarding_card_content_2
@@ -33,7 +32,6 @@ import org.coepi.android.ui.navigation.NavigationCommand.Back
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.onboarding.OnboardingCardViewData.LargeCard
 import org.coepi.android.ui.onboarding.OnboardingCardViewData.SmallCard
-import org.coepi.android.ui.onboarding.OnboardingClickEvent.FaqClicked
 import org.coepi.android.ui.onboarding.OnboardingClickEvent.JoinClicked
 import org.coepi.android.ui.onboarding.OnboardingClickEvent.NextClicked
 import org.coepi.android.ui.onboarding.OnboardingClickEvent.PrivacyLinkClicked
@@ -107,7 +105,6 @@ class OnboardingViewModel(
             is PrivacyLinkClicked ->
                 openLinkSubject.onNext(parse(resources.getString(link_privacy)))
             is JoinClicked -> onCloseClick()
-            is FaqClicked -> openLinkSubject.onNext(parse(resources.getString(link_faq)))
         }
     }
 

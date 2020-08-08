@@ -23,6 +23,7 @@
             android:layout_height="60dp"
             android:gravity="center_vertical"
             android:text="@{viewData.text}"
+            android:textFontWeight="@integer/text_weight_medium"
             android:textSize="@dimen/text_size_20"
             tools:text="March 5" />
 

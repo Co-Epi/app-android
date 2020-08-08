@@ -20,10 +20,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:navigationContentDescription="@string/accessibility_back_button"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_cough_title"
-            app:titleTextColor="@android:color/white"
-            app:navigationContentDescription="@string/accessibility_back_button"></androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white" />
 
         <TextView
             android:id="@+id/headline"
@@ -48,112 +48,71 @@
             app:layout_constraintTop_toBottomOf="@id/headline">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="146dp"
-                android:layout_height="146dp"
-                android:background="@drawable/circle_button_background"
+                style="@style/circle_button"
+                android:layout_marginEnd="@dimen/circle_button_spacing"
                 android:onClick="@{() -> vm.onClickWet()}">
 
                 <TextView
                     android:id="@+id/wet_headline"
+                    style="@style/circle_button_title_with_descr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="18dp"
-                    android:gravity="center"
-                    android:letterSpacing="0.01"
-                    android:lineSpacingExtra="1sp"
                     android:text="@string/symptom_report_cough_type_wet"
-                    android:textColor="@color/button_text_color"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    style="@style/circle_button_descr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginBottom="29dp"
-                    android:gravity="center"
-                    android:letterSpacing="0.01"
-                    android:lineSpacingExtra="1sp"
                     android:text="@string/symptom_report_cough_type_wet_description"
-                    android:textColor="@color/button_text_color"
-                    android:textSize="@dimen/text_size_10"
+                    android:textFontWeight="@integer/text_weight_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/wet_headline" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="146dp"
-                android:layout_height="146dp"
+                style="@style/circle_button"
                 android:onClick="@{() -> vm.onClickDry()}">
-
-                <ImageView
-                    android:layout_width="146dp"
-                    android:layout_height="146dp"
-                    android:src="@drawable/circle_button_background"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/dry_headline"
+                    style="@style/circle_button_title_with_descr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="18dp"
-                    android:gravity="center"
-                    android:letterSpacing="0.01"
-                    android:lineSpacingExtra="1sp"
                     android:text="@string/symptom_report_cough_type_dry"
-                    android:textColor="@color/button_text_color"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    style="@style/circle_button_descr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginBottom="29dp"
-                    android:gravity="center"
-                    android:letterSpacing="0.01"
-                    android:lineSpacingExtra="1sp"
                     android:text="@string/symptom_report_cough_type_dry_description"
-                    android:textColor="@color/button_text_color"
-                    android:textSize="@dimen/text_size_10"
+                    android:textFontWeight="@integer/text_weight_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dry_headline" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="46dp"
-            android:layout_marginTop="48dp"
+            style="@style/skip_button"
             android:onClick="@{() -> vm.onClickSkip()}"
-            android:text="@string/symptoms_skip_button"
-            android:textSize="@dimen/text_size_40"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/options" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
-            layout="@layout/progress_bar_layout"
             isVisible="@{vm.isInProgress}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            layout="@layout/progress_bar_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -41,6 +41,10 @@ class SymptomsViewModel(
 
     val symptoms: LiveData<List<SymptomViewData>> = symptomsObservable.toLiveData()
 
+    val submitButtonEnabled: LiveData<Boolean> = selectedSymptomIds
+        .map { it.isNotEmpty() }
+        .toLiveData()
+
     private val disposables = CompositeDisposable()
 
     private val selectedSymptoms = symptomsObservable

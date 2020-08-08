@@ -21,10 +21,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:src="@{viewData.image}"
-            tools:src="@drawable/ic_intro_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            />
+            tools:src="@drawable/ic_intro_1" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/small_card_view_wrapper"
@@ -37,47 +36,34 @@
             app:layout_constraintTop_toBottomOf="@id/image">
 
             <TextView
-                android:id="@+id/onboarding_card_small_title"
-                style="@style/card_view_title"
+                android:id="@+id/title"
+                style="@style/onboarding_card_title"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginEnd="@dimen/onboarding_card_text_horizontal_margins"
                 android:text="@{viewData.title}"
-                android:textSize="19sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/onboarding_card_title_1" />
 
             <TextView
-                android:id="@+id/onboarding_card_small_content"
+                android:id="@+id/description"
+                style="@style/onboarding_card_descr"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/onboarding_card_text_horizontal_margins"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginEnd="@dimen/onboarding_card_text_horizontal_margins"
-                android:letterSpacing="0.02"
                 android:text="@{viewData.message}"
-                android:textColor="#DE000000"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/onboarding_card_small_title"
+                android:textFontWeight="@integer/text_weight_semibold"
+                app:layout_constraintEnd_toEndOf="@id/title"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
                 tools:text="@string/onboarding_card_content_1" />
 
             <TextView
                 android:id="@+id/data_usage_link_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_40"
-                android:layout_marginBottom="@dimen/margin_40"
-                android:text="@string/onboarding_data_usage_link_label"
-                android:textColor="@color/colorAccent"
-                android:textSize="12sp"
+                style="@style/onboarding_how_data_used_link"
+                android:layout_width="0dp"
                 app:layout_constraintBottom_toTopOf="@id/card_progress_icons_wrapper"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toEndOf="@id/title"
+                app:layout_constraintStart_toStartOf="@id/title" />
 
             <LinearLayout
                 android:id="@+id/card_progress_icons_wrapper"
@@ -87,27 +73,27 @@
                 android:layout_marginBottom="@dimen/margin_40"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/data_usage_link_label">
+                app:layout_constraintStart_toStartOf="@id/title">
 
                 <ImageView
                     android:id="@+id/progress_icon_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/onboarding_dots_space"
                     android:src="@drawable/stepper_icon_unselected" />
 
                 <ImageView
                     android:id="@+id/progress_icon_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/onboarding_dots_space"
                     android:src="@drawable/stepper_icon_unselected" />
 
                 <ImageView
                     android:id="@+id/progress_icon_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/onboarding_dots_space"
                     android:src="@drawable/stepper_icon_unselected" />
 
                 <ImageView
@@ -122,10 +108,10 @@
                 android:id="@+id/onboarding_card_small_next_button"
                 style="@style/small_button_selected"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="@string/onboarding_next_button_label"
                 app:layout_constraintBottom_toBottomOf="@id/card_progress_icons_wrapper"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/card_progress_icons_wrapper"
+                app:layout_constraintEnd_toEndOf="@id/title"
                 app:layout_constraintTop_toTopOf="@id/card_progress_icons_wrapper" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
