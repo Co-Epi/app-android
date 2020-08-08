@@ -16,6 +16,16 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent">
 
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@{viewData.image}"
+            tools:src="@drawable/ic_intro_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/small_card_view_wrapper"
             android:layout_width="0dp"
@@ -23,7 +33,8 @@
             android:background="@drawable/background_onboarding_card"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image">
 
             <TextView
                 android:id="@+id/onboarding_card_small_title"
@@ -65,8 +76,8 @@
                 android:text="@string/onboarding_data_usage_link_label"
                 android:textColor="@color/colorAccent"
                 android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/card_progress_icons_wrapper" />
+                app:layout_constraintBottom_toTopOf="@id/card_progress_icons_wrapper"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <LinearLayout
                 android:id="@+id/card_progress_icons_wrapper"
