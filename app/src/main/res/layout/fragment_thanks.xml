@@ -11,57 +11,60 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/DarkFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.ThanksFragments"
-        style="@style/DarkFragment">
+        tools:context=".ui.home.ThanksFragments">
 
         <TextView
             android:id="@+id/headline"
-            android:name="androidx.navigation.fragment.NavHostFragment"
             style="@style/Text.Headline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginEnd="@dimen/default_margin"
             android:layout_marginTop="100dp"
-            android:text="@string/thanks_message"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:text="@string/thanks_headline"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_headline"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/logmore"
-            style="@style/StandardButton"
+        <TextView
+            android:id="@+id/caption"
+            style="@style/Text.Caption"
             android:layout_width="0dp"
-            android:text="@string/thanks_log_button"
-            android:onClick="@{() -> vm.onCheckInClick()}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headline" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/thanks_caption"
+            android:textColor="@color/white"
+            android:textFontWeight="@integer/text_weight_semibold"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
+            app:layout_constraintTop_toBottomOf="@id/headline" />
 
         <Button
             android:id="@+id/exposures"
-            style="@style/StandardButton"
+            style="@style/StandardButtonLarge"
             android:layout_width="0dp"
-            android:text="@string/thanks_exposures_button"
+            android:layout_marginTop="70dp"
             android:onClick="@{() -> vm.onSeeAlertsClick()}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logmore" />
+            android:text="@string/thanks_exposures_button"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
+            app:layout_constraintTop_toBottomOf="@+id/caption" />
 
         <Button
             android:id="@+id/home"
-            style="@style/StandardButton"
+            style="@style/StandardButtonLarge"
             android:layout_width="0dp"
-            android:text="@string/thanks_home_button"
+            android:layout_marginTop="36dp"
             android:onClick="@{() -> vm.onCloseClick()}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/thanks_home_button"
+            app:layout_constraintEnd_toEndOf="@id/headline"
+            app:layout_constraintStart_toStartOf="@id/headline"
             app:layout_constraintTop_toBottomOf="@+id/exposures" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

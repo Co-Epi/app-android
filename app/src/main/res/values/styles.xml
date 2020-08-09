@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -18,6 +18,13 @@
 
     <style name="Text.Headline">
         <item name="android:textSize">@dimen/text_size_headline</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+    </style>
+
+    <style name="Text.Caption">
+        <item name="android:textSize">@dimen/text_size_subheadline</item>
     </style>
 
     <style name="Text.Title">
@@ -37,8 +44,10 @@
         <item name="android:background">@drawable/ic_geometric_light_background</item>
     </style>
 
+    <!-- TODO refactor button styles and bgs, it's currently a mess -->
+
     <style name="Button" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:background">@drawable/rounded_shadowed_button_selected</item>
+        <item name="android:background">@drawable/ripple_dark_button</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:paddingStart">30dp</item>
         <item name="android:paddingEnd">30dp</item>
@@ -48,42 +57,94 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ButtonUnselected" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:background">@drawable/rounded_shadowed_button</item>
+    <style name="RoundedButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/ripple_shadowed_rounded_button</item>
         <item name="android:textAppearance">@style/Text</item>
         <item name="android:textColor">@color/item_symptom_text</item>
         <item name="android:textSize">@dimen/text_size_30</item>
+        <item name="android:textFontWeight" tools:targetApi="p">@integer/text_weight_semibold</item>
         <item name="android:buttonTint">@color/colorPrimary</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingBottom">5dp</item>
     </style>
 
-    <style name="StandardButton" parent="ButtonUnselected">
-        <item name="android:layout_margin">50dp</item>
+    <style name="StandardButton" parent="RoundedButton">
         <item name="android:layout_height">@dimen/medium_button_height</item>
     </style>
 
-    <style name="card_view_title" parent="Text.Headline">
+    <!-- TODO refactor styles -->
+    <style name="StandardButtonLarge" parent="RoundedButton">
+        <item name="android:layout_height">@dimen/large_button_height</item>
+    </style>
+
+    <style name="card_view_title">
+        <item name="android:textSize">@dimen/text_size_50</item>
+        <item name="android:layout_marginTop">20dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:letterSpacing">0.01</item>
-        <item name="android:textColor">#DE000000</item>
+        <item name="android:textColor">@color/textDefault</item>
     </style>
 
     <style name="card_view_body">
-        <item name="android:textSize">22sp</item>
-        <item name="android:letterSpacing">0.02</item>
-        <item name="android:textColor">#DE000000</item>
+        <item name="android:textSize">@dimen/text_size_30</item>
+        <item name="android:textColor">@color/textDefault</item>
     </style>
 
     <style name="card_view_link">
         <item name="android:textSize">@dimen/text_size_20</item>
-        <item name="android:letterSpacing">0.05</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.Launcher">
         <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <style name="toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
+    <style name="headline">
+        <item name="android:textSize">@dimen/text_size_headline</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:layout_height">118dp</item>
+    </style>
+
+    <style name="medium_button">
+        <item name="android:layout_height">@dimen/medium_button_height</item>
+        <item name="android:textColor">@color/item_symptom_text</item>
+        <item name="android:textFontWeight" tools:targetApi="p">@integer/text_weight_semibold</item>
+        <item name="android:textSize">@dimen/text_size_30</item>
+        <item name="android:buttonTint">@color/colorPrimary</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/ripple_symptom_button</item>
+        <item name="android:button">@null</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <!-- TODO this looks wrong, remove -->
+    <style name="small_button_selected" parent="Button">
+        <item name="android:layout_height">@dimen/small_button_height</item>
+    </style>
+
+    <!-- TODO this looks wrong, remove -->
+    <style name="small_button_unselected" parent="RoundedButton">
+        <item name="android:layout_height">@dimen/small_button_height</item>
+    </style>
+
+    <style name="large_button" parent="Button">
+        <item name="android:layout_height">@dimen/large_button_height</item>
+    </style>
+
+    <style name="submit_button" parent="Button">
+        <item name="android:layout_height">@dimen/small_button_height</item>
+        <item name="android:background">@drawable/ripple_submit_button</item>
     </style>
 
     <style name="circle_button">
@@ -94,48 +155,75 @@
         <item name="android:textColor">@color/button_text_color</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">@dimen/circle_button_diam</item>
+        <item name="android:layout_height">@dimen/circle_button_diam</item>
     </style>
 
-    <style name="small_circle_button" parent="circle_button">
-        <item name="android:layout_width">126dp</item>
-        <item name="android:layout_height">126dp</item>
-    </style>
-
-    <style name="toolbar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:background">@color/colorAccent</item>
-    </style>
-
-    <style name="headline" parent="Text.Headline">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:paddingStart">32dp</item>
-        <item name="android:paddingEnd">32dp</item>
-        <item name="android:gravity">left|center_vertical</item>
-        <item name="android:layout_height">109dp</item>
-    </style>
-
-    <style name="large_button">
-        <item name="android:layout_height">@dimen/large_button_height</item>
-        <item name="android:textColor">@color/item_symptom_text</item>
-        <item name="android:textSize">@dimen/text_size_30</item>
-        <item name="android:buttonTint">@color/colorPrimary</item>
+    <style name="circle_button_text">
+        <item name="android:layout_marginStart">18dp</item>
+        <item name="android:layout_marginEnd">18dp</item>
+        <item name="android:letterSpacing">0.01</item>
         <item name="android:gravity">center</item>
-        <item name ="android:background">@drawable/ripple_symptom_button</item>
-        <item name="android:button">@null</item>
-        <item name="android:clickable">false</item>
+        <item name="android:lineSpacingExtra">1sp</item>
+        <item name="android:textColor">@color/button_text_color</item>
     </style>
 
-    <style name="small_button_selected" parent="Button">
-        <item name="android:layout_height">@dimen/small_button_height</item>
+    <style name="circle_button_title" parent="circle_button_text">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="small_button_unselected" parent="ButtonUnselected">
-        <item name="android:layout_height">@dimen/small_button_height</item>
+    <style name="circle_button_title_with_descr" parent="circle_button_title">
+        <item name="android:layout_marginTop">30dp</item>
     </style>
 
+    <style name="circle_button_descr" parent="circle_button_text">
+        <item name="android:textSize">@dimen/text_size_10</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="skip_button">
+        <item name="android:layout_marginStart">46dp</item>
+        <item name="android:layout_marginBottom">40dp</item>
+        <item name="android:text">@string/symptoms_skip_button</item>
+        <item name="android:textSize">@dimen/text_size_40</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="onboarding_card_title" parent="Text.Headline">
+        <item name="android:layout_marginStart">@dimen/onboarding_card_text_horizontal_margins
+        </item>
+        <item name="android:layout_marginEnd">@dimen/onboarding_card_text_horizontal_margins</item>
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:textSize">@dimen/text_size_50</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="onboarding_card_descr" parent="Text">
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:textSize">@dimen/text_size_30</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="onboarding_how_data_used_link" parent="Text">
+        <item name="android:text">@string/onboarding_data_usage_link_label</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_marginTop">@dimen/default_margin</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+
+    <style name="Text.Caption.Small">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textFontWeight" tools:targetApi="p">@integer/text_weight_light</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+    </style>
 
     <!-- No custom style for now -->
     <style name="screen_progress_indicator" />

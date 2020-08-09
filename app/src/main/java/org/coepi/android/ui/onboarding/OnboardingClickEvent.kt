@@ -4,5 +4,4 @@ sealed class OnboardingClickEvent {
     object NextClicked : OnboardingClickEvent()
     object PrivacyLinkClicked : OnboardingClickEvent()
     object JoinClicked : OnboardingClickEvent()
-    object FaqClicked : OnboardingClickEvent()
 }

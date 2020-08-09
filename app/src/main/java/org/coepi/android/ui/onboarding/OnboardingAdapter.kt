@@ -9,7 +9,6 @@ import org.coepi.android.databinding.CardOnboardingLargeBinding
 import org.coepi.android.databinding.CardOnboardingSmallBinding
 import org.coepi.android.ui.onboarding.OnboardingCardViewData.LargeCard
 import org.coepi.android.ui.onboarding.OnboardingCardViewData.SmallCard
-import org.coepi.android.ui.onboarding.OnboardingClickEvent.FaqClicked
 import org.coepi.android.ui.onboarding.OnboardingClickEvent.JoinClicked
 import org.coepi.android.ui.onboarding.OnboardingClickEvent.NextClicked
 import org.coepi.android.ui.onboarding.OnboardingClickEvent.PrivacyLinkClicked
@@ -77,12 +76,6 @@ class OnboardingLargeCardViewHolder(
 
         onboardingCardLargeJoinButton.setOnClickListener {
             onEvent(JoinClicked)
-        }
-        onboardingCardLargeFaqButton.setOnClickListener {
-            onEvent(FaqClicked)
-        }
-        dataUsageLinkLabel.setOnClickListener {
-            onEvent(PrivacyLinkClicked)
         }
     }
 }

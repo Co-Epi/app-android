@@ -16,10 +16,11 @@
         android:clipToPadding="false"
         android:padding="24dp">
 
-        <androidx.cardview.widget.CardView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/home_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/ripple_background_rounded_border"
             app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="15dp"
@@ -51,10 +52,11 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginBottom="20dp"
                     android:text="@{item.message}"
+                    android:textFontWeight="@integer/text_weight_semibold"
                     tools:text="@string/home_my_health_card_description" />
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/alert_icon"

@@ -20,17 +20,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:navigationContentDescription="@string/accessibility_back_button"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_fever_title"
-            app:titleTextColor="@android:color/white"
-            app:navigationContentDescription="@string/accessibility_back_button"></androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/white" />
 
         <TextView
             android:id="@+id/headline"
-            android:name="androidx.navigation.fragment.NavHostFragment"
             style="@style/headline"
             android:layout_width="0dp"
-            android:gravity="center"
             android:text="@string/symptom_report_fever_taken_today_headline"
             android:textSize="@dimen/text_size_headline"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,81 +46,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headline">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="146dp"
-                android:layout_height="146dp"
-                android:background="@drawable/circle_button_background"
+            <FrameLayout
+                style="@style/circle_button"
+                android:layout_marginEnd="@dimen/circle_button_spacing"
                 android:onClick="@{() -> vm.onClickYes()}">
 
                 <TextView
-                    android:id="@+id/yes_headline"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
+                    style="@style/circle_button_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:letterSpacing="0.01"
-                    android:lineSpacingExtra="1sp"
-                    android:text="@string/symptom_report_fever_taken_today_yes"
-                    android:textColor="@color/button_text_color"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:text="@string/symptom_report_fever_taken_today_yes" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="146dp"
-                android:layout_height="146dp"
+            </FrameLayout>
+
+            <FrameLayout
+                style="@style/circle_button"
+                android:layout_marginEnd="@dimen/circle_button_spacing"
                 android:onClick="@{() -> vm.onClickNo()}">
 
-                <ImageView
-                    android:layout_width="146dp"
-                    android:layout_height="146dp"
-                    android:src="@drawable/circle_button_background"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <TextView
-                    android:id="@+id/no_headline"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
+                    android:id="@+id/wet_headline"
+                    style="@style/circle_button_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:letterSpacing="0.01"
-                    android:lineSpacingExtra="1sp"
-                    android:text="@string/symptom_report_fever_taken_today_no"
-                    android:textColor="@color/button_text_color"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:text="@string/symptom_report_fever_taken_today_no" />
+
+            </FrameLayout>
+
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="46dp"
-            android:layout_marginTop="48dp"
+            style="@style/skip_button"
             android:onClick="@{() -> vm.onClickSkip()}"
-            android:text="Skip"
-            android:textSize="@dimen/text_size_40"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/options" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
-            layout="@layout/progress_bar_layout"
             isVisible="@{vm.isInProgress}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            layout="@layout/progress_bar_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

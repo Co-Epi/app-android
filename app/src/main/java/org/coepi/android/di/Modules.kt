@@ -69,7 +69,6 @@ import org.coepi.android.ui.debug.ble.DebugBleViewModel
 import org.coepi.android.ui.debug.logs.LogsViewModel
 import org.coepi.android.ui.formatters.LengthFormatter
 import org.coepi.android.ui.home.HomeViewModel
-import org.coepi.android.ui.location.LocationViewModel
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.notifications.AppNotificationChannels
 import org.coepi.android.ui.notifications.NotificationChannelsCreator
@@ -117,7 +116,6 @@ val viewModelModule = module {
     viewModel { AlertsViewModel(get(), get(), get(), get()) }
     viewModel { UserSettingsViewModel(get(), get(), get(), get(), get(), get(),
         alertFilterSettings, get()) }
-    viewModel { LocationViewModel() }
     viewModel { OnboardingViewModel(get(), get(), get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }
     viewModel { DebugViewModel(get()) }

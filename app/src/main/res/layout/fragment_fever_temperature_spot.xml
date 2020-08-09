@@ -20,10 +20,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:navigationContentDescription="@string/accessibility_back_button"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="@string/symptom_report_fever_title"
-            app:titleTextColor="@android:color/white"
-            app:navigationContentDescription="@string/accessibility_back_button"/>
+            app:titleTextColor="@android:color/white" />
 
         <TextView
             android:id="@+id/headline"
@@ -35,62 +35,104 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <TextView
-            android:id="@+id/mouth"
-            style="@style/small_circle_button"
-            android:layout_marginTop="44dp"
-            android:onClick="@{() -> vm.onClickMouth()}"
-            android:text="@string/symptom_report_fever_temperature_spot_mouth"
-            app:layout_constraintEnd_toStartOf="@id/ear"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headline" />
-
-        <TextView
-            android:id="@+id/ear"
-            style="@style/small_circle_button"
-            android:onClick="@{() -> vm.onClickEar()}"
-            android:text="@string/symptom_report_fever_temperature_spot_ear"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/mouth"
-            app:layout_constraintTop_toTopOf="@id/mouth" />
-
-        <TextView
-            android:id="@+id/armpit"
-            style="@style/small_circle_button"
-            android:layout_marginTop="44dp"
-            android:onClick="@{() -> vm.onClickArmpit()}"
-            android:text="@string/symptom_report_fever_temperature_spot_armpit"
-            app:layout_constraintBottom_toTopOf="@id/skip"
-            app:layout_constraintEnd_toStartOf="@id/other"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mouth" />
-
-        <TextView
-            android:id="@+id/other"
-            style="@style/small_circle_button"
-            android:onClick="@{() -> vm.onClickOther()}"
-            android:text="@string/symptom_report_fever_temperature_spot_other"
-            app:layout_constraintStart_toStartOf="@id/ear"
-            app:layout_constraintTop_toTopOf="@id/armpit" />
-
-        <TextView
-            android:id="@+id/skip"
-            android:layout_width="wrap_content"
+        <!-- TODO use recyclerview grid, this is obviously not a good way to implement this -->
+        <LinearLayout
+            android:id="@+id/row1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="44dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headline">
+
+            <FrameLayout
+                android:id="@+id/mouth"
+                style="@style/circle_button"
+                android:layout_marginEnd="@dimen/circle_button_spacing"
+                android:onClick="@{() -> vm.onClickMouth()}">
+
+                <TextView
+                    style="@style/circle_button_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/symptom_report_fever_temperature_spot_mouth" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/ear"
+                style="@style/circle_button"
+                android:onClick="@{() -> vm.onClickEar()}">
+
+                <TextView
+                    style="@style/circle_button_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/symptom_report_fever_temperature_spot_ear" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/row1">
+
+            <FrameLayout
+                android:id="@+id/armpit"
+                style="@style/circle_button"
+                android:layout_marginRight="20dp"
+                android:onClick="@{() -> vm.onClickArmpit()}"
+                app:layout_constraintEnd_toStartOf="@id/other"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mouth">
+
+                <TextView
+                    style="@style/circle_button_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/symptom_report_fever_temperature_spot_armpit" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/other"
+                style="@style/circle_button"
+                android:onClick="@{() -> vm.onClickOther()}"
+                app:layout_constraintStart_toStartOf="@id/ear"
+                app:layout_constraintTop_toTopOf="@id/armpit">
+
+                <TextView
+                    style="@style/circle_button_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/symptom_report_fever_temperature_spot_other" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <TextView
+            style="@style/skip_button"
             android:onClick="@{() -> vm.onClickSkip()}"
-            android:text="Skip"
-            android:textSize="@dimen/text_size_40"
-            app:layout_constraintStart_toStartOf="@id/armpit"
-            app:layout_constraintTop_toBottomOf="@id/armpit" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
-            layout="@layout/progress_bar_layout"
             isVisible="@{vm.isInProgress}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            layout="@layout/progress_bar_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

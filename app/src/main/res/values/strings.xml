@@ -47,50 +47,38 @@
     <string name="symptoms_success_message">Symptoms submitted!</string>
 
     <!-- Thank you -->
-    <string name="thanks_message">Thank you for logging your symptoms! We will alert if you have any relevant exposures to review.</string>
-    <string name="thanks_log_button">Log more symptoms</string>
-    <string name="thanks_exposures_button">View exposures</string>
+    <string name="thanks_headline">Thank you for logging your symptoms!</string>
+    <string name="thanks_caption">We will alert if you have any new exposures.</string>
+    <string name="thanks_exposures_button">View exposure alerts</string>
     <string name="thanks_home_button">Return to home screen</string>
 
-    <!-- Onboarding -->
-    <string name="onboarding_title">CoEpi</string>
-    <string name="onboarding_cta">GET STARTED</string>
-    <string name="onboarding_tagline">Collaborate. Inform. Protect.</string>
-    <string name="onboarding_link">@string/privacy_link</string>
-    <string name="onboarding_banner_1"><b>Log your</b> interactions</string>
-    <string name="onboarding_banner_2"><b>Monitor</b> your health</string>
-    <string name="onboarding_banner_3">Get <b>contextualized alerts</b> about possible exposure to infectious illness</string>
-
     <!-- Home -->
-    <string name="home_my_health_card_title">Symptom Reporting</string>
+    <string name="home_my_health_card_title">My Symptoms</string>
+    <string name="home_my_health_card_description">Report and track any symptoms you have.</string>
     <string name="home_contact_alerts_card_title">Exposure Alerts</string>
-    <string name="home_my_health_card_description">Share how you are feeling</string>
-    <string name="home_contact_alerts_card_description">Review your potential exposures</string>
+    <string name="home_contact_alerts_card_description">Find out if you’ve interacted with someone who has symptoms.</string>
     <string name="home_version">Version: %s</string>
     <string name="home_privacy_link_text">How is my data being used?</string>
     <string name="home_how_does_it_work">How does CoEpi work?</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_card_title_1">Log your interactions</string>
-    <string name="onboarding_card_title_2">Monitor your health</string>
-    <string name="onboarding_card_title_3">Stay informed</string>
-    <string name="onboarding_card_title_4">Collaborate. Inform. Protect.</string>
+    <string name="onboarding_card_title_1">Report your symptoms</string>
+    <string name="onboarding_card_title_2">Stay informed</string>
+    <string name="onboarding_card_title_3">Ensure your privacy</string>
+    <string name="onboarding_card_title_4">Collaborate.\nInform.\nProtect.</string>
 
-    <string name="onboarding_card_content_1">CoEpi will anonymously log interactions
-            with other devices using compatible apps.
-    </string>
+    <string name="onboarding_card_content_1">Share your symptoms to inform and help protect your
+        community.</string>
 
-    <string name="onboarding_card_content_2">Share any symptoms you may have,
-        <b>when you notice them.</b>
-    </string>
+    <string name="onboarding_card_content_2">You will get alerts about potential exposure to
+        individuals with reported symptoms.</string>
 
-    <string name="onboarding_card_content_3">You will get alerts about potential <b>
-        exposure to individuals with contagious illnesses. </b>
-    </string>
+    <string name="onboarding_card_content_3">CoEpi uses Bluetooth to anonymously record
+        interactions.\n\nYour privacy is protected: there is no profile tied to your identity, and
+        location is not tracked.</string>
 
-    <string name="onboarding_card_content_4">Help prevent the spread of contagious illnesses. <b>
-        Together, we can make a difference.</b>
-    </string>
+    <string name="onboarding_card_content_4">Help prevent the spread of contagious illnesses.
+        Together, we can make a difference.</string>
 
     <string name="onboarding_data_usage_link_label"><u>How will my data be used?</u></string>
     <string name="onboarding_next_button_label">NEXT</string>
@@ -110,7 +98,8 @@
     </plurals>
     <string name="alerts_no_symptoms_reported">No symptoms reported</string>
     <string name="alerts_headline">Exposure Alerts</string>
-    <string name="alerts_learn_more">Click each alert to learn more</string>
+    <string name="alerts_learn_more">Notifications that someone you\'ve been in close proximity to
+        has symptoms</string>
 
     <!-- Alerts info -->
     <string name="alerts_info_title">How does CoEpi work?</string>
@@ -186,19 +175,19 @@
     <string name="symptom_report_cough_duration_unknown">@string/unknown</string>
 
     <!-- Symptom Report - Cough Status -->
-    <string name="symptom_report_cough_status_headline">Today my cough has:</string>
-    <string name="symptom_report_cough_status_option_better_worse_day">Felt worse and better throughout the day</string>
-    <string name="symptom_report_cough_status_option_worse_outside">Felt worse when I am outside</string>
-    <string name="symptom_report_cough_status_option_same_or_steadily_worse">Stayed the same or felt steadily worse</string>
+    <string name="symptom_report_cough_status_headline">Today my cough feels:</string>
+    <string name="symptom_report_cough_status_option_better">Better</string>
+    <string name="symptom_report_cough_status_option_worse">Worse</string>
+    <string name="symptom_report_cough_status_option_same">Same</string>
 
     <!-- Symptom Report - Breathlessness Cause -->
     <string name="symptom_report_breathlessness_cause_title">Follow up: Shortness of breath</string>
-    <string name="symptom_report_breathlessness_cause_headline">I feel short of breath when:</string>
-    <string name="symptom_report_breathlessness_cause_option_leaving_house_or_dressing">I am too short of breath to leave the house or I am short of breath when dressing</string>
-    <string name="symptom_report_breathlessness_cause_option_walking_yards_or_mins_on_ground">I stop for breath after walking about 100 yards or after a few minutes on level ground</string>
-    <string name="symptom_report_breathlessness_cause_option_ground_own_pace">On level ground, I have to stop for breath when walking at my own pace</string>
-    <string name="symptom_report_breathlessness_cause_option_hurry_or_hill">I get short of breath when hurrying on level ground or walking up a slight hill</string>
-    <string name="symptom_report_breathlessness_cause_option_exercise">I only get short of breath with strenuous exercise</string>
+    <string name="symptom_report_breathlessness_cause_headline">I feel shortness of breath:</string>
+    <string name="symptom_report_breathlessness_cause_option_leaving_house_or_dressing">getting dressed to leave  the house</string>
+    <string name="symptom_report_breathlessness_cause_option_walking_yards_or_mins_on_ground">after walking 100 yards</string>
+    <string name="symptom_report_breathlessness_cause_option_ground_own_pace">after walking for a few minutes on level ground at my own pace</string>
+    <string name="symptom_report_breathlessness_cause_option_hurry_or_hill">walking fast on level ground or going up a slight hill</string>
+    <string name="symptom_report_breathlessness_cause_option_exercise">only during strenuous exercise</string>
 
     <!-- Symptom Report - Fever -->
     <string name="symptom_report_fever_title">Follow up: Fever</string>
