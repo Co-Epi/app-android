@@ -86,18 +86,19 @@ private fun toSteps(symptomIds: List<SymptomId>): List<SymptomStep> {
         error("There must be no other symptoms selected when NONE is selected")
     }
 
-    return symptomIds.flatMap { it.toInitialSteps() } + if (symptomIds != listOf(NONE)) {
-        listOf(EARLIEST_SYMPTOM)
-    } else {
-        emptyList()
-    }
+    return symptomIds.flatMap { it.toInitialSteps() }
+//    + if (symptomIds != listOf(NONE)) {
+//        listOf(EARLIEST_SYMPTOM)
+//    } else {
+//        emptyList()
+//    }
 }
 
 private fun SymptomId.toInitialSteps(): List<SymptomStep> =
     when (this) {
         COUGH -> listOf(COUGH_TYPE, COUGH_DESCRIPTION)
         BREATHLESSNESS -> listOf(BREATHLESSNESS_DESCRIPTION)
-        FEVER -> listOf(FEVER_TEMPERATURE_TAKEN_TODAY, FEVER_HIGHEST_TEMPERATURE, FEVER_TEMPERATURE_SPOT)
+        FEVER -> listOf(FEVER_TEMPERATURE_TAKEN_TODAY, FEVER_TEMPERATURE_SPOT, FEVER_HIGHEST_TEMPERATURE )
         MUSCLE_ACHES -> listOf()
         LOSS_SMELL_OR_TASTE -> listOf()
         DIARRHEA -> listOf()
