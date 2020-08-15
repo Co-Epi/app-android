@@ -230,8 +230,8 @@
     <string name="user_settings_section_alerts_title">Exposure alerts</string>
     <string name="user_settings_section_alerts_subtitle">What information do you want to see on reported exposures
         around you?</string>
-    <string name="user_settings_item_show_all">Show me all reports,\nincluding \"I don\'t have any
-        symptoms\""</string>
+    <string name="user_settings_item_show_all">Show me \"I don\'t have any
+        symptoms\" reports"</string>
     <string name="user_settings_item_duration_longer_than">Only show alerts >%d min\nof interaction</string>
     <string name="user_settings_item_distance_shorter_than">Only notify me for\ninteractions that
         occured %s away</string>

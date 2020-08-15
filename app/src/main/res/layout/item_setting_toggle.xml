@@ -34,7 +34,7 @@
                 android:textFontWeight="@integer/text_weight_semibold"
                 android:textSize="17sp"
                 android:textStyle="bold"
-                tools:text="Show me all reports,\nincluding I don't have any\nsymptoms" />
+                tools:text="Show me &quot;I don\'t have any symptoms&quot; reports" />
 
             <Switch
                 android:id="@+id/toggle"

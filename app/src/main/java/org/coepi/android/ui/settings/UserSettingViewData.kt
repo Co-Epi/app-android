@@ -13,7 +13,6 @@ sealed class UserSettingViewData {
 enum class UserSettingToggleId {
     FILTER_ALERTS_WITH_SYMPTOMS,
     FILTER_ALERTS_WITH_LONG_DURATION,
-//    FILTER_ALERTS_WITH_SHORT_DISTANCE
 }
 
 enum class UserSettingClickId {
