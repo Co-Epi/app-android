@@ -3,7 +3,6 @@ package org.coepi.android.domain.symptomflow
 import org.coepi.android.domain.symptomflow.SymptomStep.BREATHLESSNESS_DESCRIPTION
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_DESCRIPTION
 import org.coepi.android.domain.symptomflow.SymptomStep.COUGH_TYPE
-import org.coepi.android.domain.symptomflow.SymptomStep.EARLIEST_SYMPTOM
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_HIGHEST_TEMPERATURE
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_TEMPERATURE_SPOT
 import org.coepi.android.domain.symptomflow.SymptomStep.FEVER_TEMPERATURE_TAKEN_TODAY
@@ -87,11 +86,6 @@ private fun toSteps(symptomIds: List<SymptomId>): List<SymptomStep> {
     }
 
     return symptomIds.flatMap { it.toInitialSteps() }
-//    + if (symptomIds != listOf(NONE)) {
-//        listOf(EARLIEST_SYMPTOM)
-//    } else {
-//        emptyList()
-//    }
 }
 
 private fun SymptomId.toInitialSteps(): List<SymptomStep> =
