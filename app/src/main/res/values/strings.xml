@@ -183,7 +183,7 @@
     <!-- Symptom Report - Breathlessness Cause -->
     <string name="symptom_report_breathlessness_cause_title">Follow up: Shortness of breath</string>
     <string name="symptom_report_breathlessness_cause_headline">I feel shortness of breath:</string>
-    <string name="symptom_report_breathlessness_cause_option_leaving_house_or_dressing">getting dressed to leave  the house</string>
+    <string name="symptom_report_breathlessness_cause_option_leaving_house_or_dressing">getting dressed to leave the house</string>
     <string name="symptom_report_breathlessness_cause_option_walking_yards_or_mins_on_ground">after walking 100 yards</string>
     <string name="symptom_report_breathlessness_cause_option_ground_own_pace">after walking for a few minutes on level ground at my own pace</string>
     <string name="symptom_report_breathlessness_cause_option_hurry_or_hill">walking fast on level ground or going up a slight hill</string>
