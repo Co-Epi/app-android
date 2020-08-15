@@ -28,7 +28,7 @@ import org.coepi.android.ui.settings.UserSettingClickId.APP_VERSION
 import org.coepi.android.ui.settings.UserSettingClickId.PRIVACY_STATEMENT
 import org.coepi.android.ui.settings.UserSettingClickId.REPORT_PROBLEM
 import org.coepi.android.ui.settings.UserSettingToggleId.FILTER_ALERTS_WITH_LONG_DURATION
-import org.coepi.android.ui.settings.UserSettingToggleId.FILTER_ALERTS_WITH_SHORT_DISTANCE
+//import org.coepi.android.ui.settings.UserSettingToggleId.FILTER_ALERTS_WITH_SHORT_DISTANCE
 import org.coepi.android.ui.settings.UserSettingToggleId.FILTER_ALERTS_WITH_SYMPTOMS
 import org.coepi.android.ui.settings.UserSettingViewData.SectionHeader
 import org.coepi.android.ui.settings.UserSettingViewData.Text
@@ -58,9 +58,10 @@ class UserSettingsViewModel(
                 buildSettings(
                     pars.filterAlertsWithSymptoms,
                     pars.filterAlertsWithLongDuration,
-                    pars.filterAlertsWithShortDistance, alertFilterSettings,
-                    envInfos.appVersionString(),
-                    pars.measureUnit
+//                    pars.filterAlertsWithShortDistance,
+                    alertFilterSettings,
+                    envInfos.appVersionString()
+//                    pars.measureUnit
                 )
             }
             // Don't update the UI on switch change: the toggle is already updated
@@ -83,8 +84,8 @@ class UserSettingsViewModel(
             FILTER_ALERTS_WITH_SYMPTOMS ->
                 // The text says "show all reports" -> negate for filter
                 preferences.setFilterAlertsWithSymptoms(!value)
-            FILTER_ALERTS_WITH_SHORT_DISTANCE ->
-                preferences.setFilterAlertsWithShortDistance(value)
+//            FILTER_ALERTS_WITH_SHORT_DISTANCE ->
+//                preferences.setFilterAlertsWithShortDistance(value)
             FILTER_ALERTS_WITH_LONG_DURATION ->
                 preferences.setFilterAlertsWithLongDuration(value)
         }
@@ -103,10 +104,10 @@ class UserSettingsViewModel(
     private fun buildSettings(
         filterAlertsWithSymptoms: Boolean,
         filterAlertsWithLongDuration: Boolean,
-        filterAlertsWithShortDistance: Boolean,
+//        filterAlertsWithShortDistance: Boolean,
         alertFilterSettings: AlertFilterSettings,
-        appVersionString: String,
-        lengthUnit: LengthtUnit
+        appVersionString: String
+//        lengthUnit: LengthtUnit
     ): List<UserSettingViewData> = listOf(
         SectionHeader(
             title = resources.getString(user_settings_section_alerts_title),
@@ -127,18 +128,18 @@ class UserSettingsViewModel(
             id = FILTER_ALERTS_WITH_LONG_DURATION,
             hasBottomLine = true
         ),
-        Toggle(
-            text = resources.getString(
-                user_settings_item_distance_shorter_than,
-                measurementFormatter.format(
-                    alertFilterSettings.distanceShorterThan
-                        .convert(lengthUnit)
-                )
-            ),
-            value = filterAlertsWithShortDistance,
-            id = FILTER_ALERTS_WITH_SHORT_DISTANCE,
-            hasBottomLine = false
-        ),
+//        Toggle(
+//            text = resources.getString(
+//                user_settings_item_distance_shorter_than,
+//                measurementFormatter.format(
+//                    alertFilterSettings.distanceShorterThan
+//                        .convert(lengthUnit)
+//                )
+//            ),
+//            value = filterAlertsWithShortDistance,
+//            id = FILTER_ALERTS_WITH_SHORT_DISTANCE,
+//            hasBottomLine = false
+//        ),
         Text(
             text = resources.getString(user_settings_item_privacy_statement),
             id = PRIVACY_STATEMENT,
