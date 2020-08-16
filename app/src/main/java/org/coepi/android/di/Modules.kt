@@ -114,7 +114,7 @@ val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get(), get()) }
     viewModel { ThanksViewModel(get()) }
     viewModel { AlertsViewModel(get(), get(), get(), get()) }
-    viewModel { UserSettingsViewModel(get(), get(), get(), get(), get(), get(),
+    viewModel { UserSettingsViewModel(get(), get(), get(), get(), get(),
         alertFilterSettings, get()) }
     viewModel { OnboardingViewModel(get(), get(), get(), get()) }
     viewModel { LogsViewModel(cachingLog, get(), get(), get()) }

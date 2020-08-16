@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.PublishSubject.create
 import org.coepi.android.R.string.privacy_link
-import org.coepi.android.R.string.user_settings_item_distance_shorter_than
 import org.coepi.android.R.string.user_settings_item_duration_longer_than
 import org.coepi.android.R.string.user_settings_item_privacy_statement
 import org.coepi.android.R.string.user_settings_item_report_problem
@@ -23,12 +22,10 @@ import org.coepi.android.system.Resources
 import org.coepi.android.system.UnitsProvider
 import org.coepi.android.system.WebLaunchEventEmitter
 import org.coepi.android.system.rx.ObservablePreferences
-import org.coepi.android.ui.formatters.LengthFormatter
 import org.coepi.android.ui.settings.UserSettingClickId.APP_VERSION
 import org.coepi.android.ui.settings.UserSettingClickId.PRIVACY_STATEMENT
 import org.coepi.android.ui.settings.UserSettingClickId.REPORT_PROBLEM
 import org.coepi.android.ui.settings.UserSettingToggleId.FILTER_ALERTS_WITH_LONG_DURATION
-import org.coepi.android.ui.settings.UserSettingToggleId.FILTER_ALERTS_WITH_SHORT_DISTANCE
 import org.coepi.android.ui.settings.UserSettingToggleId.FILTER_ALERTS_WITH_SYMPTOMS
 import org.coepi.android.ui.settings.UserSettingViewData.SectionHeader
 import org.coepi.android.ui.settings.UserSettingViewData.Text
@@ -38,7 +35,6 @@ import org.coepi.core.domain.model.LengthtUnit
 class UserSettingsViewModel(
     private val preferences: ObservablePreferences,
     private val email: Email,
-    private val measurementFormatter: LengthFormatter,
     private val resources: Resources,
     private val envInfos: EnvInfos,
     unitsProvider: UnitsProvider,
@@ -58,9 +54,8 @@ class UserSettingsViewModel(
                 buildSettings(
                     pars.filterAlertsWithSymptoms,
                     pars.filterAlertsWithLongDuration,
-                    pars.filterAlertsWithShortDistance, alertFilterSettings,
-                    envInfos.appVersionString(),
-                    pars.measureUnit
+                    alertFilterSettings,
+                    envInfos.appVersionString()
                 )
             }
             // Don't update the UI on switch change: the toggle is already updated
@@ -83,8 +78,6 @@ class UserSettingsViewModel(
             FILTER_ALERTS_WITH_SYMPTOMS ->
                 // The text says "show all reports" -> negate for filter
                 preferences.setFilterAlertsWithSymptoms(!value)
-            FILTER_ALERTS_WITH_SHORT_DISTANCE ->
-                preferences.setFilterAlertsWithShortDistance(value)
             FILTER_ALERTS_WITH_LONG_DURATION ->
                 preferences.setFilterAlertsWithLongDuration(value)
         }
@@ -103,10 +96,8 @@ class UserSettingsViewModel(
     private fun buildSettings(
         filterAlertsWithSymptoms: Boolean,
         filterAlertsWithLongDuration: Boolean,
-        filterAlertsWithShortDistance: Boolean,
         alertFilterSettings: AlertFilterSettings,
-        appVersionString: String,
-        lengthUnit: LengthtUnit
+        appVersionString: String
     ): List<UserSettingViewData> = listOf(
         SectionHeader(
             title = resources.getString(user_settings_section_alerts_title),
@@ -126,18 +117,6 @@ class UserSettingsViewModel(
             value = filterAlertsWithLongDuration,
             id = FILTER_ALERTS_WITH_LONG_DURATION,
             hasBottomLine = true
-        ),
-        Toggle(
-            text = resources.getString(
-                user_settings_item_distance_shorter_than,
-                measurementFormatter.format(
-                    alertFilterSettings.distanceShorterThan
-                        .convert(lengthUnit)
-                )
-            ),
-            value = filterAlertsWithShortDistance,
-            id = FILTER_ALERTS_WITH_SHORT_DISTANCE,
-            hasBottomLine = false
         ),
         Text(
             text = resources.getString(user_settings_item_privacy_statement),
