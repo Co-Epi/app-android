@@ -23,7 +23,8 @@
             android:src="@{viewData.image}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:src="@drawable/ic_intro_1" />
+            tools:src="@drawable/ic_intro_1"
+            tools:ignore="MissingConstraints" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/small_card_view_wrapper"
