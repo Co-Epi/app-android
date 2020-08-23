@@ -98,8 +98,7 @@ class AlertRepoImpl(
 
     private fun onFetchedAlertsSuccess(alerts: List<Alert>) {
         alertsState.onNext(OperationState.Success(alerts))
-        if (alerts.isNotEmpty()) {
-            if(alerts.any { !it.isRead }){
+        if (alerts.isNotEmpty() && alerts.any { !it.isRead }){
                 // TODO: figure out what we want these unique notifications ids to be - maybe associate
                 //  them with alert ids
                 newAlertsNotificationShower.showNotification(alerts.size, (0..1000000).random())
