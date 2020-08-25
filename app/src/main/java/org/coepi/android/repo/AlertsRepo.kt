@@ -102,7 +102,6 @@ class AlertRepoImpl(
                 // TODO: figure out what we want these unique notifications ids to be - maybe associate
                 //  them with alert ids
                 newAlertsNotificationShower.showNotification(alerts.size, (0..1000000).random())
-            }
         }
     }
 
