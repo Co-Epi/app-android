@@ -51,7 +51,7 @@ android {
 ext {
     koin_version = "2.1.5"
     work_version = "2.3.4"
-    core_version = "0.1.34"
+    core_version = "0.1.35"
 
     binaries_target_dir = "$rootDir/coreBinariesCache/"
     binaries_zip_name = "coreBinaries${core_version}.zip"
@@ -104,10 +104,12 @@ task detekt(type: JavaExec) {
     args(params)
 }
 
-preBuild.dependsOn installCoreBinaries
+//preBuild.dependsOn installCoreBinaries
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+/* For local development: build https://github.com/Co-Epi/app-backend-rust/tree/master/android/core and copy .aar to app/libs
+    and use fileTree insted of "com.github.Co-Epi:app-backend-rust:$core_version":
+    implementation fileTree(dir: 'libs', include: ['*.aar']) */
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.3.0'
