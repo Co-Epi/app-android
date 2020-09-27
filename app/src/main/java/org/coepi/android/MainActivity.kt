@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import okhttp3.internal.format
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.R.style.AppTheme
@@ -88,17 +89,20 @@ class MainActivity : AppCompatActivity() {
 
         calendar.add(Calendar.SECOND, 5)
 
-
-
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
+//        alarmManager.
+
+
         for (x in 1..5) {
+            val notificationIdentifier = getIdentifierFromDate(calendar)
             alarmManager.set(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                intentWithRequestCode(x)
+                intentWithRequestCode(notificationIdentifier.toInt() ?: 0)
             )
             calendar.add(Calendar.SECOND, 7)
+
         }
 
     }
@@ -109,6 +113,16 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("code", code)
             PendingIntent.getBroadcast(this, code, intent, 0)
         }
+    }
+
+    private fun getIdentifierFromDate(calendarDate: Calendar) : String {
+        val year = calendarDate.get(Calendar.YEAR)
+        val month = calendarDate.get(Calendar.MONTH)
+        val date = calendarDate.get(Calendar.DATE)
+        val sec = calendarDate.get(Calendar.SECOND)
+        val notifIdentifier: String = String.format("%04d%02d%02d%02d", year, month, date, sec)
+        log.d("[Reminder] notifIdentifier: $notifIdentifier")
+        return notifIdentifier
     }
 
     override fun onResume() {
