@@ -150,6 +150,10 @@
     <string name="infection_notification_channel_name">Exposures</string>
     <string name="infection_notification_channel_description">Detected virus exposures</string>
 
+    <!-- Reminder notifications -->
+    <string name="reminder_notification_title">Do you have any symptoms?</string>
+    <string name="reminder_notification_text">Remember to report any symptoms you might be experiencing.</string>
+
     <!-- Symptom Report Titles -->
     <string name="symptom_report_title_no_symptoms">I don\'t have any symptoms today</string>
     <string name="symptom_report_title_cough">Cough</string>

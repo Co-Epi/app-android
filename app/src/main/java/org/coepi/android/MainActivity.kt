@@ -1,6 +1,10 @@
 package org.coepi.android
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -16,13 +20,16 @@ import org.coepi.android.system.LocaleProvider
 import org.coepi.android.system.WebLaunchEventEmitter
 import org.coepi.android.system.WebLauncher
 import org.coepi.android.system.intent.IntentForwarder
+import org.coepi.android.system.log.log
 import org.coepi.android.ui.common.ActivityFinisher
 import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
+import org.coepi.android.ui.notifications.NotificationAlarmReceiver
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.koin.android.ext.android.inject
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     private val rootNav: RootNavigation by inject()
@@ -50,6 +57,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
 
+//        registerAlarmReceiver()
+        setAlarm()
+
         observeRootNavigation()
         observeUINotifier()
         observeActivityFinisher()
@@ -63,6 +73,42 @@ class MainActivity : AppCompatActivity() {
         appCenterInitializer.onActivityCreated()
 
         bleInitializer.start()
+    }
+
+    private fun registerAlarmReceiver(){
+        val receiver = NotificationAlarmReceiver()
+        registerReceiver(receiver, IntentFilter())
+    }
+
+
+    private fun setAlarm() {
+        val calendar = Calendar.getInstance()
+//        calendar.set(Calendar.HOUR_OF_DAY, 18)
+//        calendar.set(Calendar.MINUTE, 0)
+
+        calendar.add(Calendar.SECOND, 5)
+
+
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        for (x in 1..5) {
+            alarmManager.set(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                intentWithRequestCode(x)
+            )
+            calendar.add(Calendar.SECOND, 7)
+        }
+
+    }
+
+    private fun intentWithRequestCode(code: Int) : PendingIntent{
+        log.d("[Reminder] scheduling: $code")
+        return Intent(this, NotificationAlarmReceiver::class.java).let { intent ->
+            intent.putExtra("code", code)
+            PendingIntent.getBroadcast(this, code, intent, 0)
+        }
     }
 
     override fun onResume() {

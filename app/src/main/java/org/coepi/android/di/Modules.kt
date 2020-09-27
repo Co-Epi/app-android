@@ -71,8 +71,11 @@ import org.coepi.android.ui.formatters.LengthFormatter
 import org.coepi.android.ui.home.HomeViewModel
 import org.coepi.android.ui.navigation.RootNavigation
 import org.coepi.android.ui.notifications.AppNotificationChannels
+import org.coepi.android.ui.notifications.NotificationAlarmReceiver
 import org.coepi.android.ui.notifications.NotificationChannelsCreator
 import org.coepi.android.ui.notifications.NotificationsShower
+import org.coepi.android.ui.notifications.ReminderNotificationShower
+import org.coepi.android.ui.notifications.ReminderNotificationShowerImpl
 import org.coepi.android.ui.onboarding.OnboardingPermissionsChecker
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.coepi.android.ui.onboarding.OnboardingViewModel
@@ -155,6 +158,8 @@ val systemModule = module {
     single<UINotifier> { UINotifierImpl() }
     single { provideGson() }
     single<NewAlertsNotificationShower> { NewAlertsNotificationShowerImpl(get(), get(), get()) }
+    single<ReminderNotificationShower> { ReminderNotificationShowerImpl(get(), get(), get())}
+    single { NotificationAlarmReceiver()}
     single<Email> { EmailImpl() }
     single { ScreenUnitsConverter(androidApplication().resources.displayMetrics) }
     single<LocaleProvider> { LocaleProviderImpl(androidApplication()) }
