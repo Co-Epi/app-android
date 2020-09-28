@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        for ( alarm in 1..days ) {
+        (1..days).forEach { _ ->
             calendar.add(Calendar.DATE, 1)
             val notificationIdentifier = calendar.getIdentifierFromDate()
             val pendingIntent = intentWithRequestCode(notificationIdentifier, this)

@@ -9,8 +9,7 @@ import org.coepi.android.system.log.log
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class ReminderAlarmHandler(
-) : BroadcastReceiver(), KoinComponent {
+class ReminderAlarmHandler : BroadcastReceiver(), KoinComponent {
 
     private val reminderNotificationShower: ReminderNotificationShower by inject()
     internal val injectedContext: Context by inject()
@@ -18,8 +17,6 @@ class ReminderAlarmHandler(
     override fun onReceive(context: Context?, intent: Intent?) {
         val info : Int? = intent?.getIntExtra("code",0)
         log.d("[Reminder] received $info")
-//        Toast.makeText(context, "Alarm triggered $info",
-//            Toast.LENGTH_LONG).show()
         reminderNotificationShower.showNotification(info ?: 0)
     }
 
