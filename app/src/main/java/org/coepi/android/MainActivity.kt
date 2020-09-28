@@ -91,39 +91,39 @@ class MainActivity : AppCompatActivity() {
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-//        alarmManager.
+        for ( alarm in 1..5 ) {
+            val notificationIdentifier = calendar.getIdentifierFromDate()
+            val pendingIntent = calendar.intentWithRequestCode(notificationIdentifier, this)
 
-
-        for (x in 1..5) {
-            val notificationIdentifier = getIdentifierFromDate(calendar)
             alarmManager.set(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                intentWithRequestCode(notificationIdentifier.toInt() ?: 0)
+//                intentWithRequestCode(notificationIdentifier)
+                pendingIntent
             )
-            calendar.add(Calendar.SECOND, 7)
+            calendar.add(Calendar.MINUTE, 1)
 
         }
 
     }
 
-    private fun intentWithRequestCode(code: Int) : PendingIntent{
-        log.d("[Reminder] scheduling: $code")
-        return Intent(this, NotificationAlarmReceiver::class.java).let { intent ->
-            intent.putExtra("code", code)
-            PendingIntent.getBroadcast(this, code, intent, 0)
-        }
-    }
+//    private fun intentWithRequestCode(code: Int) : PendingIntent{
+//        log.d("[Reminder] scheduling: $code")
+//        return Intent(this, NotificationAlarmReceiver::class.java).let { intent ->
+//            intent.putExtra("code", code)
+//            PendingIntent.getBroadcast(this, code, intent, 0)
+//        }
+//    }
 
-    private fun getIdentifierFromDate(calendarDate: Calendar) : String {
-        val year = calendarDate.get(Calendar.YEAR)
-        val month = calendarDate.get(Calendar.MONTH)
-        val date = calendarDate.get(Calendar.DATE)
-        val sec = calendarDate.get(Calendar.SECOND)
-        val notifIdentifier: String = String.format("%04d%02d%02d%02d", year, month, date, sec)
-        log.d("[Reminder] notifIdentifier: $notifIdentifier")
-        return notifIdentifier
-    }
+//    private fun getIdentifierFromDate(calendarDate: Calendar) : Int {
+//        val year = calendarDate.get(Calendar.YEAR)
+//        val month = calendarDate.get(Calendar.MONTH)
+//        val date = calendarDate.get(Calendar.DATE)
+//        val min = calendarDate.get(Calendar.MINUTE)
+//        val notifIdentifier: String = String.format("%04d%02d%02d%02d", year, month, date, min)
+//        log.d("[Reminder] notifIdentifier: $notifIdentifier")
+//        return notifIdentifier.toInt()  ?: 0
+//    }
 
     override fun onResume() {
         super.onResume()
@@ -182,5 +182,24 @@ class MainActivity : AppCompatActivity() {
     object RequestCodes {
         const val onboardingPermissions = 1
         const val enableBluetooth = 2
+    }
+}
+
+fun Calendar.getIdentifierFromDate() : Int {
+    val year = this.get(Calendar.YEAR)
+    val month = this.get(Calendar.MONTH)
+    val date = this.get(Calendar.DATE)
+    val min = this.get(Calendar.MINUTE)
+    val notifIdentifier: String = String.format("%04d%02d%02d%02d", year, month, date, min)
+    log.d("[Reminder] notifIdentifier: $notifIdentifier")
+    return notifIdentifier.toInt()  ?: 0
+}
+
+fun Calendar.intentWithRequestCode(code: Int, context: Context) : PendingIntent{
+    log.d("[Reminder] scheduling: $code")
+    return Intent(context, NotificationAlarmReceiver::class.java).let { intent ->
+        intent.putExtra("code", code)
+//        intent.action = action
+        PendingIntent.getBroadcast(context, code, intent, 0)
     }
 }
