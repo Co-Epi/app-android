@@ -9,7 +9,7 @@ import org.coepi.android.system.log.log
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class NotificationAlarmReceiver(
+class ReminderAlarmHandler(
 ) : BroadcastReceiver(), KoinComponent {
 
     private val reminderNotificationShower: ReminderNotificationShower by inject()
@@ -25,9 +25,9 @@ class NotificationAlarmReceiver(
 
 }
 
-public fun NotificationAlarmReceiver.cancelReminderWith(id: Int){
+public fun ReminderAlarmHandler.cancelReminderWith(id: Int){
     val alarmManager = injectedContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(injectedContext, NotificationAlarmReceiver::class.java)
+    val intent = Intent(injectedContext, ReminderAlarmHandler::class.java)
     val pendingIntent = PendingIntent.getBroadcast(injectedContext,id,intent,PendingIntent.FLAG_UPDATE_CURRENT)
     log.d("[Reminder] cancelling notification with id: $id")
     pendingIntent.cancel()

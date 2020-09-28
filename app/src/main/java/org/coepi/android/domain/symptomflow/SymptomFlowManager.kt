@@ -16,7 +16,7 @@ import org.coepi.android.ui.common.UINotificationData.Failure
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.navigation.NavigationCommand.ToDestination
 import org.coepi.android.ui.navigation.RootNavigation
-import org.coepi.android.ui.notifications.NotificationAlarmReceiver
+import org.coepi.android.ui.notifications.ReminderAlarmHandler
 import org.coepi.android.ui.notifications.cancelReminderWith
 import org.coepi.android.ui.thanks.ThanksFragmentDirections.Companion.actionGlobalThanksFragment
 import org.coepi.core.domain.model.SymptomInputs.Breathlessness
@@ -57,7 +57,7 @@ class SymptomFlowManagerImpl(
     private val inputsManager: SymptomsInputManager,
     private val uiNotifier: UINotifier,
 //    private val reminderNotificationShower: ReminderNotificationShower
-    private val notificationAlarmReceiver: NotificationAlarmReceiver
+    private val reminderAlarmHandler: ReminderAlarmHandler
 ) : SymptomFlowManager {
 
     override val submitSymptomsState: PublishSubject<VoidOperationState> = create()
@@ -148,7 +148,7 @@ class SymptomFlowManagerImpl(
         inputsManager.clearSymptoms().expect()
         //cancel reminder notification for the day
         val reminderId = Calendar.getInstance().getIdentifierFromDate()
-        notificationAlarmReceiver.cancelReminderWith(reminderId)
+        reminderAlarmHandler.cancelReminderWith(reminderId)
     }
 
     override fun setCoughType(type: UserInput<Cough.Type>): Result<Unit, Throwable> =

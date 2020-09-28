@@ -4,13 +4,11 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import okhttp3.internal.format
 import org.coepi.android.R.id.rootNavHostFragment
 import org.coepi.android.R.layout.activity_main
 import org.coepi.android.R.style.AppTheme
@@ -27,7 +25,7 @@ import org.coepi.android.ui.common.UINotification
 import org.coepi.android.ui.common.UINotifier
 import org.coepi.android.ui.navigation.Navigator
 import org.coepi.android.ui.navigation.RootNavigation
-import org.coepi.android.ui.notifications.NotificationAlarmReceiver
+import org.coepi.android.ui.notifications.ReminderAlarmHandler
 import org.coepi.android.ui.onboarding.OnboardingShower
 import org.koin.android.ext.android.inject
 import java.util.Calendar
@@ -57,10 +55,7 @@ class MainActivity : AppCompatActivity() {
         setTheme(AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
-
-//        registerAlarmReceiver()
-        setAlarm()
-
+        setReminderAlarmsFor(14)
         observeRootNavigation()
         observeUINotifier()
         observeActivityFinisher()
@@ -76,13 +71,7 @@ class MainActivity : AppCompatActivity() {
         bleInitializer.start()
     }
 
-    private fun registerAlarmReceiver(){
-        val receiver = NotificationAlarmReceiver()
-        registerReceiver(receiver, IntentFilter())
-    }
-
-
-    private fun setAlarm() {
+    private fun setReminderAlarmsFor(days: Int) {
         val calendar = Calendar.getInstance()
 //        calendar.set(Calendar.HOUR_OF_DAY, 18)
 //        calendar.set(Calendar.MINUTE, 0)
@@ -91,14 +80,13 @@ class MainActivity : AppCompatActivity() {
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        for ( alarm in 1..5 ) {
+        for ( alarm in 1..days ) {
             val notificationIdentifier = calendar.getIdentifierFromDate()
-            val pendingIntent = calendar.intentWithRequestCode(notificationIdentifier, this)
+            val pendingIntent = intentWithRequestCode(notificationIdentifier, this)
 
             alarmManager.set(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-//                intentWithRequestCode(notificationIdentifier)
                 pendingIntent
             )
             calendar.add(Calendar.MINUTE, 1)
@@ -106,24 +94,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-//    private fun intentWithRequestCode(code: Int) : PendingIntent{
-//        log.d("[Reminder] scheduling: $code")
-//        return Intent(this, NotificationAlarmReceiver::class.java).let { intent ->
-//            intent.putExtra("code", code)
-//            PendingIntent.getBroadcast(this, code, intent, 0)
-//        }
-//    }
-
-//    private fun getIdentifierFromDate(calendarDate: Calendar) : Int {
-//        val year = calendarDate.get(Calendar.YEAR)
-//        val month = calendarDate.get(Calendar.MONTH)
-//        val date = calendarDate.get(Calendar.DATE)
-//        val min = calendarDate.get(Calendar.MINUTE)
-//        val notifIdentifier: String = String.format("%04d%02d%02d%02d", year, month, date, min)
-//        log.d("[Reminder] notifIdentifier: $notifIdentifier")
-//        return notifIdentifier.toInt()  ?: 0
-//    }
 
     override fun onResume() {
         super.onResume()
@@ -195,11 +165,10 @@ fun Calendar.getIdentifierFromDate() : Int {
     return notifIdentifier.toInt()  ?: 0
 }
 
-fun Calendar.intentWithRequestCode(code: Int, context: Context) : PendingIntent{
+fun intentWithRequestCode(code: Int, context: Context) : PendingIntent{
     log.d("[Reminder] scheduling: $code")
-    return Intent(context, NotificationAlarmReceiver::class.java).let { intent ->
+    return Intent(context, ReminderAlarmHandler::class.java).let { intent ->
         intent.putExtra("code", code)
-//        intent.action = action
         PendingIntent.getBroadcast(context, code, intent, 0)
     }
 }

@@ -11,7 +11,6 @@ import org.coepi.android.ui.notifications.NotificationPriority.HIGH
 
 interface ReminderNotificationShower {
     fun showNotification(notificationId: Int)
-    fun cancelNotification(notificationId: Int)
 }
 
 class ReminderNotificationShowerImpl(
@@ -25,11 +24,6 @@ class ReminderNotificationShowerImpl(
         val title = resources.getString(string.reminder_notification_title)
         val text = notificationId.toString() + " - " +resources.getString(string.reminder_notification_text)
         notificationsShower.showNotification(notificationConfiguration(notificationId, title, text))
-    }
-
-    override fun cancelNotification(notificationId: Int) {
-        log.d("[Reminder] Canceling reminder notification with id: $notificationId")
-        notificationsShower.cancelNotification(notificationId)
     }
 
     private fun notificationConfiguration( notificationId: Int, title: String, text: String): NotificationConfig =
