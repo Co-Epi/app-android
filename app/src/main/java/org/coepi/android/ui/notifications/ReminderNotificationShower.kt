@@ -1,7 +1,6 @@
 package org.coepi.android.ui.notifications
 
 import org.coepi.android.R.drawable
-import org.coepi.android.R.plurals
 import org.coepi.android.R.string
 import org.coepi.android.system.Resources
 import org.coepi.android.system.intent.IntentKey.NOTIFICATION_REMINDER_ARGS

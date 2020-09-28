@@ -73,24 +73,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun setReminderAlarmsFor(days: Int) {
         val calendar = Calendar.getInstance()
-//        calendar.set(Calendar.HOUR_OF_DAY, 18)
-//        calendar.set(Calendar.MINUTE, 0)
-
-        calendar.add(Calendar.SECOND, 5)
+        calendar.set(Calendar.HOUR_OF_DAY, 18)
+        calendar.set(Calendar.MINUTE, 0)
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         for ( alarm in 1..days ) {
+            calendar.add(Calendar.DATE, 1)
             val notificationIdentifier = calendar.getIdentifierFromDate()
             val pendingIntent = intentWithRequestCode(notificationIdentifier, this)
-
             alarmManager.set(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
                 pendingIntent
             )
-            calendar.add(Calendar.MINUTE, 1)
-
         }
 
     }
@@ -159,8 +155,7 @@ fun Calendar.getIdentifierFromDate() : Int {
     val year = this.get(Calendar.YEAR)
     val month = this.get(Calendar.MONTH)
     val date = this.get(Calendar.DATE)
-    val min = this.get(Calendar.MINUTE)
-    val notifIdentifier: String = String.format("%04d%02d%02d%02d", year, month, date, min)
+    val notifIdentifier: String = String.format("%04d%02d%02d", year, month, date)
     log.d("[Reminder] notifIdentifier: $notifIdentifier")
     return notifIdentifier.toInt()  ?: 0
 }
