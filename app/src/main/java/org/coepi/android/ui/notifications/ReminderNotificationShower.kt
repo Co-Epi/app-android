@@ -21,7 +21,7 @@ class ReminderNotificationShowerImpl(
     override fun showNotification(notificationId: Int) {
         log.d("[Reminder] Showing reminder notification with id: $notificationId")
         val title = resources.getString(string.reminder_notification_title)
-        val text = /*notificationId.toString() + " - " +*/resources.getString(string.reminder_notification_text)
+        val text = resources.getString(string.reminder_notification_text)
         notificationsShower.showNotification(notificationConfiguration(notificationId, title, text))
     }
 

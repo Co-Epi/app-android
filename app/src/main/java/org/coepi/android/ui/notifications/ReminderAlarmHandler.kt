@@ -22,11 +22,3 @@ class ReminderAlarmHandler : BroadcastReceiver(), KoinComponent {
 
 }
 
-public fun ReminderAlarmHandler.cancelReminderWith(id: Int){
-    val alarmManager = injectedContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(injectedContext, ReminderAlarmHandler::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(injectedContext,id,intent,PendingIntent.FLAG_UPDATE_CURRENT)
-    log.d("[Reminder] cancelling notification with id: $id")
-    pendingIntent.cancel()
-    alarmManager.cancel(pendingIntent)
-}

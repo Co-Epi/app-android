@@ -23,8 +23,7 @@
         android:theme="@style/AppTheme">
         <!-- TODO: Investigate installation error and remove extractNativeLibs from manifest
          see https://github.com/Co-Epi/app-android/pull/59#issuecomment-611193577 -->
-        <receiver android:name=".ui.notifications.ReminderAlarmHandler" >
-        </receiver>
+        <receiver android:name=".ui.notifications.ReminderAlarmHandler" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

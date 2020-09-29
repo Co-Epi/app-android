@@ -56,7 +56,6 @@ class SymptomFlowManagerImpl(
     private val rootNavigation: RootNavigation,
     private val inputsManager: SymptomsInputManager,
     private val uiNotifier: UINotifier,
-//    private val reminderNotificationShower: ReminderNotificationShower
     private val reminderAlarmHandler: ReminderAlarmHandler
 ) : SymptomFlowManager {
 
@@ -146,7 +145,6 @@ class SymptomFlowManagerImpl(
     private fun clear() {
         symptomFlow = null
         inputsManager.clearSymptoms().expect()
-        //cancel reminder notification for the day
         val reminderId = Calendar.getInstance().getIdentifierFromDate()
         reminderAlarmHandler.cancelReminderWith(reminderId)
     }
