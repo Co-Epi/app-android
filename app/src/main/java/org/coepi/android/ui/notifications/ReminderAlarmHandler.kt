@@ -1,7 +1,5 @@
 package org.coepi.android.ui.notifications
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
