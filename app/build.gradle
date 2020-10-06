@@ -51,7 +51,7 @@ android {
 ext {
     koin_version = "2.1.5"
     work_version = "2.3.4"
-    core_version = "0.1.35"
+    core_version = "0.1.36"
 
     binaries_target_dir = "$rootDir/coreBinariesCache/"
     binaries_zip_name = "coreBinaries${core_version}.zip"
@@ -104,7 +104,7 @@ task detekt(type: JavaExec) {
     args(params)
 }
 
-//preBuild.dependsOn installCoreBinaries
+preBuild.dependsOn installCoreBinaries
 
 dependencies {
 /* For local development: build https://github.com/Co-Epi/app-backend-rust/tree/master/android/core and copy .aar to app/libs
