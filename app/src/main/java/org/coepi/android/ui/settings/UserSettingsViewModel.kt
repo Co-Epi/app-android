@@ -86,7 +86,7 @@ class UserSettingsViewModel(
     fun onClick(item: Text, activity: Activity) {
         when (item.id) {
             REPORT_PROBLEM ->
-                email.open(activity, "TODO@TODO.TODO", "TODO")
+                email.open(activity, "CoEpi@OpenAPS.org", "Problem with CoEpi")
             PRIVACY_STATEMENT ->
                 webLaunchEventEmitter.launch(parse(resources.getString(privacy_link)))
             else -> {}
