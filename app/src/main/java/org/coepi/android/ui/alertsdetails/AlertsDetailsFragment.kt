@@ -58,6 +58,11 @@ class AlertsDetailsFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.markLinkedAlertsAsRead()
+    }
+
     @Parcelize
     data class Args(val alert: Alert, val linkedAlerts: List<Alert>) : Parcelable
 }
