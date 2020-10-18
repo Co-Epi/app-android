@@ -15,10 +15,15 @@ The core functionality (domain services / networking / db) of this app was moved
 
 ## Contribute
 
+CoEpi is an open source project with an MIT license - please do feel free to contribute improvements!
 
-1. Read the [code guidelines](https://github.com/Co-Epi/app-android/wiki/Code-guidelines).
-2. Fork or Branch
-    - If you belong to the organization: Create a branch
-    - If you don't belong to the organization: Fork and create a branch in the fork
-3. Commit changes to the branch
-4. Push your code and make a pull request
+1. Some [code guidelines](https://github.com/Co-Epi/app-android/wiki/Code-guidelines) and recommendations exist.
+2. For new contributors, fork the `develop` branch to get started.
+3. Commit changes to your version branch. 
+4. Push your code, and make a pull request back to the CoEpi `develop` branch. 
+
+Need help getting started? Just ask! You can [open an issue](https://github.com/Co-Epi/app-android/issues/new/choose), or start your PR, and tag `@danamlewis` or `@scottleibrand` in a comment to ask for assistance.
+
+## Test
+* If you're not a developer, try using the download link [here](https://bit.ly/CoEpiAndroidbeta) to get a version of the app to test on your phone, without needing to sign in anywhere. 
+* `Note: Because you are not getting the app through the app store, Android will warn you that this is an untrusted app. There is no information gathered by the CoEpi app; no username, email, or any other information gathered. If you like, you can review all the code in this repository as part of your evaluation to trust the app on your phone.` 
