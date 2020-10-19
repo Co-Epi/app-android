@@ -58,6 +58,8 @@ class AlertsDetailsViewModel(
 
     private val deleteAlertTrigger: PublishSubject<Unit> = PublishSubject.create()
 
+    private val marklinkedAlertsAsReadTrigger: PublishSubject<Unit> = PublishSubject.create()
+
     private val disposables = CompositeDisposable()
 
     init {
@@ -66,6 +68,21 @@ class AlertsDetailsViewModel(
             .doOnNext { alertsRepo.removeAlert(args.alert) }
             .observeOn(mainThread())
             .subscribe { nav.navigate(Back) }
+
+        disposables += marklinkedAlertsAsReadTrigger
+            .subscribeOn(io())
+            .doOnNext {
+                args.linkedAlerts.forEach {
+                    if (it.isRead) {
+                        return@forEach
+                    }
+                    alertsRepo.updateIsRead(it, true)
+                }
+            }
+            .observeOn(io())
+            .subscribe{
+                log.d("[Update Alert Status] Marking linked alerts completed.")
+            }
     }
 
     fun onBack() {
@@ -141,6 +158,11 @@ class AlertsDetailsViewModel(
             resources.getString(alerts_details_report_email_subject),
             resources.getString(alerts_details_report_email_address)
         )
+    }
+
+    fun markLinkedAlertsAsRead() {
+        log.d("[Update Alert Status] Marking linked alerts as read...")
+        marklinkedAlertsAsReadTrigger.onNext(Unit)
     }
 
     private fun ExposureDurationForUI.toLocalizedString(): String = when (this) {
