@@ -80,7 +80,9 @@ class AlertsDetailsViewModel(
                 }
             }
             .observeOn(io())
-            .subscribe()
+            .subscribe{
+                log.d("[Update Alert Status] Marking linked alerts completed.")
+            }
     }
 
     fun onBack() {
