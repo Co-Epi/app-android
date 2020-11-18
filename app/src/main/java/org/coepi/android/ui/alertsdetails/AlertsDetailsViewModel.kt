@@ -156,9 +156,7 @@ class AlertsDetailsViewModel(
     fun onReportProblemTap(activity: Activity) {
         email.open(activity,
             resources.getString(alerts_details_report_email_subject),
-            resources.getString(alerts_details_report_email_address),
-            "",
-            null
+            resources.getString(alerts_details_report_email_address)
         )
     }
 
