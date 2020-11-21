@@ -16,6 +16,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
 class UserSettingsFragment : Fragment() {
+
+    private val coepiFileProviderAuthority = "org.coepi.provider"
+    private val coepiDbFilePath = "databases/db.sqlite"
     private val viewModel by viewModel<UserSettingsViewModel>()
 
     override fun onCreateView(
@@ -25,7 +28,7 @@ class UserSettingsFragment : Fragment() {
         lifecycleOwner = viewLifecycleOwner
         vm = viewModel
 
-        val uri = getDbFileUri("databases/db.sqlite")
+        val dbFileUri = getDbFileUri(coepiDbFilePath)
 
         val adapter = UserSettingsAdapter(
             onToggle = { item, toggled ->
@@ -33,7 +36,7 @@ class UserSettingsFragment : Fragment() {
             },
             onClick = { item ->
                 activity?.let { activity ->
-                    viewModel.onClick(item, activity, uri)
+                    viewModel.onClick(item, activity, dbFileUri)
                 } ?: {
                     log.w("No activity set clicking on setting")
                 }()
@@ -51,23 +54,16 @@ class UserSettingsFragment : Fragment() {
     }.root
 
     fun getDbFileUri(filenameSuffix: String): Uri? {
-
-        var file: File? = File(
-            context?.getFilesDir()?.getParent(),
-            filenameSuffix
-        )
-        var dbUri: Uri? = context?.let {
-            file?.let { it1 ->
-                val uriForFile = FileProvider.getUriForFile(
-                    it,//this@MainActivity,
-                    "org.coepi.provider",  //(use your app signature + ".provider" )
-                    it1
+        return context?.let {
+            val file: File? = File(it.filesDir?.parent, filenameSuffix)
+            file?.let { file1 ->
+                FileProvider.getUriForFile(
+                    it,
+                    coepiFileProviderAuthority,
+                    file1
                 )
-                uriForFile
             }
         }
-
-        return dbUri
     }
 
 }

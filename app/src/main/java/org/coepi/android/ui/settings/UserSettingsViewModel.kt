@@ -31,6 +31,9 @@ import org.coepi.android.ui.settings.UserSettingViewData.SectionHeader
 import org.coepi.android.ui.settings.UserSettingViewData.Text
 import org.coepi.android.ui.settings.UserSettingViewData.Toggle
 import org.coepi.core.domain.model.LengthtUnit
+import org.coepi.android.R.string.alerts_details_report_email_address
+import org.coepi.android.R.string.alerts_details_report_email_subject
+
 
 class UserSettingsViewModel(
     private val preferences: ObservablePreferences,
@@ -83,10 +86,11 @@ class UserSettingsViewModel(
         }
     }
 
-    fun onClick(item: Text, activity: Activity, uri: Uri?) {
+    fun onClick(item: Text, activity: Activity, emailAttachmentUri: Uri?) {
         when (item.id) {
             REPORT_PROBLEM ->
-                email.open(activity, "duskoetf@gmail.com", "Problem with CoEpi", uri)
+                email.open(activity, resources.getString(alerts_details_report_email_address),
+                    resources.getString(alerts_details_report_email_subject), emailAttachmentUri)
             PRIVACY_STATEMENT ->
                 webLaunchEventEmitter.launch(parse(resources.getString(privacy_link)))
             else -> {}
