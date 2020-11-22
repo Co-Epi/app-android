@@ -23,6 +23,15 @@
         android:theme="@style/AppTheme">
         <!-- TODO: Investigate installation error and remove extractNativeLibs from manifest
          see https://github.com/Co-Epi/app-android/pull/59#issuecomment-611193577 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="org.coepi.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
         <receiver android:name=".ui.notifications.ReminderAlarmHandler" />
         <activity
             android:name=".MainActivity"
