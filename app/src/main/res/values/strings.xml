@@ -152,7 +152,7 @@
 
     <!-- Reminder notifications -->
     <string name="reminder_notification_title">Do you have any symptoms?</string>
-    <string name="reminder_notification_text">Remember to report any symptoms you might be experiencing.</string>
+    <string name="reminder_notification_text">Remember to report any symptoms you might be experiencing. Have you checked if you can smell today?</string>
 
     <!-- Symptom Report Titles -->
     <string name="symptom_report_title_no_symptoms">I don\'t have any symptoms today</string>
